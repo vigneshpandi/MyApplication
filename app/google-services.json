@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "961523145386",
+    "firebase_url": "https://tcttextapplicationandroi-2909a.firebaseio.com",
+    "project_id": "tcttextapplicationandroi-2909a",
+    "storage_bucket": "tcttextapplicationandroi-2909a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961523145386:android:81336c05ed973ccd",
+        "android_client_info": {
+          "package_name": "com.bluemapletech.hippatextapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961523145386-q60epqho777c780deio91oi3674fmfcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDs6sgJsP89v0SyQYyICPb2h2GX0R-ipo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

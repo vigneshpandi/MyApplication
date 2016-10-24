@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HippaTextApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="email_address">Please enter valid email address!</string>
+    <string name="password">Please enter valid password!</string>
+    <string name="alpha_numeric">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890...</string>
+</resources>
