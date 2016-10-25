@@ -22,15 +22,26 @@ public class CompanyDao {
 
     public boolean addInvitedCompany(User user) {
 
-        Log.d(TAG, "Add invited company dao method has been called!");
+        Log.d(TAG, "Add invited company dao method has been called!"+user.toString());
         HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
         invite.put("auth", "1");
+        invite.put("companyCINNumber", user.getTINorEIN());
+        invite.put("companyName", user.getCompanyName());
         invite.put("emailAddress", user.getUserName());
         invite.put("password", user.getPassword());
-        invite.put("compId", user.getTINorEIN());
-        invite.put("companyName", user.getCompanyName());
         invite.put("role", user.getRole());
+        invite.put("chatPin",user.getChatPin());
+        invite.put("status",user.getStatus());
+        invite.put("providerNPIId",user.getProviderNPIId());
+        invite.put("providerName",user.getProviderName());
+        invite.put("designation","");
+        invite.put("firstName","");
+        invite.put("lastName","");
+        invite.put("profilePhoto","");
+
+        invite.put("senderId","");
+
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(invite);
@@ -39,16 +50,25 @@ public class CompanyDao {
     }
 
     public boolean cancelCompany(User user) {
-
         Log.d(TAG, "Add invited company dao method has been called!");
         HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
         invite.put("auth", "2");
+        invite.put("companyCINNumber", user.getTINorEIN());
         invite.put("emailAddress", user.getUserName());
         invite.put("password", user.getPassword());
-        invite.put("compId", user.getTINorEIN());
         invite.put("companyName", user.getCompanyName());
         invite.put("role", user.getRole());
+        invite.put("chatPin",user.getChatPin());
+        invite.put("status",user.getStatus());
+        invite.put("designation","");
+        invite.put("firstName","");
+        invite.put("lastName","");
+        invite.put("profilePhoto","");
+        invite.put("providerNPIId",user.getProviderNPIId());
+        invite.put("providerName",user.getProviderName());
+        invite.put("senderId","");
+
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(invite);
@@ -57,20 +77,32 @@ public class CompanyDao {
     }
 
     public boolean deleteCompany(User user) {
-
         Log.d(TAG, "Add invited company dao method has been called!");
         HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
         invite.put("auth", "2");
         invite.put("emailAddress", user.getUserName());
         invite.put("password", user.getPassword());
-        invite.put("compId", user.getTINorEIN());
+        invite.put("companyCINNumber", user.getTINorEIN());
         invite.put("companyName", user.getCompanyName());
         invite.put("role", user.getRole());
+        invite.put("chatPin",user.getChatPin());
+        invite.put("status",user.getStatus());
+        invite.put("designation","");
+        invite.put("firstName","");
+        invite.put("lastName","");
+        invite.put("profilePhoto","");
+        invite.put("providerNPIId",user.getProviderNPIId());
+        invite.put("providerName",user.getProviderName());
+        invite.put("senderId","");
+
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(invite);
         return true;
-
     }
+
+
+
+
 }

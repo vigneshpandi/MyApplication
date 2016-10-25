@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class PageAdminBaseAdapter extends BaseAdapter {
-    private static final String TAG = PageBaseAdapter.class.getCanonicalName();
+    private static final String TAG = PageAdminBaseAdapter.class.getCanonicalName();
     public static final String userEmail = "userEmail";
     LayoutInflater inflater;
     Context context;
@@ -68,8 +68,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
         final User info = getItem(position);
 
-        mViewHolder.fieldId.setText(info.getTINorEIN());
-        mViewHolder.fieldName.setText(info.getUserName());
+           mViewHolder.fieldId.setText(info.getEmpId());
+           mViewHolder.fieldName.setText(info.getUserName());
 
         ((Button) convertView.findViewById(R.id.accept_btn)).setOnClickListener(new View.OnClickListener() {
             @Override

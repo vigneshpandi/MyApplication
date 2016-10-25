@@ -66,7 +66,6 @@ public class PageBaseAdapter extends BaseAdapter {
         }
 
         final User info = getItem(position);
-
         mViewHolder.fieldId.setText(info.getTINorEIN());
         mViewHolder.fieldName.setText(info.getCompanyName());
 
@@ -123,7 +122,7 @@ public class PageBaseAdapter extends BaseAdapter {
     }
 
     public void addInvitedCompany(User user) {
-        Log.d(TAG, "Add invited company method has been called!");
+        Log.d(TAG, "Add invited company method has been called!"+user.toString());
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.addInvitedCompany(user);
         if (result) {

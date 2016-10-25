@@ -42,7 +42,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private EditText compEmailtxt, compPasswordtxt, companyName, compEinOrTinNo;
+    private EditText compEmailtxt, compPasswordtxt, companyName, compEinOrTinNo,providerName,providerNPIId;
     private Button compRegBtn;
 
     @Override
@@ -65,7 +65,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         companyName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         compEinOrTinNo = (EditText) findViewById(R.id.comp_tin_or_ein_no);
         compRegBtn = (Button) findViewById(R.id.comp_register_btn);
-
+        providerName = (EditText) findViewById(R.id.provider_name);
+        providerNPIId = (EditText) findViewById(R.id.provider_npi_id);
         compRegBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +176,10 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     comInfo.setPassword(compPasswordtxt.getText().toString());
                     comInfo.setCompanyName(companyName.getText().toString());
                     comInfo.setTINorEIN(compEinOrTinNo.getText().toString());
+                    comInfo.setProviderNPIId(providerNPIId.getText().toString());
+                    comInfo.setProviderName(providerName.getText().toString());
                     comInfo.setRole("admin");
+                    comInfo.setStatus("chatPin");
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
                     if (data){

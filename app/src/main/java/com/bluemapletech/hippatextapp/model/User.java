@@ -6,15 +6,21 @@ package com.bluemapletech.hippatextapp.model;
 
 public class User {
 
-    private Long userId;
-    private String fullName;
-    private String empId;
-    private String role;
-    private String userName;
-    private String password;
+   /* private Long userId;
+    private String fullName;*/
+    private String auth;
+    private String chatPin;
     private String TINorEIN;
     private String companyName;
-    private String auth;
+    private String empId;
+    private String userName;
+    private String password;
+    private String role;
+    private String profilePjhoto;
+    private String providerNPIId;
+    private String providerName;
+    private String status;
+    private String senderId;
 
     public String getAuth() {
         return auth;
@@ -24,36 +30,28 @@ public class User {
         this.auth = auth;
     }
 
+    public String getChatPin() {
+        return chatPin;
+    }
+
+    public void setChatPin(String chatPin) {
+        this.chatPin = chatPin;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public String getTINorEIN() {
         return TINorEIN;
     }
 
     public void setTINorEIN(String TINorEIN) {
         this.TINorEIN = TINorEIN;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getEmpId() {
@@ -80,25 +78,70 @@ public class User {
         this.password = password;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getProfilePjhoto() {
+        return profilePjhoto;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setProfilePjhoto(String profilePjhoto) {
+        this.profilePjhoto = profilePjhoto;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getProviderNPIId() {
+        return providerNPIId;
+    }
+
+    public void setProviderNPIId(String providerNPIId) {
+        this.providerNPIId = providerNPIId;
+    }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
-                ", fullName='" + fullName + '\'' +
-                ", empId='" + empId + '\'' +
-                ", role='" + role + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
+                "auth='" + auth + '\'' +
+                ", chatPin='" + chatPin + '\'' +
                 ", TINorEIN='" + TINorEIN + '\'' +
                 ", companyName='" + companyName + '\'' +
+                ", empId='" + empId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", profilePjhoto='" + profilePjhoto + '\'' +
+                ", providerNPIId='" + providerNPIId + '\'' +
+                ", providerName='" + providerName + '\'' +
+                ", status='" + status + '\'' +
+                ", senderId='" + senderId + '\'' +
                 '}';
     }
 }

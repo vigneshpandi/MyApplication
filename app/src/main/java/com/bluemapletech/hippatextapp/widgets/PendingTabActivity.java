@@ -39,7 +39,6 @@ public class PendingTabActivity extends Fragment {
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
 
         DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails");
-        // List<User> compList = new ArrayList<User>();
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -48,17 +47,20 @@ public class PendingTabActivity extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
+                    user.setAuth(snapshot.child("auth").getValue(String.class));
+                    user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
-                    user.setTINorEIN(snapshot.child("compId").getValue(String.class));
                     user.setPassword(snapshot.child("password").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
-                    user.setAuth(snapshot.child("auth").getValue(String.class));
+                    user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
+                    user.setProviderName(snapshot.child("providerName").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    user.setStatus(snapshot.child("status").getValue(String.class));
+                    user.setChatPin(snapshot.child("chatPin").getValue(String.class));
                     if (user.getRole().matches("admin") && user.getAuth().matches("0")) {
                         userObj.add(user);
                     }
                 }
-
                 listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
             }
 

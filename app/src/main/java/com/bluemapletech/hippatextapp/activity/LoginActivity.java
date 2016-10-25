@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,11 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameTxt, passwordTxt;
     private Button loginBtn;
-
     private ProgressDialog progressDialog;
-
     private static final String TAG = LoginActivity.class.getCanonicalName();
-
+    public static final String userLogiMailId = "userLogiMailId";
+    User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
 
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        Log.d(TAG, "Logged in user information's:");
         DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -129,21 +128,39 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 String auth = map.get("auth");
                 String role = map.get("role");
-                if (auth.matches("1") && role.matches("root")) {
-                    Log.d(TAG, "Redirected to root admin dash board");
-                    Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
-                    startActivity(rootHome);
+                String status = map.get("status");
+                String userName = map.get("emailAddress");
+                Log.d(TAG, "Logged in user information's:");
+                if(status.matches("login")){
+                    if (auth.matches("1") && role.matches("root")) {
+                        Log.d(TAG, "Redirected to root admin dash board");
+                        Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
+                        startActivity(rootHome);
+                        progressDialog.dismiss();
+                    } else if (auth.matches("1") && role.matches("admin")) {
+                        Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
+                        startActivity(adminHome);
+                        progressDialog.dismiss();
+                    } else if (auth.matches("1") && role.matches("user")) {
+                        Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
+                        startActivity(employeeHome);
+                        progressDialog.dismiss();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
+                        Log.d("loginActivity", "under working");
+                    }}
+                else  if(status.matches("chatPin") && auth.matches("1") ){
                     progressDialog.dismiss();
-                } else if (auth.matches("1") && role.matches("admin")) {
-                    Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
-                    startActivity(adminHome);
-                    progressDialog.dismiss();
-                } else if (auth == "1" && role == "user") {
-                    progressDialog.dismiss();
-                } else {
+                    Intent redirect = new Intent(getActivity(), SecurePin.class);
+                    redirect.putExtra(userLogiMailId,userName);
+                    startActivity(redirect);
+                }
+                else{
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
                     Log.d("loginActivity", "under working");
+
                 }
             }
 
@@ -153,6 +170,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     public LoginActivity getActivity() {
         return this;

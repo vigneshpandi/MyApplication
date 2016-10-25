@@ -34,8 +34,10 @@
         <activity
             android:name=".activity.AdminHomeActivity"
             android:parentActivityName=".activity.HomeActivity" />
-        <activity android:name=".activity.ViewUserDetails"></activity>
-
+        <activity android:name=".activity.ViewUserDetails" />
+        <activity android:name=".activity.EmployeeHomeActivity" />
+        <activity android:name=".activity.ChatEmployeeActivity" />
+        <activity android:name=".activity.SecurePin"></activity>
     </application>
 
 </manifest>

@@ -179,6 +179,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         user.setEmpId(empIdTxt.getText().toString());
         user.setCompanyName(spinner.getSelectedItem().toString());
         user.setRole("user");
+        user.setChatPin("");
+        user.setStatus("chatPin");
         boolean insertUser = userDao.createEmployee(user);
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {
