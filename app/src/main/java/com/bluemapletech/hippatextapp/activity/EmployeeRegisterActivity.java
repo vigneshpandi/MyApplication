@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,7 +42,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuthRef;
-
+    private SecureRandom random;
     private ProgressDialog progressDialog;
 
     private static final String TAG = EmployeeRegisterActivity.class.getCanonicalName();
@@ -46,7 +50,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     private EditText emailTxt, passwordTxt, empIdTxt;
     private Button regBtn;
     private Spinner spinner;
-
+    private String password;
+    private String senderID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,17 +91,6 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 String empIdTxts = empIdTxt.getText().toString().trim();
 
                 boolean valid = true;
-              /*  View selectedView = spinner.getSelectedView();
-                if (selectedView != null && selectedView instanceof TextView) {
-                    TextView selectedTextView = (TextView) selectedView;
-                    if (!valid) {
-
-                        selectedTextView.setError("Company Name is invalid");
-                    }
-                    else {
-                        selectedTextView.setError(null);
-                    }
-                }*/
                 if(!isValidEmail(empEmailTxt)){
                     emailTxt.setError("Invalid Email");
                     valid = false;
@@ -134,7 +128,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         Log.d(TAG, "Get all list company has been called!");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference();
-        databaseRef.child("companyName").addValueEventListener(new ValueEventListener() {
+        databaseRef.child("approvedCompany").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> companyNames = new ArrayList<String>();
@@ -173,17 +167,38 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
     public void entryAuth() {
         User user = new User();
+        password = passwordTxt.getText().toString();
+        byte[] data = new byte[0];
+        try {
+            data = password.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         final UserDao userDao = new UserDao();
         user.setUserName(emailTxt.getText().toString());
-        user.setPassword(passwordTxt.getText().toString());
+        String enco = Base64.encodeToString(data, Base64.NO_WRAP);
+        user.setPassword(enco);
         user.setEmpId(empIdTxt.getText().toString());
         user.setCompanyName(spinner.getSelectedItem().toString());
+        user.setAuth("0");
         user.setRole("user");
-        user.setChatPin("");
         user.setStatus("chatPin");
-        boolean insertUser = userDao.createEmployee(user);
+        user.setChatPin("");
+        user.setTINorEIN("");
+        user.setDesignation("");
+        user.setFirstName("");
+        user.setLastName("");
+        random = new SecureRandom();
+        senderID = new BigInteger(130, random).toString(32);
+        String randomValue = senderID.substring(0, 7);
+        Log.d("randomValue",randomValue);
+        user.setSenderId(randomValue);
+        user.setProviderName("");
+        user.setProviderNPIId("");
+        user.setProfilePjhoto("");
+       boolean insertUser = userDao.createEmployee(user);
         Log.d(TAG, "Returned user result: " + insertUser);
-        if (insertUser) {
+       if (insertUser) {
             progressDialog.dismiss();
             Intent intent = new Intent(getActivity(), HomeActivity.class);
             startActivity(intent);

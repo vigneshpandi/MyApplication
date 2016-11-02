@@ -11,6 +11,7 @@ import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
 import com.bluemapletech.hippatextapp.widgets.AcceptedAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.ChatAdminActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
+import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         // Creating tabs
         viewPagerAdapter.addFragments(new AcceptedAdminTabActivity(),"Accepted");
+        viewPagerAdapter.addFragments(new RequestedAdminTabActivity(),"Requested");
         viewPagerAdapter.addFragments(new PendingAdminTabActivity(),"Pending");
         viewPagerAdapter.addFragments(new ChatAdminActivity(),"Chat");
 

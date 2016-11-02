@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
 import com.bluemapletech.hippatextapp.widgets.AcceptedTabActivity;
-import com.bluemapletech.hippatextapp.widgets.ChatTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingTabActivity;
+import com.bluemapletech.hippatextapp.widgets.RequestedTabActivity;
 
 public class RootHomeActivity extends AppCompatActivity {
 
@@ -34,8 +34,9 @@ public class RootHomeActivity extends AppCompatActivity {
 
         // Creating tabs
         viewPagerAdapter.addFragments(new AcceptedTabActivity(),"Accepted");
+        viewPagerAdapter.addFragments(new RequestedTabActivity(),"Requested");
         viewPagerAdapter.addFragments(new PendingTabActivity(),"Pending");
-        viewPagerAdapter.addFragments(new ChatTabActivity(),"Chat");
+
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

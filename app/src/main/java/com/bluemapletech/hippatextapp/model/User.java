@@ -21,6 +21,9 @@ public class User {
     private String providerName;
     private String status;
     private String senderId;
+    private String designation;
+    private String firstName;
+    private String lastName;
 
     public String getAuth() {
         return auth;
@@ -38,20 +41,20 @@ public class User {
         this.chatPin = chatPin;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public String getTINorEIN() {
         return TINorEIN;
     }
 
     public void setTINorEIN(String TINorEIN) {
         this.TINorEIN = TINorEIN;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getEmpId() {
@@ -78,14 +81,6 @@ public class User {
         this.password = password;
     }
 
-    public String getProfilePjhoto() {
-        return profilePjhoto;
-    }
-
-    public void setProfilePjhoto(String profilePjhoto) {
-        this.profilePjhoto = profilePjhoto;
-    }
-
     public String getRole() {
         return role;
     }
@@ -94,12 +89,12 @@ public class User {
         this.role = role;
     }
 
-    public String getProviderNPIId() {
-        return providerNPIId;
+    public String getProfilePjhoto() {
+        return profilePjhoto;
     }
 
-    public void setProviderNPIId(String providerNPIId) {
-        this.providerNPIId = providerNPIId;
+    public void setProfilePjhoto(String profilePjhoto) {
+        this.profilePjhoto = profilePjhoto;
     }
 
     public String getProviderName() {
@@ -108,6 +103,14 @@ public class User {
 
     public void setProviderName(String providerName) {
         this.providerName = providerName;
+    }
+
+    public String getProviderNPIId() {
+        return providerNPIId;
+    }
+
+    public void setProviderNPIId(String providerNPIId) {
+        this.providerNPIId = providerNPIId;
     }
 
     public String getStatus() {
@@ -126,6 +129,30 @@ public class User {
         this.senderId = senderId;
     }
 
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -142,6 +169,9 @@ public class User {
                 ", providerName='" + providerName + '\'' +
                 ", status='" + status + '\'' +
                 ", senderId='" + senderId + '\'' +
+                ", designation='" + designation + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
     }
 }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public class SecurePin extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class SecurePin extends AppCompatActivity {
     private Button loginSecureBtn;
     private String auth;
     private String role;
+    private String securePin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +43,16 @@ public class SecurePin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                         Log.d("user",auth);
-               // user = new User();
                 if(chatPin.getText().toString().matches(conformChatPin.getText().toString())){
-                    user.setChatPin(chatPin.getText().toString());
+                    securePin = chatPin.getText().toString();
+                    byte[] data = new byte[0];
+                    try {
+                        data = securePin.getBytes("UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String enCode = Base64.encodeToString(data, Base64.NO_WRAP);
+                    user.setChatPin(enCode);
                     user.setStatus("login");
                 if (user.getAuth().matches("1") && user.getRole().matches("root")) {
                     Log.d(TAG, "Redirected to root admin dash board");
@@ -92,6 +102,7 @@ public class SecurePin extends AppCompatActivity {
                 user.setProviderName(map.get("providerName"));
                 user.setRole(map.get("role"));
                 user.setUserName(map.get("emailAddress"));
+                user.setSenderId(map.get("senderId"));
             }
 
             @Override
@@ -106,7 +117,7 @@ public class SecurePin extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
         if (result) {
-            Log.d(TAG, "Company accepted successfully!");
+            Log.d(TAG, "Company secure pin added successfully!");
             Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(adminHome);
         } else {
@@ -117,7 +128,8 @@ public class SecurePin extends AppCompatActivity {
     public void saveChatPinEmp(User user) {
         Log.d(TAG, "Add invited company method has been called!");
         final UserDao userDao = new UserDao();
-        boolean result = userDao.sendInvite(user);
+        boolean result = userDao.saveSecure(user);
+        Log.d("resullttt", String.valueOf(result));
         if (result) {
             Log.d(TAG, "Company accepted successfully!");
             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
@@ -126,18 +138,6 @@ public class SecurePin extends AppCompatActivity {
             Log.d(TAG, "Error while adding the company, please try again!");
         }
     }
-
-
-    /*public void saveData(){
-        Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
-        startActivity(adminHome);
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        String reArrangeEmail = userEmail.replace(".", "-");
-        DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("chatPin");
-        dataReference.setValue(user.getChatPin());
-
-    }
-*/
 
     public SecurePin getActivity() {
         return this;

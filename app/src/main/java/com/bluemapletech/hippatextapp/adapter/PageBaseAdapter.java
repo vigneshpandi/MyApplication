@@ -27,6 +27,7 @@ public class PageBaseAdapter extends BaseAdapter {
 
     private static final String TAG = PageBaseAdapter.class.getCanonicalName();
     public static final String userEmail = "userEmail";
+    public static final String userAuth = "userAuth";
     LayoutInflater inflater;
     Context context;
     List<User> userInfo = new ArrayList<User>();
@@ -73,20 +74,22 @@ public class PageBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("0")) {
-                    addInvitedCompany(userInfo.get(position));
-                } else {
                     Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(userEmail, userInfo.get(position).getUserName());
+                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
+                }else if(userInfo.get(position).getAuth().matches("1")){
+                    pending(userInfo.get(position));
+                }else if(userInfo.get(position).getAuth().matches("2")){
+                    accepted(userInfo.get(position));
                 }
+
             }
         });
         ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userInfo.get(0).getAuth().matches("0")) {
-                    cacncelCompany(userInfo.get(position));
-                } else {
+                if (!userInfo.get(0).getAuth().matches("0")) {
                     deleteCompany(userInfo.get(position));
                 }
             }
@@ -98,16 +101,32 @@ public class PageBaseAdapter extends BaseAdapter {
                // int position=(Integer)v.getTag();
                 Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(userEmail, userInfo.get(position).getUserName());
+                intent.putExtra(userAuth, userInfo.get(position).getAuth());
                 context.startActivity(intent);
             }
         });
 
-        if (userInfo.get(0).getAuth().matches("1")) {
+        if (userInfo.get(0).getAuth().matches("0")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View");
+            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(btns.INVISIBLE);
+        }
+
+        if (userInfo.get(0).getAuth().matches("1")) {
+            Button btn = (Button) convertView.findViewById(R.id.accept_btn);
+            btn.setText("pending");
             Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setText("Delete");
         }
+
+        if (userInfo.get(0).getAuth().matches("2")) {
+            Button btn = (Button) convertView.findViewById(R.id.accept_btn);
+            btn.setText("accept");
+            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setText("Delete");
+        }
+
         return convertView;
     }
 
@@ -120,32 +139,33 @@ public class PageBaseAdapter extends BaseAdapter {
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);
         }
     }
-
-    public void addInvitedCompany(User user) {
-        Log.d(TAG, "Add invited company method has been called!"+user.toString());
-        final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.addInvitedCompany(user);
-        if (result) {
-            Log.d(TAG, "Company accepted successfully!");
-            Toast.makeText(this.context, "Request has been accepted by the admin!", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d(TAG, "Error while adding the company, please try again!");
-        }
-    }
-
-    public void cacncelCompany(User user) {
+    public void accepted(User user) {
+        user.setAuth("1");
         Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.cancelCompany(user);
+        boolean result = companyDao.acceptedCompany(user);
         if (result) {
-            Log.d(TAG, "Companycanceled successfully!");
-            Toast.makeText(this.context, "Request has been canceled by the admin!", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Company canceled successfully!");
+            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d(TAG, "Error while cancel the company, please try again!");
+            Log.d(TAG, "Error while delete the company, please try again!");
+        }
+
+    }
+    public void pending(User user) {
+        user.setAuth("2");
+        Log.d(TAG, "Add invited company method has been called!");
+        final CompanyDao companyDao = new CompanyDao();
+        boolean result = companyDao.pendingCompany(user);
+        if (result) {
+            Log.d(TAG, "Company canceled successfully!");
+            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+        } else {
+            Log.d(TAG, "Error while delete the company, please try again!");
         }
     }
-
     public void deleteCompany(User user) {
+        user.setAuth("3");
         Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.deleteCompany(user);

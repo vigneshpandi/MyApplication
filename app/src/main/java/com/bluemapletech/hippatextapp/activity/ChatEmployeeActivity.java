@@ -30,13 +30,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String mConvoId;
     private UserDao.MessagesListener mListener;
     private String toMail;
-    private String fromMail;
+    private String fromMail, senderId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caht_employee);
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
+        senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
         mListView = (ListView)findViewById(R.id.message_list);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
@@ -65,6 +66,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         msg.setMtext(newMessage);
         msg.setMsender(fromMail);
         msg.setToChatEmail(toMail);
+        msg.setSenderId(senderId);
         UserDao.saveMessage(msg, mConvoId);
     }
 

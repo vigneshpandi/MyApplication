@@ -10,7 +10,7 @@ public class Message {
     private String mtext;
     private String msender;
     private String toChatEmail;
-
+    private String senderId;
     public String getMtext() {
         return mtext;
     }
@@ -35,12 +35,21 @@ public class Message {
         this.toChatEmail = toChatEmail;
     }
 
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "mtext='" + mtext + '\'' +
                 ", msender='" + msender + '\'' +
                 ", toChatEmail='" + toChatEmail + '\'' +
+                ", senderId='" + senderId + '\'' +
                 '}';
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,12 +43,13 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuthRef;
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
-
+    private SecureRandom random;
     private ProgressDialog progressDialog;
 
     private EditText compEmailtxt, compPasswordtxt, companyName, compEinOrTinNo,providerName,providerNPIId;
     private Button compRegBtn;
-
+    private String password;
+    private String senderID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,14 +177,34 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     Log.d(TAG, "Company name already exists!");
                 } else {
                     User comInfo = new User();
+                    password = compPasswordtxt.getText().toString();
+                    byte[] enCode = new byte[0];
+                    try {
+                        enCode = password.getBytes("UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
                     comInfo.setUserName(compEmailtxt.getText().toString());
-                    comInfo.setPassword(compPasswordtxt.getText().toString());
+                    comInfo.setPassword(enCodes);
                     comInfo.setCompanyName(companyName.getText().toString());
                     comInfo.setTINorEIN(compEinOrTinNo.getText().toString());
                     comInfo.setProviderNPIId(providerNPIId.getText().toString());
                     comInfo.setProviderName(providerName.getText().toString());
                     comInfo.setRole("admin");
                     comInfo.setStatus("chatPin");
+                    comInfo.setEmpId("");
+                    comInfo.setAuth("0");
+                    comInfo.setChatPin("");
+                    comInfo.setDesignation("");
+                    comInfo.setFirstName("");
+                    comInfo.setLastName("");
+                    random = new SecureRandom();
+                    senderID = new BigInteger(130, random).toString(32);
+                    String randomValue = senderID.substring(0, 7);
+                    Log.d("randomValue",randomValue);
+                    comInfo.setSenderId(randomValue);
+                    comInfo.setProfilePjhoto("");
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
                     if (data){

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.User;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     private static final String TAG = PageBaseAdapter.class.getCanonicalName();
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
+    public static final String sendId = "sendId";
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
@@ -90,10 +94,19 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String srt = chatPinn.getEditableText().toString();
                        Log.d("chatPin srt",srt);
-                        if(srt.matches(chatPin)) {
+                        byte[] data1 = Base64.decode(chatPin, Base64.NO_WRAP);
+                        String text = null;
+                        try {
+                            text = new String(data1, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(srt.matches(text)) {
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
+                            intent.putExtra(sendId,userInfo.get(position).getSenderId());
                             context.startActivity(intent);
                         }else{
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();

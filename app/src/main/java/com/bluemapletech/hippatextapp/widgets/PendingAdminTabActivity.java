@@ -48,7 +48,6 @@ public class PendingAdminTabActivity extends Fragment {
         checkCompanyExistence();
 
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
-        // List<User> compList = new ArrayList<User>();
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,19 +57,17 @@ public class PendingAdminTabActivity extends Fragment {
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
-                    user.setPassword(snapshot.child("password").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    user.setStatus(snapshot.child("status").getValue(String.class));
-                    user.setChatPin(snapshot.child("chatPin").getValue(String.class));
-                    if (user.getRole().matches("user") && user.getAuth().matches("0")
+                    if (user.getRole().matches("user") && user.getAuth().matches("2")
                             && loggedINCompany.matches(user.getCompanyName())) {
                         userObj.add(user);
                     }
                 }
-
-                listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
+if(userObj!=null) {
+    listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
+}
             }
 
             @Override

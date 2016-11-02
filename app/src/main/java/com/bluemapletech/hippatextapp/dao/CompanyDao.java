@@ -3,6 +3,7 @@ package com.bluemapletech.hippatextapp.dao;
 import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.User;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -20,85 +21,31 @@ public class CompanyDao {
 
     private DatabaseReference databaseRef;
 
-    public boolean addInvitedCompany(User user) {
-
-        Log.d(TAG, "Add invited company dao method has been called!"+user.toString());
-        HashMap<String, Object> invite = new HashMap<>();
+    public boolean acceptedCompany(User user){
         String reArrangeEmail = user.getUserName().replace(".", "-");
-        invite.put("auth", "1");
-        invite.put("companyCINNumber", user.getTINorEIN());
-        invite.put("companyName", user.getCompanyName());
-        invite.put("emailAddress", user.getUserName());
-        invite.put("password", user.getPassword());
-        invite.put("role", user.getRole());
-        invite.put("chatPin",user.getChatPin());
-        invite.put("status",user.getStatus());
-        invite.put("providerNPIId",user.getProviderNPIId());
-        invite.put("providerName",user.getProviderName());
-        invite.put("designation","");
-        invite.put("firstName","");
-        invite.put("lastName","");
-        invite.put("profilePhoto","");
-
-        invite.put("senderId","");
-
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.setValue(invite);
+        DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(user.getCompanyName()).child("companyName");
+        databaseRefs.setValue(user.getCompanyName());
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
         return true;
-
     }
 
-    public boolean cancelCompany(User user) {
+    public boolean pendingCompany(User user) {
         Log.d(TAG, "Add invited company dao method has been called!");
-        HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
-        invite.put("auth", "2");
-        invite.put("companyCINNumber", user.getTINorEIN());
-        invite.put("emailAddress", user.getUserName());
-        invite.put("password", user.getPassword());
-        invite.put("companyName", user.getCompanyName());
-        invite.put("role", user.getRole());
-        invite.put("chatPin",user.getChatPin());
-        invite.put("status",user.getStatus());
-        invite.put("designation","");
-        invite.put("firstName","");
-        invite.put("lastName","");
-        invite.put("profilePhoto","");
-        invite.put("providerNPIId",user.getProviderNPIId());
-        invite.put("providerName",user.getProviderName());
-        invite.put("senderId","");
-
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.setValue(invite);
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
         return true;
-
     }
 
     public boolean deleteCompany(User user) {
         Log.d(TAG, "Add invited company dao method has been called!");
-        HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
-        invite.put("auth", "2");
-        invite.put("emailAddress", user.getUserName());
-        invite.put("password", user.getPassword());
-        invite.put("companyCINNumber", user.getTINorEIN());
-        invite.put("companyName", user.getCompanyName());
-        invite.put("role", user.getRole());
-        invite.put("chatPin",user.getChatPin());
-        invite.put("status",user.getStatus());
-        invite.put("designation","");
-        invite.put("firstName","");
-        invite.put("lastName","");
-        invite.put("profilePhoto","");
-        invite.put("providerNPIId",user.getProviderNPIId());
-        invite.put("providerName",user.getProviderName());
-        invite.put("senderId","");
-
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.setValue(invite);
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
         return true;
     }
 

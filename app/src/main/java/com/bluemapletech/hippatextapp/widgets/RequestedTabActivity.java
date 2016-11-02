@@ -24,12 +24,10 @@ import java.util.List;
  * Created by Kumaresan on 20-10-2016.
  */
 
-public class AcceptedTabActivity extends Fragment {
+public class RequestedTabActivity extends Fragment {
+    private static final String TAG = PendingTabActivity.class.getCanonicalName();
 
     private ListView listview;
-    ArrayList compList = new ArrayList();
-
-    private static final String TAG = AcceptedTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,6 +36,7 @@ public class AcceptedTabActivity extends Fragment {
         listview = (ListView) rootView.findViewById(R.id.pending_tab_fragment);
 
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+
         DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails");
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -52,13 +51,11 @@ public class AcceptedTabActivity extends Fragment {
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    if (user.getRole().matches("admin") && user.getAuth().matches("1")) {
-                        Log.d(TAG, "Snapshot values from admin: " + snapshot.toString());
+                    if (user.getRole().matches("admin") && user.getAuth().matches("0")) {
                         userObj.add(user);
                     }
                 }
-
-                listview.setAdapter(new PageBaseAdapter(getActivity(),userObj));
+                listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
             }
 
             @Override
@@ -68,4 +65,6 @@ public class AcceptedTabActivity extends Fragment {
         });
         return rootView;
     }
+
+
 }

@@ -4,14 +4,20 @@ import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.model.User;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -30,23 +36,24 @@ public class UserDao {
     private static final String TAG = UserDao.class.getCanonicalName();
 
     public boolean createEmployee(User user){
+        boolean success = false;
         Log.d(TAG, "Create employee dao method has been called!");
         HashMap<String, Object> empData = new HashMap<>();
-        empData.put("auth","0");
-        empData.put("chatPin","");
+        empData.put("auth",user.getAuth());
+        empData.put("chatPin",user.getChatPin());
         empData.put("companyCINNumber",user.getTINorEIN());
         empData.put("companyName", user.getCompanyName());
-        empData.put("designation","");
+        empData.put("designation",user.getDesignation());
         empData.put("emailAddress", user.getUserName());
         empData.put("employeeId", user.getEmpId());
-        empData.put("firstName","");
-        empData.put("lastName","");
+        empData.put("firstName",user.getFirstName());
+        empData.put("lastName",user.getLastName());
         empData.put("password",user.getPassword());
-        empData.put("profilePhoto","");
-        empData.put("providerNPIId","");
-        empData.put("providerName","");
+        empData.put("profilePhoto",user.getProfilePjhoto());
+        empData.put("providerNPIId",user.getProviderNPIId());
+        empData.put("providerName",user.getProviderName());
         empData.put("role", user.getRole());
-        empData.put("senderId","");
+        empData.put("senderId",user.getSenderId());
         empData.put("status",user.getStatus());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
@@ -56,77 +63,90 @@ public class UserDao {
     }
 
     public boolean createCompany(User user){
+        boolean success = false;
         Log.d(TAG, "Create company dao method has been called!");
         HashMap<String, Object> compData = new HashMap<>();
-        compData.put("auth","0");
+        compData.put("auth",user.getAuth());
         compData.put("chatPin",user.getChatPin());
         compData.put("companyCINNumber",user.getTINorEIN());
         compData.put("companyName", user.getCompanyName());
+        compData.put("designation",user.getDesignation());
         compData.put("emailAddress", user.getUserName());
+        compData.put("employeeId", user.getEmpId());
+        compData.put("firstName",user.getFirstName());
+        compData.put("lastName",user.getLastName());
         compData.put("password",user.getPassword());
+        compData.put("profilePhoto",user.getProfilePjhoto());
         compData.put("providerNPIId",user.getProviderNPIId());
         compData.put("providerName",user.getProviderName());
         compData.put("role", user.getRole());
+        compData.put("senderId",user.getSenderId());
         compData.put("status",user.getStatus());
-        compData.put("designation","");
-        compData.put("employeeId","");
-        compData.put("firstName","");
-        compData.put("lastName","");
-        compData.put("profilePhoto","");
-        compData.put("senderId","");
-
             String reArrangeEmail = user.getUserName().replace(".", "-");
             firebaseDatabaseRef = FirebaseDatabase.getInstance();
-            DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("companyName").child(user.getCompanyName()).child("companyName");
+            DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
             dataReference.setValue(compData.get("companyName"));
             DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-            databaseRef.setValue(compData);
+          databaseRef.setValue(compData);
         return true;
     }
 
-    public boolean sendInvite(User user){
 
+    public boolean acceptedEmployee(User user) {
         Log.d(TAG, "Add invited company dao method has been called!");
-        HashMap<String, Object> invite = new HashMap<>();
         String reArrangeEmail = user.getUserName().replace(".", "-");
-        invite.put("auth", "1");
-       invite.put("chatPin",user.getChatPin());
-        invite.put("employeeId", user.getEmpId());
-        invite.put("companyName", user.getCompanyName());
-        invite.put("emailAddress", user.getUserName());
-        invite.put("password", user.getPassword());
-        invite.put("role", user.getRole());
-        invite.put("status",user.getStatus());
-        invite.put("designation","");
-        invite.put("firstName","");
-        invite.put("lastName","");
-        invite.put("profilePhoto","");
-        invite.put("providerNPIId","");
-        invite.put("providerName","");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.setValue(invite);
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
         return true;
     }
+
+    public boolean pendingEmployee(User user) {
+        Log.d(TAG, "Add invited company dao method has been called!");
+        String reArrangeEmail = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
+        return true;
+    }
+
+    public boolean deleteEmployee(User user) {
+        Log.d(TAG, "Add invited company dao method has been called!");
+        String reArrangeEmail = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
+        return true;
+    }
+
+
+
     public static void saveMessage(Message message, String convoId){
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        String myFormat = "dd/MM/yy, hh:mm:aa";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+          String dateValue = sdf.format(c.getTime());
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");
         String[] ids = {sendMail,"+", toMail};
         Arrays.sort(ids);
         convIds = ids[1]+ids[0]+ids[2];
-
         HashMap<String, String> msg = new HashMap<>();
         msg.put("text", message.getMtext());
         msg.put("email",message.getMsender());
         msg.put("tochatemail",message.getToChatEmail());
         msg.put("image","");
-        msg.put("childappendid","");
-        msg.put("dateandtime","");
-        msg.put("senderId","");
-        sRef.child("messages").child(convIds).child("chat").push().setValue(msg);
+        msg.put("dateandtime",dateValue);
+        msg.put("senderId",message.getSenderId());
+        DatabaseReference value = sRef.child("messages").child(convIds).child("chat").push();
+        Log.d("rootMessage",value.toString());
+        String urlValue = value.toString();
+        String[] re = urlValue.split("/");
+        Log.d("values",re[6]);
+        msg.put("childappendid",re[6]);
+        value.setValue(msg);
     }
-
-
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
         MessagesListener listener = new MessagesListener(callbacks);
         sRef.child("messages").child(convoId).child("chat").addChildEventListener(listener);
@@ -184,6 +204,7 @@ public class UserDao {
     }
 
     public boolean saveSecure(User user){
+        boolean success = false;
         Log.d(TAG, "Create company dao method has been called!");
         HashMap<String, Object> compData = new HashMap<>();
         compData.put("auth","1");
@@ -197,21 +218,21 @@ public class UserDao {
         compData.put("role", user.getRole());
         compData.put("status",user.getStatus());
         compData.put("designation","");
-        compData.put("employeeId","");
+        compData.put("employeeId",user.getEmpId());
         compData.put("firstName","");
         compData.put("lastName","");
         compData.put("profilePhoto","");
-        compData.put("senderId","");
+        compData.put("senderId",user.getSenderId());
 
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("companyName").child(user.getCompanyName()).child("companyName");
-        dataReference.setValue(compData.get("companyName"));
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.setValue(compData);
-        return true;
+       Task<Void> result =  databaseRef.setValue(compData);
+         if(result.isSuccessful()){
+            success = true;
+        }
+        return success;
     }
 
-   /* public UserDao getActivity(){ return this;}*/
 
 }

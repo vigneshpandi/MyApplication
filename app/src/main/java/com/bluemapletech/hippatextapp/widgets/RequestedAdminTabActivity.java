@@ -23,56 +23,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kumaresan on 20-10-2016.
+ * Created by Win7v5 on 10/27/2016.
  */
 
-public class AcceptedAdminTabActivity extends Fragment{
+public class RequestedAdminTabActivity extends Fragment {
     private ListView listview;
     ArrayList empList = new ArrayList();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private String loggedINCompany;
-    private static final String TAG = AcceptedTabActivity.class.getCanonicalName();
-
+    private static final String TAG = RequestedAdminTabActivity.class.getCanonicalName();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
+    View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
 
-        listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
+    listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
 
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        final User user = new User();
-        checkCompanyExistence();
-        DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
-        dataReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-                List<User> userObj = new ArrayList<User>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
-                    user = new User();
-                    user.setAuth(snapshot.child("auth").getValue(String.class));
-                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
-                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
-                    user.setRole(snapshot.child("role").getValue(String.class));
-                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    if (user.getRole().matches("user") && user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName())) {
-                        userObj.add(user);
-                    }
-                }
-                if(userObj!=null) {
-                    listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
+    fireBaseDatabase = FirebaseDatabase.getInstance();
+    final User user = new User();
+    checkCompanyExistence();
+    DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
+    dataReference.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            User user;
+            List<User> userObj = new ArrayList<User>();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                Log.d(TAG, "Snapshot value: " + snapshot.toString());
+                user = new User();
+                user.setCompanyName(snapshot.child("companyName").getValue(String.class));
+                user.setEmpId(snapshot.child("employeeId").getValue(String.class));
+                user.setRole(snapshot.child("role").getValue(String.class));
+                user.setAuth(snapshot.child("auth").getValue(String.class));
+                user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                if (user.getRole().matches("user") && user.getAuth().matches("0")&& loggedINCompany.matches(user.getCompanyName())) {
+                    userObj.add(user);
                 }
             }
+            listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-        return rootView;
-    }
+        }
+    });
+    return rootView;
+}
 
 
     public void checkCompanyExistence() {

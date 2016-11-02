@@ -92,7 +92,21 @@
             </TableRow>
 
         </TableLayout>
-
+        <Button
+            android:id="@+id/accept_user_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Acceept"/>
+        <Button
+            android:id="@+id/pending_user_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pending"/>
+        <Button
+            android:id="@+id/delete_user_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete"/>
     </LinearLayout>
 
 </LinearLayout>

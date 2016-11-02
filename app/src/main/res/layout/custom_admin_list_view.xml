@@ -3,8 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:text="Invite"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/accept_btn"
+        android:background="@color/accept_btn"
+        android:textColor="@color/btn_text_color"
+        android:layout_alignBaseline="@+id/layout_field_name"
+        android:layout_alignBottom="@+id/layout_field_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp" />
+
+    <Button
+        android:text="Cancel"
+        android:background="@color/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="20dp"
+        android:id="@+id/cancel_btn"
+        android:textColor="@color/btn_text_color"
+        android:layout_below="@+id/accept_btn"
+        android:layout_alignLeft="@+id/accept_btn"
+        android:layout_alignStart="@+id/accept_btn" />
 
     <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="19dp"
+        android:id="@+id/layout_field_id"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_field_name"
+        android:gravity="left"
+        android:layout_alignBaseline="@+id/layout_field_id"
+        android:layout_alignBottom="@+id/layout_field_id"
+        android:layout_centerHorizontal="true" />
+  <!--  <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,6 +87,7 @@
         android:layout_marginEnd="12dp"
         android:layout_alignTop="@+id/layout_field_name"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true" />-->
+
 
 </RelativeLayout>
