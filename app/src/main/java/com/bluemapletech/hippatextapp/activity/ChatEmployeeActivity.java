@@ -66,6 +66,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         msg.setMtext(newMessage);
         msg.setMsender(fromMail);
         msg.setToChatEmail(toMail);
+        Log.d("sendeerID",senderId);
         msg.setSenderId(senderId);
         UserDao.saveMessage(msg, mConvoId);
     }

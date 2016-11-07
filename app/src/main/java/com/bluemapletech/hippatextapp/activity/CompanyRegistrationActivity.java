@@ -3,6 +3,7 @@ package com.bluemapletech.hippatextapp.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -18,9 +19,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +32,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -50,6 +56,12 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private Button compRegBtn;
     private String password;
     private String senderID;
+    private StorageReference mStorage;
+    private Uri uri;
+    private StorageReference filePath;
+
+    private User comInfos = new User();;
+    private Uri downloadUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +71,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        mStorage = FirebaseStorage.getInstance().getReference();
         init();
     }
 
@@ -207,7 +220,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     comInfo.setProfilePjhoto("");
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
-                    if (data){
+                  if (data){
                         progressDialog.dismiss();
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                         alertDialog.setTitle("Thank You Registering");
@@ -222,6 +235,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                         // Showing Alert Message
                         alertDialog.show();
                     }else{
+                        progressDialog.dismiss();
                         Log.d(TAG, "Error while inserting the company details!");
                         Toast.makeText(getActivity(),"Error while inserting the company details!",Toast.LENGTH_LONG).show();
                     }

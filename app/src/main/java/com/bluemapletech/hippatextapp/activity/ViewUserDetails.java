@@ -137,36 +137,30 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
 
     public void acceptedCompany(User user) {
         user.setAuth("1");
-        Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
+            Log.d(TAG, "Error while accepted the company, please try again!");
         }
 
     }
     public void pendingCompany(User user) {
         user.setAuth("2");
-        Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
+            Log.d(TAG, "Error while pending the company, please try again!");
         }
     }
     public void deleteCompany(User user) {
         user.setAuth("3");
-        Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.deleteCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -174,38 +168,33 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
     }
     public void acceptedEmployee(User user) {
         user.setAuth("1");
-        Log.d(TAG, "Add invited company method has been called!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
         if (result) {
             Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
+            Log.d(TAG, "Error while accepted the company, please try again!");
         }
 
     }
 
     public void pendingEmployee(User user) {
         user.setAuth("2");
-        Log.d(TAG, "Add invited company method has been called!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.pendingEmployee(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
+            Log.d(TAG, "Error while pending the company, please try again!");
         }
     }
 
     public void deleteEmployee(User user) {
         user.setAuth("3");
-        Log.d(TAG, "Add invited company method has been called!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.deleteEmployee(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");

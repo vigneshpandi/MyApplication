@@ -5,6 +5,7 @@
     <!-- Enable internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -37,7 +38,8 @@
         <activity android:name=".activity.ViewUserDetails" />
         <activity android:name=".activity.EmployeeHomeActivity" />
         <activity android:name=".activity.ChatEmployeeActivity" />
-        <activity android:name=".activity.SecurePin"></activity>
+        <activity android:name=".activity.SecurePin" />
+        <activity android:name=".activity.CreateGroup"></activity>
     </application>
 
 </manifest>

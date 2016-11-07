@@ -60,11 +60,14 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    user.setSenderId(snapshot.child("senderId").getValue(String.class));
                     if (user.getRole().matches("user") && user.getAuth().matches("1")&& !loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }
                 }
-                listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj,loggedINEmail,loggedINChatPin));
+               if(getActivity() !=null) {
+                   listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+               }
             }
 
             @Override

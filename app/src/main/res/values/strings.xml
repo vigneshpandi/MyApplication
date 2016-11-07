@@ -4,4 +4,7 @@
     <string name="email_address">Please enter valid email address!</string>
     <string name="password">Please enter valid password!</string>
     <string name="alpha_numeric">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890...</string>
+    <string name="new_group">New group</string>
+    <string name="group_create">Create</string>
+    <string name="log_out">LogOut</string>
 </resources>

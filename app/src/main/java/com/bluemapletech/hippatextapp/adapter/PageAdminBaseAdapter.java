@@ -83,14 +83,14 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                 } else if(userInfo.get(position).getAuth().matches("2")){
                     accepted(userInfo.get(position));
                 } else if(userInfo.get(position).getAuth().matches("1")) {
-                    pending(userInfo.get(position));
+                    deleteEmpl(userInfo.get(position));
                 }
             }
         });
         ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!userInfo.get(0).getAuth().matches("0")) {
+                if (userInfo.get(0).getAuth().matches("2")) {
                     deleteEmpl(userInfo.get(position));
                 }
             }
@@ -126,9 +126,10 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("pending");
-            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");
+            btn.setText("Delete");
+            btn.setBackgroundColor(Color.parseColor("#ff3322"));
+            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(btns.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {

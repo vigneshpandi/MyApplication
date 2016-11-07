@@ -61,7 +61,7 @@ public class AcceptedAdminTabActivity extends Fragment{
                         userObj.add(user);
                     }
                 }
-                if(userObj!=null) {
+                if(getActivity()!=null) {
                     listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
                 }
             }

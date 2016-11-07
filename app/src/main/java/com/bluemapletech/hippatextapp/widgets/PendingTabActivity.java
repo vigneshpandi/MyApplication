@@ -56,7 +56,10 @@ public class PendingTabActivity extends Fragment {
                         userObj.add(user);
                     }
                 }
-                listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
+                if(getActivity()!=null){
+                    listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
+                }
+
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.Message;
@@ -11,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.UnsupportedEncodingException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -87,7 +89,11 @@ public class UserDao {
             DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
             dataReference.setValue(compData.get("companyName"));
             DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-          databaseRef.setValue(compData);
+        databaseRef.setValue(compData);
+       /* Task<Void> result =  databaseRef.setValue(compData);
+        if(result.isSuccessful()){
+            success = true;
+        }*/
         return true;
     }
 
@@ -96,6 +102,7 @@ public class UserDao {
         Log.d(TAG, "Add invited company dao method has been called!");
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        Log.d("sdsdsdsd","ssdsdsdsdsdsdsdsdsd"+reArrangeEmail);
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
         return true;
@@ -122,6 +129,14 @@ public class UserDao {
 
 
     public static void saveMessage(Message message, String convoId){
+         String  TextMessage = message.getMtext();
+        byte[] data = new byte[0];
+        try {
+            data = TextMessage.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String encoText = Base64.encodeToString(data, Base64.NO_WRAP);
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         String myFormat = "dd/MM/yy, hh:mm:aa";
@@ -133,7 +148,7 @@ public class UserDao {
         Arrays.sort(ids);
         convIds = ids[1]+ids[0]+ids[2];
         HashMap<String, String> msg = new HashMap<>();
-        msg.put("text", message.getMtext());
+        msg.put("text", encoText);
         msg.put("email",message.getMsender());
         msg.put("tochatemail",message.getToChatEmail());
         msg.put("image","");
@@ -169,7 +184,16 @@ public class UserDao {
             Map<String,String> msg = (Map)dataSnapshot.getValue();
             Message message = new Message();
             message.setMsender(msg.get("email"));
-            message.setMtext(msg.get("text"));
+            String srt = msg.get("text");
+            byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
+            String text = null;
+            try {
+                text = new String(data1, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            message.setMtext(text);
             if(callbacks != null){
                 callbacks.onMessageAdded(message);
             }

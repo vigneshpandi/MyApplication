@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.User;
@@ -49,7 +50,21 @@ public class CompanyDao {
         return true;
     }
 
+    public boolean profileImageUrl(User comInfos) {
+        Log.d(TAG, "Add profileImage url!");
+        String reArrangeEmail = comInfos.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("profilePhoto");
+        databaseRef.setValue(comInfos.getProfilePjhoto());
+        return true;
+    }
 
+    public void profileImageUrl(String profilePjhoto, String userName) {
+        Log.d(TAG, "Add profileImage url!");
+        String reArrangeEmail = userName.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("profilePhoto");
+        databaseRef.setValue(profilePjhoto);
 
-
+    }
 }

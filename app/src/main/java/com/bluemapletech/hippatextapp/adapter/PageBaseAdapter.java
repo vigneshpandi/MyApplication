@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +80,7 @@ public class PageBaseAdapter extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 }else if(userInfo.get(position).getAuth().matches("1")){
-                    pending(userInfo.get(position));
+                    deleteCompany(userInfo.get(position));
                 }else if(userInfo.get(position).getAuth().matches("2")){
                     accepted(userInfo.get(position));
                 }
@@ -89,7 +90,7 @@ public class PageBaseAdapter extends BaseAdapter {
         ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!userInfo.get(0).getAuth().matches("0")) {
+                if (userInfo.get(0).getAuth().matches("2")) {
                     deleteCompany(userInfo.get(position));
                 }
             }
@@ -115,9 +116,10 @@ public class PageBaseAdapter extends BaseAdapter {
 
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("pending");
-            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");
+            btn.setText("Delete");
+            btn.setBackgroundColor(Color.parseColor("#ff3322"));
+            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(btns.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {

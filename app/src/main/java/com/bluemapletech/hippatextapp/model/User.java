@@ -24,7 +24,7 @@ public class User {
     private String designation;
     private String firstName;
     private String lastName;
-
+    private String profileImageUrl;
     public String getAuth() {
         return auth;
     }
@@ -153,6 +153,14 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -172,6 +180,7 @@ public class User {
                 ", designation='" + designation + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
                 '}';
     }
 }
