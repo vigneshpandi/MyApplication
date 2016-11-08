@@ -80,6 +80,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                 intent.putExtra(randomValue, groupInfo.get(position).getRandomName());
                 intent.putExtra(fromMail,loginMail);
                 intent.putExtra(senderId,loginSenderId);
+
                 context.startActivity(intent);
             }
         });
