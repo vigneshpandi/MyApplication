@@ -57,6 +57,7 @@ public class UserDao {
         empData.put("role", user.getRole());
         empData.put("senderId",user.getSenderId());
         empData.put("status",user.getStatus());
+        empData.put("pushNotificationId","");
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
@@ -84,6 +85,7 @@ public class UserDao {
         compData.put("role", user.getRole());
         compData.put("senderId",user.getSenderId());
         compData.put("status",user.getStatus());
+        compData.put("pushNotificationId","");
             String reArrangeEmail = user.getUserName().replace(".", "-");
             firebaseDatabaseRef = FirebaseDatabase.getInstance();
             DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
@@ -138,11 +140,11 @@ public class UserDao {
         }
         String encoText = Base64.encodeToString(data, Base64.NO_WRAP);
         Date date = new Date();
-        Log.d(TAG,"date"+date);
         Calendar c = Calendar.getInstance();
-        String myFormat = "dd/MM/yy, hh:mm:aa";
+        String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
           String dateValue = sdf.format(c.getTime());
+        Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");
         String[] ids = {sendMail,"+", toMail};
@@ -248,7 +250,7 @@ public class UserDao {
         compData.put("lastName","");
         compData.put("profilePhoto","");
         compData.put("senderId",user.getSenderId());
-
+        compData.put("pushNotificationId","");
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);

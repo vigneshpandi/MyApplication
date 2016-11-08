@@ -48,7 +48,6 @@ public class GroupChatEmployeeTabActivity extends Fragment {
         checkUserDetails();
         final Groups group = new Groups();
         fireBaseDatabase = FirebaseDatabase.getInstance();
-
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
         String reArrangeEmail = logged.getEmail().replace(".", "-");

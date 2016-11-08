@@ -303,6 +303,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
            // providerNameTxt.setText(firstName + " " + lastName);
             Log.d(TAG,firstName + " " + lastName);
             if(firstName !=null && !firstName.isEmpty()) {
+                Log.d(TAG,"not empty");
                 checkUserExistence();
             }else {
                 Log.d(TAG,"Please enter valid npi id");
