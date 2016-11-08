@@ -44,6 +44,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         viewPagerAdapter.addFragments(new PendingAdminTabActivity(),"Pending");
         viewPagerAdapter.addFragments(new ChatAdminActivity(),"Chat");
 
+
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
