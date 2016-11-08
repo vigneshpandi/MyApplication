@@ -44,12 +44,14 @@ public class GroupChatEmployeeTabActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
-
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
+        checkUserDetails();
         final Groups group = new Groups();
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        checkUserDetails();
-        String reArrangeEmail = loggedINEmail.replace(".", "-");
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override

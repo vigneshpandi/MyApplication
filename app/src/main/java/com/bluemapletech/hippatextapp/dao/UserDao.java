@@ -138,6 +138,7 @@ public class UserDao {
         }
         String encoText = Base64.encodeToString(data, Base64.NO_WRAP);
         Date date = new Date();
+        Log.d(TAG,"date"+date);
         Calendar c = Calendar.getInstance();
         String myFormat = "dd/MM/yy, hh:mm:aa";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
