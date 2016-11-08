@@ -39,7 +39,8 @@
         <activity android:name=".activity.EmployeeHomeActivity" />
         <activity android:name=".activity.ChatEmployeeActivity" />
         <activity android:name=".activity.SecurePin" />
-        <activity android:name=".activity.CreateGroup"></activity>
+        <activity android:name=".activity.CreateGroup" />
+        <activity android:name=".activity.GroupMessageEmployeeActivity"></activity>
     </application>
 
 </manifest>

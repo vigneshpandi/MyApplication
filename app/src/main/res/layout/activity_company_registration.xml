@@ -63,14 +63,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/top_margin"
-            android:hint="ProviderNPIId"
+            android:hint="Provider NPI Id"
             android:inputType="text" />
             <EditText
                 android:id="@+id/provider_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
-                android:hint="ProviderName"
+                android:hint="Provider Name"
                 android:inputType="text" />
             <Button
                 android:id="@+id/comp_register_btn"

@@ -1,15 +1,19 @@
 package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
+import com.bluemapletech.hippatextapp.activity.GroupMessageEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.Groups;
 
 
@@ -22,14 +26,21 @@ import java.util.List;
 
 public class EmployeeGroupsAdapter extends BaseAdapter {
     private static final String TAG = EmployeeGroupsAdapter.class.getCanonicalName();
-
+    public static final String randomValue = "randomValue";
+    public static final String fromMail ="fromMail";
+    public static final String senderId ="senderId";
     LayoutInflater inflater;
     Context context;
     List<Groups> groupInfo = new ArrayList<Groups>();
-
-    public EmployeeGroupsAdapter(Context context, List<Groups> groupObj) {
+    private String loginSenderId;
+    private String loginChatPin;
+    private String loginMail;
+    public EmployeeGroupsAdapter(Context context, List<Groups> groupObj, String loggedINsenderId, String loggedINChatPin, String loggedINEmail) {
         this.context = context;
         this.groupInfo = groupObj;
+        this.loginSenderId = loggedINsenderId;
+        this.loginChatPin = loggedINChatPin;
+        this.loginMail = loggedINEmail;
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -62,6 +73,16 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
         }
 
         final Groups info = getItem(position);
+        ((Button) convertView.findViewById(R.id.group_chat)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, GroupMessageEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(randomValue, groupInfo.get(position).getRandomName());
+                intent.putExtra(fromMail,loginMail);
+                intent.putExtra(senderId,loginSenderId);
+                context.startActivity(intent);
+            }
+        });
 
         mViewHolder.fieldName.setText(info.getGroupName());
 

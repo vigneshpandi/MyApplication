@@ -39,20 +39,17 @@ public class GroupChatEmployeeTabActivity extends Fragment {
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
+    private String loggedINsenderId;
     private static final String TAG = GroupChatEmployeeTabActivity.class.getCanonicalName();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
 
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
-
-        fireBaseDatabase = FirebaseDatabase.getInstance();
         final Groups group = new Groups();
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        checkUserDetails();
+        String reArrangeEmail = loggedINEmail.replace(".", "-");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,10 +62,11 @@ public class GroupChatEmployeeTabActivity extends Fragment {
                     group.setGroupName(snapshot.child("groupName").getValue(String.class));
                     group.setAdmin(snapshot.child("admin").getValue(String.class));
                     group.setStatus(snapshot.child("status").getValue(String.class));
+                    group.setRandomName(snapshot.child("randomName").getValue(String.class));
                     groupObj.add(group);
             }
                 if(getActivity() !=null){
-                    listview.setAdapter(new EmployeeGroupsAdapter(getActivity(), groupObj));
+                    listview.setAdapter(new EmployeeGroupsAdapter(getActivity(), groupObj ,loggedINsenderId ,loggedINChatPin,loggedINEmail));
                 }
 
             }
@@ -79,5 +77,27 @@ public class GroupChatEmployeeTabActivity extends Fragment {
             }
         });
         return rootView;
+    }
+    public void checkUserDetails() {
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
+                loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
+                loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+                loggedINsenderId = (String) dataSnapshot.child("senderId").getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

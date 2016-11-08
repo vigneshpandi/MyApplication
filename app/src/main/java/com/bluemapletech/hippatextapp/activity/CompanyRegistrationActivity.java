@@ -17,7 +17,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import android.os.AsyncTask;
+import android.os.Bundle;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
@@ -67,6 +75,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_registration);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,28 +101,30 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(getActivity(), "Company registered failed!", Toast.LENGTH_LONG).show();
                 } else{
                     Log.d(TAG, "Company registered successfully!");
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle("Conform your Email Address");
-                // Setting Icon to Dialog
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setMessage("Are you sure do you want to use this email address " + compEmailtxt.getText());
-                // Setting Positive "Yes" Button
-                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.setMessage("registering...");
-                        progressDialog.show();
-                        checkUserExistence();
-                    }
-                });
-                // Setting Negative "NO" Button
-                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                // Showing Alert Message
-                dialog.show();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Conform your Email Address");
+                    // Setting Icon to Dialog
+                    dialog.setIcon(R.mipmap.ic_launcher);
+                    dialog.setMessage("Are you sure do you want to use this email address " + compEmailtxt.getText());
+                    // Setting Positive "Yes" Button
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setMessage("registering...");
+                            progressDialog.show();
+                            AsyncTaskRunner runner = new AsyncTaskRunner();
+                            runner.execute(providerNPIId.getText().toString());
+
+                        }
+                    });
+                    // Setting Negative "NO" Button
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    // Showing Alert Message
+                    dialog.show();
             }
             }
 
@@ -170,6 +181,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     entryAuth();
                 }else{
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
                 }
             }
@@ -257,7 +269,48 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private class AsyncTaskRunner extends AsyncTask<String, String, String> {
+        String firstName;
+        String lastName;
 
+        @Override
+        protected String doInBackground(String... params) {
+            Log.d(TAG, "params: " + params[0]);
+            String url = "https://npiregistry.cms.hhs.gov/api?pretty=true&limit=1";
+            url = url + "&number=" + params[0];
+            Log.d(TAG, url);
+            Object json = null;
+            try {
+                json = new JSONObject(IOUtils.toString(new URL(url),
+                        Charset.forName("UTF-8")));
+                JSONObject jsonObj = new JSONObject(json.toString());
+                JSONArray data = jsonObj.getJSONArray("results");
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject jsonOBject = data.getJSONObject(i);
+                    firstName = String.valueOf(jsonOBject.getJSONObject("basic").get("first_name"));
+                    lastName = String.valueOf(jsonOBject.getJSONObject("basic").get("last_name"));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return json.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+           // providerNameTxt.setText(firstName + " " + lastName);
+            Log.d(TAG,firstName + " " + lastName);
+            if(firstName !=null && !firstName.isEmpty()) {
+                checkUserExistence();
+            }else {
+                Log.d(TAG,"Please enter valid npi id");
+                progressDialog.dismiss();
+                Toast.makeText(getActivity(),"Please enter valid NPI ID",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     public CompanyRegistrationActivity getActivity() {
         return this;
     }
