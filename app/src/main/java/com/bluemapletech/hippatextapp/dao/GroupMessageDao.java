@@ -8,6 +8,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,14 @@ import java.util.Map;
  */
 
 public class GroupMessageDao {
-    /*public static void saveMessage(Message message, String convoId){
+    private static final FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+    private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
+
+    private static String convIds;
+    private FirebaseDatabase firebaseDatabaseRef;
+    private static final String TAG = GroupMessageDao.class.getCanonicalName();
+    DatabaseReference databaseRef;
+    public static void saveMessage(Message message, String convoId){
         String  TextMessage = message.getMtext();
         byte[] data = new byte[0];
         try {
@@ -37,12 +45,10 @@ public class GroupMessageDao {
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String dateValue = sdf.format(c.getTime());
-        Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
-        String toMail = message.getToChatEmail().replace(".", "-");
-        String[] ids = {sendMail,"+", toMail};
+        String[] ids = {sendMail};
         Arrays.sort(ids);
-        convIds = ids[1]+ids[0]+ids[2];
+        convIds = ids[0];
         HashMap<String, String> msg = new HashMap<>();
         msg.put("text", encoText);
         msg.put("email",message.getMsender());
@@ -50,28 +56,27 @@ public class GroupMessageDao {
         msg.put("image","");
         msg.put("dateandtime",dateValue);
         msg.put("senderId",message.getSenderId());
-        DatabaseReference value = sRef.child("messages").child(convIds).child("chat").push();
+        DatabaseReference value = sRef.child("groupmessage").child("message").child(message.getRandomValue()).child("message").push();
         Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
-        Log.d("values",re[6]);
-        msg.put("childappendid",re[6]);
-        value.setValue(msg);
+        msg.put("childappendid",re[7]);
+       value.setValue(msg);
     }
-    public static UserDao.MessagesListener addMessagesListener(String convoId, final UserDao.MessagesCallbacks callbacks){
-        UserDao.MessagesListener listener = new UserDao.MessagesListener(callbacks);
-        sRef.child("messages").child(convoId).child("chat").addChildEventListener(listener);
+    public static GroupMessageDao.MessagesListener addMessagesListener(String convoId, final GroupMessageDao.MessagesCallbacks callbacks){
+        GroupMessageDao.MessagesListener listener = new GroupMessageDao.MessagesListener(callbacks);
+        sRef.child("groupmessage").child("message").child(convoId).child("message").addChildEventListener(listener);
         return listener;
     }
 
 
-    *//*public static void stop(MessagesListener listener){
+    public static void stop(MessagesListener listener){
         sRef.removeEventListener(listener);
-    }*//*
+    }
 
     public static class MessagesListener implements ChildEventListener {
-        private UserDao.MessagesCallbacks callbacks;
-        MessagesListener(UserDao.MessagesCallbacks callbacks){
+        private GroupMessageDao.MessagesCallbacks callbacks;
+        MessagesListener(GroupMessageDao.MessagesCallbacks callbacks){
             this.callbacks = callbacks;
         }
 
@@ -80,6 +85,7 @@ public class GroupMessageDao {
             Map<String,String> msg = (Map)dataSnapshot.getValue();
             Message message = new Message();
             message.setMsender(msg.get("email"));
+            message.setSenderId(msg.get("senderId"));
             String srt = msg.get("text");
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
@@ -122,5 +128,4 @@ public class GroupMessageDao {
     public interface MessagesCallbacks{
         public void onMessageAdded(Message message);
     }
-    */
 }

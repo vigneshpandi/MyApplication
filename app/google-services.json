@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1068384747250",
-    "firebase_url": "https://hipaatextproductioninstance.firebaseio.com",
-    "project_id": "hipaatextproductioninstance",
-    "storage_bucket": "hipaatextproductioninstance.appspot.com"
+    "project_number": "770513330162",
+    "firebase_url": "https://tcttextapplicationtestinstance.firebaseio.com",
+    "project_id": "tcttextapplicationtestinstance",
+    "storage_bucket": "tcttextapplicationtestinstance.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1068384747250:android:c018e45ea63977e3",
+        "mobilesdk_app_id": "1:770513330162:android:c018e45ea63977e3",
         "android_client_info": {
           "package_name": "com.bluemapletech.hippatextapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1068384747250-ot75tb4m16jllm9im6d9qllndf83bu63.apps.googleusercontent.com",
+          "client_id": "770513330162-hh7eoatv9ol2vng8s9ifc3em952beufj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBqnYG4n2yH5NEVHKH-xQy8wp2B6PL9ePM"
+          "current_key": "AIzaSyBY_KoPAk-v6FEMW6_-Ts1z32lNGq5LD_Y"
         }
       ],
       "services": {

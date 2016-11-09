@@ -11,6 +11,7 @@ public class Message {
     private String msender;
     private String toChatEmail;
     private String senderId;
+    private String randomValue;
     public String getMtext() {
         return mtext;
     }
@@ -43,6 +44,14 @@ public class Message {
         this.senderId = senderId;
     }
 
+    public String getRandomValue() {
+        return randomValue;
+    }
+
+    public void setRandomValue(String randomValue) {
+        this.randomValue = randomValue;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -50,6 +59,7 @@ public class Message {
                 ", msender='" + msender + '\'' +
                 ", toChatEmail='" + toChatEmail + '\'' +
                 ", senderId='" + senderId + '\'' +
+                ", randomValue='" + randomValue + '\'' +
                 '}';
     }
 }

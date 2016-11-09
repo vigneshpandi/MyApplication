@@ -77,6 +77,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, GroupMessageEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Log.d("RandomValueForGroup",groupInfo.get(position).getRandomName());
                 intent.putExtra(randomValue, groupInfo.get(position).getRandomName());
                 intent.putExtra(fromMail,loginMail);
                 intent.putExtra(senderId,loginSenderId);

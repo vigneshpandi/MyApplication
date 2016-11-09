@@ -17,105 +17,104 @@ import android.widget.TextView;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
-import com.bluemapletech.hippatextapp.dao.UserDao;
+import com.bluemapletech.hippatextapp.dao.GroupMessageDao;
 import com.bluemapletech.hippatextapp.model.Message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class GroupMessageEmployeeActivity extends AppCompatActivity  {
+public class GroupMessageEmployeeActivity extends AppCompatActivity implements View.OnClickListener,GroupMessageDao.MessagesCallbacks {
     private ArrayList<Message> mMessages;
-    //private GroupMessageEmployeeActivity.MessagesAdapter mAdapter;
-    private ListView mListView;
-    private String mConvoId;
-    private UserDao.MessagesListener mListener;
+        private GroupMessageEmployeeActivity.MessagesAdapter mAdapter;
+        private ListView mListView;
+        private String mConvoId;
+        private GroupMessageDao.MessagesListener mListener;
+        private String randomValue;
+        private String fromMail, senderId;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_group_message_employee);
 
-    private String fromMail, senderId;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_message_employee);
+            fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
+            senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
+            randomValue = getIntent().getStringExtra(EmployeeGroupsAdapter.randomValue);
 
-        /*fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
-        senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
+            mListView = (ListView)findViewById(R.id.message_list);
+            mMessages = new ArrayList<>();
+            mAdapter = new GroupMessageEmployeeActivity.MessagesAdapter(mMessages);
+            mListView.setAdapter(mAdapter);
+            if (getSupportActionBar() != null){
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+            Button sendMessage = (Button)findViewById(R.id.send_message);
 
-        mListView = (ListView)findViewById(R.id.message_list);
-        mMessages = new ArrayList<>();
-        mAdapter = new GroupMessageEmployeeActivity.MessagesAdapter(mMessages);
-        mListView.setAdapter(mAdapter);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            sendMessage.setOnClickListener(this);
+            String fromMails = fromMail.replace(".", "-");
+            String[] ids = {fromMails};
+            Arrays.sort(ids);
+            mConvoId = ids[0];
+            Log.d("mConvoId",mConvoId);
+            mListener = GroupMessageDao.addMessagesListener(randomValue, this);
+
         }
-        Button sendMessage = (Button)findViewById(R.id.send_message);
 
-        sendMessage.setOnClickListener(this);
-        String toMails = toMail.replace(".", "-");
-        String fromMails = fromMail.replace(".", "-");
-        String[] ids = {toMails,"+", fromMails};
-        Arrays.sort(ids);
-        mConvoId = ids[1]+ids[0]+ids[2];
-        Log.d("mConvoId",mConvoId);
-        mListener = UserDao.addMessagesListener(mConvoId, this);
+        public void onClick(View v) {
+            EditText newMessageView = (EditText)findViewById(R.id.new_message);
+            String newMessage = newMessageView.getText().toString();
+            newMessageView.setText("");
+            Message msg = new Message();
+            msg.setMtext(newMessage);
+            msg.setMsender(fromMail);
+            msg.setSenderId(senderId);
+            msg.setRandomValue(randomValue);
+            GroupMessageDao.saveMessage(msg, randomValue);
+        }
 
-    }
-
-    public void onClick(View v) {
-        EditText newMessageView = (EditText)findViewById(R.id.new_message);
-        String newMessage = newMessageView.getText().toString();
-        newMessageView.setText("");
-        Message msg = new Message();
-        msg.setMtext(newMessage);
-        msg.setMsender(fromMail);
-        msg.setToChatEmail(toMail);
-        Log.d("sendeerID",senderId);
-        msg.setSenderId(senderId);
-        UserDao.saveMessage(msg, mConvoId);
-    }
-
-    @Override
-    public void onMessageAdded(Message message) {
-        mMessages.add(message);
-        mAdapter.notifyDataSetChanged();
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //UserDao.stop(mListener);
-    }
-    private class MessagesAdapter extends ArrayAdapter<Message> {
-        MessagesAdapter(ArrayList<Message> messages){
-            super(GroupMessageEmployeeActivity.this, R.layout.item, R.id.msg, messages);
+        @Override
+        public void onMessageAdded(Message message) {
+            mMessages.add(message);
+            mAdapter.notifyDataSetChanged();
         }
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = super.getView(position, convertView, parent);
-            Message message = getItem(position);
-            TextView nameView = (TextView)convertView.findViewById(R.id.msg);
-            nameView.setText(message.getMtext());
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
-            int sdk = Build.VERSION.SDK_INT;
-            if (message.getMsender().equals(fromMail)){
-                Log.d("this is login id chat",fromMail);
-                if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
-                    layoutParams.gravity = Gravity.RIGHT;
-                } else{
-                    nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
-                    layoutParams.gravity = Gravity.RIGHT;
-                }
-               *//* layoutParams.gravity = Gravity.RIGHT;*//*
-            }else{
-                if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                    nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
-                    layoutParams.gravity = Gravity.LEFT;
-                } else{
-                    nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
-                    layoutParams.gravity = Gravity.LEFT;
-                }
-           *//* layoutParams.gravity = Gravity.RIGHT;*//*
+        protected void onDestroy() {
+            super.onDestroy();
+            GroupMessageDao.stop(mListener);
+        }
+        private class MessagesAdapter extends ArrayAdapter<Message> {
+            MessagesAdapter(ArrayList<Message> messages){
+                super(GroupMessageEmployeeActivity.this, R.layout.item, R.id.msg, messages);
             }
-            nameView.setLayoutParams(layoutParams);
-            return convertView;
-        }*/
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                convertView = super.getView(position, convertView, parent);
+                Message message = getItem(position);
+                TextView nameView = (TextView)convertView.findViewById(R.id.msg);
+                nameView.setText(message.getMtext());
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
+                int sdk = Build.VERSION.SDK_INT;
+                if (message.getSenderId().equals(senderId)){
+                    Log.d("this is login id chat",fromMail);
+                    if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
+                        layoutParams.gravity = Gravity.RIGHT;
+                    } else{
+                        nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
+                        layoutParams.gravity = Gravity.RIGHT;
+                    }
+                    //layoutParams.gravity = Gravity.RIGHT;
+                }else{
+                    if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
+                        layoutParams.gravity = Gravity.LEFT;
+                    } else{
+                        nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
+                        layoutParams.gravity = Gravity.LEFT;
+                    }
+                    // layoutParams.gravity = Gravity.RIGHT;
+                }
+                nameView.setLayoutParams(layoutParams);
+                return convertView;
+            }
     }
 }
