@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import com.bluemapletech.hippatextapp.R;
@@ -269,6 +271,9 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {
         String firstName;
         String lastName;
@@ -281,6 +286,34 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             Log.d(TAG, url);
             Object json = null;
             try {
+                URL url1;
+                url1 = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
+                JSONObject root = new JSONObject();
+                root.put("title","notification");
+                root.put("body","hi dddsdsdsd");
+                JSONObject root1 = new JSONObject();
+                root1.put("notification",root);
+                root1.put("to","eU4j8cshvvI:APA91bFWU_RRESEGvrErTzxC_FUU15HywJkcs6Tv-AU49pmd18GfZ6SZoUj3PMy9cKtNpBw2eaw3RfI-xCuiXN4R6LdTYnQBxxKlUgQfSJz4kuBYTHtN3zJDFSc6k7feXPUCWisWsZ0h");
+                root1.put("priority","high");
+                Log.d(TAG,"rootValue1"+root1);
+                Log.d(TAG,"rootValue"+root);
+                OutputStreamWriter wr= new OutputStreamWriter(conn.getOutputStream());
+                wr.write(root1.toString());
+                wr.flush();
+                wr.close();
+                int responsecode = conn.getResponseCode();
+
+                if(responsecode == 200) {
+                    Log.d(TAG,"success"+conn.getResponseMessage());
+                }else{
+                    Log.d(TAG,"error"+conn.getResponseMessage());
+                }
+
+
                 json = new JSONObject(IOUtils.toString(new URL(url),
                         Charset.forName("UTF-8")));
                 JSONObject jsonObj = new JSONObject(json.toString());

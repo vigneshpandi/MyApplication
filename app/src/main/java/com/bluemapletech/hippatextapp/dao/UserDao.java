@@ -1,8 +1,11 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.bluemapletech.hippatextapp.activity.CompanyRegistrationActivity;
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.Task;
@@ -12,7 +15,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -92,6 +107,7 @@ public class UserDao {
             dataReference.setValue(compData.get("companyName"));
             DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(compData);
+
        /* Task<Void> result =  databaseRef.setValue(compData);
         if(result.isSuccessful()){
             success = true;
@@ -131,6 +147,7 @@ public class UserDao {
 
 
     public static void saveMessage(Message message, String convoId){
+        boolean success = false;
          String  TextMessage = message.getMtext();
         byte[] data = new byte[0];
         try {
@@ -163,8 +180,11 @@ public class UserDao {
         String[] re = urlValue.split("/");
         Log.d("values",re[6]);
         msg.put("childappendid",re[6]);
-        value.setValue(msg);
+        Task<Void> result =  value.setValue(msg);
+        AsyncTaskRunners runner = new AsyncTaskRunners();
+        runner.execute(message.getPushNotificationId());
     }
+
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
         MessagesListener listener = new MessagesListener(callbacks);
         sRef.child("messages").child(convoId).child("chat").addChildEventListener(listener);
@@ -261,5 +281,57 @@ public class UserDao {
         return success;
     }
 
+    private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
+        String firstName;
+        String lastName;
 
+        @Override
+        protected String doInBackground(String... params) {
+            Log.d(TAG, "params: " + params[0]);
+            Object json = null;
+            try {
+                URL url1;
+                Log.d("sdfdfdfdfdfdf","dfdfdfdf");
+                url1 = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
+                JSONObject root = new JSONObject();
+                root.put("title","notification");
+                root.put("body","hi dddsdsdsd");
+                JSONObject root1 = new JSONObject();
+                root1.put("notification",root);
+                root1.put("to",params[0]);
+                root1.put("priority","high");
+                Log.d(TAG,"rootValue1"+root1);
+                Log.d(TAG,"rootValue"+root);
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(root1.toString());
+                wr.flush();
+                wr.close();
+                int responsecode = conn.getResponseCode();
+
+                if(responsecode == 200) {
+                    Log.d(TAG,"success"+conn.getResponseMessage());
+                }else{
+                    Log.d(TAG,"error"+conn.getResponseMessage());
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }
+    public UserDao getActivity() {
+        return this;
+    }
 }

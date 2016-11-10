@@ -31,6 +31,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private UserDao.MessagesListener mListener;
     private String toMail;
     private String fromMail, senderId;
+    private String notificationId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
+        notificationId = getIntent().getStringExtra(PageEmployeeBaseAdpter.notificationId);
         mListView = (ListView)findViewById(R.id.message_list);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
@@ -68,6 +70,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         msg.setToChatEmail(toMail);
         Log.d("sendeerID",senderId);
         msg.setSenderId(senderId);
+        msg.setPushNotificationId(notificationId);
+        Log.d("notificationIdn",notificationId);
         UserDao.saveMessage(msg, mConvoId);
     }
 

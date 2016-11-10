@@ -32,6 +32,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
+    public static final String notificationId = "notificationId";
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
@@ -107,6 +108,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
                             intent.putExtra(sendId,userInfo.get(position).getSenderId());
+                            intent.putExtra(notificationId,userInfo.get(position).getPushNotificationId());
                             context.startActivity(intent);
                         }else{
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();

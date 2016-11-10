@@ -25,6 +25,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String profileImageUrl;
+    private String pushNotificationId;
     public String getAuth() {
         return auth;
     }
@@ -161,6 +162,14 @@ public class User {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public String getPushNotificationId() {
+        return pushNotificationId;
+    }
+
+    public void setPushNotificationId(String pushNotificationId) {
+        this.pushNotificationId = pushNotificationId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -181,6 +190,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", profileImageUrl='" + profileImageUrl + '\'' +
+                ", pushNotificationId='" + pushNotificationId + '\'' +
                 '}';
     }
 }

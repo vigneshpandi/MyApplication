@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -133,15 +135,17 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "Logged in user information's:");
                 if(status.matches("login")){
                     if (auth.matches("1") && role.matches("root")) {
-                        Log.d(TAG, "Redirected to root admin dash board");
+                        addNotificationId();
                         Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                         startActivity(rootHome);
                         progressDialog.dismiss();
                     } else if (auth.matches("1") && role.matches("admin")) {
+                        addNotificationId();
                         Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
                         startActivity(adminHome);
                         progressDialog.dismiss();
                     } else if (auth.matches("1") && role.matches("user")) {
+                        addNotificationId();
                         Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                         startActivity(employeeHome);
                         progressDialog.dismiss();
@@ -171,7 +175,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
+    private void addNotificationId() {
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG,"refreshedToken After login" + refreshedToken);
+        String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
+        dataReferences.setValue(refreshedToken);
+    }
 
 
     public LoginActivity getActivity() {

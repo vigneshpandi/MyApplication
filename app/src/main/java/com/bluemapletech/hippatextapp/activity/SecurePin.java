@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -117,6 +118,7 @@ public class SecurePin extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
         if (result) {
+            addNotificationId();
             Log.d(TAG, "Company secure pin added successfully!");
             Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(adminHome);
@@ -131,6 +133,7 @@ public class SecurePin extends AppCompatActivity {
         boolean result = userDao.saveSecure(user);
         Log.d("resullttt", String.valueOf(result));
         if (result) {
+            addNotificationId();
             Log.d(TAG, "Company accepted successfully!");
             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
             startActivity(employeeHome);
@@ -138,7 +141,14 @@ public class SecurePin extends AppCompatActivity {
             Log.d(TAG, "Error while adding the company, please try again!");
         }
     }
-
+    private void addNotificationId() {
+        String reArrangeEmail = userEmail.replace(".", "-");
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG,"refreshedToken After login" + refreshedToken);
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
+        dataReferences.setValue(refreshedToken);
+    }
     public SecurePin getActivity() {
         return this;
     }
