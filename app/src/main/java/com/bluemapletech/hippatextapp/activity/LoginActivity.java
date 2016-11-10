@@ -91,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
         boolean valid = true;
         Log.d(TAG, "Validate method has been called!");
 
+
+
         if (!isValidEmail(usernameTxts)) {
             usernameTxt.setError("Invalid email address");
             valid = false;
