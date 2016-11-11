@@ -40,17 +40,21 @@
         <activity android:name=".activity.ChatEmployeeActivity" />
         <activity android:name=".activity.SecurePin" />
         <activity android:name=".activity.CreateGroup" />
-        <activity android:name=".activity.GroupMessageEmployeeActivity"></activity>
+        <activity android:name=".activity.GroupMessageEmployeeActivity" />
+
         <service android:name=".utils.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service android:name=".utils.MyFirebaseInstansceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".activity.AddRootActivity" />
+        <activity android:name=".activity.ListOfRoots"></activity>
     </application>
 
 </manifest>

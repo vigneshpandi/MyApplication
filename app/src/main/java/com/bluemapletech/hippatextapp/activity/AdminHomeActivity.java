@@ -18,6 +18,10 @@ import com.bluemapletech.hippatextapp.widgets.AcceptedAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.ChatAdminActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
@@ -27,6 +31,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
     private ActionBar actionBar;
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

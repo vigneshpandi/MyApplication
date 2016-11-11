@@ -17,6 +17,10 @@ import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
 import com.bluemapletech.hippatextapp.widgets.AcceptedTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedTabActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RootHomeActivity extends AppCompatActivity {
 
@@ -26,6 +30,7 @@ public class RootHomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
     private ActionBar actionBar;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,22 @@ public class RootHomeActivity extends AppCompatActivity {
         if (id == R.id.log_out) {
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.add_root) {
+            Intent add = new Intent(getActivity(), AddRootActivity.class);
+            startActivity(add);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.list_of_root) {
+            Intent list = new Intent(getActivity(), ListOfRoots.class);
+            startActivity(list);
             onStop();
             finish();
             Log.d("menu selected","menu New group selected");

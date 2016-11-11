@@ -16,6 +16,12 @@ import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
 import com.bluemapletech.hippatextapp.widgets.GroupChatEmployeeTabActivity;
 import com.bluemapletech.hippatextapp.widgets.InterChatEmployeeTabActivity;
 import com.bluemapletech.hippatextapp.widgets.IntraChatEmployeeTabActivity;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class EmployeeHomeActivity extends AppCompatActivity {
@@ -23,6 +29,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +76,33 @@ Log.d("menu selected","menu selected");
             return true;
         }
         if (id == R.id.log_out) {
-            Intent logOut = new Intent(getActivity(), HomeActivity.class);
-            startActivity(logOut);
-            onStop();
-            finish();
-            Log.d("menu selected","menu New group selected");
+                Intent logOut = new Intent(getActivity(), HomeActivity.class);
+                startActivity(logOut);
+                onStop();
+                finish();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+   /*private boolean clearPusNotificationId() {
+        Log.d("log","logoout method called");
+       boolean successvalue = false;
+        Intent logOut = new Intent(getActivity(), HomeActivity.class);
+        startActivity(logOut);
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
+       Task<Void> success = dataReferences.setValue("111");
+       if(success.isSuccessful()){
+           successvalue = true;
+       }
+        return successvalue;
+    }*/
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)

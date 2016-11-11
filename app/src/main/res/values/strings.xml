@@ -7,4 +7,6 @@
     <string name="new_group">New group</string>
     <string name="group_create">Create</string>
     <string name="log_out">LogOut</string>
+    <string name="add_root">addRoot</string>
+    <string name="list_of_roots">listOfRoots</string>
 </resources>
