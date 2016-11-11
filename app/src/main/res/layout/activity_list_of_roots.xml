@@ -12,5 +12,5 @@
     <ListView
         android:id="@+id/all_roots"
         android:layout_width="match_parent"
-        android:layout_height="10dp"></ListView>
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

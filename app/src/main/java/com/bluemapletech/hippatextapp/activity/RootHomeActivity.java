@@ -35,8 +35,8 @@ public class RootHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_root_home);
+
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
 

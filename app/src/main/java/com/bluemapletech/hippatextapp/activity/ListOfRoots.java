@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class ListOfRoots extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -73,9 +77,7 @@ public class ListOfRoots extends AppCompatActivity {
                     }
                     iv.setAdapter(new EmployeeCreateGroupBaseAdapter(getActivity(), userObj,loggedINEmail));
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -145,10 +147,25 @@ public class ListOfRoots extends AppCompatActivity {
             final User info = getItem(position);
             Log.d("getUserName",info.getUserName());
             mViewHolder.fieldName.setText(info.getUserName());
+ ((Button) convertView.findViewById(R.id.delete_root)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteUser(userInfo.get(position).getUserName());
 
+                }
+            });
             return convertView;
         }
 
+        public void deleteUser(String userMail) {
+            final UserDao userDao = new UserDao();
+            boolean result = userDao.deleteUser(userMail);
+            if (result) {
+                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
+            }
+        }
 
         private class MyViewHolder {
             private TextView  fieldName;

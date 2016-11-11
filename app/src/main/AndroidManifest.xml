@@ -53,8 +53,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.AddRootActivity" />
-        <activity android:name=".activity.ListOfRoots"></activity>
+        <activity android:name=".activity.AddRootActivity"
+            android:parentActivityName=".activity.RootHomeActivity"/>
+        <activity android:name=".activity.ListOfRoots"
+            android:parentActivityName=".activity.RootHomeActivity"></activity>
     </application>
 
 </manifest>

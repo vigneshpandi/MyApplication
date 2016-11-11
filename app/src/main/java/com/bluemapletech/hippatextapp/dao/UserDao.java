@@ -182,7 +182,7 @@ public class UserDao {
         msg.put("childappendid",re[6]);
         Task<Void> result =  value.setValue(msg);
         AsyncTaskRunners runner = new AsyncTaskRunners();
-        runner.execute(message.getPushNotificationId());
+        runner.execute(message.getPushNotificationId(),message.getMtext());
     }
 
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
@@ -190,6 +190,7 @@ public class UserDao {
         sRef.child("messages").child(convoId).child("chat").addChildEventListener(listener);
         return listener;
     }
+
 
 
     /*public static void stop(MessagesListener listener){
@@ -287,19 +288,18 @@ public class UserDao {
 
         @Override
         protected String doInBackground(String... params) {
-            Log.d(TAG, "params: " + params[0]);
+            Log.d(TAG, "params Text: " + params[1]);
             Object json = null;
             try {
                 URL url1;
-                Log.d("sdfdfdfdfdfdf","dfdfdfdf");
                 url1 = new URL("https://fcm.googleapis.com/fcm/send");
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
                 JSONObject root = new JSONObject();
-                root.put("title","notification");
-                root.put("body","hi dddsdsdsd");
+                root.put("title","TCTText");
+                root.put("body",params[1]);
                 JSONObject root1 = new JSONObject();
                 root1.put("notification",root);
                 root1.put("to",params[0]);
@@ -330,6 +330,14 @@ public class UserDao {
         protected void onPostExecute(String result) {
 
         }
+    }
+
+    public boolean deleteUser(String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        databaseRef.removeValue();
+        return  true;
     }
     public UserDao getActivity() {
         return this;
