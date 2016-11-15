@@ -6,8 +6,8 @@ package com.bluemapletech.hippatextapp.model;
 
 public class User {
 
-   /* private Long userId;
-    private String fullName;*/
+    /* private Long userId;
+     private String fullName;*/
     private String auth;
     private String chatPin;
     private String TINorEIN;

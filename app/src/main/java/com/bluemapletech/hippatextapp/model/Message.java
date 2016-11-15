@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Win7v5 on 10/24/2016.
  */
@@ -13,6 +15,7 @@ public class Message {
     private String senderId;
     private String randomValue;
     private String pushNotificationId;
+    private String image;
     public String getMtext() {
         return mtext;
     }
@@ -61,6 +64,14 @@ public class Message {
         this.pushNotificationId = pushNotificationId;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -70,6 +81,9 @@ public class Message {
                 ", senderId='" + senderId + '\'' +
                 ", randomValue='" + randomValue + '\'' +
                 ", pushNotificationId='" + pushNotificationId + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
+
+
 }

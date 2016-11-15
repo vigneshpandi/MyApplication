@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -45,7 +47,7 @@ public class UserDao {
     private static final FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
     private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
 
-     private static String convIds;
+    private static String convIds;
     private FirebaseDatabase firebaseDatabaseRef;
 
     DatabaseReference databaseRef;
@@ -101,11 +103,11 @@ public class UserDao {
         compData.put("senderId",user.getSenderId());
         compData.put("status",user.getStatus());
         compData.put("pushNotificationId","");
-            String reArrangeEmail = user.getUserName().replace(".", "-");
-            firebaseDatabaseRef = FirebaseDatabase.getInstance();
-            DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
-            dataReference.setValue(compData.get("companyName"));
-            DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        String reArrangeEmail = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
+        dataReference.setValue(compData.get("companyName"));
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(compData);
 
        /* Task<Void> result =  databaseRef.setValue(compData);
@@ -148,7 +150,7 @@ public class UserDao {
 
     public static void saveMessage(Message message, String convoId){
         boolean success = false;
-         String  TextMessage = message.getMtext();
+        String  TextMessage = message.getMtext();
         byte[] data = new byte[0];
         try {
             data = TextMessage.getBytes("UTF-8");
@@ -160,7 +162,7 @@ public class UserDao {
         Calendar c = Calendar.getInstance();
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-          String dateValue = sdf.format(c.getTime());
+        String dateValue = sdf.format(c.getTime());
         Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");
@@ -171,9 +173,11 @@ public class UserDao {
         msg.put("text", encoText);
         msg.put("email",message.getMsender());
         msg.put("tochatemail",message.getToChatEmail());
-        msg.put("image","");
+        Log.d("message.getImage()",message.getImage());
+        msg.put("image",message.getImage());
         msg.put("dateandtime",dateValue);
         msg.put("senderId",message.getSenderId());
+        msg.put("image",message.getImage());
         DatabaseReference value = sRef.child("messages").child(convIds).child("chat").push();
         Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
@@ -193,9 +197,9 @@ public class UserDao {
 
 
 
-    /*public static void stop(MessagesListener listener){
+    public static void stop(MessagesListener listener){
         sRef.removeEventListener(listener);
-    }*/
+    }
 
     public static class MessagesListener implements ChildEventListener {
         private MessagesCallbacks callbacks;
@@ -209,6 +213,7 @@ public class UserDao {
             Message message = new Message();
             message.setMsender(msg.get("email"));
             String srt = msg.get("text");
+            message.setImage(msg.get("image"));
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
             try {
@@ -275,17 +280,14 @@ public class UserDao {
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-       Task<Void> result =  databaseRef.setValue(compData);
-         if(result.isSuccessful()){
+        Task<Void> result =  databaseRef.setValue(compData);
+        if(result.isSuccessful()){
             success = true;
         }
         return success;
     }
 
     private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
-        String firstName;
-        String lastName;
-
         @Override
         protected String doInBackground(String... params) {
             Log.d(TAG, "params Text: " + params[1]);
@@ -296,7 +298,7 @@ public class UserDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
+                conn.setRequestProperty("Authorization", "key=AIzaSyBdEITs3rnNr0UGvlX4HYVNqfPgh6CLXpw");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
