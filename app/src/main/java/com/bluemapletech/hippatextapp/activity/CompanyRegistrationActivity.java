@@ -70,7 +70,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private Uri uri;
     private StorageReference filePath;
 
-    private User comInfos = new User();;
+    private User comInfos = new User();
     private Uri downloadUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +135,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 String compPasswordtxts = compPasswordtxt.getText().toString().trim();
                 String companyNames = companyName.getText().toString().trim();
                 String compEinOrTinNos = compEinOrTinNo.getText().toString().trim();
+                String providerNpi = providerNPIId.getText().toString().trim();
+                String providerNameText = providerName.getText().toString().trim();
                 boolean valid = true;
                 if(!isValidEmail(compEmailtxts)){
                     compEmailtxt.setError("Invalid Email");
@@ -160,6 +162,19 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     valid = false;
                 }else{
                     compEinOrTinNo.setError(null);
+                }
+                if(providerNpi.isEmpty()||providerNpi.length()<4){
+                    providerNPIId.setError("Provider NPI Id is invalid");
+                    valid = false;
+                }else{
+                    providerNPIId.setError(null);
+                }
+
+                if(providerNameText.isEmpty()||providerNameText.length()<2){
+                    providerName.setError("Provider Name is invalid");
+                    valid = false;
+                }else{
+                    providerName.setError(null);
                 }
                 return valid;
             }

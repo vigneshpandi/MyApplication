@@ -16,30 +16,39 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:divider="@null"
-        ></ListView>
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"></ListView>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/attachment"
+
+            android:src="@drawable/atachment"/>
+
         <EditText
             android:id="@+id/new_message"
-            android:layout_weight="100"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        <Button
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/send_message"
+            android:src="@drawable/send_selected"
+            android:background="#ffffff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/accept_btn"
-            android:id="@+id/select_image"/>
+            android:baselineAlignBottom="true"
+            android:layout_alignTop="@+id/new_message"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
-        <Button
-            android:id="@+id/send_message"
-            android:text="send"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    </RelativeLayout>
+
 </LinearLayout>

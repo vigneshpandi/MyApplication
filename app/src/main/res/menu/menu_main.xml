@@ -9,13 +9,34 @@
         android:title="@string/new_group"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/add_admin"
         android:orderInCategory="102"
-        android:title="@string/action_settings"
+        android:title="Add Admin"
         app:showAsAction="never" />
     <item
+        android:id="@+id/admin_list"
+        android:orderInCategory="103"
+        android:title="Admin List"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/add_employee"
+        android:orderInCategory="104"
+        android:title="Add Employee"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/change_pin"
+        android:orderInCategory="105"
+        android:title="Change Secure Chat Pin"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/profile"
+        android:orderInCategory="106"
+        android:title="Profile"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/log_out"
-        android:orderInCategory="102"
+        android:orderInCategory="107"
         android:title="@string/log_out"
         app:showAsAction="never" />
 

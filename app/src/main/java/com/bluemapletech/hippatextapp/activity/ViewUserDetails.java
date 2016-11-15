@@ -32,7 +32,7 @@ public class ViewUserDetails extends AppCompatActivity {
     User user = new User();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
-    private TextView userEmail, compName, empId;
+    private TextView userEmail, compName, empId, providerName, providerNPI, providerNpiLabel, providerNameLabel;
     private Button acceptBtn, pendingBtn, deleteBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,10 @@ if(!userAuths.matches("0")){
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
+        providerNPI = (TextView) findViewById(R.id.provider_npi_text);
+        providerName = (TextView) findViewById(R.id.provider_name_text);
+        providerNpiLabel = (TextView) findViewById(R.id.provider_npi);
+        providerNameLabel = (TextView) findViewById(R.id.provider_name);
 
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         if (adminMailId != null) {
@@ -75,6 +79,14 @@ if(!userAuths.matches("0")){
                 String comNames = map.get("companyName");
                 user.setCompanyName(comNames);
                String role =  map.get("role");
+                Log.d("role.....","role........"+role);
+                if(role.equals("user")){
+                    Log.d("inside","inside");
+                    providerNPI.setVisibility(View.INVISIBLE);
+                    providerName.setVisibility(View.INVISIBLE);
+                    providerNpiLabel.setVisibility(View.INVISIBLE);
+                    providerNameLabel.setVisibility(View.INVISIBLE);
+                }
                 user.setRole(role);
                 String emailAddress = map.get("emailAddress");
                 if (adminMailId != null) {
@@ -83,9 +95,20 @@ if(!userAuths.matches("0")){
                     userId = map.get("employeeId");
 
                 }
+                String providerNpi = map.get("providerNPIId");
+                String providerNames = map.get("providerName");
                 empId.setText(userId);
                 compName.setText(comNames);
                 userEmail.setText(emailAddress);
+                providerNPI.setText(providerNpi);
+                providerName.setText(providerNames);
+                if(role == "user"){
+                    Log.d("inside","inside");
+                    providerNPI.setVisibility(View.INVISIBLE);
+                    providerName.setVisibility(View.INVISIBLE);
+                    providerNpiLabel.setVisibility(View.INVISIBLE);
+                    providerNameLabel.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override

@@ -44,7 +44,10 @@ public class SecurePin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                         Log.d("user",auth);
-                if(chatPin.getText().toString().matches(conformChatPin.getText().toString())){
+                if(!validate()){
+                    Toast.makeText(getActivity(),"Please enter the Chat Pin",Toast.LENGTH_LONG).show();
+                    return;
+                }else if(chatPin.getText().toString().matches(conformChatPin.getText().toString())){
                     securePin = chatPin.getText().toString();
                     byte[] data = new byte[0];
                     try {
@@ -70,6 +73,26 @@ public class SecurePin extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean validate() {
+        String chatPins = chatPin.getText().toString().trim();
+        String confirmChatPins = conformChatPin.getText().toString();
+        boolean valid = true;
+        if(chatPins.isEmpty()||chatPins.length()<4){
+            chatPin.setError("Chat Pin is invalid");
+            valid = false;
+        }else{
+            chatPin.setError(null);
+        }
+
+        if(confirmChatPins.isEmpty()||confirmChatPins.length()<4){
+            conformChatPin.setError("Conform Chat Pin is invalid");
+            valid= false;
+        }else{
+            conformChatPin.setError(null);
+        }
+        return valid;
     }
 
     public void init(){

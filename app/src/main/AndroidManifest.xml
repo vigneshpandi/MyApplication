@@ -37,7 +37,9 @@
             android:parentActivityName=".activity.HomeActivity" />
         <activity android:name=".activity.ViewUserDetails" />
         <activity android:name=".activity.EmployeeHomeActivity" />
-        <activity android:name=".activity.ChatEmployeeActivity" />
+        <activity
+            android:name=".activity.ChatEmployeeActivity"
+            android:parentActivityName=".activity.EmployeeHomeActivity" />
         <activity android:name=".activity.SecurePin" />
         <activity android:name=".activity.CreateGroup" />
         <activity android:name=".activity.GroupMessageEmployeeActivity" />
@@ -53,10 +55,19 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.AddRootActivity"
-            android:parentActivityName=".activity.RootHomeActivity"/>
-        <activity android:name=".activity.ListOfRoots"
-            android:parentActivityName=".activity.RootHomeActivity"></activity>
+        <activity
+            android:name=".activity.AddRootActivity"
+            android:parentActivityName=".activity.RootHomeActivity" />
+        <activity
+            android:name=".activity.ListOfRoots"
+            android:parentActivityName=".activity.RootHomeActivity" />
+        <activity
+            android:name=".activity.AddAdminActivity"
+            android:parentActivityName=".activity.AdminHomeActivity" />
+        <activity
+            android:name=".activity.ListOfAdminActivity"
+            android:parentActivityName=".activity.AdminHomeActivity" />
+        <activity android:name=".activity.AddEmployeeActivity"></activity>
     </application>
 
 </manifest>

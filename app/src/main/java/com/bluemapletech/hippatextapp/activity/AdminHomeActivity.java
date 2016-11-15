@@ -57,7 +57,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.root_home, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
     @Override
@@ -71,6 +71,30 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         if (id == R.id.log_out) {
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
+            startActivity(logOut);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.add_admin) {
+            Intent logOut = new Intent(getActivity(), AddAdminActivity.class);
+            startActivity(logOut);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.admin_list) {
+            Intent logOut = new Intent(getActivity(), ListOfAdminActivity.class);
+            startActivity(logOut);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.add_employee) {
+            Intent logOut = new Intent(getActivity(), AddEmployeeActivity.class);
             startActivity(logOut);
             onStop();
             finish();
