@@ -173,7 +173,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     entryAuth();
                 } else {
-                    // Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
+                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
                 }
             }
         });

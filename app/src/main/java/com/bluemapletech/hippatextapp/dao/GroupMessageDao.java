@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
@@ -9,8 +10,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -31,8 +40,9 @@ public class GroupMessageDao {
     private FirebaseDatabase firebaseDatabaseRef;
     private static final String TAG = GroupMessageDao.class.getCanonicalName();
     DatabaseReference databaseRef;
+    private static String  TextMessage;
     public static void saveMessage(Message message, String convoId){
-        String  TextMessage = message.getMtext();
+        TextMessage = message.getMtext();
         byte[] data = new byte[0];
         try {
             data = TextMessage.getBytes("UTF-8");
@@ -53,7 +63,7 @@ public class GroupMessageDao {
         msg.put("text", encoText);
         msg.put("email",message.getMsender());
         msg.put("tochatemail",message.getToChatEmail());
-        msg.put("image","");
+        msg.put("image",message.getImage());
         msg.put("dateandtime",dateValue);
         msg.put("senderId",message.getSenderId());
         DatabaseReference value = sRef.child("groupmessage").child("message").child(message.getRandomValue()).child("message").push();
@@ -62,6 +72,25 @@ public class GroupMessageDao {
         String[] re = urlValue.split("/");
         msg.put("childappendid",re[7]);
        value.setValue(msg);
+        Log.d(TAG,"groupPusNotificatuionEmailId"+message.getPushNotificationId());
+        String arr[] = message.getPushNotificationId().split(";");
+        for(int i = 0; i < arr.length; i++){
+            String reArrangeEmail = arr[i].trim().replace(".", "-");
+            DatabaseReference databaseRef = sRef.child("userDetails").child(reArrangeEmail);
+            databaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                   String notificationId = dataSnapshot.child("pushNotificationId").getValue(String.class);
+                    AsyncTaskRunnerss runner = new AsyncTaskRunnerss();
+                    runner.execute(notificationId,TextMessage);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
     public static GroupMessageDao.MessagesListener addMessagesListener(String convoId, final GroupMessageDao.MessagesCallbacks callbacks){
         GroupMessageDao.MessagesListener listener = new GroupMessageDao.MessagesListener(callbacks);
@@ -87,6 +116,7 @@ public class GroupMessageDao {
             message.setMsender(msg.get("email"));
             message.setSenderId(msg.get("senderId"));
             String srt = msg.get("text");
+            message.setImage(msg.get("image"));
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
             try {
@@ -127,5 +157,51 @@ public class GroupMessageDao {
 
     public interface MessagesCallbacks{
         public void onMessageAdded(Message message);
+    }
+    private static  class AsyncTaskRunnerss extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            Log.d(TAG, "params Text: " + params[1]);
+            Object json = null;
+            try {
+                URL url1;
+                url1 = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
+                JSONObject root = new JSONObject();
+                root.put("title","TCTText");
+                root.put("body",params[1]);
+                JSONObject root1 = new JSONObject();
+                root1.put("notification",root);
+                root1.put("to",params[0]);
+                root1.put("priority","high");
+                Log.d(TAG,"rootValue1"+root1);
+                Log.d(TAG,"rootValue"+root);
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(root1.toString());
+                wr.flush();
+                wr.close();
+                int responsecode = conn.getResponseCode();
+
+                if(responsecode == 200) {
+                    Log.d(TAG,"success"+conn.getResponseMessage());
+                }else{
+                    Log.d(TAG,"error"+conn.getResponseMessage());
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
     }
 }

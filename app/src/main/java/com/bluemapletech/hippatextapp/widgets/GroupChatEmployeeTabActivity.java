@@ -64,6 +64,7 @@ public class GroupChatEmployeeTabActivity extends Fragment {
                     group.setAdmin(snapshot.child("admin").getValue(String.class));
                     group.setStatus(snapshot.child("status").getValue(String.class));
                     group.setRandomName(snapshot.child("randomName").getValue(String.class));
+                    group.setGroupEmailId(snapshot.child("groupEmailId").getValue(String.class));
                     groupObj.add(group);
             }
                 if(getActivity() !=null){

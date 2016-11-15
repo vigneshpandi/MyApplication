@@ -83,8 +83,6 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         ((Button) convertView.findViewById(R.id.chat_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   // chatEmployee(userInfo, position);
-              Log.d("chatPin",chatPin);
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("Security check");
                 final EditText chatPinn = new EditText(context);
@@ -94,7 +92,6 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String srt = chatPinn.getEditableText().toString();
-                       Log.d("chatPin srt",srt);
                         byte[] data1 = Base64.decode(chatPin, Base64.NO_WRAP);
                         String text = null;
                         try {
@@ -117,16 +114,11 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                 });
                 alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // Canceled.
                         dialog.cancel();
                     }
                 });
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
-            /* Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                intent.putExtra(fromEmail, fromMAil);
-                context.startActivity(intent);*/
             }
         });
         return convertView;

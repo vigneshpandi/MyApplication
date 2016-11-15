@@ -28,7 +28,11 @@
             android:layout_weight="100"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/accept_btn"
+            android:id="@+id/select_image"/>
         <Button
             android:id="@+id/send_message"
             android:text="send"

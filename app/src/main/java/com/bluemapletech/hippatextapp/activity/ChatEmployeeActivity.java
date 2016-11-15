@@ -76,7 +76,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         Arrays.sort(ids);
         mConvoId = ids[1]+ids[0]+ids[2];
         mListener = UserDao.addMessagesListener(mConvoId, this);
-
     }
 
     public void onClick(View v) {

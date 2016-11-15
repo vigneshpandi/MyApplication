@@ -1,14 +1,19 @@
 package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bluemapletech.hippatextapp.R;
@@ -17,6 +22,7 @@ import com.bluemapletech.hippatextapp.activity.GroupMessageEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.Groups;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +35,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
     public static final String randomValue = "randomValue";
     public static final String fromMail ="fromMail";
     public static final String senderId ="senderId";
+    public static final String notificationId = "notificationId";
     LayoutInflater inflater;
     Context context;
     List<Groups> groupInfo = new ArrayList<Groups>();
@@ -76,12 +83,43 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
         ((Button) convertView.findViewById(R.id.group_chat)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, GroupMessageEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Log.d("RandomValueForGroup",groupInfo.get(position).getRandomName());
-                intent.putExtra(randomValue, groupInfo.get(position).getRandomName());
-                intent.putExtra(fromMail,loginMail);
-                intent.putExtra(senderId,loginSenderId);
-                context.startActivity(intent);
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                alert.setTitle("Security check");
+                final EditText chatPinn = new EditText(context);
+                chatPinn.setHint("Enter your chat pin");
+                alert.setView(chatPinn);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String srt = chatPinn.getEditableText().toString();
+                        byte[] data1 = Base64.decode(loginChatPin, Base64.NO_WRAP);
+                        String text = null;
+                        try {
+                            text = new String(data1, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        if(srt.matches(text)) {
+                            Intent intent = new Intent(context, GroupMessageEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(randomValue, groupInfo.get(position).getRandomName());
+                            intent.putExtra(fromMail,loginMail);
+                            intent.putExtra(senderId,loginSenderId);
+                            intent.putExtra(notificationId,groupInfo.get(position).getGroupEmailId());
+                            context.startActivity(intent);
+                        }else{
+                            Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
             }
         });
 
