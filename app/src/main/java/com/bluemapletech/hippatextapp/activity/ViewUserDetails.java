@@ -44,6 +44,7 @@ public class ViewUserDetails extends AppCompatActivity {
         empMailId = getIntent().getStringExtra(PageAdminBaseAdapter.userEmails);
         adminMailId = getIntent().getStringExtra(PageBaseAdapter.userEmail);
         userAuths = getIntent().getStringExtra(PageBaseAdapter.userAuth);
+        Log.d(TAG,"userAuths....."+userAuths+empMailId+adminMailId);
         acceptBtn = (Button) findViewById(R.id.accept_user_btn);
         pendingBtn = (Button) findViewById(R.id.pending_user_btn);
         deleteBtn = (Button) findViewById(R.id.delete_user_btn);

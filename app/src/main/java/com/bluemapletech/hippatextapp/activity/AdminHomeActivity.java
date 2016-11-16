@@ -78,23 +78,31 @@ public class AdminHomeActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.add_admin) {
-            Intent logOut = new Intent(getActivity(), AddAdminActivity.class);
-            startActivity(logOut);
+            Intent addAdmin = new Intent(getActivity(), AddAdminActivity.class);
+            startActivity(addAdmin);
             onStop();
             finish();
             Log.d("menu selected", "menu New group selected");
             return true;
         }
         if (id == R.id.admin_list) {
-            Intent logOut = new Intent(getActivity(), ListOfAdminActivity.class);
-            startActivity(logOut);
+            Intent listAdmin = new Intent(getActivity(), ListOfAdminActivity.class);
+            startActivity(listAdmin);
             onStop();
             finish();
             Log.d("menu selected", "menu New group selected");
             return true;
         }
         if (id == R.id.add_employee) {
-            Intent logOut = new Intent(getActivity(), AddEmployeeActivity.class);
+            Intent addEmp = new Intent(getActivity(), AddEmployeeActivity.class);
+            startActivity(addEmp);
+            onStop();
+            finish();
+            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.profile) {
+            Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(logOut);
             onStop();
             finish();

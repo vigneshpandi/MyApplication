@@ -68,7 +68,9 @@
         <activity
             android:name=".activity.ListOfAdminActivity"
             android:parentActivityName=".activity.AdminHomeActivity" />
-        <activity android:name=".activity.AddEmployeeActivity"></activity>
+        <activity android:name=".activity.AddEmployeeActivity" />
+        <activity android:name=".activity.EditProfileActivity"
+            android:parentActivityName=".activity.AdminHomeActivity"></activity>
     </application>
 
 </manifest>

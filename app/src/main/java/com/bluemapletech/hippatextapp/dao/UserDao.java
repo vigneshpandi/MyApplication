@@ -74,7 +74,7 @@ public class UserDao {
 
     public boolean createCompany(User user){
         boolean success = false;
-        Log.d(TAG, "Create company dao method has been called!");
+        Log.d(TAG, "Create company dao method has been called!"+ user.getUserName());
         HashMap<String, Object> compData = new HashMap<>();
         compData.put("auth",user.getAuth());
         compData.put("chatPin",user.getChatPin());
