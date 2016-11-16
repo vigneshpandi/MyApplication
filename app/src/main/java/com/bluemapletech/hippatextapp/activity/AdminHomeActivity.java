@@ -101,6 +101,7 @@ public class AdminHomeActivity extends AppCompatActivity {
             Log.d("menu selected","menu New group selected");
             return true;
         }
+
         if (id == R.id.profile) {
             Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(logOut);
