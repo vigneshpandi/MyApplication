@@ -53,6 +53,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,15 +152,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             }
             imageView.setLayoutParams(layoutParams);
             nameView.setLayoutParams(layoutParams);
-          /*  ((ImageView) convertView.findViewById(R.id.image)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialog dialog=new Dialog(getContext(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-                    dialog.setContentView(R.layout.view_image_dialog);
-                    Log.d("position","position"+getItem(position).getImage());
-                    dialog.show();
-                }
-            });*/
+
             return convertView;
         }
 
