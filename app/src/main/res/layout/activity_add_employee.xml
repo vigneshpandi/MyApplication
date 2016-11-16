@@ -43,8 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/emp_email_address"
             android:layout_marginTop="@dimen/top_margin"
-            android:hint="Employee Id"
-            android:inputType="textPassword" />
+            android:hint="Employee Id" />
 
         <Button
             android:id="@+id/add_employee_btn"

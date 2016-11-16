@@ -1,10 +1,12 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -47,7 +49,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String toMail;
     private String fromMail, senderId;
     private String notificationId;
-    private Button selectImage;
+    private ImageView selectImage;
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
@@ -60,14 +62,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
         notificationId = getIntent().getStringExtra(PageEmployeeBaseAdpter.notificationId);
         mListView = (ListView)findViewById(R.id.message_list);
-        selectImage = (Button) findViewById(R.id.select_image);
+        selectImage = (ImageView) findViewById(R.id.select_image);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        Button sendMessage = (Button)findViewById(R.id.send_message);
+        ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
 
         sendMessage.setOnClickListener(this);
         String toMails = toMail.replace(".", "-");
@@ -97,7 +99,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             super(ChatEmployeeActivity.this, R.layout.item, R.id.msg, messages);
         }
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = super.getView(position, convertView, parent);
             Message message = getItem(position);
             TextView nameView = (TextView)convertView.findViewById(R.id.msg);
@@ -148,8 +150,19 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             }
             imageView.setLayoutParams(layoutParams);
             nameView.setLayoutParams(layoutParams);
+          /*  ((ImageView) convertView.findViewById(R.id.image)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog dialog=new Dialog(getContext(),android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                    dialog.setContentView(R.layout.view_image_dialog);
+                    Log.d("position","position"+getItem(position).getImage());
+                    dialog.show();
+                }
+            });*/
             return convertView;
         }
+
+
     }
 
 

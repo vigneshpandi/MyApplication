@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Security;
 import java.util.Properties;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
  * Created by HPFolioUser on 15-11-2016.
  */
 
-public class GMailSender  extends javax.mail.Authenticator  {
+public class GMailSender extends javax.mail.Authenticator  {
 
     private String mailhost = "smtp.gmail.com";
     private String user;
@@ -52,6 +52,7 @@ public class GMailSender  extends javax.mail.Authenticator  {
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
+
 
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         try{
