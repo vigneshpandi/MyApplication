@@ -26,6 +26,7 @@ public class User {
     private String lastName;
     private String profileImageUrl;
     private String pushNotificationId;
+
     public String getAuth() {
         return auth;
     }

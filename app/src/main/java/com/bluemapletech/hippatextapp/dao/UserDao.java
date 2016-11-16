@@ -1,13 +1,9 @@
 package com.bluemapletech.hippatextapp.dao;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.bluemapletech.hippatextapp.activity.CompanyRegistrationActivity;
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.Task;
@@ -17,8 +13,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,11 +20,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -199,6 +189,16 @@ public class UserDao {
     public static void stop(MessagesListener listener){
         sRef.removeEventListener(listener);
     }
+
+    public boolean saveSecurePin(User user) {
+        Log.d(TAG,"secureChat userDao called!");
+        String reArrangeEmail = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("chatPin");
+        databaseRef.setValue(user.getChatPin());
+        return true;
+    }
+
 
     public static class MessagesListener implements ChildEventListener {
         private MessagesCallbacks callbacks;

@@ -42,6 +42,7 @@
             android:parentActivityName=".activity.EmployeeHomeActivity" />
         <activity android:name=".activity.SecurePin" />
         <activity android:name=".activity.CreateGroup" />
+        <activity android:name=".activity.ChangeSecureChatPinActivity"/>
         <activity android:name=".activity.GroupMessageEmployeeActivity" />
 
         <service android:name=".utils.MyFirebaseMessagingService">
