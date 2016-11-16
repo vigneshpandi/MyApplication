@@ -9,7 +9,6 @@
     <include
         android:id="@+id/toolbar_header"
         layout="@layout/toolbar_header" />
-
     <ListView
         android:id="@+id/message_list"
         android:layout_weight="100"
