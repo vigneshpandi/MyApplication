@@ -2,10 +2,12 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Build;
 import android.os.Environment;
@@ -16,8 +18,11 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -152,7 +157,19 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             }
             imageView.setLayoutParams(layoutParams);
             nameView.setLayoutParams(layoutParams);
-
+            ((ImageView) convertView.findViewById(R.id.image)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Dialog dialog=new Dialog(ChatEmployeeActivity.this,android.R.style.Theme_Black_NoTitleBar);
+                    dialog.setContentView(R.layout.view_image_dialog);
+                    String images = getItem(position).getImage();
+                   ImageView showImage = (ImageView) dialog.findViewById(R.id.view_image);
+                    byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    showImage.setImageBitmap(decodedByte);
+                    dialog.show();
+                }
+            });
             return convertView;
         }
 

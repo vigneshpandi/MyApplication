@@ -41,6 +41,7 @@ public class CreateGroup extends AppCompatActivity {
     private FirebaseDatabase fireBaseDatabase;
     private String loggedINCompany;
     private String loggedINEmail;
+    private String loggegINRole;
     private String loggedINChatPin;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
@@ -76,9 +77,11 @@ public class CreateGroup extends AppCompatActivity {
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
 
-                    if (user.getRole().matches("user") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
+                    if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
-                    }
+                    }/* else if(user.getRole().matches("admin") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName()) && loggegINRole.matches("admin") ){
+                        userObj.add(user);
+                    }*/
                     iv.setAdapter(new EmployeeCreateGroupBaseAdapter(getActivity(), userObj,loggedINEmail));
                 }
 
@@ -126,6 +129,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+                loggegINRole = (String) dataSnapshot.child("role").getValue();
             }
 
             @Override

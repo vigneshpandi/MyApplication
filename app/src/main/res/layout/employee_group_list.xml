@@ -11,20 +11,9 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:src="@drawable/natural"
+        android:src="@drawable/group"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp" />
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/group_name"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="24dp"
-        android:layout_alignBottom="@+id/imageUploade"
-        android:layout_toRightOf="@+id/imageUploade"
-        android:layout_toEndOf="@+id/imageUploade" />
 
     <Button
         android:text="chat"
@@ -38,4 +27,16 @@
         android:layout_alignTop="@+id/group_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/group_name"
+        android:layout_marginLeft="47dp"
+        android:layout_marginStart="47dp"
+        android:layout_alignTop="@+id/imageUploade"
+        android:layout_toRightOf="@+id/imageUploade"
+        android:layout_toEndOf="@+id/imageUploade"
+        android:layout_marginTop="19dp" />
 </RelativeLayout>

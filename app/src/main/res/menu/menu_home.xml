@@ -3,8 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bluemapletech.hippatextapp.activity.HomeActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/new_group"
+        android:orderInCategory="101"
+        android:title="@string/new_group"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/change_pin"
+        android:orderInCategory="105"
+        android:title="Change Secure Chat Pin"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/profile"
+        android:orderInCategory="106"
+        android:title="Profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/log_out"
+        android:orderInCategory="107"
+        android:title="@string/log_out"
         app:showAsAction="never" />
 </menu>

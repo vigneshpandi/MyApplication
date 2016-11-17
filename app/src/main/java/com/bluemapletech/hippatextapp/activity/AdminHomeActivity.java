@@ -16,9 +16,13 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
 import com.bluemapletech.hippatextapp.widgets.AcceptedAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.ChatAdminActivity;
+import com.bluemapletech.hippatextapp.widgets.GroupChatEmployeeTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
@@ -42,10 +46,11 @@ public class AdminHomeActivity extends AppCompatActivity {
         viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager());
 
         // Creating tabs
-        viewPagerAdapter.addFragments(new AcceptedAdminTabActivity(), "Accepted");
-        viewPagerAdapter.addFragments(new RequestedAdminTabActivity(), "Requested");
-        viewPagerAdapter.addFragments(new PendingAdminTabActivity(), "Pending");
-        viewPagerAdapter.addFragments(new ChatAdminActivity(), "Chat");
+        viewPagerAdapter.addFragments(new AcceptedAdminTabActivity(),"Accepted");
+        viewPagerAdapter.addFragments(new RequestedAdminTabActivity(),"Requested");
+        viewPagerAdapter.addFragments(new PendingAdminTabActivity(),"Pending");
+        viewPagerAdapter.addFragments(new ChatAdminActivity(),"Chat");
+        viewPagerAdapter.addFragments(new GroupChatEmployeeTabActivity(),"Group");
 
 
         viewPager.setAdapter(viewPagerAdapter);
@@ -74,34 +79,36 @@ public class AdminHomeActivity extends AppCompatActivity {
             startActivity(logOut);
             onStop();
             finish();
-            Log.d("menu selected", "menu New group selected");
             return true;
         }
         if (id == R.id.add_admin) {
-            Intent addAdmin = new Intent(getActivity(), AddAdminActivity.class);
-            startActivity(addAdmin);
+            Intent redirect = new Intent(getActivity(), AddAdminActivity.class);
+            startActivity(redirect);
             onStop();
             finish();
-            Log.d("menu selected", "menu New group selected");
             return true;
         }
         if (id == R.id.admin_list) {
-            Intent listAdmin = new Intent(getActivity(), ListOfAdminActivity.class);
-            startActivity(listAdmin);
+            Intent redirect = new Intent(getActivity(), ListOfAdminActivity.class);
+            startActivity(redirect);
             onStop();
             finish();
-            Log.d("menu selected", "menu New group selected");
             return true;
         }
         if (id == R.id.add_employee) {
-            Intent addEmp = new Intent(getActivity(), AddEmployeeActivity.class);
-            startActivity(addEmp);
+            Intent redirect = new Intent(getActivity(), AddEmployeeActivity.class);
+            startActivity(redirect);
             onStop();
             finish();
-            Log.d("menu selected","menu New group selected");
             return true;
         }
-
+        if (id == R.id.new_group) {
+            Intent redirect = new Intent(getActivity(), CreateGroup.class);
+            startActivity(redirect);
+            onStop();
+            finish();
+            return true;
+        }
         if (id == R.id.profile) {
             Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(logOut);

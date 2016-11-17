@@ -53,26 +53,17 @@ public class EmployeeHomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-Log.d("menu selected","menu selected");
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Log.d("menu selected","menu setting selected");
-            return true;
-        }
+
+
         if (id == R.id.new_group) {
             Intent rootHome = new Intent(getActivity(), CreateGroup.class);
             startActivity(rootHome);
-            Log.d("menu selected","menu New group selected");
             return true;
         }
         if (id == R.id.log_out) {
@@ -81,6 +72,20 @@ Log.d("menu selected","menu selected");
                 onStop();
                 finish();
 
+            return true;
+        }
+        if (id == R.id.profile) {
+            Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
+            startActivity(logOut);
+            onStop();
+            finish();
+            return true;
+        }
+        if (id == R.id.change_pin) {
+            Intent logOut = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
+            startActivity(logOut);
+            onStop();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
