@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class CreateGroup extends AppCompatActivity {
     private HashMap<String, String> hm = new HashMap<String, String>();
     public int listPosition;
     private String groupName = "";
+    private String storeMail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +184,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Set<String> keys = hm.keySet();
             int i=0;
             for(String key: keys){
-                String storeMail = hm.get(key);
+                storeMail = hm.get(key);
                 if(i==0){
                     i++;
                     groupMail = loggedINEmail +";"+storeMail;
@@ -191,7 +193,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 }
 
             }
-
+        if(i>0) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Group Name");
             // Set up the input
@@ -203,12 +205,13 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     EmployeeDao empDao = new EmployeeDao();
                     groupName = input.getText().toString();
-                    boolean success = empDao.createGroup(loggedINEmail,groupMail,groupName);
+                    boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName);
                     finish();
                     startActivity(getIntent());
 
                 }
             });
+
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -217,8 +220,11 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             });
 
             alert.show();
-
             return true;
+        }else{
+            Log.d(TAG,"employee not selected...");
+            Toast.makeText(getActivity(),"Please select the user..!",Toast.LENGTH_LONG).show();
+        }
         }
         return super.onOptionsItemSelected(item);
     }
