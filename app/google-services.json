@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "770513330162",
-    "firebase_url": "https://tcttextapplicationtestinstance.firebaseio.com",
-    "project_id": "tcttextapplicationtestinstance",
-    "storage_bucket": "tcttextapplicationtestinstance.appspot.com"
+    "project_number": "113955913785",
+    "firebase_url": "https://tct-app.firebaseio.com",
+    "project_id": "tct-app",
+    "storage_bucket": "tct-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:770513330162:android:c018e45ea63977e3",
+        "mobilesdk_app_id": "1:113955913785:android:c018e45ea63977e3",
         "android_client_info": {
           "package_name": "com.bluemapletech.hippatextapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "770513330162-hh7eoatv9ol2vng8s9ifc3em952beufj.apps.googleusercontent.com",
+          "client_id": "113955913785-q1sv13jg5eqnd1i13s53uvm0295q39ej.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBY_KoPAk-v6FEMW6_-Ts1z32lNGq5LD_Y"
+          "current_key": "AIzaSyCwftT62BxZyPW5VNwKrdLVYzsiQQByC0I"
         }
       ],
       "services": {
