@@ -1,13 +1,18 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ViewUserDetails extends AppCompatActivity {
@@ -34,7 +41,9 @@ public class ViewUserDetails extends AppCompatActivity {
     String adminMailId = null;
     String reArrangeEmail;
     String userAuths;
+    private ListView iv;
     private FirebaseAuth firebaseAuth;
+    List<User> userObj = new ArrayList<User>();
     User user = new User();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
@@ -141,24 +150,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
             user.setAuth("1");
             acceptedEmployee(user);
         } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-            String loginReArrangeEmail = logged.getEmail().replace(".", "-");
-            databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(loginReArrangeEmail);
-            databaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    /*Map<String, String> maps = (Map) dataSnapshot.getValue();
-                   String chatpin = (maps.get("chatPin"));
-                    Log.d(TAG, "Old chat pin: " + chatpin);*/
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+           getUserDetails(user.getCompanyName());
         }
 
     }
@@ -185,6 +177,36 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
                 } else if(user.getRole().matches("user")){
                     deleteEmployee(user);
                 }
+            }
+        });
+    }
+
+    private void getUserDetails(final String companyName) {
+        iv = (ListView) findViewById(R.id.list_of_user);
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        final User user = new User();
+        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("userDetails");
+        dataReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    user = new User();
+                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    user.setRole(snapshot.child("role").getValue(String.class));
+                    user.setAuth(snapshot.child("auth").getValue(String.class));
+                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
+                    if (user.getRole().matches("user") && user.getAuth().matches("1") && user.getCompanyName().matches(companyName)) {
+                        userObj.add(user);
+                        Log.d("adminDetails","adminDetails"+user);
+                    }
+                    iv.setAdapter(new viewUserAdapter(getActivity(), userObj));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -267,7 +289,60 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
+    private class viewUserAdapter extends BaseAdapter {
 
+        List<User> userInfo = new ArrayList<User>();
+        LayoutInflater inflater;
+        Context context;
+        public viewUserAdapter(Context context, List<User> user) {
+            this.context = context;
+            this.userInfo = user;
+            inflater = LayoutInflater.from(this.context);
+        }
+
+
+        public int getCount() {
+            return userInfo.size();
+        }
+
+        @Override
+        public User getItem(int position) {
+            return userInfo.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            ViewUserDetails.viewUserAdapter.MyViewHolder mViewHolder  = null;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.list_of_user_under_admin, parent, false);
+                mViewHolder = new ViewUserDetails.viewUserAdapter.MyViewHolder(convertView);
+                convertView.setTag(mViewHolder);
+            } else {
+                mViewHolder = (ViewUserDetails.viewUserAdapter.MyViewHolder) convertView.getTag();
+            }
+
+            final User info = getItem(position);
+
+                mViewHolder.mailId.setText(info.getUserName());
+
+
+            return convertView;
+        }
+
+
+        private class MyViewHolder {
+            private TextView mailId;
+            public MyViewHolder(View item) {
+                mailId = (TextView) item.findViewById(R.id.user_mail);
+            }
+        }
+    }
     public ViewUserDetails getActivity() {
         return this;
     }
