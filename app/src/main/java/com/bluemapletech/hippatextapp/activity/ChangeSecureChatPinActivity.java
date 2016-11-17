@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +54,11 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_secure_chat_pin);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         init();
         resetPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +116,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 chatpin = (map.get("chatPin"));
+                role = map.get("role");
                 Log.d(TAG, "Old chat pin: " + chatpin);
             }
 
@@ -166,6 +174,36 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         }
         return valid;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(role.equals("admin")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdmin();
+                    return true;
+            }
+        }
+        if(role.equals("user")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageEmp();
+                    return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPageEmp() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
+
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+
 
     public ChangeSecureChatPinActivity getActivity() {
         return this;

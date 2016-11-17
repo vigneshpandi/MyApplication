@@ -1,11 +1,13 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -32,6 +34,7 @@ import java.util.List;
 
 public class ListOfAdminActivity extends AppCompatActivity {
 
+    private static final String TAG = ListOfAdminActivity.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private String loggedInCompanyValue;
@@ -174,6 +177,20 @@ public class ListOfAdminActivity extends AppCompatActivity {
                 fieldName = (TextView) item.findViewById(R.id.root_mail);
             }
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
 
     public ListOfAdminActivity getActivity() {

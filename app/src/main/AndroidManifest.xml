@@ -56,21 +56,12 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".activity.AddRootActivity"
-            android:parentActivityName=".activity.RootHomeActivity" />
-        <activity
-            android:name=".activity.ListOfRoots"
-            android:parentActivityName=".activity.RootHomeActivity" />
-        <activity
-            android:name=".activity.AddAdminActivity"
-            android:parentActivityName=".activity.AdminHomeActivity" />
-        <activity
-            android:name=".activity.ListOfAdminActivity"
-            android:parentActivityName=".activity.AdminHomeActivity" />
+        <activity android:name=".activity.AddRootActivity" />
+        <activity android:name=".activity.ListOfRoots" />
+        <activity android:name=".activity.AddAdminActivity" />
+        <activity android:name=".activity.ListOfAdminActivity" />
         <activity android:name=".activity.AddEmployeeActivity" />
-        <activity android:name=".activity.EditProfileActivity"
-            android:parentActivityName=".activity.AdminHomeActivity"></activity>
+        <activity android:name=".activity.EditProfileActivity"/>
     </application>
 
 </manifest>

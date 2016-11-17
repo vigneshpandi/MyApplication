@@ -11,9 +11,11 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,13 @@ import com.bluemapletech.hippatextapp.dao.GroupMessageDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.utils.Utility;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class GroupMessageEmployeeActivity extends AppCompatActivity implements View.OnClickListener,GroupMessageDao.MessagesCallbacks {
     private ArrayList<Message> mMessages;
@@ -47,11 +57,17 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private GroupMessageDao.MessagesListener mListener;
         private String randomValue;
         private String fromMail, senderId;
-        private Button selectImage;
+        private ImageView selectImage;
         private String notificationId;
         final private int SELECT_FILE = 1;
         final private int REQUEST_CAMERA = 2;
-         private String base64Profile;
+        private String base64Profile;
+        private  String reArrangeEmail;
+        private String role;
+        private FirebaseAuth firebaseAuthRef;
+        private FirebaseDatabase firebaseDatabaseRef;
+        private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -62,14 +78,16 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             randomValue = getIntent().getStringExtra(EmployeeGroupsAdapter.randomValue);
             notificationId = getIntent().getStringExtra(EmployeeGroupsAdapter.notificationId);
             mListView = (ListView)findViewById(R.id.message_list);
-            selectImage = (Button) findViewById(R.id.select_image);
+            selectImage = (ImageView) findViewById(R.id.select_image);
             mMessages = new ArrayList<>();
             mAdapter = new GroupMessageEmployeeActivity.MessagesAdapter(mMessages);
             mListView.setAdapter(mAdapter);
-            if (getSupportActionBar() != null){
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
-            Button sendMessage = (Button)findViewById(R.id.send_message);
+            ImageView sendMessage = (ImageView)findViewById(R.id.send_message);
 
             sendMessage.setOnClickListener(this);
             String fromMails = fromMail.replace(".", "-");
@@ -78,10 +96,32 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             mConvoId = ids[0];
             Log.d("mConvoId",mConvoId);
             mListener = GroupMessageDao.addMessagesListener(randomValue, this);
-
+            init();
         }
 
-        public void onClick(View v) {
+    private void init() {
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuthRef = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuthRef.getCurrentUser();
+        reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
+
+        dataReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                role = map.get("role");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+    }
+
+    public void onClick(View v) {
             saveMessages();
         }
 
@@ -266,6 +306,36 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }
         GroupMessageDao.saveMessage(msg, randomValue);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(role.equals("admin")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdmin();
+                    return true;
+            }
+        }
+        if(role.equals("user")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageEmp();
+                    return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPageEmp() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
+
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+
     public GroupMessageEmployeeActivity getActivity() {
         return this;
     }

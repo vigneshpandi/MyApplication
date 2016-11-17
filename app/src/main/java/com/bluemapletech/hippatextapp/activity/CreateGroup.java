@@ -37,12 +37,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class CreateGroup extends AppCompatActivity {
+
+    private static final String TAG = CreateGroup.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggegINRole;
     private String loggedINChatPin;
+    private String role;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
  // private   List<User> userObj;
@@ -56,8 +59,13 @@ public class CreateGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
-        setSupportActionBar(toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         checkCompanyExistence();
@@ -126,6 +134,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                role = (String) dataSnapshot.child("role").getValue();
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
@@ -153,6 +162,20 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         int id = item.getItemId();
         Log.d("menu selected","menu  selected");
         //noinspection SimplifiableIfStatement
+        if(role.equals("admin")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdmin();
+                    return true;
+            }
+        }
+        if(role.equals("user")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageEmp();
+                    return true;
+            }
+        }
         if (id == R.id.group_create) {
             Log.d("menu selected","menu group create selected");
             Log.d("loggedINEmail",loggedINEmail);
@@ -199,6 +222,18 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void backPageEmp() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
+
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+
+
     private class EmployeeCreateGroupBaseAdapter extends BaseAdapter {
 
         List<User> userInfo = new ArrayList<User>();
@@ -280,6 +315,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             }
         }
     }
+
 
     public CreateGroup getActivity() {
         return this;

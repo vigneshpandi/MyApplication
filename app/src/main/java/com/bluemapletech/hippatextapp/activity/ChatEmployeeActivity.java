@@ -15,10 +15,12 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -58,7 +60,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
-
+    private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
-        if (getSupportActionBar() != null){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
@@ -289,6 +293,21 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             msg.setImage("");
         }
         UserDao.saveMessage(msg, mConvoId);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
     }
     public ChatEmployeeActivity getActivity() {
         return this;

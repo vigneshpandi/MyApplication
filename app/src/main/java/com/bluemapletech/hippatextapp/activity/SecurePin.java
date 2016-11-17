@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ public class SecurePin extends AppCompatActivity {
     private static final String TAG = SecurePin.class.getCanonicalName();
     String userEmail;
     User user;
+
     private EditText chatPin, conformChatPin;
     private Button loginSecureBtn;
     private String auth;
@@ -39,6 +42,13 @@ public class SecurePin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secure_pin);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         init();
         loginSecureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +182,21 @@ public class SecurePin extends AppCompatActivity {
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
         dataReferences.setValue(refreshedToken);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),LoginActivity.class));
+    }
+
     public SecurePin getActivity() {
         return this;
     }

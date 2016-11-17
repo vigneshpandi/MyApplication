@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -211,6 +212,21 @@ public class AddEmployeeActivity extends AppCompatActivity {
             Intent intent = new Intent(getActivity(), AddEmployeeActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
 
     public AddEmployeeActivity getActivity() { return this;  }

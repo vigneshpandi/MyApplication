@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +50,11 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         fireBaseDatabase = FirebaseDatabase.getInstance();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         init();
     }
 
@@ -212,7 +219,34 @@ public class EditProfileActivity extends AppCompatActivity {
         return  matcher.matches();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(role.equals("admin")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdmin();
+                    return true;
+            }
+        }
+        if(role.equals("user")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageEmp();
+                    return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void backPageEmp() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
+
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
 
 
     public EditProfileActivity getActivity() {
