@@ -46,7 +46,7 @@ public class PageBaseAdapter extends BaseAdapter {
 
     @Override
     public User getItem(int position) {
-        return (User) userInfo.get(position);
+        return userInfo.get(position);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PageBaseAdapter extends BaseAdapter {
         mViewHolder.fieldId.setText(info.getTINorEIN());
         mViewHolder.fieldName.setText(info.getCompanyName());
 
-        ((Button) convertView.findViewById(R.id.accept_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("0")) {
@@ -80,23 +80,26 @@ public class PageBaseAdapter extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 }else if(userInfo.get(position).getAuth().matches("1")){
-                    deleteCompany(userInfo.get(position));
+                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(userEmail, userInfo.get(position).getUserName());
+                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
+                    context.startActivity(intent);
                 }else if(userInfo.get(position).getAuth().matches("2")){
                     accepted(userInfo.get(position));
                 }
 
             }
         });
-        ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userInfo.get(0).getAuth().matches("2")) {
+                if (!userInfo.get(0).getAuth().matches("0")) {
                     deleteCompany(userInfo.get(position));
                 }
             }
         });
 
-        ((TextView) convertView.findViewById(R.id.layout_field_id)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                // int position=(Integer)v.getTag();
@@ -110,16 +113,15 @@ public class PageBaseAdapter extends BaseAdapter {
         if (userInfo.get(0).getAuth().matches("0")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View");
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("Delete");
-            btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            btn.setText("View");
+            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setText("Delete");
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {

@@ -17,6 +17,8 @@ import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +34,7 @@ public class ViewUserDetails extends AppCompatActivity {
     String adminMailId = null;
     String reArrangeEmail;
     String userAuths;
+    private FirebaseAuth firebaseAuth;
     User user = new User();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
@@ -53,15 +56,20 @@ public class ViewUserDetails extends AppCompatActivity {
         empMailId = getIntent().getStringExtra(PageAdminBaseAdapter.userEmails);
         adminMailId = getIntent().getStringExtra(PageBaseAdapter.userEmail);
         userAuths = getIntent().getStringExtra(PageBaseAdapter.userAuth);
-        Log.d(TAG,"userAuths....."+userAuths+empMailId+adminMailId);
         acceptBtn = (Button) findViewById(R.id.accept_user_btn);
         pendingBtn = (Button) findViewById(R.id.pending_user_btn);
         deleteBtn = (Button) findViewById(R.id.delete_user_btn);
-if(!userAuths.matches("0")){
-    acceptBtn.setVisibility(View.INVISIBLE);
-    pendingBtn.setVisibility(View.INVISIBLE);
-    deleteBtn.setVisibility(View.INVISIBLE);
-}
+
+
+        acceptBtn.setVisibility(View.INVISIBLE);
+        pendingBtn.setVisibility(View.INVISIBLE);
+        deleteBtn.setVisibility(View.INVISIBLE);
+
+        if(userAuths.matches("0")){
+            acceptBtn.setVisibility(View.VISIBLE);
+            pendingBtn.setVisibility(View.VISIBLE);
+            deleteBtn.setVisibility(View.VISIBLE);
+            }
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
@@ -72,11 +80,9 @@ if(!userAuths.matches("0")){
 
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         if (adminMailId != null) {
-            Log.d("adminMailId",adminMailId);
             reArrangeEmail = adminMailId.replace(".", "-");
             user.setUserName(reArrangeEmail);
         } else if(empMailId!=null){
-            Log.d("empMailId",empMailId);
             reArrangeEmail = empMailId.replace(".", "-");
             user.setUserName(reArrangeEmail);
         }
@@ -87,38 +93,36 @@ if(!userAuths.matches("0")){
                 Log.d(TAG, dataSnapshot.toString());
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 String comNames = map.get("companyName");
-                user.setCompanyName(comNames);
-               String role =  map.get("role");
-                Log.d("role.....","role........"+role);
+                String emailAddress = map.get("emailAddress");
+                String providerNpi = map.get("providerNPIId");
+                String providerNames = map.get("providerName");
+                String role =  map.get("role");
+                String auth = map.get("auth");
                 if(role.equals("user")){
-                    Log.d("inside","inside");
                     providerNPI.setVisibility(View.INVISIBLE);
                     providerName.setVisibility(View.INVISIBLE);
                     providerNpiLabel.setVisibility(View.INVISIBLE);
                     providerNameLabel.setVisibility(View.INVISIBLE);
                 }
-                user.setRole(role);
-                String emailAddress = map.get("emailAddress");
                 if (adminMailId != null) {
                     userId = map.get("companyCINNumber");
                 } else if(empMailId!=null) {
                     userId = map.get("employeeId");
 
                 }
-                String providerNpi = map.get("providerNPIId");
-                String providerNames = map.get("providerName");
+                if(userAuths.matches("1") && role.matches("admin")){
+                    acceptBtn.setVisibility(View.VISIBLE);
+                   Button btns = (Button) findViewById(R.id.accept_user_btn);
+                    btns.setText("Employee List");
+                }
+                user.setAuth(auth);
+                user.setCompanyName(comNames);
+                user.setRole(role);
                 empId.setText(userId);
                 compName.setText(comNames);
                 userEmail.setText(emailAddress);
                 providerNPI.setText(providerNpi);
                 providerName.setText(providerNames);
-                if(role == "user"){
-                    Log.d("inside","inside");
-                    providerNPI.setVisibility(View.INVISIBLE);
-                    providerName.setVisibility(View.INVISIBLE);
-                    providerNpiLabel.setVisibility(View.INVISIBLE);
-                    providerNameLabel.setVisibility(View.INVISIBLE);
-                }
             }
 
             @Override
@@ -130,12 +134,31 @@ if(!userAuths.matches("0")){
 acceptBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        Log.d("user.get",user.getUserName());
-        user.setAuth("1");
-        if(user.getRole().matches("admin")){
+        if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
+            user.setAuth("1");
             acceptedCompany(user);
-        } else if(user.getRole().matches("user")){
+        } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
+            user.setAuth("1");
             acceptedEmployee(user);
+        } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+            String loginReArrangeEmail = logged.getEmail().replace(".", "-");
+            databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(loginReArrangeEmail);
+            databaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    /*Map<String, String> maps = (Map) dataSnapshot.getValue();
+                   String chatpin = (maps.get("chatPin"));
+                    Log.d(TAG, "Old chat pin: " + chatpin);*/
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
     }
@@ -145,7 +168,6 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.setAuth("2");
-
                 if(user.getRole().matches("admin")){
                     pendingCompany(user);
                 } else if(user.getRole().matches("user")){
@@ -158,7 +180,6 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.setAuth("3");
-
                 if(user.getRole().matches("admin")){
                     deleteCompany(user);
                 } else if(user.getRole().matches("user")){
@@ -204,7 +225,6 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while accepted the company, please try again!");
