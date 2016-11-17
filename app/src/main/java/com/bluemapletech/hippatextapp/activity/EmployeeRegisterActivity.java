@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,21 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,10 +31,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -65,6 +62,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     private StorageReference filePath;
     private User empInfos = new User();;
     private Uri downloadUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,29 +97,41 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     checkUserExistence();
                 }
             }
+
             private boolean validate() {
-                String empEmailTxt= emailTxt.getText().toString().trim();
-                String empPasswordTxt= passwordTxt.getText().toString().trim();
+                String empEmailTxt = emailTxt.getText().toString().trim();
+                String empPasswordTxt = passwordTxt.getText().toString().trim();
                 String empIdTxts = empIdTxt.getText().toString().trim();
+                View select = spinner.getSelectedView();
 
                 boolean valid = true;
-                if(!isValidEmail(empEmailTxt)){
+                if (!isValidEmail(empEmailTxt)) {
                     emailTxt.setError("Invalid Email");
                     valid = false;
                 }
 
-                if(empPasswordTxt.isEmpty()||empPasswordTxt.length()< 8|| empPasswordTxt.length()> 16){
+                if (empPasswordTxt.isEmpty() || empPasswordTxt.length() < 8 || empPasswordTxt.length() > 16) {
                     passwordTxt.setError("Password between 8 - 16 number and character");
                     valid = false;
-                }else{
+                } else {
                     passwordTxt.setError(null);
                 }
 
-                if(empIdTxts.isEmpty()){
+                if (empIdTxts.isEmpty()) {
                     empIdTxt.setError("EmployeeId is invalid");
                     valid = false;
-                }else{
+                } else {
                     empIdTxt.setError(null);
+                }
+
+                String selectedItem = spinner.getSelectedItem().toString();
+                View selectedView = spinner.getSelectedView();
+                if (selectedItem.equalsIgnoreCase("Select Company") ||
+                        selectedItem.equalsIgnoreCase("") && selectedView != null && selectedView instanceof TextView) {
+                    TextView selectedTextView = (TextView) selectedView;
+                    selectedTextView.setTextColor(Color.RED);
+                    selectedTextView.setError("Please select company name!");
+                    /*Toast.makeText(EmployeeRegisterActivity.this, "Please select company name!", Toast.LENGTH_SHORT).show();*/
                 }
                 return valid;
             }
@@ -129,13 +139,12 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     }
 
 
-
     private boolean isValidEmail(String empEmailTxt) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(empEmailTxt);
-        return  matcher.matches();
+        return matcher.matches();
     }
 
     public void getAllCompanyList() {
@@ -149,6 +158,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
                 for (DataSnapshot companyList : dataSnapshot.getChildren()) {
                     String comName = companyList.child("companyName").getValue(String.class);
+                    String name = "Select Company";
+                    companyNames.add(name);
                     companyNames.add(comName);
                 }
                 ArrayAdapter<String> companyAdapter = new ArrayAdapter<String>(getActivity(),
@@ -173,7 +184,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     entryAuth();
                 } else {
-                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Entered email address is already exists! ", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -205,17 +216,17 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String randomValue = senderID.substring(0, 7);
-        Log.d("randomValue",randomValue);
+        Log.d("randomValue", randomValue);
         user.setSenderId(randomValue);
         user.setProviderName("");
         user.setProviderNPIId("");
         user.setProfilePjhoto("");
-       boolean insertUser = userDao.createEmployee(user);
+        boolean insertUser = userDao.createEmployee(user);
         Log.d(TAG, "Returned user result: " + insertUser);
-       if (insertUser) {
-           progressDialog.dismiss();
-           Intent intent = new Intent(getActivity(), HomeActivity.class);
-           startActivity(intent);
+        if (insertUser) {
+            progressDialog.dismiss();
+            Intent intent = new Intent(getActivity(), HomeActivity.class);
+            startActivity(intent);
         } else {
             Log.d(TAG, "Employee insertion not successful!");
             Toast.makeText(getActivity(), "Employee already Exists, Please login with your email and password!", Toast.LENGTH_LONG).show();
@@ -226,7 +237,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;

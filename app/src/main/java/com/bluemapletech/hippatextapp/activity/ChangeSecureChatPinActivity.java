@@ -25,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.UnsupportedEncodingException;
-import java.security.SecureRandom;
 import java.util.Map;
 
 /**
@@ -38,7 +37,6 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuthRef;
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
-    private SecureRandom random;
     private ProgressDialog progressDialog;
 
     private String chatpin;
