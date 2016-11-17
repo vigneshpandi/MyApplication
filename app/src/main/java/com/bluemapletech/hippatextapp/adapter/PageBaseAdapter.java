@@ -172,7 +172,7 @@ public class PageBaseAdapter extends BaseAdapter {
         user.setAuth("3");
         Log.d(TAG, "Add invited company method has been called!");
         final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.deleteCompany(user);
+        boolean result = companyDao.deleteCompanys(user);
         if (result) {
             Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();

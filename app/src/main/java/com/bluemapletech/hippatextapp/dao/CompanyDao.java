@@ -49,6 +49,16 @@ public class CompanyDao {
         databaseRef.setValue(user.getAuth());
         return true;
     }
+    public boolean deleteCompanys(User user) {
+        Log.d(TAG, "Add invited company dao method has been called!");
+        String reArrangeEmail = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue(user.getAuth());
+        DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(user.getCompanyName());
+        databaseRefs.removeValue();
+        return true;
+    }
 
     public boolean profileImageUrl(User comInfos) {
         Log.d(TAG, "Add profileImage url!");
