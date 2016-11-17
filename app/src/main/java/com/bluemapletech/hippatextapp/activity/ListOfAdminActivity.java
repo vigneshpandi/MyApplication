@@ -79,7 +79,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
                         userObj.add(user);
                         Log.d("adminDetails","adminDetails"+user);
                     }
-                    iv.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj,loggedINEmail));
+                    iv.setAdapter(new PageAdminBaseAdapters(getActivity(), userObj,loggedINEmail));
                 }
             }
             @Override
@@ -108,13 +108,13 @@ public class ListOfAdminActivity extends AppCompatActivity {
             }
         });
     }
-    private class PageAdminBaseAdapter extends BaseAdapter {
+    private class PageAdminBaseAdapters extends BaseAdapter {
 
         List<User> userInfo = new ArrayList<User>();
         LayoutInflater inflater;
         Context context;
         private String loginMail;
-        public PageAdminBaseAdapter(Context context, List<User> user , String loginMail) {
+        public PageAdminBaseAdapters(Context context, List<User> user , String loginMail) {
             this.context = context;
             this.userInfo = user;
             this.loginMail = loginMail;
@@ -128,7 +128,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
 
         @Override
         public User getItem(int position) {
-            return (User) userInfo.get(position);
+            return userInfo.get(position);
         }
 
         @Override
@@ -139,19 +139,18 @@ public class ListOfAdminActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ListOfAdminActivity.PageAdminBaseAdapter.MyViewHolder mViewHolder  = null;
+            ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder mViewHolder  = null;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.view_root_list, parent, false);
-                mViewHolder = new ListOfAdminActivity.PageAdminBaseAdapter.MyViewHolder(convertView);
+                mViewHolder = new ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder(convertView);
                 convertView.setTag(mViewHolder);
             } else {
-                mViewHolder = (ListOfAdminActivity.PageAdminBaseAdapter.MyViewHolder) convertView.getTag();
+                mViewHolder = (ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder) convertView.getTag();
             }
 
             final User info = getItem(position);
-            Log.d("getUserName",info.getUserName());
             mViewHolder.fieldName.setText(info.getUserName());
-            ((Button) convertView.findViewById(R.id.delete_root)).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.delete_root).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteUser(userInfo.get(position).getUserName());

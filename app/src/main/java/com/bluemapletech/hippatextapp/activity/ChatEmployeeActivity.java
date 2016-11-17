@@ -161,7 +161,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             }
             imageView.setLayoutParams(layoutParams);
             nameView.setLayoutParams(layoutParams);
-            ((ImageView) convertView.findViewById(R.id.image)).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Dialog dialog=new Dialog(ChatEmployeeActivity.this,android.R.style.Theme_Black_NoTitleBar);
@@ -174,6 +174,16 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     dialog.show();
                 }
             });
+            convertView.findViewById(R.id.image).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d(TAG,"lonngpress"+"longPress");
+                    return false;
+                }
+            });
+
+
+
             return convertView;
         }
 
