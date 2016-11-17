@@ -41,6 +41,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private SecureRandom random;
     private ProgressDialog progressDialog;
 
+
     private EditText addEmpEmailId, addEmpEmployeeId;
     private Button addEmpBtn;
     private String password;
