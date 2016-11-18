@@ -41,6 +41,7 @@ public class ViewUserDetails extends AppCompatActivity {
     String adminMailId = null;
     String reArrangeEmail;
     String userAuths;
+    String role;
     private ListView iv;
     private FirebaseAuth firebaseAuth;
     List<User> userObj = new ArrayList<User>();
@@ -101,11 +102,12 @@ public class ViewUserDetails extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, dataSnapshot.toString());
                 Map<String, String> map = (Map) dataSnapshot.getValue();
+
                 String comNames = map.get("companyName");
                 String emailAddress = map.get("emailAddress");
                 String providerNpi = map.get("providerNPIId");
                 String providerNames = map.get("providerName");
-                String role =  map.get("role");
+                role =  map.get("role");
                 String auth = map.get("auth");
                 if(role.equals("user")){
                     providerNPI.setVisibility(View.INVISIBLE);
@@ -193,6 +195,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     user = new User();
+
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
@@ -277,15 +280,29 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                backPage();
-                return true;
+        if(role.equals("user")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdmin();
+                    return true;
+            }
+        }
+        if(role.equals("admin")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageRoot();
+                    return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void backPage() {
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+
+    private void backPageRoot() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
