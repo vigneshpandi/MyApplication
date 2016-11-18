@@ -130,6 +130,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                         selectedItem.equalsIgnoreCase("") && selectedView != null && selectedView instanceof TextView) {
                     TextView selectedTextView = (TextView) selectedView;
                     selectedTextView.setTextColor(Color.RED);
+                    selectedTextView.setText("Select Company");
                     selectedTextView.setError("Please select company name!");
                     /*Toast.makeText(EmployeeRegisterActivity.this, "Please select company name!", Toast.LENGTH_SHORT).show();*/
                 }
@@ -155,11 +156,10 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> companyNames = new ArrayList<String>();
-
+                String name = "Select Company";
+                companyNames.add(name);
                 for (DataSnapshot companyList : dataSnapshot.getChildren()) {
                     String comName = companyList.child("companyName").getValue(String.class);
-                    String name = "Select Company";
-                    companyNames.add(name);
                     companyNames.add(comName);
                 }
                 ArrayAdapter<String> companyAdapter = new ArrayAdapter<String>(getActivity(),
