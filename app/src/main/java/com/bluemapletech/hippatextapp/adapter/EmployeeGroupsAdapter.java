@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.activity.GroupMessageEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.Groups;
+import com.squareup.picasso.Picasso;
 
 
 import java.io.UnsupportedEncodingException;
@@ -58,7 +60,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
 
     @Override
     public Groups getItem(int position) {
-        return (Groups) groupInfo.get(position);
+        return groupInfo.get(position);
     }
 
     @Override
@@ -80,7 +82,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
         }
 
         final Groups info = getItem(position);
-        ((Button) convertView.findViewById(R.id.group_chat)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.group_chat).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
@@ -122,7 +124,9 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                 alertDialog.show();
             }
         });
-
+        if(info.getGroupImage()!= null && !info.getGroupImage().matches("")){
+            Picasso.with(context).load(info.getGroupImage()).fit().centerCrop().into(mViewHolder.userImage);
+        }
         mViewHolder.fieldName.setText(info.getGroupName());
 
 
@@ -132,10 +136,11 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
     private class MyViewHolder {
 
         private TextView  fieldName;
-
+        private ImageView userImage;
         public MyViewHolder(View item) {
 
             fieldName = (TextView) item.findViewById(R.id.group_name);
+            userImage = (ImageView) item.findViewById(R.id.user_image);
         }
     }
 

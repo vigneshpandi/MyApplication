@@ -12,12 +12,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.User;
+import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
 
     @Override
     public User getItem(int position) {
-        return (User) userInfo.get(position);
+        return userInfo.get(position);
     }
 
     @Override
@@ -77,10 +79,14 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         }
 
         final User info = getItem(position);
-        mViewHolder.fieldId.setText(info.getEmpId());
+        //mViewHolder.fieldId.setText(info.getEmpId());
+        if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
+            Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
+        }
+
         mViewHolder.fieldName.setText(info.getUserName());
 
-        ((Button) convertView.findViewById(R.id.chat_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
@@ -126,9 +132,11 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
 
     private class MyViewHolder {
         private TextView fieldId, fieldName;
+        private ImageView userImage;
         public MyViewHolder(View item) {
-            fieldId = (TextView) item.findViewById(R.id.layout_field_id);
+            //fieldId = (TextView) item.findViewById(R.id.layout_field_id);
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);
+            userImage = (ImageView) item.findViewById(R.id.user_image);
         }
     }
 

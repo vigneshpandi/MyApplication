@@ -2,7 +2,9 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,8 @@ import java.util.Set;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.EmployeeDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +42,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 public class CreateGroup extends AppCompatActivity {
 
@@ -47,6 +57,9 @@ public class CreateGroup extends AppCompatActivity {
     private String loggegINRole;
     private String loggedINChatPin;
     private String role;
+    private Uri downloadUrl;
+
+    private StorageReference mStorage;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
  // private   List<User> userObj;
@@ -57,6 +70,8 @@ public class CreateGroup extends AppCompatActivity {
     public int listPosition;
     private String groupName = "";
     private String storeMail;
+    private SecureRandom random;
+    private String senderID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +101,7 @@ public class CreateGroup extends AppCompatActivity {
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-
+                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }/* else if(user.getRole().matches("admin") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName()) && loggegINRole.matches("admin") ){
@@ -203,11 +218,8 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    EmployeeDao empDao = new EmployeeDao();
                     groupName = input.getText().toString();
-                    boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName);
-                    finish();
-                    startActivity(getIntent());
+                    saveImage();
 
                 }
             });
@@ -228,6 +240,33 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void saveImage() {
+       final  EmployeeDao empDao = new EmployeeDao();
+        random = new SecureRandom();
+        senderID = new BigInteger(130, random).toString(32);
+        String randomValue = senderID.substring(0, 7);
+        Log.d("randomValue",randomValue);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.group);
+        StorageReference filePath = mStorage.child(groupName+senderID);
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl " + downloadUrl);
+Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
+                boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl);
+                finish();
+                startActivity(getIntent());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
 
     private void backPageEmp() {
         Log.d(TAG,"back page..");
@@ -260,7 +299,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
         @Override
         public User getItem(int position) {
-            return (User) userInfo.get(position);
+            return userInfo.get(position);
         }
 
         @Override
@@ -280,15 +319,18 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             } else {
                 mViewHolder = (EmployeeCreateGroupBaseAdapter.MyViewHolder) convertView.getTag();
             }
-            View ticks = (ImageView) convertView.findViewById(R.id.tickIcon);
-            ticks.setVisibility(ticks.INVISIBLE);
+            View ticks = convertView.findViewById(R.id.tickIcon);
+            ticks.setVisibility(View.INVISIBLE);
 
 
             final User info = getItem(position);
-            mViewHolder.fieldId.setText(info.getEmpId());
+            //mViewHolder.fieldId.setText(info.getEmpId());
             mViewHolder.fieldName.setText(info.getUserName());
             final View finalConvertView = convertView;
              selection = (ImageView)convertView.findViewById(R.id.tickIcon);
+            if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
+                Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
+            }
            /* ((TextView) convertView.findViewById(R.id.employee_mail)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -313,11 +355,12 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
         private class MyViewHolder {
             private TextView fieldId, fieldName;
-            private ImageView tickMark;
+            private ImageView tickMark, userImage;
             public MyViewHolder(View item) {
-                fieldId = (TextView) item.findViewById(R.id.employee_id);
+               //fieldId = (TextView) item.findViewById(R.id.employee_id);
                 fieldName = (TextView) item.findViewById(R.id.employee_mail);
                 tickMark = (ImageView) item.findViewById(R.id.tickIcon);
+                userImage = (ImageView) item.findViewById(R.id.user_image);
             }
         }
     }

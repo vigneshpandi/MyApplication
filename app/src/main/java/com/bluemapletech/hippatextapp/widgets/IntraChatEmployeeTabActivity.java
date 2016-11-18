@@ -59,6 +59,7 @@ public class IntraChatEmployeeTabActivity extends Fragment{
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     user.setSenderId(snapshot.child("senderId").getValue(String.class));
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
                     if (user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {

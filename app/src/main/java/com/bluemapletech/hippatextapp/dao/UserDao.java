@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -200,6 +201,7 @@ public class UserDao {
     }
 
 
+
     public static class MessagesListener implements ChildEventListener {
         private MessagesCallbacks callbacks;
         MessagesListener(MessagesCallbacks callbacks){
@@ -252,7 +254,7 @@ public class UserDao {
 
 
     public interface MessagesCallbacks{
-        public void onMessageAdded(Message message);
+        void onMessageAdded(Message message);
     }
 
     public boolean saveSecure(User user){
@@ -269,11 +271,11 @@ public class UserDao {
         compData.put("providerName",user.getProviderName());
         compData.put("role", user.getRole());
         compData.put("status",user.getStatus());
-        compData.put("designation","");
+        compData.put("designation",user.getDesignation());
         compData.put("employeeId",user.getEmpId());
-        compData.put("firstName","");
-        compData.put("lastName","");
-        compData.put("profilePhoto","");
+        compData.put("firstName",user.getFirstName());
+        compData.put("lastName",user.getLastName());
+        compData.put("profilePhoto",user.getProfilePjhoto());
         compData.put("senderId",user.getSenderId());
         compData.put("pushNotificationId","");
         String reArrangeEmail = user.getUserName().replace(".", "-");

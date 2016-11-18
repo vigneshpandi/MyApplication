@@ -63,6 +63,7 @@ public class ChatAdminActivity extends Fragment{
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setSenderId(snapshot.child("senderId").getValue(String.class));
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
+                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     if (user.getRole().matches("user") && user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }

@@ -1,15 +1,25 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
@@ -17,6 +27,9 @@ import com.bluemapletech.hippatextapp.adapter.PageAdminBaseAdapter;
 import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.Utility;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,20 +37,39 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.R.attr.data;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = EditProfileActivity.class.getCanonicalName();
     private EditText editFirstName, editLastName, editEmail, editCompanyName, editEmployeeId, editDesignation;
     private Button updateProfileBtn;
-
+    private  ImageView userImage;
+    final private int SELECT_FILE = 1;
+    final private int REQUEST_CAMERA = 2;
+    private String base64Profile;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private DatabaseReference databaseRef;
+    private StorageReference mStorage;
+    Uri value;
+    Uri downloadUrl;
     String reArrangeEmail;
     User user = new User();
     private ProgressDialog progressDialog;
@@ -62,6 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Log.d(TAG,"init method called");
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
         editFirstName = (EditText) findViewById(R.id.com_first_name);
         editLastName = (EditText) findViewById(R.id.com_last_name);
@@ -70,12 +103,12 @@ public class EditProfileActivity extends AppCompatActivity {
         editEmployeeId = (EditText) findViewById(R.id.edit_emp_id);
         editDesignation = (EditText) findViewById(R.id.edit_designation);
         updateProfileBtn = (Button) findViewById(R.id.update_profile);
-
+         userImage = (ImageView) findViewById(R.id.user_image);
         // fireBaseDatabase = FirebaseDatabase.getInstance();
         Log.d(TAG,"logged....."+logged);
         if (logged != null) {
             Log.d("logged",logged.toString());
-            reArrangeEmail = logged.getEmail().replace(".", "-");;
+            reArrangeEmail = logged.getEmail().replace(".", "-");
         }
         databaseRef = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.addValueEventListener(new ValueEventListener() {
@@ -105,7 +138,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 editCompanyName.setText(comNames);
                 editEmail.setText(emailAddress);
                 editDesignation.setText(designation);
-
+                Picasso.with(EditProfileActivity.this).load(profile).fit().centerCrop().into(userImage);
             }
 
             @Override
@@ -120,41 +153,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if(!validate()){
                 Toast.makeText(getActivity(),"Update failed",Toast.LENGTH_LONG).show();
             }else{
-                Log.d(TAG, "update profile successfully!");
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("Update...");
-                progressDialog.show();
-                final UserDao userDao = new UserDao();
-                user.setAuth(auth);
-                user.setChatPin(chatPin);
-                user.setTINorEIN(companyCin);
-                user.setCompanyName(compCompany);
-                user.setDesignation(compDesignation);
-                user.setUserName(compEmail);
-                user.setEmpId(compEmployee);
-                user.setFirstName(compFirstName);
-                user.setLastName(compLastName);
-                user.setPassword(password);
-                user.setProfilePjhoto(profile);
-                user.setProviderNPIId(providerNPI);
-                user.setProviderName(providerName);
-                user.setPushNotificationId(notification);
-                user.setRole(role);
-                user.setSenderId(senderId);
-                user.setStatus(status);
-                Log.d(TAG,"userObj........"+user);
-                boolean data = userDao.createCompany(user);
-                if (data){
-                    progressDialog.dismiss();
-                    Log.d(TAG, "Update Profile successfuly!");
-                    Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
-                    startActivity(intent);
-                } else {
-                    Log.d(TAG, "profile not successfuly updated!");
-                    Toast.makeText(getActivity(), "profile not successfuly updated!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                    startActivity(intent);
-                }
+                saveImage();
             }
         }
         private boolean validate() {
@@ -248,8 +247,167 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
 
+    // show the popup for capture the image
+    @Override
+    protected  void onStart(){
+        super.onStart();
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] items = { "Take Photo", "Choose from Library",
+                        "Cancel" };
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        boolean result= Utility.checkPermission(EditProfileActivity.this);
+                        if (items[item].equals("Take Photo")) {
+                            if(result)
+                                cameraIntent();
+                        } else if (items[item].equals("Choose from Library")) {
+                            if(result)
+                                galleryIntent();
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
 
+
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+    private void galleryIntent()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+        }
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        assert thumbnail != null:"Image Could not be set!";
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        userImage.setImageBitmap(thumbnail);
+        base64Profile = bitmapToBase64(thumbnail);
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Bitmap bm = null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        userImage.setImageBitmap(bm);
+        base64Profile = bitmapToBase64(bm);
+         value = data.getData();
+    }
+
+    private void saveImage() {
+       // Uri uri = data.getData();
+        if(value!=null){
+            Log.d(TAG,"value"+value);
+            StorageReference filePath = mStorage.child(reArrangeEmail);
+            filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                    Log.d(TAG,"downloadUrl"+downloadUrl);
+                    profile = String.valueOf(downloadUrl);
+                    saveProfile();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }else  if(value==null){
+            Log.d(TAG,"value null"+value);
+            saveProfile();
+        }
+    }
+
+    private void saveProfile() {
+        Log.d(TAG, "update profile successfully!");
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Update...");
+        progressDialog.show();
+        final UserDao userDao = new UserDao();
+        user.setAuth(auth);
+        user.setChatPin(chatPin);
+        user.setTINorEIN(companyCin);
+        user.setCompanyName(compCompany);
+        user.setDesignation(compDesignation);
+        user.setUserName(compEmail);
+        user.setEmpId(compEmployee);
+        user.setFirstName(compFirstName);
+        user.setLastName(compLastName);
+        user.setPassword(password);
+        user.setProfilePjhoto(profile);
+        user.setProviderNPIId(providerNPI);
+        user.setProviderName(providerName);
+        user.setPushNotificationId(notification);
+        user.setRole(role);
+        user.setSenderId(senderId);
+        user.setStatus(status);
+        boolean data = userDao.createCompany(user);
+        if (data){
+            progressDialog.dismiss();
+            Log.d(TAG, "Update Profile successfuly!");
+            Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "profile not successfuly updated!");
+            Toast.makeText(getActivity(), "profile not successfuly updated!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+    }
     public EditProfileActivity getActivity() {
         return this;
     }
 }
+

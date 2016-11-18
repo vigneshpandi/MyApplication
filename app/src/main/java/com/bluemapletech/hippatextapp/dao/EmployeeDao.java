@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.dao;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +24,9 @@ public class EmployeeDao {
     private static final String TAG = EmployeeDao.class.getCanonicalName();
     private SecureRandom random;
     private String randomName;
-    public boolean createGroup(String loggedINEmail, String groupMail, String groupName) {
+    public boolean createGroup(String loggedINEmail, String groupMail, String groupName , Uri downloadUrl) {
+        String profileUrl = String.valueOf(downloadUrl);
+        HashMap<String, Object> empData = new HashMap<>();
         Log.d(TAG, "CreateGroup employee dao method has been called!");
         Log.d("groupMail",groupMail);
         String[] seprated = groupMail.split(";");
@@ -32,10 +35,9 @@ public class EmployeeDao {
         randomName = new BigInteger(130, random).toString(32);
         String randomValue = randomName.substring(0, 7);
         Log.d("randomValue",randomValue);
-        HashMap<String, Object> empData = new HashMap<>();
         empData.put("admin",loggedINEmail);
         empData.put("groupEmailId",groupMail);
-        empData.put("groupImage","");
+        empData.put("groupImage",profileUrl);
         empData.put("groupName",groupName);
         empData.put("randomName",randomValue);
         firebaseDatabaseRef = FirebaseDatabase.getInstance();

@@ -1,11 +1,13 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -23,6 +25,8 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -60,9 +65,9 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     private StorageReference mStorage;
     private Uri uri;
     private StorageReference filePath;
-    private User empInfos = new User();;
+    private User empInfos = new User();
     private Uri downloadUrl;
-
+    User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +188,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    entryAuth();
+                    saveImage();
                 } else {
                     Toast.makeText(getActivity(), "Entered email address is already exists! ", Toast.LENGTH_LONG).show();
                 }
@@ -192,7 +197,6 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     }
 
     public void entryAuth() {
-        User user = new User();
         password = passwordTxt.getText().toString();
         byte[] data = new byte[0];
         try {
@@ -221,13 +225,23 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         user.setSenderId(randomValue);
         user.setProviderName("");
         user.setProviderNPIId("");
-        user.setProfilePjhoto("");
+        user.setProfilePjhoto(String.valueOf(downloadUrl));
         boolean insertUser = userDao.createEmployee(user);
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {
             progressDialog.dismiss();
-            Intent intent = new Intent(getActivity(), HomeActivity.class);
-            startActivity(intent);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            alertDialog.setTitle("Thank You Registering");
+            alertDialog.setMessage("You will receive an email once we verify the  details");
+            // Setting OK Button
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(intent);
+                }
+            });
+            // Showing Alert Message
+            alertDialog.show();
         } else {
             Log.d(TAG, "Employee insertion not successful!");
             Toast.makeText(getActivity(), "Employee already Exists, Please login with your email and password!", Toast.LENGTH_LONG).show();
@@ -245,7 +259,24 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void saveImage() {
+       final  String reArrangeEmailId = emailTxt.getText().toString().replace(".", "-");
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
+        StorageReference filePath = mStorage.child(reArrangeEmailId);
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl"+downloadUrl);
+                entryAuth();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
+            }
+        });
+    }
 
     public EmployeeRegisterActivity getActivity() {
         return this;

@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageUploade"
+        android:id="@+id/user_image"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
@@ -35,8 +35,8 @@
         android:id="@+id/group_name"
         android:layout_marginLeft="47dp"
         android:layout_marginStart="47dp"
-        android:layout_alignTop="@+id/imageUploade"
-        android:layout_toRightOf="@+id/imageUploade"
-        android:layout_toEndOf="@+id/imageUploade"
+        android:layout_alignTop="@+id/user_image"
+        android:layout_toRightOf="@+id/user_image"
+        android:layout_toEndOf="@+id/user_image"
         android:layout_marginTop="19dp" />
 </RelativeLayout>

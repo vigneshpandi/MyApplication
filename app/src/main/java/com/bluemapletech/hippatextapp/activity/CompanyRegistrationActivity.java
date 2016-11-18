@@ -33,6 +33,7 @@ import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -196,7 +197,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    entryAuth();
+                    saveImage();
                 }else{
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
@@ -246,7 +247,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     String randomValue = senderID.substring(0, 7);
                     Log.d("randomValue",randomValue);
                     comInfo.setSenderId(randomValue);
-                    comInfo.setProfilePjhoto("");
+                    comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
                   if (data){
@@ -287,6 +288,25 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void saveImage() {
+        final  String reArrangeEmailId = compEmailtxt.getText().toString().replace(".", "-");
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
+        StorageReference filePath = mStorage.child(reArrangeEmailId);
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl"+downloadUrl);
+                entryAuth();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
 
 
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {

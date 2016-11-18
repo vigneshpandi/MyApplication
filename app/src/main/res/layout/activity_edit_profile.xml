@@ -7,14 +7,9 @@
     android:orientation="vertical"
     tools:context="com.bluemapletech.hippatextapp.activity.EditProfileActivity">
 
-
-
     <include
         android:id="@+id/toolbar_header"
         layout="@layout/toolbar_header" />
-
-
-
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -29,19 +24,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp">
 
-        <!--<de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imageUploade"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:src="@drawable/natural"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />-->
-
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +34,7 @@
                 android:layout_height="96dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/natural"
-                android:id="@+id/circleView"
+                android:id="@+id/user_image"
                 android:layout_gravity="center"/>
 
             <EditText
