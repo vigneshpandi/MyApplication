@@ -138,8 +138,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 }  else if(message.getImage()!=null && !message.getImage().matches("")){
                     imageView.setVisibility(View.VISIBLE);
                     nameView.setVisibility(View.GONE);
-                    imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
-                    layoutParams.gravity = Gravity.RIGHT;
+                    if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                        layoutParams.gravity = Gravity.RIGHT;
+                    } else {
+                        imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                        layoutParams.gravity = Gravity.RIGHT;
+                    }
                 }
             }else if(!message.getMsender().equals(fromMail)){
                 if(message.getMtext()!=null && !message.getMtext().matches("")){
@@ -155,8 +160,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 }else if(message.getImage()!=null && !message.getImage().matches("")){
                     nameView.setVisibility(View.GONE);
                     imageView.setVisibility(View.VISIBLE);
-                    imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
-                    layoutParams.gravity = Gravity.LEFT;
+                    if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                        layoutParams.gravity = Gravity.LEFT;
+                    }else {
+                        imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                        layoutParams.gravity = Gravity.LEFT;
+                    }
                 }
             }
             imageView.setLayoutParams(layoutParams);

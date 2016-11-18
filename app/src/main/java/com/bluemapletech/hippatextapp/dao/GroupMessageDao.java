@@ -156,7 +156,7 @@ public class GroupMessageDao {
 
 
     public interface MessagesCallbacks{
-        public void onMessageAdded(Message message);
+        void onMessageAdded(Message message);
     }
     private static  class AsyncTaskRunnerss extends AsyncTask<String, String, String> {
         @Override
@@ -169,7 +169,7 @@ public class GroupMessageDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key=AIzaSyDGbtV6pU8idsFMADn905ynj4Y7UNK4ibI");
+                conn.setRequestProperty("Authorization", "key=AIzaSyAmybMdxj4hzhchdWTzaydHB4RzH0CObjk");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
