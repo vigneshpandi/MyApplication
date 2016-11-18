@@ -158,6 +158,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 List<String> companyNames = new ArrayList<String>();
                 String name = "Select Company";
                 companyNames.add(name);
+
                 for (DataSnapshot companyList : dataSnapshot.getChildren()) {
                     String comName = companyList.child("companyName").getValue(String.class);
                     companyNames.add(comName);
