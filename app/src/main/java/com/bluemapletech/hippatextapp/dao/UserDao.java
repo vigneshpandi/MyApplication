@@ -299,7 +299,7 @@ public class UserDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key=AIzaSyAmybMdxj4hzhchdWTzaydHB4RzH0CObjk");
+                conn.setRequestProperty("Authorization", "key= AIzaSyAmybMdxj4hzhchdWTzaydHB4RzH0CObjk ");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
