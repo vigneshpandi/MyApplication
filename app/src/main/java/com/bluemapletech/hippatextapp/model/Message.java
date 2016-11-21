@@ -16,6 +16,7 @@ public class Message {
     private String randomValue;
     private String pushNotificationId;
     private String image;
+    private String childappendid;
     public String getMtext() {
         return mtext;
     }
@@ -72,6 +73,14 @@ public class Message {
         this.image = image;
     }
 
+    public String getChildappendid() {
+        return childappendid;
+    }
+
+    public void setChildappendid(String childappendid) {
+        this.childappendid = childappendid;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -82,8 +91,7 @@ public class Message {
                 ", randomValue='" + randomValue + '\'' +
                 ", pushNotificationId='" + pushNotificationId + '\'' +
                 ", image='" + image + '\'' +
+                ", childappendid='" + childappendid + '\'' +
                 '}';
     }
-
-
 }
