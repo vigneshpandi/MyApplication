@@ -20,6 +20,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+
 public class ChatEmployeeActivity extends AppCompatActivity implements View.OnClickListener,UserDao.MessagesCallbacks {
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
@@ -61,7 +63,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
-
+    Message message;
+    private String childappendid;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +79,12 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+
         if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(fromMail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
 
@@ -89,6 +95,15 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         Arrays.sort(ids);
         mConvoId = ids[1]+ids[0]+ids[2];
         mListener = UserDao.addMessagesListener(mConvoId, this);
+
+
+        //toolbar clicking
+       /* toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
     }
 
     public void onClick(View v) {
@@ -112,7 +127,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = super.getView(position, convertView, parent);
-            Message message = getItem(position);
+             message = getItem(position);
+            childappendid = message.getChildappendid();
+            Log.d(TAG,"childappendid..."+childappendid);
             TextView nameView = (TextView)convertView.findViewById(R.id.msg);
             nameView.setText(message.getMtext());
             ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
@@ -187,13 +204,23 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             convertView.findViewById(R.id.image).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    message = getItem(position);
                     Log.d(TAG,"lonngpress"+"longPress");
+                    toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                     return false;
+
                 }
             });
+            convertView.findViewById(R.id.msg).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    message = getItem(position);
+                    Log.d(TAG,"lonngpress....1"+"longPress.....1");
+                    toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                    return false;
 
-
-
+                }
+            });
             return convertView;
         }
 
@@ -316,12 +343,30 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.delete_chat, menu);
+        menu.findItem(R.id.delete).setVisible(false);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id= item.getItemId();
         switch (item.getItemId()){
             case android.R.id.home:
                 backPage();
                 return true;
         }
+        if(id == R.id.delete){
+            Log.d(TAG,"mConvoId...."+mConvoId);
+            UserDao.deleteChatMessage(message,mConvoId);
+            toolbar.getMenu().findItem(R.id.delete).setVisible(false);
+            startActivity(getIntent());
+           /* mMessages.clear();
+            mListener = UserDao.addMessagesListener(mConvoId, this);
+            mAdapter.notifyDataSetChanged();*/
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

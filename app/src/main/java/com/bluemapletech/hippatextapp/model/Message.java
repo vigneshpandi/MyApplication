@@ -17,6 +17,7 @@ public class Message {
     private String pushNotificationId;
     private String image;
     private String childappendid;
+
     public String getMtext() {
         return mtext;
     }

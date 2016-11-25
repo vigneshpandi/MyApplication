@@ -402,7 +402,21 @@ public class UserDao {
         }
     }
 
-
+   /* public boolean deleteUser(String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        databaseRef.removeValue();
+        return  true;
+    }
+    public static void deleteChatMessage(Message message, String mConvoId) {
+        Log.d(TAG,"message....."+message.getChildappendid());
+        String childappendid =  message.getChildappendid();
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendid);
+        databaseRef.removeValue();
+        return;
+    }*/
     public UserDao getActivity() {
         return this;
     }

@@ -70,7 +70,7 @@ public class GroupMessageDao {
         Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
-        msg.put("childappendid",re[7]);
+        msg.put("childByAppendid",re[7]);
        value.setValue(msg);
         Log.d(TAG,"groupPusNotificatuionEmailId"+message.getPushNotificationId());
         String arr[] = message.getPushNotificationId().split(";");

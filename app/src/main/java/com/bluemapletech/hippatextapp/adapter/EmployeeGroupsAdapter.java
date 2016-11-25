@@ -38,6 +38,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
     public static final String fromMail ="fromMail";
     public static final String senderId ="senderId";
     public static final String notificationId = "notificationId";
+    public static final String groupName = "groupName";
     LayoutInflater inflater;
     Context context;
     List<Groups> groupInfo = new ArrayList<Groups>();
@@ -107,6 +108,7 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                             intent.putExtra(fromMail,loginMail);
                             intent.putExtra(senderId,loginSenderId);
                             intent.putExtra(notificationId,groupInfo.get(position).getGroupEmailId());
+                            intent.putExtra(groupName,groupInfo.get(position).getGroupName());
                             context.startActivity(intent);
                         }else{
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
@@ -124,9 +126,10 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                 alertDialog.show();
             }
         });
-        if(info.getGroupImage()!= null && !info.getGroupImage().matches("")){
+
+            Log.d(TAG,"info.getGroupImages()"+info.getGroupImage());
             Picasso.with(context).load(info.getGroupImage()).fit().centerCrop().into(mViewHolder.userImage);
-        }
+
         mViewHolder.fieldName.setText(info.getGroupName());
 
 

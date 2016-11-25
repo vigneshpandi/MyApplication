@@ -42,7 +42,7 @@
             android:parentActivityName=".activity.EmployeeHomeActivity" />
         <activity android:name=".activity.SecurePin" />
         <activity android:name=".activity.CreateGroup" />
-        <activity android:name=".activity.ChangeSecureChatPinActivity"/>
+        <activity android:name=".activity.ChangeSecureChatPinActivity" />
         <activity android:name=".activity.GroupMessageEmployeeActivity" />
 
         <service android:name=".utils.MyFirebaseMessagingService">
@@ -61,7 +61,8 @@
         <activity android:name=".activity.AddAdminActivity" />
         <activity android:name=".activity.ListOfAdminActivity" />
         <activity android:name=".activity.AddEmployeeActivity" />
-        <activity android:name=".activity.EditProfileActivity"/>
+        <activity android:name=".activity.EditProfileActivity" />
+        <activity android:name=".activity.ViewGroupDetails"></activity>
     </application>
 
 </manifest>

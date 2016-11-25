@@ -83,7 +83,6 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
             Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
         }
-
         mViewHolder.fieldName.setText(info.getUserName());
 
         convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {

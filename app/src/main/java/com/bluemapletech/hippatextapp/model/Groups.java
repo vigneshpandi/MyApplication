@@ -11,7 +11,7 @@ public class Groups {
     private String groupName;
     private String randomName;
     private String status;
-
+    private String userMail;
     public String getAdmin() {
         return admin;
     }
@@ -60,15 +60,24 @@ public class Groups {
         this.status = status;
     }
 
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
+    }
+
     @Override
     public String toString() {
-        return "group{" +
+        return "Groups{" +
                 "admin='" + admin + '\'' +
                 ", groupEmailId='" + groupEmailId + '\'' +
                 ", groupImage='" + groupImage + '\'' +
                 ", groupName='" + groupName + '\'' +
                 ", randomName='" + randomName + '\'' +
                 ", status='" + status + '\'' +
+                ", userMail='" + userMail + '\'' +
                 '}';
     }
 }

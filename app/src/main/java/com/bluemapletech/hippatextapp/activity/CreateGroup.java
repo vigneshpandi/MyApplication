@@ -247,7 +247,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         String randomValue = senderID.substring(0, 7);
         Log.d("randomValue",randomValue);
         mStorage = FirebaseStorage.getInstance().getReference();
-        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.group);
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.groupimage);
         StorageReference filePath = mStorage.child(groupName+senderID);
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
