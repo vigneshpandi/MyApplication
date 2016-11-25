@@ -1,18 +1,12 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +18,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.GMailSender;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,8 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -44,17 +37,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter.randomValue;
 
 public class AddAdminActivity extends AppCompatActivity {
 
@@ -75,6 +64,7 @@ public class AddAdminActivity extends AppCompatActivity {
     private String passRandomValue;
     GMailSender sender;
     private String toEmail;
+    private String compEmailtxts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,19 +102,6 @@ public class AddAdminActivity extends AppCompatActivity {
                     progressDialog.show();
                     AsyncTaskRunner runner = new AsyncTaskRunner();
                     runner.execute(adminProviderNPItxt.getText().toString());
-
-
-                    sender = new GMailSender("transcaretextapp@gmail.com", "transc4r3");
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.
-                            Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-
-                    try {
-                        new MyAsyncClass().execute();
-
-                    } catch (Exception ex) {
-                        // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
-                    }
 
                 }
 
@@ -238,6 +215,15 @@ public class AddAdminActivity extends AppCompatActivity {
         if (data){
             progressDialog.dismiss();
             Log.d(TAG, "Add Admin  successfuly registered!");
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Thanks for your registration, Please wait for HippaText admin's confirmation."+passRandomValue;
+                runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",adminEmailTxt.getText().toString());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(intent);
         } else {
@@ -319,10 +305,8 @@ public class AddAdminActivity extends AppCompatActivity {
         }
     }
 
-    class MyAsyncClass extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog pDialog;
-
+   /* class MyAsyncClass extends AsyncTask<Void, Void, Void> {
+        String compEmailtxts = adminEmailTxt.getText().toString().trim();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -330,11 +314,11 @@ public class AddAdminActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... mApi) {
-            Log.d(TAG,"mail method is called");
+            Log.d(TAG,"mail method is called"+compEmailtxts);
             try {
                 // Add subject, Body, your mail Id, and receiver mail Id.
 
-                sender.sendMail("My App", " HI welcome my application"+passRandomValue, "transcaretextapp@gmail.com", toEmail);
+                sender.sendMail("My App", " HI welcome to TCT Text Application"+passRandomValue, "hipaatext123@gmail.com", compEmailtxts);
             }
 
             catch (Exception ex) {
@@ -348,7 +332,7 @@ public class AddAdminActivity extends AppCompatActivity {
             super.onPostExecute(result);
             //Toast.makeText(getApplicationContext(), "Email send").show();
         }
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

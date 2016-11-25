@@ -20,6 +20,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.GMailSender;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -86,17 +87,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     progressDialog.setMessage("Added Root...");
                     progressDialog.show();
                     checkUserExistence();
-                    sender = new GMailSender("transcaretextapp@gmail.com", "transc4r3");
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.
-                            Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-
-                    try {
-                        new MyAsyncClass().execute();
-
-                    } catch (Exception ex) {
-                        // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
-                    }
                 }
 
             }
@@ -204,7 +194,17 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {
             progressDialog.dismiss();
-            Intent intent = new Intent(getActivity(), RootHomeActivity.class);
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Thanks for your registration, Please wait your admin's confirmation.\n" +
+                        "Thanks for showing your interest."+passRandomValue;
+                runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",addEmpEmailId.getText().toString());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
+            Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(intent);
         } else {
             Log.d(TAG, "Add Employee register not successful!");

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -230,6 +231,17 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {
             progressDialog.dismiss();
+            try {
+                String subject = "Thanks for your registration, Please wait your admin's confirmation.\n" +
+                        "Thanks for showing your interest.";
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                runners.execute("Profile has been created!",subject,"hipaatext123@gmail.com",emailTxt.getText().toString());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
+
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
             alertDialog.setTitle("Thank You Registering");
             alertDialog.setMessage("You will receive an email once we verify the  details");

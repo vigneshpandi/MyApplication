@@ -46,7 +46,8 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     private String securePin;
     private EditText oldChatPin, newChatPin, confirmChatPin;
     private Button resetPinBtn;
-   private  String reArrangeEmail;
+    private  String reArrangeEmail;
+    private String text;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,8 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
                     user.setUserName(reArrangeEmail);
                     resetPinBtn(user);
 
+                }else{
+                    Toast.makeText(getActivity(),"New chat pin and Confirm chat pin are not same",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -86,16 +89,25 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     private void resetPinBtn(User user) {
        /* Log.d(TAG, "Add invited company method has been called!");*/
-        final UserDao userDao = new UserDao();
-        boolean result = userDao.saveSecurePin(user);
-        Log.d("result", String.valueOf(result));
-        if (result) {
-            Log.d(TAG, "Changed Pin successfully!");
-            Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
-            startActivity(adminHome);
-        } else {
-            Log.d(TAG, "Unable to process, please try again!");
+        boolean valid = true;
+        if(text.matches(confirmChatPin.getText().toString())){
+            Toast.makeText(getActivity(),"Old chat pin and new chat pin are same..!",Toast.LENGTH_LONG).show();
+            valid = false;
+            return;
+        }else{
+            final UserDao userDao = new UserDao();
+            boolean result = userDao.saveSecurePin(user);
+            Log.d("result", String.valueOf(result));
+            if (result) {
+                Log.d(TAG, "Changed Pin successfully!");
+                Toast.makeText(getActivity(),"Chat Pin has been changed successfully!",Toast.LENGTH_LONG).show();
+                Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
+                startActivity(adminHome);
+            } else {
+                Log.d(TAG, "Unable to process, please try again!");
+            }
         }
+
     }
 
     private void init() {
@@ -128,7 +140,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     private boolean validateOldPin() {
         byte[] data1 = Base64.decode(chatpin, Base64.NO_WRAP);
-        String text = null;
+        text = null;
         try {
             text = new String(data1, "UTF-8");
         } catch (UnsupportedEncodingException e) {

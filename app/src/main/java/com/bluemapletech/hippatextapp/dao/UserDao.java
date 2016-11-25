@@ -7,12 +7,14 @@ import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,9 +41,10 @@ public class UserDao {
     private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
 
     private static String convIds;
-    private FirebaseDatabase firebaseDatabaseRef;
+    private static FirebaseDatabase firebaseDatabaseRef;
 
-    DatabaseReference databaseRef;
+
+    private static DatabaseReference databaseRef;
 
     private static final String TAG = UserDao.class.getCanonicalName();
 
@@ -116,6 +119,17 @@ public class UserDao {
         Log.d("sdsdsdsd","ssdsdsdsdsdsdsdsdsd"+reArrangeEmail);
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
+        try {
+            String acceptEmail = user.getUserName().replace("-", ".");
+            Log.d(TAG,"user......"+acceptEmail);
+            MailSender runners = new MailSender();
+            String value = "This email is to notify you that your profile has been accepted by admin.\n" +
+                    "Thanks for showing interest.";
+            runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",acceptEmail);
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
         return true;
     }
 
@@ -134,6 +148,17 @@ public class UserDao {
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
+        try {
+            String acceptEmail = user.getUserName().replace("-", ".");
+            Log.d(TAG,"user......"+acceptEmail);
+            MailSender runners = new MailSender();
+            String value = "This email is to notify you that your profile has been rejected by admin.\n" +
+                    "Thanks for showing interest.";
+            runners.execute("Profile has been rejected!",value,"hipaatext123@gmail.com",acceptEmail);
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
         return true;
     }
 
@@ -197,8 +222,32 @@ public class UserDao {
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("chatPin");
         databaseRef.setValue(user.getChatPin());
+        try {
+            //  new MyAsyncClass().execute();
+            String loggedInEmail = user.getUserName().replace("-", ".");
+            MailSender runners = new MailSender();
+            String  value = "Your chat pin has been changed successfully in HippaText.\n" +
+                    "Please use new chat pin:"+ user.getChatPin()+"\n"+
+                    "Thanks for showing your interest.";
+            runners.execute("Chat Pin has been changed!",value,"hipaatext123@gmail.com",loggedInEmail);
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
         return true;
     }
+
+    public static void deleteChatMessage(Message message, String mConvoId) {
+        Log.d(TAG,"message....."+message.getChildappendid());
+        String childappendid =  message.getChildappendid();
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendid);
+        databaseRef.removeValue();
+        return;
+    }
+
+
+
 
 
 
@@ -215,6 +264,7 @@ public class UserDao {
             message.setMsender(msg.get("email"));
             String srt = msg.get("text");
             message.setImage(msg.get("image"));
+            message.setChildappendid(msg.get("childappendid"));
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
             try {
@@ -251,7 +301,24 @@ public class UserDao {
 
 
     }
+    public boolean deleteUser(String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        databaseRef.removeValue();
+        try {
+            String acceptEmail = userMail.replace("-", ".");
+            Log.d(TAG,"userMail......"+acceptEmail);
+            MailSender runners = new MailSender();
+            String value = "This email is to notify you that your profile has been rejected by admin.\n" +
+                    "Thanks for showing interest.";
+            runners.execute("Profile has been rejected!",value,"hipaatext123@gmail.com",acceptEmail);
 
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
+        return  true;
+    }
 
     public interface MessagesCallbacks{
         void onMessageAdded(Message message);
@@ -335,13 +402,7 @@ public class UserDao {
         }
     }
 
-    public boolean deleteUser(String userMail) {
-        String reArrangeEmail = userMail.replace(".", "-");
-        firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.removeValue();
-        return  true;
-    }
+
     public UserDao getActivity() {
         return this;
     }

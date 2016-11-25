@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -41,6 +42,7 @@ public class AddRootActivity extends AppCompatActivity {
     private Button addRootBtn;
     private String password;
     private String senderID;
+    private String passRandomValue;
     private User empInfos = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,17 @@ public class AddRootActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        random = new SecureRandom();
+        password = new BigInteger(130, random).toString(32);
+        String randomValue = password.substring(0, 8);
+        Log.d("randomValue",randomValue);
+        passRandomValue = randomValue.toString();
     }
 
     private void init() {
         Log.d(TAG, "Init method has been called!");
 
         addRootEmailId = (EditText) findViewById(R.id.email_address);
-        addRootPassword = (EditText) findViewById(R.id.password);
         addRootBtn = (Button) findViewById(R.id.submit_btn);
 
         addRootBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,18 +81,10 @@ public class AddRootActivity extends AppCompatActivity {
             }
             private boolean validate() {
                 String addEmailId = addRootEmailId.getText().toString().trim();
-                String addPassword = addRootPassword.getText().toString().trim();
                 boolean valid = true;
                 if(!isValidEmail(addEmailId)){
                     addRootEmailId.setError("Invalid Email");
                     valid = false;
-                }
-
-                if(addPassword.isEmpty()||addPassword.length()< 8|| addPassword.length()> 16){
-                    addRootPassword.setError("Password between 8 - 16 number and character");
-                    valid = false;
-                }else{
-                    addRootPassword.setError(null);
                 }
                 return valid;
             }
@@ -104,7 +102,7 @@ public class AddRootActivity extends AppCompatActivity {
     public void checkUserExistence() {
         firebaseAuthRef = FirebaseAuth.getInstance();
         firebaseAuthRef.createUserWithEmailAndPassword(addRootEmailId.getText().toString()
-                , addRootPassword.getText().toString()).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                , passRandomValue).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -121,17 +119,10 @@ public class AddRootActivity extends AppCompatActivity {
 
     public void entryAuth() {
         User user = new User();
-        password = addRootPassword.getText().toString();
-        byte[] data = new byte[0];
-        try {
-            data = password.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         final UserDao userDao = new UserDao();
         user.setUserName(addRootEmailId.getText().toString());
-        String encoPass = Base64.encodeToString(data, Base64.NO_WRAP);
-        user.setPassword(encoPass);
+        Log.d("TAG","randomValue11..randomValue11......"+passRandomValue);
+        user.setPassword(passRandomValue);
         user.setEmpId("");
         user.setCompanyName("");
         user.setAuth("1");
@@ -154,6 +145,17 @@ public class AddRootActivity extends AppCompatActivity {
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {
             progressDialog.dismiss();
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "This email is to notify you that your password has been created successfully in HippaText.\n" +
+                        "Please use this password to login:"+ passRandomValue+"\n"+
+                        "Thanks for showing your interest.";
+                runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",addRootEmailId.getText().toString());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Intent intent = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(intent);
         } else {

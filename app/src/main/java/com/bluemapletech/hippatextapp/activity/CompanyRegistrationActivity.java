@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,8 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.GMailSender;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,9 +73,19 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private StorageReference mStorage;
     private Uri uri;
     private StorageReference filePath;
-
+    GMailSender sender;
+    private String toEmail;
     private User comInfos = new User();
     private Uri downloadUrl;
+
+    /*Mail*/
+   /* private String subject = "My App";
+    private String body*/
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +103,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     public void init() {
         Log.d(TAG, "Init method has been called!");
         compEmailtxt = (EditText) findViewById(R.id.comp_email_address);
+        toEmail = compEmailtxt.getText().toString();
         compPasswordtxt = (EditText) findViewById(R.id.comp_password);
         companyName = (EditText) findViewById(R.id.company_name);
         companyName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -251,7 +265,15 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
                   if (data){
-                        progressDialog.dismiss();
+                      progressDialog.dismiss();
+                        try {
+                        //  new MyAsyncClass().execute();
+                          MailSender runners = new MailSender();
+                          runners.execute("Profile has been created!","Thanks for your registration, Please wait for HippaText admin's confirmation.","hipaatext123@gmail.com",compEmailtxt.getText().toString());
+
+                      } catch (Exception ex) {
+                          // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+                      }
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                         alertDialog.setTitle("Thank You Registering");
                         alertDialog.setMessage("You will receive an email once we verify the company details, if the company is exists");
@@ -380,6 +402,38 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             }
         }
     }
+
+    /*class MyAsyncClass extends AsyncTask<String, String, String> {
+        String compEmail = compEmailtxt.getText().toString().trim();
+        String comPassword = compPasswordtxt.getText().toString().trim();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.d(TAG,"mail method is called"+compEmail);
+            Log.d(TAG,"params"+params[0]);
+            try {
+                // Add subject, Body, your mail Id, and receiver mail Id.
+
+                sender.sendMail("My App", " HI welcome to TCT Text Application Password:"+comPassword, "hipaatext123@gmail.com", compEmail);
+            }
+
+            catch (Exception ex) {
+
+            }
+            return null;
+        }
+
+        *//*@Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            //Toast.makeText(getApplicationContext(), "Email send").show();
+        }*//*
+    }*/
+
     public CompanyRegistrationActivity getActivity() {
         return this;
     }
