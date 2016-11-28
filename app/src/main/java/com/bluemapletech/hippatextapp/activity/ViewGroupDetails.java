@@ -186,6 +186,19 @@ if(info.getStatus().matches("admin")){
             }
         }
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
     public ViewGroupDetails getActivity() {
         return this;
     }

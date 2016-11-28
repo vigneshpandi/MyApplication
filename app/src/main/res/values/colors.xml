@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#004080</color>
+    <color name="colorPrimaryDark">#004080</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="btn_color">#586170</color>
+    <color name="btn_color">#004080</color>
     <color name="btn_text_color">#ffffff</color>
     <color name="color_primary">#34bf49</color>
     <color name="background_color">#ffffff</color>
-    <color name="cancel_btn">#ff3322</color>
-    <color name="accept_btn">#34bf49</color>
+    <color name="cancel_btn">#ff2600</color>
+    <color name="accept_btn">#009193</color>
     <color name="white">#ffffff</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
+    <color name="navigationBarColor">#004080</color>
 </resources>
