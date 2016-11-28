@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +47,17 @@ public class ViewGroupDetails extends AppCompatActivity {
     List<Groups> groupObj = new ArrayList<Groups>();
     private String loggedEmail;
     ImageView viewImage;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_group_details);
         iv = (ListView) findViewById(R.id.group_user);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
+        if (toolbar != null) {
+           setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         viewImage = (ImageView) findViewById(R.id.view_group_image);
         groupName = getIntent().getStringExtra(GroupMessageEmployeeActivity.groupNames);
         fireBaseDatabase = FirebaseDatabase.getInstance();
@@ -85,7 +93,12 @@ public class ViewGroupDetails extends AppCompatActivity {
         });
 
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_group_user_menu, menu);
+//        menu.findItem(R.id.delete).setVisible(false);
+        return true;
+    }
     private void getGroupUser(String userMail, String randomValue) {
       final Groups  groupValue = new Groups();
         groupValue.setUserMail(userMail);
@@ -149,9 +162,15 @@ public class ViewGroupDetails extends AppCompatActivity {
             }
 
             final Groups info = getItem(position);
-
+if(info.getStatus().matches("admin")){
+    /*View btn = (Button) convertView.findViewById(R.id.btn_admin_view);
+    btn.setVisibility(btn.GONE);*/
+}else if(info.getStatus().matches("user")){
+    View btn = convertView.findViewById(R.id.btn_admin_view);
+    btn.setVisibility(View.GONE);
+}
             mViewHolder.fieldName.setText(info.getUserMail());
-
+            mViewHolder.btnName.setText("admin");
             return convertView;
         }
 
@@ -159,8 +178,11 @@ public class ViewGroupDetails extends AppCompatActivity {
 
         private class MyViewHolder {
             private TextView  fieldName;
+            private Button btnName;
             public MyViewHolder(View item) {
                 fieldName = (TextView) item.findViewById(R.id.user_email);
+                btnName = (Button) item.findViewById(R.id.btn_admin_view);
+
             }
         }
     }

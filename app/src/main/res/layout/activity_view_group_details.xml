@@ -5,15 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails">
-    <include
+<!--    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_header"
-        layout="@layout/toolbar_header" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/btn_text_color"
+        android:background="@color/colorPrimary"
+        layout="@layout/toolbar_header"/>-->
+   <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_header_menu"
+        android:background="@color/colorPrimary"
+        layout="@layout/toolbar_add_user_menu" />
    <ImageView
        android:id="@+id/view_group_image"
         android:layout_height="300dp"
         android:layout_width="fill_parent"
-        android:src="@drawable/natural"
+        android:src="@drawable/groupimage"
        android:layout_marginTop="-30dp"
        />
    <ListView
