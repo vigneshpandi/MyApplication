@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,19 +37,25 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
     public static final String notificationId = "notificationId";
+    public static final String firstName = "firstName";
+    public static final String lastName = "lastName";
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
-    private String  chatPin;
+    private String chatPin;
+    private String userFirstName;
+    private String userLastName;
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
 
-    public PageEmployeeBaseAdpter(Context context, List<User> user,String fromEmail,String loggedINChatPin) {
+    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin, String first, String last) {
         this.context = context;
         this.userInfo = user;
-       this.fromMAil = fromEmail;
-        this.chatPin=loggedINChatPin;
-       inflater = LayoutInflater.from(this.context);
+        this.fromMAil = fromEmail;
+        this.chatPin = loggedINChatPin;
+        this.userFirstName = first;
+        this.userLastName = last;
+        inflater = LayoutInflater.from(this.context);
     }
 
     @Override
@@ -79,11 +87,12 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         }
 
         final User info = getItem(position);
+       /* firstName = userInfo.get(position).getFirstName().toString();
+        lastName = userInfo.get(position).getLastName();*/
         //mViewHolder.fieldId.setText(info.getEmpId());
-        if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
+        if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {
             Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
         }
-        mViewHolder.fieldName.setText(info.getUserName());
 
         convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +100,8 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("Security check");
                 final EditText chatPinn = new EditText(context);
+                chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 chatPinn.setHint("Enter your chat pin");
                 alert.setView(chatPinn);
 
@@ -105,14 +116,16 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                             e.printStackTrace();
                         }
 
-                        if(srt.matches(text)) {
+                        if (srt.matches(text)) {
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
-                            intent.putExtra(sendId,userInfo.get(position).getSenderId());
-                            intent.putExtra(notificationId,userInfo.get(position).getPushNotificationId());
+                            intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                            intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                            intent.putExtra(firstName, userFirstName);
+                            intent.putExtra(lastName, userLastName);
                             context.startActivity(intent);
-                        }else{
+                        } else {
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -132,6 +145,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     private class MyViewHolder {
         private TextView fieldId, fieldName;
         private ImageView userImage;
+
         public MyViewHolder(View item) {
             //fieldId = (TextView) item.findViewById(R.id.layout_field_id);
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);

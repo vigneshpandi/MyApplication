@@ -2,13 +2,10 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,15 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,7 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 
 public class ChatEmployeeActivity extends AppCompatActivity implements View.OnClickListener,UserDao.MessagesCallbacks {
@@ -56,7 +48,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String mConvoId;
     private UserDao.MessagesListener mListener;
     private String toMail;
-    private String fromMail, senderId;
+    private String fromMail, senderId, userFirstName, userLastName;
     private String notificationId;
     private ImageView selectImage;
     final private int SELECT_FILE = 1;
@@ -65,6 +57,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
     private String childappendid;
+    private String userName;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,17 +67,20 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
         notificationId = getIntent().getStringExtra(PageEmployeeBaseAdpter.notificationId);
+        userFirstName = getIntent().getStringExtra(PageEmployeeBaseAdpter.firstName);
+        userLastName = getIntent().getStringExtra(PageEmployeeBaseAdpter.lastName);
         mListView = (ListView)findViewById(R.id.message_list);
         selectImage = (ImageView) findViewById(R.id.select_image);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
         toolbar = (Toolbar) findViewById(R.id.toolbar_header);
-
+        userName = userFirstName +" "+ userLastName;
+        Log.d(TAG,"userLastName..."+userName);
         if (toolbar != null) {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(fromMail);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(fromMail);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
 
@@ -127,11 +123,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = super.getView(position, convertView, parent);
-             message = getItem(position);
+            message = getItem(position);
             childappendid = message.getChildappendid();
             Log.d(TAG,"childappendid..."+childappendid);
             TextView nameView = (TextView)convertView.findViewById(R.id.msg);
             nameView.setText(message.getMtext());
+            TextView userFirstAndLastName = (TextView) convertView.findViewById(R.id.user_name);
+            TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
             ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
             if(message.getImage()!=null && !message.getImage().matches("")) {
                 String images = message.getImage();
@@ -140,6 +138,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 imageView.setImageBitmap(decodedByte);
             }
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
+            LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
+            LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams)userFirstAndLastName.getLayoutParams();
             int sdk = Build.VERSION.SDK_INT;
             if (message.getMsender().equals(fromMail)){
                 if(message.getMtext()!=null && !message.getMtext().matches("")){
@@ -147,20 +147,40 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...1");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
+                        layoutParams2.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...11");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
+                        layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }  else if(message.getImage()!=null && !message.getImage().matches("")){
                     imageView.setVisibility(View.VISIBLE);
                     nameView.setVisibility(View.GONE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...111");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
+                        layoutParams2.gravity = Gravity.RIGHT;
                     } else {
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...1111");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
+                        layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }
             }else if(!message.getMsender().equals(fromMail)){
@@ -169,20 +189,40 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     imageView.setVisibility(View.GONE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...2");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...22");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     }
                 }else if(message.getImage()!=null && !message.getImage().matches("")){
                     nameView.setVisibility(View.GONE);
                     imageView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...222");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     }else {
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...2222");
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     }
                 }
             }
@@ -194,7 +234,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     Dialog dialog=new Dialog(ChatEmployeeActivity.this,android.R.style.Theme_Black_NoTitleBar);
                     dialog.setContentView(R.layout.view_image_dialog);
                     String images = getItem(position).getImage();
-                   ImageView showImage = (ImageView) dialog.findViewById(R.id.view_image);
+                    ImageView showImage = (ImageView) dialog.findViewById(R.id.view_image);
                     byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     showImage.setImageBitmap(decodedByte);

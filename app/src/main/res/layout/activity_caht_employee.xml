@@ -29,7 +29,8 @@
             android:layout_weight="100"
             android:divider="@null"
             android:stackFromBottom="true"
-            android:transcriptMode="alwaysScroll"></ListView>
+            android:transcriptMode="alwaysScroll"
+            ></ListView>
 
 
         <RelativeLayout

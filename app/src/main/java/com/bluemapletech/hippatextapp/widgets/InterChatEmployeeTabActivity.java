@@ -34,6 +34,8 @@ public class InterChatEmployeeTabActivity extends Fragment {
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
+    private String userFirstName;
+    private String userLastName;
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +70,7 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     }
                 }
                if(getActivity() !=null) {
-                   listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+                   listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userLastName));
                }
             }
 

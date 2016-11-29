@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by Win7v5 on 10/24/2016.
  */
 
-public class IntraChatEmployeeTabActivity extends Fragment{
+public class IntraChatEmployeeTabActivity extends Fragment {
     private ListView listview;
     ArrayList empList = new ArrayList();
     private FirebaseAuth firebaseAuth;
@@ -33,6 +34,8 @@ public class IntraChatEmployeeTabActivity extends Fragment{
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
+    private String userFirstName;
+    private String userLastName;
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,12 +65,17 @@ public class IntraChatEmployeeTabActivity extends Fragment{
                     user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     user.setSenderId(snapshot.child("senderId").getValue(String.class));
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
-                    if (user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
+                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
+                    user.setLastName(snapshot.child("lastName").getValue(String.class));
+                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }
                 }
-                if(getActivity()!=null){
-                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj,loggedINEmail,loggedINChatPin));
+                if (getActivity() != null) {
+                    userFirstName = userObj.get(0).getFirstName();
+                    userLastName = userObj.get(0).getLastName();
+                    Log.d(TAG, "User first name and last name: "+ userObj.get(0).getFirstName() + userObj.get(0).getLastName());
+                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userLastName));
                 }
 
             }
@@ -102,8 +110,6 @@ public class IntraChatEmployeeTabActivity extends Fragment{
             }
         });
     }
-
-
 
 
 }

@@ -17,6 +17,8 @@ public class Message {
     private String pushNotificationId;
     private String image;
     private String childappendid;
+    private String dateAndTime;
+    private String userName;
 
     public String getMtext() {
         return mtext;
@@ -82,6 +84,22 @@ public class Message {
         this.childappendid = childappendid;
     }
 
+    public String getDateAndTime(String dateandtime) {
+        return dateAndTime;
+    }
+
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -93,6 +111,8 @@ public class Message {
                 ", pushNotificationId='" + pushNotificationId + '\'' +
                 ", image='" + image + '\'' +
                 ", childappendid='" + childappendid + '\'' +
+                ", dateAndTime='" + dateAndTime + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }
