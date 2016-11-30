@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -58,7 +59,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
     private static final String TAG = EmployeeRegisterActivity.class.getCanonicalName();
 
-    private EditText emailTxt, passwordTxt, empIdTxt;
+    private EditText firstName, lastName, emailTxt, passwordTxt, empIdTxt;
     private Button regBtn;
     private Spinner spinner;
     private String password;
@@ -85,6 +86,10 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
     public void init() {
         Log.d(TAG, "Init method has been called!");
+        firstName = (EditText) findViewById(R.id.emp_first_name);
+        firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        lastName = (EditText) findViewById(R.id.emp_last_name);
+        lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         emailTxt = (EditText) findViewById(R.id.emp_email_address);
         passwordTxt = (EditText) findViewById(R.id.emp_password);
         empIdTxt = (EditText) findViewById(R.id.emp_employee_id);
@@ -105,6 +110,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             }
 
             private boolean validate() {
+                String empFirstName = firstName.getText().toString();
+                String empLastName = lastName.getText().toString();
                 String empEmailTxt = emailTxt.getText().toString().trim();
                 String empPasswordTxt = passwordTxt.getText().toString().trim();
                 String empIdTxts = empIdTxt.getText().toString().trim();
@@ -130,6 +137,20 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     empIdTxt.setError(null);
                 }
 
+                if (empFirstName.isEmpty()) {
+                    firstName.setError("Employee First Name is invalid");
+                    valid = false;
+                } else {
+                    firstName.setError(null);
+                }
+
+                if (empLastName.isEmpty()) {
+                    lastName.setError("Employee Last Name is invalid");
+                    valid = false;
+                } else {
+                    firstName.setError(null);
+                }
+
                 String selectedItem = spinner.getSelectedItem().toString();
                 View selectedView = spinner.getSelectedView();
                 if (selectedItem.equalsIgnoreCase("Select Company") ||
@@ -138,7 +159,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     selectedTextView.setTextColor(Color.RED);
                     selectedTextView.setText("Select Company");
                     selectedTextView.setError("Please select company name!");
-                    /*Toast.makeText(EmployeeRegisterActivity.this, "Please select company name!", Toast.LENGTH_SHORT).show();*/
+                    valid = false;
                 }
                 return valid;
             }
@@ -217,8 +238,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         user.setChatPin("");
         user.setTINorEIN("");
         user.setDesignation("");
-        user.setFirstName("");
-        user.setLastName("");
+        user.setFirstName(firstName.getText().toString());
+        user.setLastName(lastName.getText().toString());
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String randomValue = senderID.substring(0, 7);

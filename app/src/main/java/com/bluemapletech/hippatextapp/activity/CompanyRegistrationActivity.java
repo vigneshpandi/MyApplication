@@ -77,6 +77,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private String toEmail;
     private User comInfos = new User();
     private Uri downloadUrl;
+    String firstName;
+    String lastName;
 
     /*Mail*/
    /* private String subject = "My App";
@@ -127,6 +129,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             progressDialog = new ProgressDialog(getActivity());
+                            Log.d(TAG,"npi.."+providerNPIId.getText().toString());
                             progressDialog.setMessage("registering...");
                             progressDialog.show();
                             AsyncTaskRunner runner = new AsyncTaskRunner();
@@ -254,8 +257,9 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     comInfo.setAuth("0");
                     comInfo.setChatPin("");
                     comInfo.setDesignation("");
-                    comInfo.setFirstName("");
-                    comInfo.setLastName("");
+                    Log.d(TAG,"firstName...LastNAme.."+firstName+""+lastName);
+                    comInfo.setFirstName(firstName);
+                    comInfo.setLastName(lastName);
                     random = new SecureRandom();
                     senderID = new BigInteger(130, random).toString(32);
                     String randomValue = senderID.substring(0, 7);
@@ -313,27 +317,28 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
 
     private void saveImage() {
         final  String reArrangeEmailId = compEmailtxt.getText().toString().replace(".", "-");
+        Log.d(TAG,"reArrangeEmailId...."+reArrangeEmailId);
         Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
         StorageReference filePath = mStorage.child(reArrangeEmailId);
+        Log.d(TAG,"filePath.."+filePath.toString());
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"success..");
                 Log.d(TAG,"downloadUrl"+downloadUrl);
                 entryAuth();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Log.d(TAG,"failure..");
             }
         });
     }
 
 
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {
-        String firstName;
-        String lastName;
 
         @Override
         protected String doInBackground(String... params) {
