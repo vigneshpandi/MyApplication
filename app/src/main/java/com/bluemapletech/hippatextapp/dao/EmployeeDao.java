@@ -3,6 +3,8 @@ package com.bluemapletech.hippatextapp.dao;
 import android.net.Uri;
 import android.util.Log;
 
+import com.bluemapletech.hippatextapp.model.Groups;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -55,4 +57,28 @@ public class EmployeeDao {
 
         return true;
     }
+
+    public boolean addMemberToGroup(String userName, Groups groupVal) {
+        HashMap<String, Object> empData = new HashMap<>();
+        String groupMail = groupVal.getGroupEmailId()+";"+userName;
+        String groupMailId = groupVal.getGroupEmailId();
+        String[] separated = groupMailId.split(";");
+        empData.put("admin",groupVal.getAdmin());
+        empData.put("groupEmailId",groupMail);
+        empData.put("groupImage",groupVal.getGroupImage());
+        empData.put("groupName",groupVal.getGroupName());
+        empData.put("status","user");
+        String reArrangeEmail = userName.replace(".", "-");
+        empData.put("randomName",groupVal.getRandomName());
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        databaseRef = firebaseDatabaseRef.getReference().child("group").child(reArrangeEmail).child(groupVal.getRandomName());
+        Task<Void> result = databaseRef.setValue(empData);
+     for(int i =0; i<separated.length; i++){
+         String reArrangeEmailId = separated[i].replace(".", "-");
+         databaseRef = firebaseDatabaseRef.getReference().child("group").child(reArrangeEmailId).child(groupVal.getRandomName()).child("groupEmailId");
+         databaseRef.setValue(groupMail);
+     }
+        return true;
+    }
+
 }

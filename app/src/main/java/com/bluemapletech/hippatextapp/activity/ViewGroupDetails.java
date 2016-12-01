@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,11 +33,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ViewGroupDetails extends AppCompatActivity {
+public class ViewGroupDetails extends AppCompatActivity{
     private static final String TAG = ViewGroupDetails.class.getCanonicalName();
     private String groupName;
     private FirebaseAuth firebaseAuth;
@@ -45,9 +48,17 @@ public class ViewGroupDetails extends AppCompatActivity {
     private  String[] separated;
     Groups group = new Groups();
     List<Groups> groupObj = new ArrayList<Groups>();
+    List<Groups> groupObjs = new ArrayList<Groups>();
     private String loggedEmail;
     ImageView viewImage;
     private Toolbar toolbar;
+    private int l=0;
+    private int k=0;
+    public int listPosition;
+     Groups  groupInformation;
+    private String userMailId;
+    private String reArrangeEmails;
+    Map<String,String> maps = new HashMap<String,String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +67,19 @@ public class ViewGroupDetails extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
         if (toolbar != null) {
            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         viewImage = (ImageView) findViewById(R.id.view_group_image);
+        /*
+          values comes  from GroupMessageEmployeeActivity
+         */
         groupName = getIntent().getStringExtra(GroupMessageEmployeeActivity.groupNames);
+        /*
+          values comes from SelectUser
+         */
+        groupName = getIntent().getStringExtra(SelectUser.groupNames);
+
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
@@ -69,21 +89,27 @@ public class ViewGroupDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                  String groupValue = snapshot.child("groupName").getValue(String.class);
+                  String groupValues = snapshot.child("groupName").getValue(String.class);
                    String groupEmailId = snapshot.child("groupEmailId").getValue(String.class);
                     String randomName = snapshot.child("randomName").getValue(String.class);
-
-                    if(groupValue.matches(groupName)){
+                   String  admin = snapshot.child("admin").getValue(String.class);
+                    if(groupValues.matches(groupName)){
+                        group.setAdmin(admin);
                         group.setGroupEmailId(groupEmailId);
-                        group.setRandomName(randomName);
                         group.setGroupImage(snapshot.child("groupImage").getValue(String.class));
+                        group.setRandomName(randomName);
+                        group.setGroupName(groupValues);
                         Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(viewImage);
                     }
                 }
                 separated = group.getGroupEmailId().split(";");
+                Log.d("separated","separated"+separated);
+                Log.d("separated","separated"+separated.length);
                 for(int i=0; i<separated.length;i++){
-                    getGroupUser(separated[i],group.getRandomName());
+                    getUserProfile(separated[i]);
+                   // getGroupUser(separated[i],group.getRandomName());
                 }
+
             }
 
             @Override
@@ -91,25 +117,62 @@ public class ViewGroupDetails extends AppCompatActivity {
 
             }
         });
-
+        iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG,"groupObj"+groupObj.get(position).getUserMail());
+                Log.d(TAG,"groupObj"+groupObj.get(position).getRandomName());
+            }
+        });
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_group_user_menu, menu);
 //        menu.findItem(R.id.delete).setVisible(false);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id= item.getItemId();
+        if(id == R.id.add_admin_group_menu){
+            Log.d(TAG,"groupDetails"+group);
+            Intent intent = new Intent(getActivity(), SelectUser.class);
+            Bundle b = new Bundle();
+            b.putSerializable("groupDetails", group);
+            intent.putExtras(b);
+            startActivity(intent);
+        }
+
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void getGroupUser(String userMail, String randomValue) {
-      final Groups  groupValue = new Groups();
+        userMailId = userMail;
+        final Groups  groupValue = new Groups();
         groupValue.setUserMail(userMail);
-        Log.d(TAG, " userMail for before insert: " + userMail);
-        String reArrangeEmail = userMail.replace(".", "-");
-        DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(randomValue);
+        groupValue.setUserImage(groupObjs.get(k).getUserImage());
+        k++;
+        reArrangeEmails = userMail.replace(".", "-");
+        DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(randomValue);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 groupValue.setStatus(map.get("status"));
+                groupValue.setRandomName(map.get("randomName"));
+                groupValue.setGroupName(map.get("groupName"));
+                groupValue.setGroupImage(map.get("groupImage"));
+                groupValue.setGroupEmailId(map.get("groupEmailId"));
+                groupValue.setAdmin(map.get("admin"));
+                Log.d(TAG,"groupsssss"+groupValue);
                 groupObj.add(groupValue);
                 if(getActivity()!=null) {
                     iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj));
@@ -121,6 +184,29 @@ public class ViewGroupDetails extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getUserProfile(String userMail) {
+        groupInformation = new Groups();
+        reArrangeEmails = userMail.replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmails);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                   groupInformation.setUserImage(map.get("profilePhoto"));
+              // maps.put(separated[l],groupInformation.getUserImage());
+                groupObjs.add(groupInformation);
+                getGroupUser(separated[l],group.getRandomName());
+                l++;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private class GroupUserAdapter extends BaseAdapter {
@@ -171,6 +257,10 @@ if(info.getStatus().matches("admin")){
 }
             mViewHolder.fieldName.setText(info.getUserMail());
             mViewHolder.btnName.setText("admin");
+            if(info.getUserImage()!=null) {
+                Log.d(TAG,"info.getUserImage()"+info.getUserImage());
+                Picasso.with(context).load(info.getUserImage()).fit().centerCrop().into(mViewHolder.userImage);
+            }
             return convertView;
         }
 
@@ -178,23 +268,17 @@ if(info.getStatus().matches("admin")){
 
         private class MyViewHolder {
             private TextView  fieldName;
+            private ImageView userImage;
             private Button btnName;
             public MyViewHolder(View item) {
                 fieldName = (TextView) item.findViewById(R.id.user_email);
                 btnName = (Button) item.findViewById(R.id.btn_admin_view);
+                userImage = (ImageView) item.findViewById(R.id.user_image);
 
             }
         }
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                backPage();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
 
     private void backPage() {
         startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));

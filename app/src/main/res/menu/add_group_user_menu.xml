@@ -6,7 +6,7 @@
     <item
         android:id="@+id/add_admin_group_menu"
         android:orderInCategory="100"
-        android:icon="@drawable/delete"
+        android:icon="@drawable/adduser"
         android:title="delete"
         app:showAsAction="always"
         />

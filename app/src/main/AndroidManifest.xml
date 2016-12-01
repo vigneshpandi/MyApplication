@@ -62,7 +62,8 @@
         <activity android:name=".activity.ListOfAdminActivity" />
         <activity android:name=".activity.AddEmployeeActivity" />
         <activity android:name=".activity.EditProfileActivity" />
-        <activity android:name=".activity.ViewGroupDetails"></activity>
+        <activity android:name=".activity.ViewGroupDetails" />
+        <activity android:name=".activity.SelectUser"></activity>
     </application>
 
 </manifest>
