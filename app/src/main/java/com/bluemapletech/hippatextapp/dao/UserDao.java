@@ -274,7 +274,7 @@ public class UserDao {
             }
 
             message.setMtext(text);
-            message.getDateAndTime(msg.get("dateandtime"));
+            message.setDateAndTime(msg.get("dateandtime"));
             if(callbacks != null){
                 callbacks.onMessageAdded(message);
             }

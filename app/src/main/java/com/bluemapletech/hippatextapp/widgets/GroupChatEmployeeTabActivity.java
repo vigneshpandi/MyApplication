@@ -66,6 +66,7 @@ public class GroupChatEmployeeTabActivity extends Fragment {
                     group.setRandomName(snapshot.child("randomName").getValue(String.class));
                     group.setGroupEmailId(snapshot.child("groupEmailId").getValue(String.class));
                     group.setGroupImage(snapshot.child("groupImage").getValue(String.class));
+
                     groupObj.add(group);
             }
                 if(getActivity() !=null){
@@ -95,6 +96,7 @@ public class GroupChatEmployeeTabActivity extends Fragment {
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
                 loggedINsenderId = (String) dataSnapshot.child("senderId").getValue();
+
             }
 
             @Override

@@ -15,6 +15,8 @@ public class Groups implements Serializable {
     private String status;
     private String userMail;
     private String userImage;
+    private String firstName;
+    private String lastName;
 
     public String getAdmin() {
         return admin;
@@ -80,6 +82,22 @@ public class Groups implements Serializable {
         this.userImage = userImage;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
         return "Groups{" +
@@ -91,6 +109,8 @@ public class Groups implements Serializable {
                 ", status='" + status + '\'' +
                 ", userMail='" + userMail + '\'' +
                 ", userImage='" + userImage + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
     }
 }

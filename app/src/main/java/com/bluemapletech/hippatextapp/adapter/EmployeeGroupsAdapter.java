@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,6 +91,8 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                 AlertDialog.Builder alert = new AlertDialog.Builder(context);
                 alert.setTitle("Security check");
                 final EditText chatPinn = new EditText(context);
+                chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 chatPinn.setHint("Enter your chat pin");
                 alert.setView(chatPinn);
                 alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -110,6 +110,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 }
             });
 
+
         }
 
     private void init() {
@@ -160,6 +161,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 Message message = getItem(position);
                 TextView nameView = (TextView)convertView.findViewById(R.id.msg);
                 nameView.setText(message.getMtext());
+                TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
                 ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
                 if(message.getImage()!=null && !message.getImage().matches("")) {
                     String images = message.getImage();
@@ -168,47 +170,72 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     imageView.setImageBitmap(decodedByte);
                 }
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
-                int sdk = Build.VERSION.SDK_INT;
+                LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
+                 int sdk = Build.VERSION.SDK_INT;
                 if (message.getSenderId().equals(senderId)){
                     if(message.getMtext()!=null && !message.getMtext().matches("")){
                         imageView.setVisibility(View.GONE);
                         nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...1");
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
+                        Log.d(TAG,"inside...11");
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams1.gravity = Gravity.RIGHT;
                     }
                 }else if(message.getImage()!=null && !message.getImage().matches("")){
                         imageView.setVisibility(View.VISIBLE);
                         nameView.setVisibility(View.GONE);
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                            Log.d(TAG,"inside...111");
+                            dateTime.setText(message.getDateAndTime("dateandtime"));
                             layoutParams.gravity = Gravity.RIGHT;
+                            layoutParams1.gravity = Gravity.RIGHT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
+                            Log.d(TAG,"inside...1111");
+                            dateTime.setText(message.getDateAndTime("dateandtime"));
                             layoutParams.gravity = Gravity.RIGHT;
+                            layoutParams1.gravity = Gravity.RIGHT;
                         }
                     }
                 }else if(!message.getMsender().equals(fromMail)){
                     if(message.getMtext()!=null && !message.getMtext().matches("")){
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...2");
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
+                        Log.d(TAG,"inside...22");
+                        dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.LEFT;
+                        layoutParams1.gravity = Gravity.LEFT;
                     }
                 }else if(message.getImage()!=null && !message.getImage().matches("")){
                         nameView.setVisibility(View.GONE);
                         imageView.setVisibility(View.VISIBLE);
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                            Log.d(TAG,"inside...222");
+                            dateTime.setText(message.getDateAndTime("dateandtime"));
                             layoutParams.gravity = Gravity.LEFT;
+                            layoutParams1.gravity = Gravity.LEFT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
+                            Log.d(TAG,"inside...2222");
+                            dateTime.setText(message.getDateAndTime("dateandtime"));
                             layoutParams.gravity = Gravity.LEFT;
+                            layoutParams1.gravity = Gravity.LEFT;
                         }
                     }}
                 imageView.setLayoutParams(layoutParams);

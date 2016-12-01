@@ -126,6 +126,7 @@ public class GroupMessageDao {
             }
 
             message.setMtext(text);
+            message.setDateAndTime(msg.get("dateandtime"));
             if(callbacks != null){
                 callbacks.onMessageAdded(message);
             }
