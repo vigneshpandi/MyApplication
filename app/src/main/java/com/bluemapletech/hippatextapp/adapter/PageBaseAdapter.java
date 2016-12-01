@@ -163,7 +163,7 @@ public class PageBaseAdapter extends BaseAdapter {
         boolean result = companyDao.pendingCompany(user);
         if (result) {
             Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
