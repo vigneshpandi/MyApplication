@@ -89,7 +89,8 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         final User info = getItem(position);
        /* firstName = userInfo.get(position).getFirstName().toString();
         lastName = userInfo.get(position).getLastName();*/
-        //mViewHolder.fieldId.setText(info.getEmpId());
+      // mViewHolder.fieldId.setText(info.getEmpId());
+        mViewHolder.fieldName.setText(info.getUserName());
         if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {
             Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
         }

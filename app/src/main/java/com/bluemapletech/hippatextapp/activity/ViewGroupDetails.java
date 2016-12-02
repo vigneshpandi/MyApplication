@@ -1,16 +1,23 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -21,6 +28,7 @@ import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter;
+import com.bluemapletech.hippatextapp.dao.EmployeeDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.Groups;
 import com.bluemapletech.hippatextapp.model.User;
@@ -52,12 +60,14 @@ public class ViewGroupDetails extends AppCompatActivity{
     private String loggedEmail;
     ImageView viewImage;
     private Toolbar toolbar;
+    private Toolbar toolbars;
     private int l=0;
     private int k=0;
     public int listPosition;
      Groups  groupInformation;
     private String userMailId;
     private String reArrangeEmails;
+    FirebaseUser logged;
     Map<String,String> maps = new HashMap<String,String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,9 @@ public class ViewGroupDetails extends AppCompatActivity{
         setContentView(R.layout.activity_view_group_details);
         iv = (ListView) findViewById(R.id.group_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
+        firebaseAuth = FirebaseAuth.getInstance();
+       logged = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         if (toolbar != null) {
            setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("");
@@ -120,8 +133,35 @@ public class ViewGroupDetails extends AppCompatActivity{
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG,"groupObj"+groupObj.get(position).getUserMail());
-                Log.d(TAG,"groupObj"+groupObj.get(position).getRandomName());
+                listPosition = position;
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setMessage("Make group admin");
+                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        EmployeeDao empDao = new EmployeeDao();
+                        boolean success =  empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(),groupObj.get(listPosition).getUserMail());
+                    }
+                });
+                // Setting Negative "NO" Button
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                // Showing Alert Message
+                dialog.show();
+
+            }
+        });
+
+        viewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog=new Dialog(ViewGroupDetails.this,android.R.style.Widget_ProgressBar_Small_Inverse);
+                dialog.setContentView(R.layout.view_groupimage_dialog);
+                ImageView showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
+                Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(showImage);
+                dialog.show();
             }
         });
     }
@@ -130,7 +170,7 @@ public class ViewGroupDetails extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_group_user_menu, menu);
-//        menu.findItem(R.id.delete).setVisible(false);
+       menu.findItem(R.id.add_admin_group_menu).setVisible(false);
         return true;
     }
 
@@ -175,7 +215,7 @@ public class ViewGroupDetails extends AppCompatActivity{
                 Log.d(TAG,"groupsssss"+groupValue);
                 groupObj.add(groupValue);
                 if(getActivity()!=null) {
-                    iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj));
+                    iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj,logged.getEmail()));
                 }
             }
 
@@ -213,10 +253,12 @@ public class ViewGroupDetails extends AppCompatActivity{
 
         List<Groups> groupInfo = new ArrayList<Groups>();
         LayoutInflater inflater;
+        String loginMailId;
         Context context;
-        public GroupUserAdapter(Context context, List<Groups> group) {
+        public GroupUserAdapter(Context context, List<Groups> group, String loginMail) {
             this.context = context;
             this.groupInfo = group;
+            this.loginMailId=loginMail;
             inflater = LayoutInflater.from(this.context);
         }
 
@@ -248,9 +290,9 @@ public class ViewGroupDetails extends AppCompatActivity{
             }
 
             final Groups info = getItem(position);
-if(info.getStatus().matches("admin")){
-    /*View btn = (Button) convertView.findViewById(R.id.btn_admin_view);
-    btn.setVisibility(btn.GONE);*/
+if(info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId)){
+    Log.d(TAG,"valUES");
+    toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
 }else if(info.getStatus().matches("user")){
     View btn = convertView.findViewById(R.id.btn_admin_view);
     btn.setVisibility(View.GONE);

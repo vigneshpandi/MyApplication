@@ -70,6 +70,14 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     }
                 }
                if(getActivity() !=null) {
+                   userFirstName = userObj.get(0).getFirstName();
+                   userLastName = userObj.get(0).getLastName();
+                   if(userFirstName==null && userLastName==null){
+                       Log.d("valueuserName"," userObj.get(0).getUserName()"+ userObj.get(0).getUserName());
+                       String[] valueuserName = userObj.get(0).getUserName().split("@");
+                       userFirstName = valueuserName[0];
+                       Log.d("valueuserName","valueuserName"+userFirstName);
+                   }
                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userLastName));
                }
             }

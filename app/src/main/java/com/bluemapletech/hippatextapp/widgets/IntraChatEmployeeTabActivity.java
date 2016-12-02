@@ -74,6 +74,11 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                 if (getActivity() != null) {
                     userFirstName = userObj.get(0).getFirstName();
                     userLastName = userObj.get(0).getLastName();
+                    if(userFirstName==null && userLastName==null){
+                        String[] valueuserName = userObj.get(0).getUserName().split("@");
+                        Log.d("valueuserName","valueuserName"+valueuserName);
+                        userFirstName = valueuserName[0];
+                    }
                     Log.d(TAG, "User first name and last name: "+ userObj.get(0).getFirstName() + userObj.get(0).getLastName());
                     listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userLastName));
                 }

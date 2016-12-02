@@ -19,8 +19,7 @@ import java.util.HashMap;
 public class EmployeeDao {
     private static final FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
     private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
-    private FirebaseDatabase firebaseDatabaseRef;
-
+    private FirebaseDatabase firebaseDatabaseRef =  FirebaseDatabase.getInstance();
     DatabaseReference databaseRef;
 
     private static final String TAG = EmployeeDao.class.getCanonicalName();
@@ -42,7 +41,7 @@ public class EmployeeDao {
         empData.put("groupImage",profileUrl);
         empData.put("groupName",groupName);
         empData.put("randomName",randomValue);
-        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+       // firebaseDatabaseRef = FirebaseDatabase.getInstance();
         for(int i=0;i<seprated.length;i++){
             String userName = seprated[i];
             if(i==0){
@@ -81,4 +80,10 @@ public class EmployeeDao {
         return true;
     }
 
+    public boolean empChangeAdmintoGroup(String randomName, String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        databaseRef = firebaseDatabaseRef.getReference().child("group").child(reArrangeEmail).child(randomName).child("status");
+        databaseRef.setValue("admin");
+        return true;
+    }
 }

@@ -117,6 +117,7 @@ public class GroupMessageDao {
             message.setSenderId(msg.get("senderId"));
             String srt = msg.get("text");
             message.setImage(msg.get("image"));
+            message.setChildappendid(msg.get("childByAppendid"));
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
             try {
@@ -205,4 +206,5 @@ public class GroupMessageDao {
 
         }
     }
+
 }

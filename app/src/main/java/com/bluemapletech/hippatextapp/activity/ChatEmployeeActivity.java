@@ -401,6 +401,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             Log.d(TAG,"mConvoId...."+mConvoId);
             UserDao.deleteChatMessage(message,mConvoId);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
+            finish();
             startActivity(getIntent());
            /* mMessages.clear();
             mListener = UserDao.addMessagesListener(mConvoId, this);

@@ -246,7 +246,15 @@ public class UserDao {
         return;
     }
 
-
+    public static void deleteGroupChatMessage(Message message, String mConvoId) {
+        String childappendid =  message.getChildappendid();
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        Log.d(TAG,"removing the group message"+childappendid);
+        databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child("message").child("-KXuh4xMduJdlus-bH1m");
+        databaseRef.removeValue();
+        Log.d(TAG,"remove the value");
+        return;
+    }
 
 
 

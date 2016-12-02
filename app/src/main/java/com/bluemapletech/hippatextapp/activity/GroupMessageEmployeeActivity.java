@@ -1,6 +1,7 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -57,6 +61,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private GroupMessageDao.MessagesListener mListener;
         private String randomValue;
         private String fromMail, senderId;
+    private String childappendid;
+    Message message;
         private ImageView selectImage;
         private String notificationId;
         final private int SELECT_FILE = 1;
@@ -66,6 +72,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private String role;
         private FirebaseAuth firebaseAuthRef;
         private String groupName;
+    private Toolbar toolbar;
         private FirebaseDatabase firebaseDatabaseRef;
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
@@ -85,7 +92,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             mMessages = new ArrayList<>();
             mAdapter = new GroupMessageEmployeeActivity.MessagesAdapter(mMessages);
             mListView.setAdapter(mAdapter);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+            toolbar = (Toolbar) findViewById(R.id.toolbar_header);
             if (toolbar != null) {
                 setSupportActionBar(toolbar);
                 getSupportActionBar().setTitle(groupName);
@@ -156,9 +163,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 super(GroupMessageEmployeeActivity.this, R.layout.item, R.id.msg, messages);
             }
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
                 convertView = super.getView(position, convertView, parent);
-                Message message = getItem(position);
+                 message = getItem(position);
+                childappendid = message.getChildappendid();
+                Log.d(TAG,"childappendiddddddddd..."+childappendid);
                 TextView nameView = (TextView)convertView.findViewById(R.id.msg);
                 nameView.setText(message.getMtext());
                 TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
@@ -240,12 +249,51 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     }}
                 imageView.setLayoutParams(layoutParams);
                 nameView.setLayoutParams(layoutParams);
+                convertView.findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toolbar.getMenu().findItem(R.id.delete).setVisible(false);
+                        Dialog dialog=new Dialog(GroupMessageEmployeeActivity.this,android.R.style.Theme_Black_NoTitleBar);
+                        dialog.setContentView(R.layout.view_image_dialog);
+                        String images = getItem(position).getImage();
+                        ImageView showImage = (ImageView) dialog.findViewById(R.id.view_image);
+                        byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        showImage.setImageBitmap(decodedByte);
+                        dialog.show();
+                    }
+                });
+                convertView.findViewById(R.id.image).setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        message = getItem(position);
+                        Log.d(TAG,"lonngpress"+"longPress");
+                        toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        return true;
+
+                    }
+                });
+                convertView.findViewById(R.id.msg).setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        message = getItem(position);
+                        Log.d(TAG,"lonngpress....1"+"longPress.....1");
+                        toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        return false;
+
+                    }
+                });
+
                 return convertView;
             }
     }
 
-
-    // show the popup for capture the image
+    public boolean onTouchEvent(MotionEvent event) {
+Log.d("dsssssss","ssssppww");
+        int eventAction = event.getAction();
+        return true;
+    }
+        // show the popup for capture the image
     @Override
     protected  void onStart(){
         super.onStart();
@@ -274,7 +322,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 builder.show();
             }
         });
-
 
     }
 
@@ -358,9 +405,15 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }
         GroupMessageDao.saveMessage(msg, randomValue);
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.delete_chat, menu);
+        menu.findItem(R.id.delete).setVisible(false);
+        return true;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id= item.getItemId();
         if(role.equals("admin")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
@@ -374,6 +427,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     backPageEmp();
                     return true;
             }
+        }
+        if(id == R.id.delete){
+            Log.d(TAG,"mConvoId...."+mConvoId);
+            Log.d(TAG,"message...."+message);
+            UserDao.deleteGroupChatMessage(message,mConvoId);
+            toolbar.getMenu().findItem(R.id.delete).setVisible(false);
+            startActivity(getIntent());
         }
         return super.onOptionsItemSelected(item);
     }
