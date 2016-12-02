@@ -60,6 +60,8 @@ public class AddAdminActivity extends AppCompatActivity {
     private String password;
     private String senderID;
     private String loggedINCompany;
+    private String firstName;
+    private String lastName;
     private User comInfos = new User();
     private String passRandomValue;
     GMailSender sender;
@@ -190,7 +192,7 @@ public class AddAdminActivity extends AppCompatActivity {
         password = new BigInteger(130, random).toString(32);
         String passwordRandomValue = password.substring(0, 8);
         Log.d("randomValue",passwordRandomValue);*/
-        Log.d("TAG","randomValue11..randomValue11......"+passRandomValue+loggedINCompany);
+        Log.d("TAG","randomValue11..randomValue11......"+passRandomValue+loggedINCompany+firstName+lastName);
         comInfo.setPassword(passRandomValue);
         comInfo.setCompanyName(loggedINCompany);
         comInfo.setTINorEIN("");
@@ -202,8 +204,8 @@ public class AddAdminActivity extends AppCompatActivity {
         comInfo.setAuth("1");
         comInfo.setChatPin("");
         comInfo.setDesignation("");
-        comInfo.setFirstName("");
-        comInfo.setLastName("");
+        comInfo.setFirstName(firstName);
+        comInfo.setLastName(lastName);
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String senderIdRandomValue = senderID.substring(0, 7);
@@ -234,8 +236,6 @@ public class AddAdminActivity extends AppCompatActivity {
         }
     }
     private class AsyncTaskRunner extends AsyncTask<String, String, String> {
-        String firstName;
-        String lastName;
 
         @Override
         protected String doInBackground(String... params) {

@@ -172,11 +172,11 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                        layoutParams2.gravity = Gravity.RIGHT;
+                        //layoutParams2.gravity = Gravity.RIGHT;
                     } else {
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1111");
-                        userFirstAndLastName.setText(userName);
+                       // userFirstAndLastName.setText(userName);
                         dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
