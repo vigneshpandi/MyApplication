@@ -1,6 +1,7 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -77,6 +78,10 @@ public class AdminHomeActivity extends AppCompatActivity {
         if (id == R.id.log_out) {
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);
+            SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
             onStop();
             finish();
             return true;

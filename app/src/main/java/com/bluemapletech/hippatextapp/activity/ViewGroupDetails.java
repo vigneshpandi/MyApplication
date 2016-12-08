@@ -237,6 +237,8 @@ public class ViewGroupDetails extends AppCompatActivity{
                    groupInformation.setUserImage(map.get("profilePhoto"));
               // maps.put(separated[l],groupInformation.getUserImage());
                 groupObjs.add(groupInformation);
+                Log.d(TAG,"separated[l]"+separated[l]);
+                Log.d(TAG,"group.getRandomName()"+group.getRandomName());
                 getGroupUser(separated[l],group.getRandomName());
                 l++;
             }

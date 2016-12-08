@@ -1,6 +1,7 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,16 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        Log.d("emphomeActvity","Destroy");
+        SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
@@ -69,6 +80,10 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         if (id == R.id.log_out) {
                 Intent logOut = new Intent(getActivity(), HomeActivity.class);
                 startActivity(logOut);
+            SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
                 onStop();
                 finish();
 

@@ -2,10 +2,13 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -72,6 +75,10 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private String role;
         private FirebaseAuth firebaseAuthRef;
         private String groupName;
+    private  LinearLayout layout;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    boolean wallpaperImage = false;
     private Toolbar toolbar;
         private FirebaseDatabase firebaseDatabaseRef;
     public static final String groupNames = "groupNames";
@@ -81,7 +88,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_group_message_employee);
-
+            layout = (LinearLayout) findViewById(R.id.activity_group_chat_employee);
             fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
             randomValue = getIntent().getStringExtra(EmployeeGroupsAdapter.randomValue);
@@ -116,8 +123,12 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     startActivity(intent);
                 }
             });
-
-
+            pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
+            String backgroundImageValue =  pref.getString("backgroundImage", "");
+            if(backgroundImageValue!=null){
+                Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
+                StringToBitMap(backgroundImageValue);
+            }
         }
 
     private void init() {
@@ -300,31 +311,33 @@ Log.d("dsssssss","ssssppww");
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] items = { "Take Photo", "Choose from Library",
-                        "Cancel" };
-                AlertDialog.Builder builder = new AlertDialog.Builder(GroupMessageEmployeeActivity.this);
-                builder.setTitle("Add Photo!");
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        boolean result= Utility.checkPermission(GroupMessageEmployeeActivity.this);
-                        if (items[item].equals("Take Photo")) {
-                            if(result)
-                                cameraIntent();
-                        } else if (items[item].equals("Choose from Library")) {
-                            if(result)
-                                galleryIntent();
-                        } else if (items[item].equals("Cancel")) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-                builder.show();
+                chooseImage();
             }
         });
 
     }
-
+    public void chooseImage (){
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupMessageEmployeeActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                boolean result= Utility.checkPermission(GroupMessageEmployeeActivity.this);
+                if (items[item].equals("Take Photo")) {
+                    if(result)
+                        cameraIntent();
+                } else if (items[item].equals("Choose from Library")) {
+                    if(result)
+                        galleryIntent();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
     private void cameraIntent()
     {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -365,7 +378,18 @@ Log.d("dsssssss","ssssppww");
             e.printStackTrace();
         }
         base64Profile = bitmapToBase64(thumbnail);
-        saveMessages();
+        if(wallpaperImage!=true){
+            Log.d(TAG,"not a wallpaper");
+            saveMessages();
+        }else if(wallpaperImage==true){
+            Log.d(TAG,"it is a wallpaper");
+            BitmapDrawable myBackground = new BitmapDrawable(thumbnail);
+            Log.d(TAG,"myBackground"+myBackground);
+            layout.setBackgroundDrawable(myBackground);
+            editor = pref.edit();
+            editor.putString("backgroundImage", base64Profile);
+            editor.apply();
+        }
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -378,7 +402,18 @@ Log.d("dsssssss","ssssppww");
             }
         }
         base64Profile = bitmapToBase64(bm);
-        saveMessages();
+        if(wallpaperImage!=true){
+            Log.d(TAG,"not a wallpaper");
+            saveMessages();
+        }else if(wallpaperImage==true){
+            Log.d(TAG,"it is a wallpaper");
+            BitmapDrawable myBackground = new BitmapDrawable(bm);
+            Log.d(TAG,"myBackground"+myBackground);
+            layout.setBackgroundDrawable(myBackground);
+            editor = pref.edit();
+            editor.putString("backgroundImage", base64Profile);
+            editor.apply();
+        }
     }
 
     private String bitmapToBase64(Bitmap bitmap) {
@@ -435,6 +470,10 @@ Log.d("dsssssss","ssssppww");
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
         }
+        if(id == R.id.chat_image_background){
+            wallpaperImage = true;
+            chooseImage();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -447,7 +486,22 @@ Log.d("dsssssss","ssssppww");
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
-
+    /**
+     * @param encodedString
+     * @return bitmap (from given string)
+     */
+    public Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmapValue=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            BitmapDrawable myBackground = new BitmapDrawable(bitmapValue);
+            layout.setBackgroundDrawable(myBackground);
+            return bitmapValue;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
     public GroupMessageEmployeeActivity getActivity() {
         return this;
     }

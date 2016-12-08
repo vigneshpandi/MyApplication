@@ -41,10 +41,6 @@ public class RootHomeActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
-
-        SharedPreferences pref = getSharedPreferences("loginDetails", Context.MODE_PRIVATE);
-       String prefValue =  pref.getString("userName", "");
-        Log.d(TAG,"prefValue"+prefValue);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager());

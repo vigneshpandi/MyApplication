@@ -173,12 +173,6 @@ public class LoginActivity extends AppCompatActivity {
                 if(status.matches("login")){
                     if (auth.matches("1") && role.matches("root")) {
                         addNotificationId();
-                        SharedPreferences pref = getSharedPreferences("loginDetails", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("userName", "vimalKumar");
-                        editor.apply();
-                        String prefValue =  pref.getString("userName", "");
-                        Log.d(TAG,"prefValue"+prefValue);
                         Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                         startActivity(rootHome);
                         progressDialog.dismiss();
