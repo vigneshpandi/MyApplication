@@ -123,8 +123,8 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                             intent.putExtra(fromEmail, fromMAil);
                             intent.putExtra(sendId, userInfo.get(position).getSenderId());
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
-                            intent.putExtra(firstName, userFirstName);
-                            intent.putExtra(lastName, userLastName);
+                            intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                            intent.putExtra(lastName, userInfo.get(position).getLastName());
                             context.startActivity(intent);
                         } else {
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();

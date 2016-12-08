@@ -36,6 +36,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
     private String loggedINChatPin;
     private String userFirstName;
     private String userLastName;
+    private String fName, lName, userEmailName;
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,9 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                 List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
+                    fName = snapshot.child("firstName").getValue(String.class);
+                    lName = snapshot.child("lastName").getValue(String.class);
+                    userEmailName = snapshot.child("emailAddress").getValue(String.class);
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
@@ -72,14 +76,14 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                     }
                 }
                 if (getActivity() != null) {
-                    userFirstName = userObj.get(0).getFirstName();
-                    userLastName = userObj.get(0).getLastName();
+                    userFirstName = fName;
+                    userLastName = lName;
                     if(userFirstName==null && userLastName==null){
-                        String[] valueuserName = userObj.get(0).getUserName().split("@");
+                        String[] valueuserName = userEmailName.split("@");
                         Log.d("valueuserName","valueuserName"+valueuserName);
                         userFirstName = valueuserName[0];
                     }
-                    Log.d(TAG, "User first name and last name: "+ userObj.get(0).getFirstName() + userObj.get(0).getLastName());
+                    Log.d(TAG, "User first name and last name: "+ fName + lName);
                     listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userLastName));
                 }
 
