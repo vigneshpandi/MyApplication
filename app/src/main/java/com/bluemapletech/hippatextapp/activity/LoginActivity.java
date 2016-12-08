@@ -1,6 +1,7 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
 
     private EditText usernameTxt, passwordTxt;
-    private Button loginBtn;
+    private Button loginBtn , forgetPassword;
     private ProgressDialog progressDialog;
     private static final String TAG = LoginActivity.class.getCanonicalName();
     public static final String userLogiMailId = "userLogiMailId";
@@ -51,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         init();
+        firebaseAuth = FirebaseAuth.getInstance();
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog = new ProgressDialog(getActivity());
                         progressDialog.setMessage("Please wait...");
                         progressDialog.show();
-                        firebaseAuth = FirebaseAuth.getInstance();
+                       // firebaseAuth = FirebaseAuth.getInstance();
                         FirebaseUser userin = firebaseAuth.getCurrentUser();
                         firebaseAuth.signInWithEmailAndPassword(usernameTxt.getText().toString(),
                                 passwordTxt.getText().toString()).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -83,6 +86,37 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (usernameTxt.getText().toString().isEmpty()) {
+                    Toast.makeText(getActivity(), "Please enter your e-mail to continue!", Toast.LENGTH_LONG).show();
+                } else{
+                    firebaseAuth.fetchProvidersForEmail(usernameTxt.getText().toString()).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                            Log.d(TAG,"task"+task);
+                            if(task.isSuccessful()){
+                                 FirebaseAuth   auth = FirebaseAuth.getInstance();
+                                auth.sendPasswordResetEmail(usernameTxt.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(getActivity(), "reset the password link send  your mail!", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }else {
+                                Toast.makeText(getActivity(), "Email address is not found!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
     private boolean validate() {
@@ -119,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameTxt = (EditText) findViewById(R.id.user_name);
         passwordTxt = (EditText) findViewById(R.id.password);
         loginBtn = (Button) findViewById(R.id.login_btn);
+        forgetPassword = (Button) findViewById(R.id.reset_button);
     }
 
     public void getUserInformation() {
@@ -138,6 +173,12 @@ public class LoginActivity extends AppCompatActivity {
                 if(status.matches("login")){
                     if (auth.matches("1") && role.matches("root")) {
                         addNotificationId();
+                        SharedPreferences pref = getSharedPreferences("loginDetails", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("userName", "vimalKumar");
+                        editor.apply();
+                        String prefValue =  pref.getString("userName", "");
+                        Log.d(TAG,"prefValue"+prefValue);
                         Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                         startActivity(rootHome);
                         progressDialog.dismiss();

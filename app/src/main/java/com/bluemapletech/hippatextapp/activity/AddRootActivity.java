@@ -156,6 +156,7 @@ public class AddRootActivity extends AppCompatActivity {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
+            finish();
             Intent intent = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(intent);
         } else {

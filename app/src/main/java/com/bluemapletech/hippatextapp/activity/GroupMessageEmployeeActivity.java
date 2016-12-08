@@ -93,8 +93,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             mAdapter = new GroupMessageEmployeeActivity.MessagesAdapter(mMessages);
             mListView.setAdapter(mAdapter);
             toolbar = (Toolbar) findViewById(R.id.toolbar_header);
-            if (toolbar != null) {
                 setSupportActionBar(toolbar);
+                    if (toolbar != null) {
                 getSupportActionBar().setTitle(groupName);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
@@ -429,9 +429,9 @@ Log.d("dsssssss","ssssppww");
             }
         }
         if(id == R.id.delete){
-            Log.d(TAG,"mConvoId...."+mConvoId);
+            Log.d(TAG,"mConvoId...."+senderId);
             Log.d(TAG,"message...."+message);
-            UserDao.deleteGroupChatMessage(message,mConvoId);
+            UserDao.deleteGroupChatMessage(message,randomValue);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
         }

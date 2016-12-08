@@ -219,6 +219,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
+            startActivity(new Intent(getActivity(),RootHomeActivity.class));
             Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while accepted the company, please try again!");
@@ -231,6 +232,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         boolean result = companyDao.pendingCompany(user);
         if (result) {
             Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(),RootHomeActivity.class));
         } else {
             Log.d(TAG, "Error while pending the company, please try again!");
         }
@@ -241,6 +243,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         boolean result = companyDao.deleteCompany(user);
         if (result) {
             Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(),RootHomeActivity.class));
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
@@ -250,6 +253,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
         if (result) {
+            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
             Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while accepted the company, please try again!");
@@ -263,6 +267,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         boolean result = userDao.pendingEmployee(user);
         if (result) {
             Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
         } else {
             Log.d(TAG, "Error while pending the company, please try again!");
         }
@@ -274,6 +279,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
         boolean result = userDao.deleteEmployee(user);
         if (result) {
             Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }

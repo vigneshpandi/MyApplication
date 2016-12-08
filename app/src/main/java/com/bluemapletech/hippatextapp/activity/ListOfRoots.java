@@ -94,6 +94,7 @@ public class ListOfRoots extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
         String reArrangeEmail = logged.getEmail().replace(".", "-");
+        Log.d(TAG,"reArrangeEmailIdd"+reArrangeEmail);
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
@@ -128,7 +129,7 @@ public class ListOfRoots extends AppCompatActivity {
 
         @Override
         public User getItem(int position) {
-            return (User) userInfo.get(position);
+            return userInfo.get(position);
         }
 
         @Override
@@ -151,7 +152,7 @@ public class ListOfRoots extends AppCompatActivity {
             final User info = getItem(position);
             Log.d("getUserName",info.getUserName());
             mViewHolder.fieldName.setText(info.getUserName());
- ((Button) convertView.findViewById(R.id.delete_root)).setOnClickListener(new View.OnClickListener() {
+ convertView.findViewById(R.id.delete_root).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteUser(userInfo.get(position).getUserName());
@@ -163,12 +164,13 @@ public class ListOfRoots extends AppCompatActivity {
 
         public void deleteUser(String userMail) {
             final UserDao userDao = new UserDao();
-            boolean result = userDao.deleteUser(userMail);
+            Log.d(TAG,"userMail"+userMail);
+            /*boolean result = userDao.deleteUser(userMail);
             if (result) {
                 Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
-            }
+            }*/
         }
 
         private class MyViewHolder {

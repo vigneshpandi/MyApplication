@@ -249,8 +249,8 @@ public class UserDao {
     public static void deleteGroupChatMessage(Message message, String mConvoId) {
         String childappendid =  message.getChildappendid();
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        Log.d(TAG,"removing the group message"+childappendid);
-        databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child("message").child("-KXuh4xMduJdlus-bH1m");
+        Log.d(TAG,"removing the group message"+mConvoId);
+        databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child(mConvoId).child("message").child(childappendid);
         databaseRef.removeValue();
         Log.d(TAG,"remove the value");
         return;
@@ -313,8 +313,8 @@ public class UserDao {
     public boolean deleteUser(String userMail) {
         String reArrangeEmail = userMail.replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.removeValue();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue("2");
         try {
             String acceptEmail = userMail.replace("-", ".");
             Log.d(TAG,"userMail......"+acceptEmail);

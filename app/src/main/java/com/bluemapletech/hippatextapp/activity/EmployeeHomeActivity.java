@@ -88,6 +88,11 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             finish();
             return true;
         }
+        if (id == R.id.settings) {
+            Intent settings = new Intent(getActivity(), Settings.class);
+            startActivity(settings);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
