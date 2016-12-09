@@ -170,7 +170,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         user.setCompanyName(loggedINCompany);
         user.setAuth("1");
         user.setRole("user");
-        user.setStatus("login");
+        user.setStatus("chatPin");
         user.setChatPin("");
         user.setTINorEIN("");
         user.setDesignation("");
