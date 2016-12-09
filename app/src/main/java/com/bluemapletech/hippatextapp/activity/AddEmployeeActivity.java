@@ -25,8 +25,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -49,6 +53,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private String password;
     private String senderID;
     private String passRandomValue;
+    private String loggedINCompany;
     GMailSender sender;
     private String toEmail;
 
@@ -108,8 +113,28 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 return valid;
             }
         });
-
+        getCompanyValue();
     }
+    private void getCompanyValue() {
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        firebaseAuthRef = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuthRef.getCurrentUser();
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReferences = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
+                Log.d(TAG,"loggedINCompany...."+loggedINCompany);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private boolean isValidEmail(String addEmailId) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -135,37 +160,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         });
     }
-
-    class MyAsyncClass extends AsyncTask<Void, Void, Void> {
-
-        ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... mApi) {
-            Log.d(TAG,"mail method is called");
-            try {
-                // Add subject, Body, your mail Id, and receiver mail Id.
-
-                sender.sendMail("My App", " HI welcome my application"+passRandomValue, "transcaretextapp@gmail.com", toEmail);
-            }
-
-            catch (Exception ex) {
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //Toast.makeText(getApplicationContext(), "Email send").show();
-        }
-    }
     public void entryAuth() {
         User user = new User();
         final UserDao userDao = new UserDao();
@@ -173,7 +167,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Log.d(TAG,"passRandomValue11.."+passRandomValue);
         user.setPassword(passRandomValue);
         user.setEmpId(addEmpEmployeeId.getText().toString().trim());
-        user.setCompanyName("");
+        user.setCompanyName(loggedINCompany);
         user.setAuth("1");
         user.setRole("user");
         user.setStatus("login");

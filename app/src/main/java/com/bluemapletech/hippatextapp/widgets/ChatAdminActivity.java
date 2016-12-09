@@ -71,7 +71,7 @@ public class ChatAdminActivity extends Fragment{
                     }
                 }
                 if(getActivity() !=null) {
-                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin, userFirstName, userFirstName));
+                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
                 }
             }
 

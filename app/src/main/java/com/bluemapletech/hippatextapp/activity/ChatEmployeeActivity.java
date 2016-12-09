@@ -86,6 +86,16 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         userName = userFirstName +" "+ userLastName;
         Log.d(TAG,"userLastName..."+userName);
+        if(userFirstName.matches("") && userLastName.matches("")){
+            Log.d(TAG,"inside empty");
+            String[] valueuserName = toMail.split("[@._-]");
+            for (int j = 0; j <= valueuserName.length - 1; j++)
+            {
+                Log.d("valueuserName","valueuserName"+valueuserName[j]);
+                userName = valueuserName[j];
+                break;
+            }
+        }
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(fromMail);

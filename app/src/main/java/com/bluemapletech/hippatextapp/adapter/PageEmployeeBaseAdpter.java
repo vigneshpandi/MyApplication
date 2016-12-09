@@ -48,13 +48,11 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
 
-    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin, String first, String last) {
+    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin) {
         this.context = context;
         this.userInfo = user;
         this.fromMAil = fromEmail;
         this.chatPin = loggedINChatPin;
-        this.userFirstName = first;
-        this.userLastName = last;
         inflater = LayoutInflater.from(this.context);
     }
 
