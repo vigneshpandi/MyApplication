@@ -66,6 +66,7 @@ public class PendingTabActivity extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, databaseError.getMessage());
             }
+
         });
         return rootView;
     }

@@ -98,7 +98,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(fromMail);
+            getSupportActionBar().setTitle(toMail);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);

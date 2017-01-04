@@ -44,7 +44,7 @@ public class ViewUserDetails extends AppCompatActivity {
     String role;
     private ListView iv;
     private FirebaseAuth firebaseAuth;
-    List<User> userObj = new ArrayList<User>();
+    List<User> userObj;
     User user = new User();
     User user1 = new User();
     private FirebaseDatabase firebaseDatabaseRef;
@@ -114,7 +114,7 @@ public class ViewUserDetails extends AppCompatActivity {
                 user1.setSenderId(map.get("senderId"));
                 user1.setFirstName(map.get("firstName"));
                 user1.setLastName(map.get("lastName"));
-                if (user1.getFirstName()==null && user1.getLastName()==null) {
+                if (user1.getFirstName().matches("") && user1.getLastName().matches("")) {
                     String[] valueuserName = user1.getUserName().split("@");
                     user1.setFirstName(valueuserName[0]);
                 }
@@ -150,7 +150,6 @@ public class ViewUserDetails extends AppCompatActivity {
                 providerNPI.setText(providerNpi);
                 providerName.setText(providerNames);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -226,7 +225,7 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
-
+                userObj  = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     user = new User();
 

@@ -119,7 +119,7 @@ public class ViewGroupDetails extends AppCompatActivity{
             groupName =  pref.getString("groupNameValue","");
         }
         TextView name = (TextView) findViewById(R.id.group_name);
-        name.setText(groupName);
+       name.setText(groupName);
 
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -180,13 +180,20 @@ public class ViewGroupDetails extends AppCompatActivity{
                                 Log.d(TAG,"editGroupName.."+editGroupName);
                                 Log.d(TAG,"0000000000"+groupObj.get(0).getGroupName());
                                 Log.d(TAG,"0000000001"+groupObj.get(1).getGroupName());
-                                for(int i=0;i<groupObj.size();i++){
-                                    String us_mail = groupObj.get(i).getUserMail();
+                                for(int m=0;m<groupObj.size();m++){
+                                    String us_mail = groupObj.get(m).getUserMail();
                                     Log.d(TAG,"us_mail..."+us_mail);
                                     reArrangeEmails = us_mail.replace(".", "-");
-                                    String r_value = groupObj.get(i).getRandomName();
+                                    String r_value = groupObj.get(m).getRandomName();
                                     DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(r_value).child("groupName");
                                     dataReferences.setValue(editGroupName);
+                                    TextView name = (TextView) findViewById(R.id.group_name);
+                                    Log.d(TAG,"groupValioo"+editGroupName);
+                                    name.setText(editGroupName);
+                                    l=0;
+                                    k=0;
+                                    int i=0;
+
                                 }
                             }
                         });
@@ -411,7 +418,8 @@ if(info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId))
 
 
     private void backPage() {
-        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+        startActivity(new Intent(
+                getActivity(),GroupMessageEmployeeActivity.class));
     }
     public ViewGroupDetails getActivity() {
         return this;

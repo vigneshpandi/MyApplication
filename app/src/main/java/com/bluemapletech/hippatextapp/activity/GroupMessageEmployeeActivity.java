@@ -38,7 +38,9 @@ import com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.dao.GroupMessageDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
+import com.bluemapletech.hippatextapp.model.Groups;
 import com.bluemapletech.hippatextapp.model.Message;
+import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.Utility;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +54,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -93,7 +96,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
             randomValue = getIntent().getStringExtra(EmployeeGroupsAdapter.randomValue);
             notificationId = getIntent().getStringExtra(EmployeeGroupsAdapter.notificationId);
-            groupName =  getIntent().getStringExtra(EmployeeGroupsAdapter.groupName);
+            //groupName =  getIntent().getStringExtra(EmployeeGroupsAdapter.groupName);
             mListView = (ListView)findViewById(R.id.message_list);
             selectImage = (ImageView) findViewById(R.id.select_image);
             mMessages = new ArrayList<>();
@@ -101,10 +104,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             mListView.setAdapter(mAdapter);
             toolbar = (Toolbar) findViewById(R.id.toolbar_header);
                 setSupportActionBar(toolbar);
-                    if (toolbar != null) {
-                getSupportActionBar().setTitle(groupName);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
+
             ImageView sendMessage = (ImageView)findViewById(R.id.send_message);
 
             sendMessage.setOnClickListener(this);
@@ -115,20 +115,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             Log.d("mConvoId",mConvoId);
             mListener = GroupMessageDao.addMessagesListener(randomValue, this);
             init();
-            toolbar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
-                    intent.putExtra(groupNames,groupName);
-                    startActivity(intent);
-                }
-            });
-            pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
-            String backgroundImageValue =  pref.getString("backgroundImage", "");
-            if(backgroundImageValue!=null){
-                Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
-                StringToBitMap(backgroundImageValue);
-            }
+
         }
 
     private void init() {
@@ -151,8 +138,42 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             }
 
         });
+        Log.d(TAG,"senderIdsenderIdsenderId"+randomValue);
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(randomValue);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                groupName = map.get("groupName");
+                Log.d(TAG,"groupNamegroupNamegroupNamegroupNamegroupName"+groupName);
+                getSupportActionBar().setTitle(groupName);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+
+        });
+        if (toolbar != null) {
+          // getSupportActionBar().setTitle(groupName);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
+                intent.putExtra(groupNames,groupName);
+                startActivity(intent);
+            }
+        });
+        pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
+        String backgroundImageValue =  pref.getString("backgroundImage", "");
+        if(backgroundImageValue!=null){
+            Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
+            StringToBitMap(backgroundImageValue);
+        }
     }
 
     public void onClick(View v) {
