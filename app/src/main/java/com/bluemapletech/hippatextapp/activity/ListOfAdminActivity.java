@@ -150,7 +150,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
 
             final User info = getItem(position);
             mViewHolder.fieldName.setText(info.getUserName());
-            convertView.findViewById(R.id.delete_root).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.accept_root).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteUser(userInfo.get(position).getUserName());

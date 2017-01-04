@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     private EditText usernameTxt, passwordTxt;
     private Button loginBtn , forgetPassword;
     private ProgressDialog progressDialog;
@@ -169,6 +170,13 @@ public class LoginActivity extends AppCompatActivity {
                 String role = map.get("role");
                 String status = map.get("status");
                 String userName = map.get("emailAddress");
+                String userChatPin = map.get("chatPin");
+                if(userChatPin!=null){
+                     pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                     editor = pref.edit();
+                    editor.putString("chatPin",userChatPin);
+                    editor.commit();
+                }
                 Log.d(TAG, "Logged in user information's:");
                 if(status.matches("login")){
                     if (auth.matches("1") && role.matches("root")) {
@@ -196,12 +204,17 @@ public class LoginActivity extends AppCompatActivity {
                     Intent redirect = new Intent(getActivity(), SecurePin.class);
                     redirect.putExtra(userLogiMailId,userName);
                     startActivity(redirect);
+                }else if(status.matches("chatPin") && auth.matches("0") ) {
+                    progressDialog.dismiss();
+                    Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
+                    redirect.putExtra(userLogiMailId,userName);
+                    startActivity(redirect);
+
                 }
                 else{
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
                     Log.d("loginActivity", "under working");
-
                 }
             }
 

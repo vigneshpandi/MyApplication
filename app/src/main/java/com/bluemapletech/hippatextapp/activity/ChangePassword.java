@@ -23,7 +23,9 @@ public class ChangePassword extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabaseRef;
     private  DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuth;
+    private String roleValue;
     private Button changePassword;
+    public static final String roleValuesReturn = "roleValuesReturn";
     private EditText emailAddress;
     String email;
     @Override
@@ -36,6 +38,7 @@ public class ChangePassword extends AppCompatActivity {
         changePassword = (Button) findViewById(R.id.send_password);
         emailAddress = (EditText) findViewById(R.id.user_email);
         emailAddress.setText(logged.getEmail());
+        roleValue = getIntent().getStringExtra(Settings.roleValues);
         init();
     }
 
@@ -50,7 +53,10 @@ public class ChangePassword extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "reset the password link send  your mail!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getActivity(),Settings.class));
+                           /* startActivity(new Intent(getActivity(),Settings.class));*/
+                            Intent changePassword = new Intent(getActivity(), Settings.class);
+                            changePassword.putExtra(roleValuesReturn,roleValue);
+                            startActivity(changePassword);
                     } else{
                             Toast.makeText(getActivity(), "reset the password send again!", Toast.LENGTH_LONG).show();
                         }

@@ -15,6 +15,24 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/rejected_root"
+        android:orderInCategory="101"
+        android:title="Rejected Root"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/rejected_company"
+        android:orderInCategory="101"
+        android:title="Rejected Company"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="101"
+        android:title="Settings"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/log_out"
         android:orderInCategory="101"
         android:title="@string/log_out"

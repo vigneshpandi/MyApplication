@@ -46,10 +46,17 @@ public class ViewUserDetails extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     List<User> userObj = new ArrayList<User>();
     User user = new User();
+    User user1 = new User();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
+    public static final String toEmail = "toEmail";
+    public static final String fromEmail = "fromEmail";
+    public static final String sendId = "sendId";
+    public static final String notificationId = "notificationId";
+    public static final String firstName = "firstName";
+    public static final String lastName = "lastName";
     private TextView userEmail, compName, empId, providerName, providerNPI, providerNpiLabel, providerNameLabel;
-    private Button acceptBtn, pendingBtn, deleteBtn;
+    private Button acceptBtn, pendingBtn, deleteBtn,chatBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +76,7 @@ public class ViewUserDetails extends AppCompatActivity {
         acceptBtn = (Button) findViewById(R.id.accept_user_btn);
         pendingBtn = (Button) findViewById(R.id.pending_user_btn);
         deleteBtn = (Button) findViewById(R.id.delete_user_btn);
-
+        chatBtn  = (Button) findViewById(R.id.chat_user_btn);
 
         acceptBtn.setVisibility(View.INVISIBLE);
         pendingBtn.setVisibility(View.INVISIBLE);
@@ -102,7 +109,15 @@ public class ViewUserDetails extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, dataSnapshot.toString());
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-
+                user1.setUserName(map.get("emailAddress"));
+                user1.setPushNotificationId(map.get("pushNotificationId"));
+                user1.setSenderId(map.get("senderId"));
+                user1.setFirstName(map.get("firstName"));
+                user1.setLastName(map.get("lastName"));
+                if (user1.getFirstName()==null && user1.getLastName()==null) {
+                    String[] valueuserName = user1.getUserName().split("@");
+                    user1.setFirstName(valueuserName[0]);
+                }
                 String comNames = map.get("companyName");
                 String emailAddress = map.get("emailAddress");
                 String providerNpi = map.get("providerNPIId");
@@ -141,7 +156,6 @@ public class ViewUserDetails extends AppCompatActivity {
 
             }
         });
-
 acceptBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -181,7 +195,27 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
                 }
             }
         });
+
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth = FirebaseAuth.getInstance();
+                FirebaseUser logged = firebaseAuth.getCurrentUser();
+                Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                intent.putExtra(toEmail,user1.getUserName());
+                intent.putExtra(fromEmail, logged.getEmail());
+                intent.putExtra(sendId, user1.getSenderId());
+                intent.putExtra(notificationId,user1.getPushNotificationId());
+                intent.putExtra(firstName, user1.getFirstName());
+                intent.putExtra(lastName, user1.getLastName());
+                startActivity(intent);
+            }
+        });
+
     }
+
+
 
     private void getUserDetails(final String companyName) {
         iv = (ListView) findViewById(R.id.list_of_user);

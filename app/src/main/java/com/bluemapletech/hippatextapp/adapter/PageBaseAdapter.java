@@ -74,16 +74,13 @@ public class PageBaseAdapter extends BaseAdapter {
         convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userInfo.get(position).getAuth().matches("0")) {
+              if (userInfo.get(position).getAuth().matches("0")) {
                     Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(userEmail, userInfo.get(position).getUserName());
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 }else if(userInfo.get(position).getAuth().matches("1")){
-                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(userEmail, userInfo.get(position).getUserName());
-                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
-                    context.startActivity(intent);
+                  deleteCompany(userInfo.get(position));
                 }else if(userInfo.get(position).getAuth().matches("2")){
                     accepted(userInfo.get(position));
                 }
@@ -93,42 +90,47 @@ public class PageBaseAdapter extends BaseAdapter {
         convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!userInfo.get(0).getAuth().matches("0")) {
+                if (userInfo.get(position).getAuth().matches("2")) {
                     deleteCompany(userInfo.get(position));
                 }
             }
         });
 
         convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                // int position=(Integer)v.getTag();
-                Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(userEmail, userInfo.get(position).getUserName());
-                intent.putExtra(userAuth, userInfo.get(position).getAuth());
-                context.startActivity(intent);
+                    if (!userInfo.get(position).getAuth().matches("0")) {
+                        Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(userEmail, userInfo.get(position).getUserName());
+                        intent.putExtra(userAuth, userInfo.get(position).getAuth());
+                        context.startActivity(intent);
+                    }
             }
         });
 
         if (userInfo.get(0).getAuth().matches("0")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("View");
+            btn.setText("View Request");
             View btns = convertView.findViewById(R.id.cancel_btn);
             btns.setVisibility(View.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("View");
-            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");
+            btn.setText("Reject");
+            btn.setBackgroundColor(Color.parseColor("#ff3322"));
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
+           /* Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setText("Delete");*/
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("accept");
+            btn.setText("Accept");
             Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");
+            btns.setText("Reject");
         }
 
         return convertView;

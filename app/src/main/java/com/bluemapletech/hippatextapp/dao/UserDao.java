@@ -314,10 +314,9 @@ public class UserDao {
         String reArrangeEmail = userMail.replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
-        databaseRef.setValue("2");
+        databaseRef.setValue("3");
         try {
             String acceptEmail = userMail.replace("-", ".");
-            Log.d(TAG,"userMail......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been rejected by admin.\n" +
                     "Thanks for showing interest.";
@@ -328,6 +327,42 @@ public class UserDao {
         }
         return  true;
     }
+    public boolean deleteAccount(String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
+        databaseRef.removeValue();
+        try {
+            String acceptEmail = userMail.replace("-", ".");
+            MailSender runners = new MailSender();
+            String value = "This email is to notify you that your profile has been deleted by admin.\n" +
+                    "Thanks for showing interest.";
+            runners.execute("Profile has been deleted!",value,"hipaatext123@gmail.com",acceptEmail);
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
+        return  true;
+    }
+
+    public boolean acceptUser(String userMail) {
+        String reArrangeEmail = userMail.replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+        databaseRef.setValue("1");
+        try {
+            String acceptEmail = userMail.replace("-", ".");
+            MailSender runners = new MailSender();
+            String value = "This email is to notify you that your profile has been accepted by admin.\n" +
+                    "Thanks for showing interest.";
+            runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",acceptEmail);
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
+        return  true;
+    }
+
 
     public interface MessagesCallbacks{
         void onMessageAdded(Message message);

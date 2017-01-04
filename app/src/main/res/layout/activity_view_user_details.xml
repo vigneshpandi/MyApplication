@@ -156,6 +156,13 @@
             android:text="Delete"
             android:textColor="#ffffff"
             android:background="#ff2600"/>
+        <Button
+            android:id="@+id/chat_user_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chat"
+            android:textColor="#ffffff"
+            android:background="#34bf49"/>
 
     </LinearLayout>
 

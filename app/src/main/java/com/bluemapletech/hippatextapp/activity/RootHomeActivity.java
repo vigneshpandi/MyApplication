@@ -33,7 +33,10 @@ public class RootHomeActivity extends AppCompatActivity {
     private ViewPageAdapter viewPagerAdapter;
     private ActionBar actionBar;
     private FirebaseAuth firebaseAuth;
-
+    public static final String rootValue = "rootValue";
+    public static final String role = "role";
+    public static final String NotAcceptUser = "NotAcceptUser";
+    private String AcceptedUser = "AcceptUser";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,23 +77,48 @@ public class RootHomeActivity extends AppCompatActivity {
             startActivity(logOut);
             onStop();
             finish();
-            Log.d("menu selected","menu New group selected");
             return true;
         }
         if (id == R.id.add_root) {
             Intent add = new Intent(getActivity(), AddRootActivity.class);
             startActivity(add);
-            onStop();
-            finish();
-            Log.d("menu selected","menu New group selected");
             return true;
         }
         if (id == R.id.list_of_root) {
             Intent list = new Intent(getActivity(), ListOfRoots.class);
+            String rootVal = "1";
+            String roleVal = "root";
+            list.putExtra(rootValue,rootVal);
+            list.putExtra(role,roleVal);
+            list.putExtra(NotAcceptUser,AcceptedUser);
             startActivity(list);
-            onStop();
-            finish();
-            Log.d("menu selected","menu New group selected");
+            return true;
+        }
+        if (id == R.id.rejected_root) {
+            Intent list = new Intent(getActivity(), ListOfRoots.class);
+            String rootVal = "3";
+            String roleVal = "root";
+            list.putExtra(rootValue,rootVal);
+            list.putExtra(role,roleVal);
+            list.putExtra(NotAcceptUser,AcceptedUser);
+            startActivity(list);
+            return true;
+        }
+        if (id == R.id.rejected_company) {
+            Intent list = new Intent(getActivity(), ListOfRoots.class);
+            String rootVal = "3";
+            String roleVal = "admin";
+            list.putExtra(NotAcceptUser,AcceptedUser);
+            list.putExtra(rootValue,rootVal);
+            list.putExtra(role,roleVal);
+            startActivity(list);
+            return true;
+        }
+        if (id == R.id.settings) {
+            Intent list = new Intent(getActivity(), Settings.class);
+            String roleVal = "root";
+            list.putExtra(role,roleVal);
+            startActivity(list);
             return true;
         }
         return super.onOptionsItemSelected(item);

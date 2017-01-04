@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.adapter.EmployeeListOfRootBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,12 +46,15 @@ public class ListOfRoots extends AppCompatActivity {
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
     // private   List<User> userObj;
-    List<User> userObj = new ArrayList<User>();
+
     ImageView selection;
     String groupMail;
     private HashMap<String, String> hm = new HashMap<String, String>();
     public int listPosition;
     private String groupName = "";
+    private String rootValue;
+    private String not_acp_user;
+    private String role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,12 @@ public class ListOfRoots extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        rootValue = getIntent().getStringExtra(RootHomeActivity.rootValue);
+        role = getIntent().getStringExtra(RootHomeActivity.role);
+        not_acp_user = getIntent().getStringExtra(RootHomeActivity.NotAcceptUser);
+        rootValue = getIntent().getStringExtra(NotAcceptedUser.rootValue);
+        role = getIntent().getStringExtra(NotAcceptedUser.role);
+        not_acp_user = getIntent().getStringExtra(NotAcceptedUser.NotAcceptUser);
         checkUserExistence();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
@@ -69,17 +79,27 @@ public class ListOfRoots extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
-
+                List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     user = new User();
+                    user.setLastName(snapshot.child("lastName").getValue(String.class));
+                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
-                    if (user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
+                    user.setSenderId(snapshot.child("senderId").getValue(String.class));
+                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
+                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    if (user.getFirstName()==null && user.getLastName()==null) {
+                        String[] valueuserName = user.getUserName().split("@");
+                        user.setFirstName(valueuserName[0]);
+                    }
+                    if (user.getRole().matches(role) && user.getAuth().matches(rootValue) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                         Log.d("rootDetails","rootDetails"+user);
                     }
-                    iv.setAdapter(new EmployeeCreateGroupBaseAdapter(getActivity(), userObj,loggedINEmail));
+
+                    iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,loggedINEmail,not_acp_user,loggedINChatPin));
                 }
             }
             @Override
@@ -100,6 +120,7 @@ public class ListOfRoots extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
+                loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
             }
 
             @Override
@@ -109,77 +130,7 @@ public class ListOfRoots extends AppCompatActivity {
         });
     }
 
-    private class EmployeeCreateGroupBaseAdapter extends BaseAdapter {
 
-        List<User> userInfo = new ArrayList<User>();
-        LayoutInflater inflater;
-        Context context;
-        private String loginMail;
-        public EmployeeCreateGroupBaseAdapter(Context context, List<User> user , String loginMail) {
-            this.context = context;
-            this.userInfo = user;
-            this.loginMail = loginMail;
-            inflater = LayoutInflater.from(this.context);
-        }
-
-
-        public int getCount() {
-            return userInfo.size();
-        }
-
-        @Override
-        public User getItem(int position) {
-            return userInfo.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            MyViewHolder mViewHolder  = null;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.view_root_list, parent, false);
-                mViewHolder = new EmployeeCreateGroupBaseAdapter.MyViewHolder(convertView);
-                convertView.setTag(mViewHolder);
-            } else {
-                mViewHolder = (EmployeeCreateGroupBaseAdapter.MyViewHolder) convertView.getTag();
-            }
-
-            final User info = getItem(position);
-            Log.d("getUserName",info.getUserName());
-            mViewHolder.fieldName.setText(info.getUserName());
- convertView.findViewById(R.id.delete_root).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteUser(userInfo.get(position).getUserName());
-
-                }
-            });
-            return convertView;
-        }
-
-        public void deleteUser(String userMail) {
-            final UserDao userDao = new UserDao();
-            Log.d(TAG,"userMail"+userMail);
-            /*boolean result = userDao.deleteUser(userMail);
-            if (result) {
-                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
-            }*/
-        }
-
-        private class MyViewHolder {
-            private TextView  fieldName;
-            public MyViewHolder(View item) {
-                fieldName = (TextView) item.findViewById(R.id.root_mail);
-            }
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
