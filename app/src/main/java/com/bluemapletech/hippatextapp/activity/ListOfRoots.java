@@ -22,6 +22,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.EmployeeListOfRootBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -55,6 +56,7 @@ public class ListOfRoots extends AppCompatActivity {
     private String rootValue;
     private String not_acp_user;
     private String role;
+    UserDetailDto userDetailDto = new UserDetailDto();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,7 @@ public class ListOfRoots extends AppCompatActivity {
         }
         rootValue = getIntent().getStringExtra(RootHomeActivity.rootValue);
         role = getIntent().getStringExtra(RootHomeActivity.role);
+        Log.d("rootDetails","rootDetailsssssssssss"+role);
         not_acp_user = getIntent().getStringExtra(RootHomeActivity.NotAcceptUser);
         rootValue = getIntent().getStringExtra(NotAcceptedUser.rootValue);
         role = getIntent().getStringExtra(NotAcceptedUser.role);
@@ -98,8 +101,9 @@ public class ListOfRoots extends AppCompatActivity {
                         userObj.add(user);
                         Log.d("rootDetails","rootDetails"+user);
                     }
-
-                    iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,loggedINEmail,not_acp_user,loggedINChatPin,role));
+                    Log.d("rootDetails","rootDetailsssssssssss333333"+role);
+                    userDetailDto.setRole_val_det(role);
+                    iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,userDetailDto,not_acp_user));
                 }
             }
             @Override
@@ -121,6 +125,9 @@ public class ListOfRoots extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+
+                userDetailDto.setLoggedINChatPin(loggedINChatPin);
+                userDetailDto.setLoggedINEmail(loggedINEmail);
             }
 
             @Override

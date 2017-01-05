@@ -21,8 +21,10 @@ import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
+import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 
 import org.w3c.dom.Text;
 
@@ -43,6 +45,8 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
     public static final String firstName = "firstName";
     public static final String lastName = "lastName";
 
+    public static final String userEmails = "userEmails";
+    public static final String userAuth = "userAuth";
 
         List<User> userInfo = new ArrayList<User>();
         LayoutInflater inflater;
@@ -51,13 +55,13 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
     private  String loginChatPin;
     private String not_acp_user;
     private String role_user_val;
-        public EmployeeListOfRootBaseAdapter(Context context, List<User> user , String loginMail,String not_acp_user,String loginChatPin,String role_val_det) {
+        public EmployeeListOfRootBaseAdapter(Context context, List<User> user , UserDetailDto userDetailDto,String not_acp_user) {
             this.context = context;
             this.userInfo = user;
-            this.loginMail = loginMail;
-            this.loginChatPin = loginChatPin;
+            this.loginMail = userDetailDto.getLoggedINEmail();
+            this.loginChatPin = userDetailDto.getLoggedINChatPin();
             this.not_acp_user = not_acp_user;
-            this.role_user_val = role_val_det;
+            this.role_user_val = userDetailDto.getRole_val_det();
             inflater = LayoutInflater.from(this.context);
         }
 
@@ -146,7 +150,15 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     }
                 }
             });
-
+            convertView.findViewById(R.id.root_mail).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(userEmails, userInfo.get(position).getUserName());
+                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
+                    context.startActivity(intent);
+                }
+            });
             if (userInfo.get(position).getAuth().matches("1")) {
                 if(not_acp_user.matches("notAcceptUser")){
                     Button btn = (Button) convertView.findViewById(R.id.reject_btn);
