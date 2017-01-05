@@ -128,6 +128,8 @@ public class PageBaseAdapter extends BaseAdapter {
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
             Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setVisibility(View.INVISIBLE);
+            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
+            id.setTextColor(Color.parseColor("#808080"));
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {

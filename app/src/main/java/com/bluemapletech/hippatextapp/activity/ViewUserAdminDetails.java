@@ -3,8 +3,8 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +15,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.PageAdminBaseAdapter;
 import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
-import com.bluemapletech.hippatextapp.dao.CompanyDao;
-import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ViewUserDetails extends AppCompatActivity {
+public class ViewUserAdminDetails extends AppCompatActivity {
     private static final String TAG = ViewUserDetails.class.getCanonicalName();
     String empMailId = null;
     String userId;
@@ -63,8 +60,7 @@ public class ViewUserDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_user_details);
-
+        setContentView(R.layout.activity_view_user_admin_details);
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         roleValue =  pref.getString("role", "");
 
@@ -80,30 +76,8 @@ public class ViewUserDetails extends AppCompatActivity {
         adminMailId = getIntent().getStringExtra(PageBaseAdapter.userEmail);
         userAuths = getIntent().getStringExtra(PageBaseAdapter.userAuth);
         acceptBtn = (Button) findViewById(R.id.accept_user_btn);
-        pendingBtn = (Button) findViewById(R.id.pending_user_btn);
-        deleteBtn = (Button) findViewById(R.id.delete_user_btn);
-        chatBtn  = (Button) findViewById(R.id.chat_user_btn);
 
-        acceptBtn.setVisibility(View.INVISIBLE);
-        pendingBtn.setVisibility(View.INVISIBLE);
-        deleteBtn.setVisibility(View.INVISIBLE);
-        chatBtn.setVisibility(View.INVISIBLE);
-        if(userAuths.matches("0")){
-            acceptBtn.setVisibility(View.VISIBLE);
-            pendingBtn.setVisibility(View.VISIBLE);
-            deleteBtn.setVisibility(View.VISIBLE);
-            chatBtn.setVisibility(View.VISIBLE);
-            }
-        if(userAuths.matches("2")){
-            acceptBtn.setVisibility(View.VISIBLE);
-            acceptBtn.setText("Chat");
-            acceptBtn.setBackgroundColor(getResources().getColor(R.color.color_primary));
 
-        }
-        if(userAuths.matches("3")){
-            acceptBtn.setVisibility(View.VISIBLE);
-
-        }
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
@@ -153,12 +127,6 @@ public class ViewUserDetails extends AppCompatActivity {
                     userId = map.get("employeeId");
 
                 }
-                if(userAuths.matches("1") && role.matches("admin")){
-                    acceptBtn.setVisibility(View.VISIBLE);
-                   Button btns = (Button) findViewById(R.id.accept_user_btn);
-                    btns.setText("Employee List");
-                    btns.setBackgroundColor(getResources().getColor(R.color.navigationBarColor));
-                }
                 user.setAuth(auth);
                 user.setCompanyName(comNames);
                 user.setRole(role);
@@ -175,180 +143,26 @@ public class ViewUserDetails extends AppCompatActivity {
         });
 
         acceptBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(!userAuths.matches("2")){
-        if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            acceptedCompany(user);
-        } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            acceptedEmployee(user);
-        } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
-           getUserDetails(user.getCompanyName());
-        }
-
-    }else {
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-            Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-            intent.putExtra(toEmail,user1.getUserName());
-            intent.putExtra(fromEmail, logged.getEmail());
-            intent.putExtra(sendId, user1.getSenderId());
-            intent.putExtra(notificationId,user1.getPushNotificationId());
-            intent.putExtra(firstName, user1.getFirstName());
-            intent.putExtra(lastName, user1.getLastName());
-            startActivity(intent);
-            }}
-});
-
-        pendingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setAuth("2");
-                if(user.getRole().matches("admin")){
-                    pendingCompany(user);
-                } else if(user.getRole().matches("user")){
-                    pendingEmployee(user);
-                }
-            }
-        });
 
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user.setAuth("3");
-                if(user.getRole().matches("admin")){
-                    deleteCompany(user);
-                } else if(user.getRole().matches("user")){
-                    deleteEmployee(user);
-                }
-            }
-        });
-
-        chatBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 firebaseAuth = FirebaseAuth.getInstance();
                 FirebaseUser logged = firebaseAuth.getCurrentUser();
                 Log.d(TAG, "Logged in user information's: " + logged.getEmail());
                 Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-                intent.putExtra(toEmail,user1.getUserName());
+                intent.putExtra(toEmail, user1.getUserName());
                 intent.putExtra(fromEmail, logged.getEmail());
                 intent.putExtra(sendId, user1.getSenderId());
-                intent.putExtra(notificationId,user1.getPushNotificationId());
+                intent.putExtra(notificationId, user1.getPushNotificationId());
                 intent.putExtra(firstName, user1.getFirstName());
                 intent.putExtra(lastName, user1.getLastName());
                 startActivity(intent);
             }
         });
-
     }
 
 
 
-    private void getUserDetails(final String companyName) {
-        iv = (ListView) findViewById(R.id.list_of_user);
-        firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        final User user = new User();
-        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("userDetails");
-        dataReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-                userObj  = new ArrayList<User>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    user = new User();
-
-                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    user.setRole(snapshot.child("role").getValue(String.class));
-                    user.setAuth(snapshot.child("auth").getValue(String.class));
-                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
-                    if (user.getRole().matches("user") && user.getAuth().matches("1") && user.getCompanyName().matches(companyName)) {
-                        userObj.add(user);
-                        Log.d("adminDetails","adminDetails"+user);
-                    }
-                    iv.setAdapter(new viewUserAdapter(getActivity(), userObj));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void acceptedCompany(User user) {
-        user.setAuth("1");
-        final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.acceptedCompany(user);
-        if (result) {
-            startActivity(new Intent(getActivity(),RootHomeActivity.class));
-            Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d(TAG, "Error while accepted the company, please try again!");
-        }
-
-    }
-    public void pendingCompany(User user) {
-        user.setAuth("2");
-        final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.pendingCompany(user);
-        if (result) {
-            Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getActivity(),RootHomeActivity.class));
-        } else {
-            Log.d(TAG, "Error while pending the company, please try again!");
-        }
-    }
-    public void deleteCompany(User user) {
-        user.setAuth("3");
-        final CompanyDao companyDao = new CompanyDao();
-        boolean result = companyDao.deleteCompany(user);
-        if (result) {
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getActivity(),RootHomeActivity.class));
-        } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
-        }
-    }
-    public void acceptedEmployee(User user) {
-        user.setAuth("1");
-        final UserDao userDao = new UserDao();
-        boolean result = userDao.acceptedEmployee(user);
-        if (result) {
-            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
-            Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
-        } else {
-            Log.d(TAG, "Error while accepted the company, please try again!");
-        }
-
-    }
-
-    public void pendingEmployee(User user) {
-        user.setAuth("2");
-        final UserDao userDao = new UserDao();
-        boolean result = userDao.pendingEmployee(user);
-        if (result) {
-            Toast.makeText(getActivity(), "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
-        } else {
-            Log.d(TAG, "Error while pending the company, please try again!");
-        }
-    }
-
-    public void deleteEmployee(User user) {
-        user.setAuth("3");
-        final UserDao userDao = new UserDao();
-        boolean result = userDao.deleteEmployee(user);
-        if (result) {
-            Toast.makeText(getActivity(), "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getActivity(),AdminHomeActivity.class));
-        } else {
-            Log.d(TAG, "Error while delete the company, please try again!");
-        }
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -419,18 +233,18 @@ public class ViewUserDetails extends AppCompatActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ViewUserDetails.viewUserAdapter.MyViewHolder mViewHolder  = null;
+            viewUserAdapter.MyViewHolder mViewHolder  = null;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.list_of_user_under_admin, parent, false);
-                mViewHolder = new ViewUserDetails.viewUserAdapter.MyViewHolder(convertView);
+                mViewHolder = new viewUserAdapter.MyViewHolder(convertView);
                 convertView.setTag(mViewHolder);
             } else {
-                mViewHolder = (ViewUserDetails.viewUserAdapter.MyViewHolder) convertView.getTag();
+                mViewHolder = (viewUserAdapter.MyViewHolder) convertView.getTag();
             }
 
             final User info = getItem(position);
 
-                mViewHolder.mailId.setText(info.getUserName());
+            mViewHolder.mailId.setText(info.getUserName());
 
 
             return convertView;
@@ -444,7 +258,7 @@ public class ViewUserDetails extends AppCompatActivity {
             }
         }
     }
-    public ViewUserDetails getActivity() {
+    public ViewUserAdminDetails getActivity() {
         return this;
     }
 }

@@ -174,7 +174,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
             convertView.findViewById(R.id.root_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(context, ViewUserAdminDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(userEmails, userInfo.get(position).getUserName());
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);

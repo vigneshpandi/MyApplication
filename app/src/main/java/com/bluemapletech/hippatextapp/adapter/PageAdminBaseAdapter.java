@@ -98,10 +98,12 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         ((TextView) convertView.findViewById(R.id.layout_field_id)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(userEmails, userInfo.get(position).getUserName());
-                intent.putExtra(userAuth, userInfo.get(position).getAuth());
-                context.startActivity(intent);
+                if(!userInfo.get(position).getAuth().matches("0")) {
+                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(userEmails, userInfo.get(position).getUserName());
+                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
+                    context.startActivity(intent);
+                }
             }
         });
 
@@ -119,14 +121,21 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
         if (userInfo.get(0).getAuth().matches("0")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("View");
+            btn.setText("View Request");
+            btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
             View btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setVisibility(btns.INVISIBLE);
+            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
+            id.setTextColor(Color.parseColor("#808080"));
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("Delete");
+            btn.setText("Reject");
+           // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
+            TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
+            textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
+
             btn.setBackgroundColor(Color.parseColor("#ff3322"));
             View btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setVisibility(btns.INVISIBLE);
@@ -136,7 +145,10 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("accept");
             Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");
+            btns.setText("Reject");
+            TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
+            textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
+
         }
 
         return convertView;

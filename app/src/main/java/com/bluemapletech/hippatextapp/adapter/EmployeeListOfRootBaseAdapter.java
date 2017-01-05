@@ -249,6 +249,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     Button btn = (Button) convertView.findViewById(R.id.reject_btn);
                     btn.setText("Chat");
                     btn.setBackgroundColor(Color.parseColor("#009193"));
+
                 }
                 View btn = convertView.findViewById(R.id.accept_root);
                 btn.setVisibility(View.INVISIBLE);
@@ -268,6 +269,9 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     Button btn = (Button) convertView.findViewById(R.id.reject_btn);
                     btn.setText("Chat");
                     btn.setBackgroundColor(Color.parseColor("#009193"));
+
+                    TextView text = (TextView) convertView.findViewById(R.id.root_name);
+                    text.setTextColor(convertView.getResources().getColor(R.color.textColor));
                 }else{
                     View btn = convertView.findViewById(R.id.reject_btn);
                     btn.setVisibility(View.INVISIBLE);

@@ -189,6 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("role",role);
                     editor.putString("loginMail",userName);
                     editor.putString("loginCompanyName",companyName);
+                    editor.putString("auth",auth);
                     editor.commit();
 
                 Log.d(TAG, "Logged in user information's:");

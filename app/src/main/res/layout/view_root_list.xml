@@ -6,27 +6,53 @@
     >
 
     <Button
+        android:text="Reject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reject_btn"
+        android:textColor="@color/btn_text_color"
+        android:background="@color/cancel_btn"
+        android:layout_alignTop="@+id/accept_root"
+        android:layout_alignLeft="@+id/chat_btn"
+        android:layout_alignStart="@+id/chat_btn"
+        android:layout_alignBottom="@+id/accept_root"
+        />
+
+    <Button
+        android:text="Accept"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/accept_root"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/btn_text_color"
+        android:layout_marginRight="27dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginTop="14dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
         android:text="Chat"
         android:background="@color/accept_btn"
         android:layout_width="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:layout_height="20dp"
         android:id="@+id/chat_btn"
         android:textColor="@color/btn_text_color"
-        android:layout_below="@+id/accept_root"
+        android:layout_below="@+id/reject_btn"
         android:layout_alignLeft="@+id/accept_root"
-        android:layout_alignStart="@+id/accept_root" />
+        android:layout_alignStart="@+id/accept_root"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="19dp"
         android:id="@+id/root_mail"
-        android:layout_alignParentTop="true"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_alignBottom="@+id/reject_btn"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -36,32 +62,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/root_name"
         android:gravity="left"
-        android:layout_below="@+id/root_mail"
+        android:layout_alignBottom="@+id/chat_btn"
         android:layout_alignLeft="@+id/root_mail"
         android:layout_alignStart="@+id/root_mail" />
-
-    <Button
-        android:text="Accept"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/accept_root"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/btn_text_color"
-        android:layout_marginRight="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_above="@+id/root_name"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="Reject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/reject_btn"
-        android:textColor="@color/btn_text_color"
-        android:background="@color/cancel_btn"
-        android:layout_alignLeft="@+id/chat_btn"
-        android:layout_alignStart="@+id/chat_btn"
-        android:layout_alignTop="@+id/root_mail"
-        android:layout_alignBottom="@+id/root_name" />
 </RelativeLayout>

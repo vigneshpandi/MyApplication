@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,7 +32,7 @@ public class Settings extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     String emailValue;
-    String role_Value;
+    String role_Value,auth;
     private FirebaseDatabase firebaseDatabaseRef;
     public static final String roleValues = "roleValues";
     private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"};
@@ -46,6 +47,7 @@ public class Settings extends AppCompatActivity {
 
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         role_Value =  pref.getString("role", "");
+        auth = pref.getString("auth","");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
@@ -122,6 +124,30 @@ public class Settings extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                if(role_Value.matches("root") && auth.matches("1")){
+                    startActivity(new Intent(getActivity(),RootHomeActivity.class));
+                }else
+                if(role_Value.matches("admin") && auth.matches("1")){
+                    startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+                }else
+                if(role_Value.matches("user") && auth.matches("1")){
+                    startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+                }else{
+                    Intent user = new Intent(getActivity(),NotAcceptedUser.class);
+                    startActivity(user);
+                }
+
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public Settings getActivity() {
         return this;
     }
