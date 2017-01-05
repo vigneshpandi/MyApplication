@@ -30,7 +30,7 @@ public class Settings extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String role_Value;
     public static final String roleValues = "roleValues";
-    private String[] lv_arr = {"Profile","Change Password","Delete An Acount","Notification Settings"};
+    private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"};
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,23 +66,35 @@ public class Settings extends AppCompatActivity {
                         Intent changePassword = new Intent(getActivity(), ChangePassword.class);
                         changePassword.putExtra(roleValues,roleValue);
                         startActivity(changePassword);
-                    }else {
+                    }else  if(role_Value.matches("admin")){
                         Intent editProfile = new Intent(getActivity(), EditProfileActivity.class);
                         startActivity(editProfile);
                     }
                } else if(positionValue == 1){
                     if(role_Value.matches("root")){
                         deleteAcount();
-                    }else {
-                        Intent changePassword = new Intent(getActivity(), ChangePassword.class);
-                        startActivity(changePassword);
+                    }else if(role_Value.matches("admin")){
+                        Intent redirect = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
+                        startActivity(redirect);
+                        Log.d(TAG, "Change chat pin has called!");
                     }
                } else if(positionValue == 2){
-                    if(!role_Value.matches("root")) {
+                    if(role_Value.matches("admin")) {
+                        Intent changePassword = new Intent(getActivity(), ChangePassword.class);
+                        startActivity(changePassword);
+                    } else if(role_Value.matches("root")) {
                         deleteAcount();
                     }
                 } else if(positionValue == 3){
+                    if(role_Value.matches("admin")){
+                        deleteAcount();
+                    }else if(role_Value.matches("root")){
 
+                    }
+                }else if(positionValue == 4){
+                    if(role_Value.matches("admin")){
+
+                    }
                 }
             }
         });

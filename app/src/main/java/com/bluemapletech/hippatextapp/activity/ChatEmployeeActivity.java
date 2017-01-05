@@ -41,8 +41,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class ChatEmployeeActivity extends AppCompatActivity implements View.OnClickListener,UserDao.MessagesCallbacks {
@@ -179,6 +183,24 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1");
                        // userFirstAndLastName.setText(userName);
+                        String myFormat = "yyyy-MM-dd HH:mm:ss z";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                     //   String dateValue = sdf.format(message.getDateAndTime("dateandtime"));
+                     //Log.d(TAG,"message.getDateAndTime"+ dateValue);
+
+                        Date date = null;
+                        try {
+                            date = sdf.parse(message.getDateAndTime("dateandtime"));
+
+                            sdf = new SimpleDateFormat("hh:mm a");
+                            Log.d(TAG,"message.getDateAndTime"+ sdf.format(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                       String dateVal = message.getDateAndTime("dateandtime");
+
+                        Log.d(TAG,"message.dateVal"+ dateVal);
                         dateTime.setText(message.getDateAndTime("dateandtime"));
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;

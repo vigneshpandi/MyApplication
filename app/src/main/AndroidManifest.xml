@@ -66,7 +66,9 @@
         <activity android:name=".activity.SelectUser" />
         <activity android:name=".activity.Settings" />
         <activity android:name=".activity.ChangePassword" />
-        <activity android:name=".activity.NotAcceptedUser"></activity>
+        <activity android:name=".activity.NotAcceptedUser" />
+        <activity android:name=".activity.RejectedEmployeeListActivity" />
+        <activity android:name=".activity.RejectedAdminList"></activity>
     </application>
 
 </manifest>

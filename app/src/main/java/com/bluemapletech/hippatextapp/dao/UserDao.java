@@ -176,9 +176,12 @@ public class UserDao {
         String encoText = Base64.encodeToString(data, Base64.NO_WRAP);
         Date date = new Date();
         Calendar c = Calendar.getInstance();
+
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String dateValue = sdf.format(c.getTime());
+
+
         Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");

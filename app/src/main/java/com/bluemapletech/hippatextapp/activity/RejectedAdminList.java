@@ -2,7 +2,6 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,14 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,52 +25,38 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ListOfAdminActivity extends AppCompatActivity {
-
-    private static final String TAG = ListOfAdminActivity.class.getCanonicalName();
+public class RejectedAdminList extends AppCompatActivity {
+    private static final String TAG = RejectedAdminList.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private String loggedInCompanyValue;
     private String loggedINEmail;
-    private String loggedINChatPin;
     private ListView iv;
-    private ArrayList<String> data = new ArrayList<>();
-    // private   List<User> userObj;
-    List<User> userObj = new ArrayList<User>();
-    ImageView selection;
-    String groupMail;
-    private HashMap<String, String> hm = new HashMap<String, String>();
-    public int listPosition;
-    private String groupName = "";
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    public static final String toEmail = "toEmail";
+    public static final String fromEmail = "fromEmail";
+    public static final String sendId = "sendId";
+    public static final String notificationId = "notificationId";
+    public static final String firstName = "firstName";
+    public static final String lastName = "lastName";
     public static final String userEmails = "userEmails";
     public static final String userAuth = "userAuth";
+    List<User> userObj = new ArrayList<User>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_of_admin);
-
+        setContentView(R.layout.activity_rejected_admin_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        String loginMail =  pref.getString("loginMail", "");
-        String chatPin =  pref.getString("chatPin", "");
-        String companyName =  pref.getString("loginCompanyName", "");
-        loggedINEmail = loginMail;
-        loggedInCompanyValue = companyName;
-        Log.d("loggedInCoInCom",loggedInCompanyValue);
-       // checkUserExistence();
+        checkUserExistence();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
-        iv = (ListView) findViewById(R.id.all_admins);
+        iv = (ListView) findViewById(R.id.all_users);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,13 +67,21 @@ public class ListOfAdminActivity extends AppCompatActivity {
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
+                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
+                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
+                    user.setLastName(snapshot.child("lastName").getValue(String.class));
                     user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
+                    Log.d("adminDetails","adminDetails"+user.getCompanyName());
+                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
+                        String[] valueuserName = user.getUserName().split("@");
+                        user.setFirstName(valueuserName[0]);
+                    }
                     if (user.getRole().matches("admin") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
                         userObj.add(user);
                         Log.d("adminDetails","adminDetails"+user);
                     }
-                    iv.setAdapter(new PageAdminBaseAdapters(getActivity(), userObj,loggedINEmail));
+                    iv.setAdapter(new RejectedAdminList.PageAdminBaseAdaptersAdmin(getActivity(), userObj,loggedINEmail));
                 }
             }
             @Override
@@ -113,6 +102,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedInCompanyValue = (String) dataSnapshot.child("companyName").getValue();
+
             }
 
             @Override
@@ -121,13 +111,13 @@ public class ListOfAdminActivity extends AppCompatActivity {
             }
         });
     }
-    private class PageAdminBaseAdapters extends BaseAdapter {
+    private class PageAdminBaseAdaptersAdmin extends BaseAdapter {
 
         List<User> userInfo = new ArrayList<User>();
         LayoutInflater inflater;
         Context context;
         private String loginMail;
-        public PageAdminBaseAdapters(Context context, List<User> user , String loginMail) {
+        public PageAdminBaseAdaptersAdmin(Context context, List<User> user , String loginMail) {
             this.context = context;
             this.userInfo = user;
             this.loginMail = loginMail;
@@ -152,26 +142,33 @@ public class ListOfAdminActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder mViewHolder  = null;
+            RejectedAdminList.PageAdminBaseAdaptersAdmin.MyViewHolder mViewHolder  = null;
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.view_admin_list, parent, false);
-                mViewHolder = new ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder(convertView);
+                convertView = inflater.inflate(R.layout.rejected_employee_custom_layout, parent, false);
+                mViewHolder = new RejectedAdminList.PageAdminBaseAdaptersAdmin.MyViewHolder(convertView);
                 convertView.setTag(mViewHolder);
             } else {
-                mViewHolder = (ListOfAdminActivity.PageAdminBaseAdapters.MyViewHolder) convertView.getTag();
+                mViewHolder = (RejectedAdminList.PageAdminBaseAdaptersAdmin.MyViewHolder) convertView.getTag();
             }
 
             final User info = getItem(position);
             mViewHolder.fieldName.setText(info.getUserName());
             mViewHolder.fieldId.setText(info.getProviderNPIId());
-            convertView.findViewById(R.id.reject_btn).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteUser(userInfo.get(position).getUserName());
+                    Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                    intent.putExtra(fromEmail, loginMail);
+                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                    intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                    intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                    intent.putExtra(lastName, userInfo.get(position).getLastName());
+                    context.startActivity(intent);
 
                 }
             });
-            convertView.findViewById(R.id.root_name).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.user_id).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -183,22 +180,13 @@ public class ListOfAdminActivity extends AppCompatActivity {
             return convertView;
         }
 
-        public void deleteUser(String userMail) {
-            final UserDao userDao = new UserDao();
-            boolean result = userDao.deleteUser(userMail);
-            if (result) {
-                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
-            }
-        }
 
         private class MyViewHolder {
             private TextView fieldName;
             private TextView fieldId;
             public MyViewHolder(View item) {
-                fieldName = (TextView) item.findViewById(R.id.root_mail);
-                fieldId = (TextView) item.findViewById(R.id.root_name);
+                fieldName = (TextView) item.findViewById(R.id.user_mail);
+                fieldId = (TextView) item.findViewById(R.id.user_id);
             }
         }
     }
@@ -217,7 +205,11 @@ public class ListOfAdminActivity extends AppCompatActivity {
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
 
-    public ListOfAdminActivity getActivity() {
+    public RejectedAdminList getActivity() {
         return this;
     }
-}
+
+
+
+    }
+

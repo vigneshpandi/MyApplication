@@ -171,12 +171,14 @@ public class LoginActivity extends AppCompatActivity {
                 String status = map.get("status");
                 String userName = map.get("emailAddress");
                 String userChatPin = map.get("chatPin");
+                String companyName = map.get("companyName");
                 if(userChatPin!=null){
                      pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                      editor = pref.edit();
                     editor.putString("chatPin",userChatPin);
                     editor.putString("role",role);
                     editor.putString("loginMail",userName);
+                    editor.putString("loginCompanyName",companyName);
                     editor.commit();
                 }
                 Log.d(TAG, "Logged in user information's:");

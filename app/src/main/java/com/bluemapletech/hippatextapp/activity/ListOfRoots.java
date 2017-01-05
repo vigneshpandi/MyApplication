@@ -83,8 +83,6 @@ public class ListOfRoots extends AppCompatActivity {
         userDetailDto.setLoggedINChatPin(chatPin);
         userDetailDto.setLoggedINEmail(loginMail);
 
-
-
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");

@@ -19,24 +19,40 @@
         android:title="Admin List"
         app:showAsAction="never" />
     <item
-        android:id="@+id/add_employee"
+        android:id="@+id/re_admin_list"
         android:orderInCategory="104"
+        android:title="Rejected Admin List"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/add_employee"
+        android:orderInCategory="105"
         android:title="Add Employee"
         app:showAsAction="never" />
     <item
+        android:id="@+id/rejected_employee"
+        android:orderInCategory="106"
+        android:title="Rejected Employee List"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="107"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+   <!-- <item
         android:id="@+id/change_pin"
-        android:orderInCategory="105"
+        android:orderInCategory="108"
         android:title="Change Secure Chat Pin"
         app:showAsAction="never" />
     <item
         android:id="@+id/profile"
-        android:orderInCategory="106"
+        android:orderInCategory="109"
         android:title="Profile"
         app:showAsAction="never" />
-
+-->
     <item
         android:id="@+id/log_out"
-        android:orderInCategory="107"
+        android:orderInCategory="108"
         android:title="@string/log_out"
         app:showAsAction="never" />
 

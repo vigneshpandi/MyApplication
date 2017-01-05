@@ -74,6 +74,44 @@ public class AdminHomeActivity extends AppCompatActivity {
         int id = item.getItemId();
         Log.d("menu selected", "menu selected");
         //noinspection SimplifiableIfStatement
+        if (id == R.id.new_group) {
+            Intent redirect = new Intent(getActivity(), CreateGroup.class);
+            startActivity(redirect);
+            return true;
+        }
+
+        if (id == R.id.add_admin) {
+            Intent redirect = new Intent(getActivity(), AddAdminActivity.class);
+            startActivity(redirect);
+            return true;
+        }
+        if (id == R.id.admin_list) {
+            Intent redirect = new Intent(getActivity(), ListOfAdminActivity.class);
+            startActivity(redirect);
+            return true;
+        }
+        if (id == R.id.re_admin_list) {
+            Intent redirect = new Intent(getActivity(), RejectedAdminList.class);
+            startActivity(redirect);
+            return true;
+        }
+        if (id == R.id.add_employee) {
+            Intent redirect = new Intent(getActivity(), AddEmployeeActivity.class);
+            startActivity(redirect);
+            return true;
+        }
+
+        if (id == R.id.rejected_employee) {
+            Intent redirect = new Intent(getActivity(), RejectedEmployeeListActivity.class);
+            startActivity(redirect);
+            return true;
+        }
+        if (id == R.id.settings) {
+            Intent redirect = new Intent(getActivity(), Settings.class);
+            startActivity(redirect);
+            return true;
+        }
+
 
         if (id == R.id.log_out) {
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
@@ -86,50 +124,23 @@ public class AdminHomeActivity extends AppCompatActivity {
             finish();
             return true;
         }
-        if (id == R.id.add_admin) {
-            Intent redirect = new Intent(getActivity(), AddAdminActivity.class);
-            startActivity(redirect);
-            onStop();
-            finish();
-            return true;
-        }
-        if (id == R.id.admin_list) {
-            Intent redirect = new Intent(getActivity(), ListOfAdminActivity.class);
-            startActivity(redirect);
-            onStop();
-            finish();
-            return true;
-        }
-        if (id == R.id.add_employee) {
-            Intent redirect = new Intent(getActivity(), AddEmployeeActivity.class);
-            startActivity(redirect);
-            onStop();
-            finish();
-            return true;
-        }
-        if (id == R.id.new_group) {
-            Intent redirect = new Intent(getActivity(), CreateGroup.class);
-            startActivity(redirect);
-            onStop();
-            finish();
-            return true;
-        }
-        if (id == R.id.profile) {
+
+       /* if (id == R.id.profile) {
             Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(logOut);
             onStop();
             finish();
             Log.d("menu selected", "menu New group selected");
             return true;
-        }
-        if (id == R.id.change_pin) {
+        }*/
+       /* if (id == R.id.change_pin) {
             Intent logOut = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
             startActivity(logOut);
             onStop();
             finish();
             Log.d(TAG, "Change chat pin has called!");
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
