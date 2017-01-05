@@ -70,26 +70,28 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-
         if (id == R.id.new_group) {
             Intent rootHome = new Intent(getActivity(), CreateGroup.class);
             startActivity(rootHome);
             return true;
         }
+        if (id == R.id.settings) {
+            Intent settings = new Intent(getActivity(), Settings.class);
+            startActivity(settings);
+            return true;
+        }
         if (id == R.id.log_out) {
-                Intent logOut = new Intent(getActivity(), HomeActivity.class);
-                startActivity(logOut);
+            Intent logOut = new Intent(getActivity(), HomeActivity.class);
+            startActivity(logOut);
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
                 onStop();
                 finish();
-
             return true;
         }
-        if (id == R.id.profile) {
+        /*if (id == R.id.profile) {
             Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(logOut);
             onStop();
@@ -102,12 +104,8 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             onStop();
             finish();
             return true;
-        }
-        if (id == R.id.settings) {
-            Intent settings = new Intent(getActivity(), Settings.class);
-            startActivity(settings);
-            return true;
-        }
+        }*/
+
         return super.onOptionsItemSelected(item);
     }
 

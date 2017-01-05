@@ -47,7 +47,8 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
 
     public static final String userEmails = "userEmails";
     public static final String userAuth = "userAuth";
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
         List<User> userInfo = new ArrayList<User>();
         LayoutInflater inflater;
         Context context;
@@ -110,17 +111,45 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
             convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                    intent.putExtra(fromEmail, loginMail);
-                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
-                    intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
-                    intent.putExtra(firstName, userInfo.get(position).getFirstName());
-                    intent.putExtra(lastName, userInfo.get(position).getLastName());
-                    context.startActivity(intent);
-                        }
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Security check");
+                    final EditText chatPinn = new EditText(context);
+                    chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    chatPinn.setHint("Enter your chat pin");
+                    alert.setView(chatPinn);
 
+
+
+
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String srt = chatPinn.getEditableText().toString();
+                            if (srt.matches(loginChatPin)) {
+                                Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                                intent.putExtra(fromEmail, loginMail);
+                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                                intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                                intent.putExtra(lastName, userInfo.get(position).getLastName());
+                                context.startActivity(intent);
+                            } else {
+                                Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+                }
             });
+
+
             convertView.findViewById(R.id.reject_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,24 +158,78 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     }
 
                     if(!not_acp_user.matches("notAcceptUser") && role_user_val.matches("admin")){
-                        Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                        intent.putExtra(fromEmail, loginMail);
-                        intent.putExtra(sendId, userInfo.get(position).getSenderId());
-                        intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
-                        intent.putExtra(firstName, userInfo.get(position).getFirstName());
-                        intent.putExtra(lastName, userInfo.get(position).getLastName());
-                        context.startActivity(intent);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("Security check");
+                        final EditText chatPinn = new EditText(context);
+                        chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                        chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        chatPinn.setHint("Enter your chat pin");
+                        alert.setView(chatPinn);
+
+
+
+
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String srt = chatPinn.getEditableText().toString();
+                                if (srt.matches(loginChatPin)) {
+                                    Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                                    intent.putExtra(fromEmail, loginMail);
+                                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                    intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                                    intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                                    intent.putExtra(lastName, userInfo.get(position).getLastName());
+                                    context.startActivity(intent);
+                                } else {
+                                    Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
                     }
                     if(not_acp_user.matches("notAcceptUser")) {
-                        Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                        intent.putExtra(fromEmail, loginMail);
-                        intent.putExtra(sendId, userInfo.get(position).getSenderId());
-                        intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
-                        intent.putExtra(firstName, userInfo.get(position).getFirstName());
-                        intent.putExtra(lastName, userInfo.get(position).getLastName());
-                        context.startActivity(intent);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        alert.setTitle("Security check");
+                        final EditText chatPinn = new EditText(context);
+                        chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                        chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        chatPinn.setHint("Enter your chat pin");
+                        alert.setView(chatPinn);
+
+
+
+
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String srt = chatPinn.getEditableText().toString();
+                                if (srt.matches(loginChatPin)) {
+                                    Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                                    intent.putExtra(fromEmail, loginMail);
+                                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                    intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                                    intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                                    intent.putExtra(lastName, userInfo.get(position).getLastName());
+                                    context.startActivity(intent);
+                                } else {
+                                    Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
                     }
                 }
             });

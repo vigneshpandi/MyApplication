@@ -127,7 +127,7 @@ public class AddRootActivity extends AppCompatActivity {
         user.setCompanyName("");
         user.setAuth("1");
         user.setRole("root");
-        user.setStatus("login");
+        user.setStatus("chatPin");
         user.setChatPin("");
         user.setTINorEIN("");
         user.setDesignation("");

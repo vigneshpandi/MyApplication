@@ -42,12 +42,8 @@ public class UserDao {
 
     private static String convIds;
     private static FirebaseDatabase firebaseDatabaseRef;
-
-
     private static DatabaseReference databaseRef;
-
     private static final String TAG = UserDao.class.getCanonicalName();
-
     public boolean createEmployee(User user){
         boolean success = false;
         Log.d(TAG, "Create employee dao method has been called!");
@@ -375,7 +371,7 @@ public class UserDao {
         boolean success = false;
         Log.d(TAG, "Create company dao method has been called!");
         HashMap<String, Object> compData = new HashMap<>();
-        compData.put("auth","1");
+        compData.put("auth",user.getAuth());
         compData.put("chatPin",user.getChatPin());
         compData.put("companyCINNumber",user.getTINorEIN());
         compData.put("companyName", user.getCompanyName());

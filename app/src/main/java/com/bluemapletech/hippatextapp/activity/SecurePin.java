@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +33,8 @@ public class SecurePin extends AppCompatActivity {
     private static final String TAG = SecurePin.class.getCanonicalName();
     String userEmail;
     User user;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     private EditText chatPin, conformChatPin;
     private Button loginSecureBtn;
     private String auth;
@@ -59,6 +61,11 @@ public class SecurePin extends AppCompatActivity {
                     return;
                 }else if(chatPin.getText().toString().matches(conformChatPin.getText().toString())){
                     securePin = chatPin.getText().toString();
+                    pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                    editor = pref.edit();
+                    editor.putString("chatPin",securePin);
+                    editor.commit();
+                    Log.d("userChatPin", pref.getString("chatPin", ""));
                     byte[] data = new byte[0];
                     try {
                         data = securePin.getBytes("UTF-8");
@@ -77,7 +84,16 @@ public class SecurePin extends AppCompatActivity {
                     saveChatPinCompany(user);
                 } else if (user.getAuth().matches("1") && user.getRole().matches("user")) {
                     saveChatPinEmp(user);
-                }}else{
+                }else if(!user.getAuth().matches("1")){
+         if(user.getRole().matches("user")){
+             saveChatPinUser(user);
+        }else if(user.getRole().matches("admin")){
+             saveChatPinUser(user);
+        }if(user.getRole().matches("root")){
+                        saveChatPinUser(user);
+                    }
+                }
+                }else{
                     Toast.makeText(getActivity(), "Sorry, chatPin Not Match!", Toast.LENGTH_LONG).show();
                     Log.d("securePin", "chat pin  not match");
                 }
@@ -125,7 +141,6 @@ public class SecurePin extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                  auth = map.get("auth");
-
                  role = map.get("role");
                 user = new User();
                 user.setAuth(map.get("auth"));
@@ -155,7 +170,7 @@ public class SecurePin extends AppCompatActivity {
     }
 
     public void saveChatPinCompany(User user) {
-        Log.d(TAG, "Add invited company method has been called!");
+        Log.d(TAG, "saveChatPinCompany");
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
         if (result) {
@@ -169,7 +184,7 @@ public class SecurePin extends AppCompatActivity {
     }
 
     public void saveChatPinEmp(User user) {
-        Log.d(TAG, "Add invited company method has been called!");
+        Log.d(TAG, "saveChatPinEmp!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
         Log.d("resullttt", String.valueOf(result));
@@ -182,6 +197,22 @@ public class SecurePin extends AppCompatActivity {
             Log.d(TAG, "Error while adding the company, please try again!");
         }
     }
+
+    public void saveChatPinUser(User user) {
+        Log.d("dsdsdsdsd","dfdfdfdfd");
+        final UserDao userDao = new UserDao();
+        boolean result = userDao.saveSecure(user);
+        if (result) {
+            addNotificationId();
+            Log.d(TAG, "Company accepted successfully!");
+            Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
+            startActivity(redirect);
+        } else {
+            Log.d(TAG, "Error while adding the company, please try again!");
+        }
+    }
+
+
     private void addNotificationId() {
         String reArrangeEmail = userEmail.replace(".", "-");
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -172,15 +174,23 @@ public class LoginActivity extends AppCompatActivity {
                 String userName = map.get("emailAddress");
                 String userChatPin = map.get("chatPin");
                 String companyName = map.get("companyName");
-                if(userChatPin!=null){
+                String text = null;
+                if(userChatPin!=null) {
+                    byte[] data1 = Base64.decode(userChatPin, Base64.NO_WRAP);
+                    try {
+                        text = new String(data1, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
                      pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                      editor = pref.edit();
-                    editor.putString("chatPin",userChatPin);
+                    editor.putString("chatPin",text);
                     editor.putString("role",role);
                     editor.putString("loginMail",userName);
                     editor.putString("loginCompanyName",companyName);
                     editor.commit();
-                }
+
                 Log.d(TAG, "Logged in user information's:");
                 if(status.matches("login")){
                     if (auth.matches("1") && role.matches("root")) {
@@ -200,20 +210,17 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
-                        Log.d("loginActivity", "under working");
+                        Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
+                        redirect.putExtra(userLogiMailId,userName);
+                        startActivity(redirect);
+                        /*Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
+                        Log.d("loginActivity", "under working");*/
                     }}
-                else  if(status.matches("chatPin") && auth.matches("1") ){
+                else  if(status.matches("chatPin")){
                     progressDialog.dismiss();
                     Intent redirect = new Intent(getActivity(), SecurePin.class);
                     redirect.putExtra(userLogiMailId,userName);
                     startActivity(redirect);
-                }else if(status.matches("chatPin") && auth.matches("0") ) {
-                    progressDialog.dismiss();
-                    Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
-                    redirect.putExtra(userLogiMailId,userName);
-                    startActivity(redirect);
-
                 }
                 else{
                     progressDialog.dismiss();

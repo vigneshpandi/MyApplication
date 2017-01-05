@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,10 @@ public class NotAcceptedUser extends AppCompatActivity {
     public static final String rootValue = "rootValue";
     public static final String role = "role";
     public static final String NotAcceptUser = "NotAcceptUser";
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String loginroleValue;
+    String roleVal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,11 +28,17 @@ public class NotAcceptedUser extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginroleValue =  pref.getString("role", "");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.not_accept_user_menu, menu);
+        if(loginroleValue.matches("admin")){
+            getMenuInflater().inflate(R.menu.not_accept_user_menu, menu);
+        }else if(loginroleValue.matches("user")){
+            getMenuInflater().inflate(R.menu.not_accept_user, menu);
+        }
         return true;
     }
 
@@ -42,7 +53,11 @@ public class NotAcceptedUser extends AppCompatActivity {
         if (id == R.id.list_of_roots) {
             Intent intent = new Intent(getActivity(), ListOfRoots.class);
             String rootVal = "1";
-            String roleVal = "root";
+            if(loginroleValue.matches("admin")){
+                 roleVal = "root";
+            }else if(loginroleValue.matches("user")){
+                 roleVal = "admin";
+            }
             String notAcceptUser = "notAcceptUser";
             intent.putExtra(NotAcceptUser,notAcceptUser);
             intent.putExtra(rootValue,rootVal);
@@ -50,6 +65,11 @@ public class NotAcceptedUser extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+        if (id == R.id.settings) {
+            Intent redirect = new Intent(getActivity(), Settings.class);
+            startActivity(redirect);
+        }
+
         if (id == R.id.log_out) {
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);

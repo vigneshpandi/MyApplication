@@ -96,6 +96,20 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
             randomValue = getIntent().getStringExtra(EmployeeGroupsAdapter.randomValue);
             notificationId = getIntent().getStringExtra(EmployeeGroupsAdapter.notificationId);
+            pref = getApplicationContext().getSharedPreferences("groupMessageDetail", MODE_PRIVATE);
+    if(fromMail!=null || senderId!=null || randomValue!=null || notificationId!=null ) {
+        editor = pref.edit();
+        editor.putString("fromMail", fromMail);
+        editor.putString("senderId", senderId);
+        editor.putString("randomValue", randomValue);
+        editor.putString("notificationId", notificationId);
+        editor.commit();
+    } else{
+        fromMail =  pref.getString("fromMail", "");
+        senderId =  pref.getString("senderId", "");
+        randomValue =  pref.getString("randomValue", "");
+        notificationId =  pref.getString("notificationId", "");
+    }
             //groupName =  getIntent().getStringExtra(EmployeeGroupsAdapter.groupName);
             mListView = (ListView)findViewById(R.id.message_list);
             selectImage = (ImageView) findViewById(R.id.select_image);

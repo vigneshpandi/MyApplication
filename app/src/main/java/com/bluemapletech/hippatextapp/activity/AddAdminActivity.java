@@ -199,7 +199,7 @@ public class AddAdminActivity extends AppCompatActivity {
         comInfo.setProviderNPIId(adminProviderNPItxt.getText().toString());
         comInfo.setProviderName(adminProviderName.getText().toString());
         comInfo.setRole("admin");
-        comInfo.setStatus("login");
+        comInfo.setStatus("chatPin");
         comInfo.setEmpId("");
         comInfo.setAuth("1");
         comInfo.setChatPin("");

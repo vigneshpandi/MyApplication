@@ -70,33 +70,33 @@ public class Settings extends AppCompatActivity {
                         Intent changePassword = new Intent(getActivity(), ChangePassword.class);
                         changePassword.putExtra(roleValues,roleValue);
                         startActivity(changePassword);
-                    }else  if(role_Value.matches("admin")){
+                    }else  if(role_Value.matches("admin") || role_Value.matches("user")){
                         Intent editProfile = new Intent(getActivity(), EditProfileActivity.class);
                         startActivity(editProfile);
                     }
                } else if(positionValue == 1){
                     if(role_Value.matches("root")){
                         deleteAcount();
-                    }else if(role_Value.matches("admin")){
+                    }else if(role_Value.matches("admin") || role_Value.matches("user")){
                         Intent redirect = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
                         startActivity(redirect);
                         Log.d(TAG, "Change chat pin has called!");
                     }
                } else if(positionValue == 2){
-                    if(role_Value.matches("admin")) {
+                    if(role_Value.matches("admin") || role_Value.matches("user")) {
                         Intent changePassword = new Intent(getActivity(), ChangePassword.class);
                         startActivity(changePassword);
                     } else if(role_Value.matches("root")) {
                         deleteAcount();
                     }
                 } else if(positionValue == 3){
-                    if(role_Value.matches("admin")){
+                    if(role_Value.matches("admin") || role_Value.matches("user")){
                         deleteAcount();
                     }else if(role_Value.matches("root")){
 
                     }
                 }else if(positionValue == 4){
-                    if(role_Value.matches("admin")){
+                    if(role_Value.matches("admin") || role_Value.matches("user")){
 
                     }
                 }
