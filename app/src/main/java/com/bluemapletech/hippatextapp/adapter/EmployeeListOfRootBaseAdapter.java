@@ -150,13 +150,15 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     }
                 }
             });
-            convertView.findViewById(R.id.root_mail).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.root_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(userEmails, userInfo.get(position).getUserName());
-                    intent.putExtra(userAuth, userInfo.get(position).getAuth());
-                    context.startActivity(intent);
+                    if(!userInfo.get(position).getRole().matches("root")) {
+                        Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(userEmails, userInfo.get(position).getUserName());
+                        intent.putExtra(userAuth, userInfo.get(position).getAuth());
+                        context.startActivity(intent);
+                    }
                 }
             });
             if (userInfo.get(position).getAuth().matches("1")) {
