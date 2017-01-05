@@ -176,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                      editor = pref.edit();
                     editor.putString("chatPin",userChatPin);
                     editor.putString("role",role);
+                    editor.putString("loginMail",userName);
                     editor.commit();
                 }
                 Log.d(TAG, "Logged in user information's:");

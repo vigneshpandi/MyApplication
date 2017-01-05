@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +48,8 @@ public class ListOfRoots extends AppCompatActivity {
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
     // private   List<User> userObj;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     ImageView selection;
     String groupMail;
     private HashMap<String, String> hm = new HashMap<String, String>();
@@ -73,7 +75,16 @@ public class ListOfRoots extends AppCompatActivity {
         rootValue = getIntent().getStringExtra(NotAcceptedUser.rootValue);
         role = getIntent().getStringExtra(NotAcceptedUser.role);
         not_acp_user = getIntent().getStringExtra(NotAcceptedUser.NotAcceptUser);
-        checkUserExistence();
+        //checkUserExistence();
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        String loginMail =  pref.getString("loginMail", "");
+        String chatPin =  pref.getString("chatPin", "");
+        loggedINEmail = loginMail;
+        userDetailDto.setLoggedINChatPin(chatPin);
+        userDetailDto.setLoggedINEmail(loginMail);
+
+
+
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
@@ -101,7 +112,6 @@ public class ListOfRoots extends AppCompatActivity {
                         userObj.add(user);
                         Log.d("rootDetails","rootDetails"+user);
                     }
-                    Log.d("rootDetails","rootDetailsssssssssss333333"+role);
                     userDetailDto.setRole_val_det(role);
                     iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,userDetailDto,not_acp_user));
                 }
