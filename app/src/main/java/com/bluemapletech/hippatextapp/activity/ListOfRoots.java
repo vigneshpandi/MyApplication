@@ -99,7 +99,7 @@ public class ListOfRoots extends AppCompatActivity {
                         Log.d("rootDetails","rootDetails"+user);
                     }
 
-                    iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,loggedINEmail,not_acp_user,loggedINChatPin));
+                    iv.setAdapter(new EmployeeListOfRootBaseAdapter(getActivity(), userObj,loggedINEmail,not_acp_user,loggedINChatPin,role));
                 }
             }
             @Override

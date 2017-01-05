@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,10 +28,11 @@ import java.util.List;
  */
 
 public class AcceptedTabActivity extends Fragment {
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     private ListView listview;
     ArrayList compList = new ArrayList();
-
+    HashMap<String,Integer> hashValue = new HashMap<String, Integer>();
     private static final String TAG = AcceptedTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +57,14 @@ public class AcceptedTabActivity extends Fragment {
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     if (user.getRole().matches("admin") && user.getAuth().matches("1")) {
+                        if (hashValue.get( user.getCompanyName()) == null) {
+                            hashValue.put(user.getCompanyName(),1);
+                            Log.d(TAG, "Snapshot working from admin: " + snapshot.toString());
+                        }else{
+                            int com_count = hashValue.get( user.getCompanyName());
+                            com_count++;
+                            hashValue.put(user.getCompanyName(),com_count);
+                        }
                         Log.d(TAG, "Snapshot values from admin: " + snapshot.toString());
                         userObj.add(user);
                     }

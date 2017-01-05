@@ -50,12 +50,14 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         private String loginMail;
     private  String loginChatPin;
     private String not_acp_user;
-        public EmployeeListOfRootBaseAdapter(Context context, List<User> user , String loginMail,String not_acp_user,String loginChatPin) {
+    private String role_user_val;
+        public EmployeeListOfRootBaseAdapter(Context context, List<User> user , String loginMail,String not_acp_user,String loginChatPin,String role_val_det) {
             this.context = context;
             this.userInfo = user;
             this.loginMail = loginMail;
             this.loginChatPin = loginChatPin;
             this.not_acp_user = not_acp_user;
+            this.role_user_val = role_val_det;
             inflater = LayoutInflater.from(this.context);
         }
 
@@ -121,6 +123,17 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     if (userInfo.get(position).getAuth().matches("1") && !not_acp_user.matches("notAcceptUser")) {
                         deleteUser(userInfo.get(position).getUserName());
                     }
+
+                    if(!not_acp_user.matches("notAcceptUser") && role_user_val.matches("admin")){
+                        Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                        intent.putExtra(fromEmail, loginMail);
+                        intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                        intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                        intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                        intent.putExtra(lastName, userInfo.get(position).getLastName());
+                        context.startActivity(intent);
+                    }
                     if(not_acp_user.matches("notAcceptUser")) {
                         Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra(toEmail, userInfo.get(position).getUserName());
@@ -150,8 +163,19 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
             }
 
             if (userInfo.get(position).getAuth().matches("3")) {
-                View btn = convertView.findViewById(R.id.reject_btn);
-                btn.setVisibility(View.INVISIBLE);
+                if(role_user_val.matches("admin")){
+                    View btns = convertView.findViewById(R.id.accept_root);
+                    btns.setVisibility(View.INVISIBLE);
+                    View btns1 = convertView.findViewById(R.id.chat_btn);
+                    btns1.setVisibility(View.INVISIBLE);
+                    Button btn = (Button) convertView.findViewById(R.id.reject_btn);
+                    btn.setText("Chat");
+                    btn.setBackgroundColor(Color.parseColor("#009193"));
+                }else{
+                    View btn = convertView.findViewById(R.id.reject_btn);
+                    btn.setVisibility(View.INVISIBLE);
+                }
+
             }
             return convertView;
         }
