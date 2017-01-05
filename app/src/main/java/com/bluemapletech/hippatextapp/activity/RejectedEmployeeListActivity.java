@@ -183,8 +183,6 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
             });
             return convertView;
         }
-
-
         private class MyViewHolder {
             private TextView fieldName;
             private TextView fieldId;

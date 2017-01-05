@@ -1,5 +1,9 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+/**
+ * Created by BlueMaple on 1/5/2017.
+ */
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.adapter.PageAdminChatAdapter;
-import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
-import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.adapter.AdminGroupBaseAdapter;
+import com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter;
+import com.bluemapletech.hippatextapp.model.Groups;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,12 +27,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * Created by Kumaresan on 20-10-2016.
+ * Created by Win7v5 on 10/24/2016.
  */
 
-public class ChatAdminActivity extends Fragment{
-
+public class GroupAdminTabActivity extends Fragment {
     private ListView listview;
     ArrayList empList = new ArrayList();
     private FirebaseAuth firebaseAuth;
@@ -36,50 +40,39 @@ public class ChatAdminActivity extends Fragment{
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
-    private String userFirstName;
-    private String userLastName;
-    private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
-
+    private String loggedINsenderId;
+    private static final String TAG = GroupChatEmployeeTabActivity.class.getCanonicalName();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
-
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
-
+        checkUserDetails();
+        final Groups group = new Groups();
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        final User user = new User();
-        checkCompanyExistence();
-        DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-                List<User> userObj = new ArrayList<User>();
+                Groups group;
+                List<Groups> groupObj = new ArrayList<Groups>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
-                    user = new User();
-                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
-                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
-                    user.setPassword(snapshot.child("password").getValue(String.class));
-                    user.setRole(snapshot.child("role").getValue(String.class));
-                    user.setAuth(snapshot.child("auth").getValue(String.class));
-                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    user.setSenderId(snapshot.child("senderId").getValue(String.class));
-                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
-                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
-                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
-                    user.setLastName(snapshot.child("lastName").getValue(String.class));
-                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
-                        String[] valueuserName = user.getUserName().split("@");
-                        user.setFirstName(valueuserName[0]);
-                    }
-                    if (user.getRole().matches("user") && user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
-                        userObj.add(user);
-                    }
+                    group = new Groups();
+                    group.setGroupName(snapshot.child("groupName").getValue(String.class));
+                    group.setAdmin(snapshot.child("admin").getValue(String.class));
+                    group.setStatus(snapshot.child("status").getValue(String.class));
+                    group.setRandomName(snapshot.child("randomName").getValue(String.class));
+                    group.setGroupEmailId(snapshot.child("groupEmailId").getValue(String.class));
+                    group.setGroupImage(snapshot.child("groupImage").getValue(String.class));
+                    groupObj.add(group);
                 }
-                if(getActivity() !=null) {
-                    listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+                if(getActivity() !=null){
+                    listview.setAdapter(new AdminGroupBaseAdapter(getActivity(), groupObj ,loggedINsenderId ,loggedINChatPin,loggedINEmail));
                 }
+
             }
 
             @Override
@@ -89,9 +82,7 @@ public class ChatAdminActivity extends Fragment{
         });
         return rootView;
     }
-
-
-    public void checkCompanyExistence() {
+    public void checkUserDetails() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
@@ -104,13 +95,14 @@ public class ChatAdminActivity extends Fragment{
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+                loggedINsenderId = (String) dataSnapshot.child("senderId").getValue();
+
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
-
-
 }
