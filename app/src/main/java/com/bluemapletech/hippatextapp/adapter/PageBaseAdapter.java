@@ -79,8 +79,6 @@ public class PageBaseAdapter extends BaseAdapter {
                     intent.putExtra(userEmail, userInfo.get(position).getUserName());
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
-                }else if(userInfo.get(position).getAuth().matches("1")){
-                  deleteCompany(userInfo.get(position));
                 }else if(userInfo.get(position).getAuth().matches("2")){
                     accepted(userInfo.get(position));
                 }
@@ -91,6 +89,8 @@ public class PageBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("2")) {
+                    deleteCompany(userInfo.get(position));
+                }else if(userInfo.get(position).getAuth().matches("1")){
                     deleteCompany(userInfo.get(position));
                 }
             }
@@ -106,32 +106,66 @@ public class PageBaseAdapter extends BaseAdapter {
                         intent.putExtra(userAuth, userInfo.get(position).getAuth());
                         context.startActivity(intent);
                     }
+
             }
         });
 
         if (userInfo.get(0).getAuth().matches("0")) {
+            /*Button btn = (Button) convertView.findViewById(R.id.accept_btn);
+            btn.setText("View Request");
+            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
+            id.setTextColor(Color.parseColor("#666633"));
+            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
+            companyName.setTextColor(Color.parseColor("#000000"));
+            btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
+            btn.setVisibility(View.INVISIBLE);
+            *//*Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
+            hideBtns.setVisibility(View.VISIBLE);*/
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
-            View btns = convertView.findViewById(R.id.cancel_btn);
+            btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
+            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setVisibility(View.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {
-            Button btn = (Button) convertView.findViewById(R.id.accept_btn);
+           /* Button btn = (Button) convertView.findViewById(R.id.cancel_btn);
             btn.setText("Reject");
             btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            View btns = convertView.findViewById(R.id.cancel_btn);
+            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
+            id.setTextColor(Color.parseColor("#0080ff"));
+            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
+            companyName.setTextColor(Color.parseColor("#000000"));
+            View btns = convertView.findViewById(R.id.accept_btn);
             btns.setVisibility(View.INVISIBLE);
-           /* Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Delete");*/
+            btn.setVisibility(View.INVISIBLE);
+            *//*Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
+            hideBtns.setVisibility(View.VISIBLE);*/
+            Button btn = (Button) convertView.findViewById(R.id.cancel_btn);
+            btn.setText("Reject");
+            btn.setBackgroundColor(convertView.getResources().getColor(R.color.cancel_btn));
+            Button btns = (Button) convertView.findViewById(R.id.accept_btn);
+            btns.setVisibility(View.INVISIBLE);
+            TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
+            textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
+
+
         }
 
-        if (userInfo.get(0).getAuth().matches("2")) {
+       /* if (userInfo.get(0).getAuth().matches("2")) {
+            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
+            id.setTextColor(Color.parseColor("#0080ff"));
+            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
+            companyName.setTextColor(Color.parseColor("#000000"));
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("Accept");
             Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
             btns.setText("Reject");
-        }
+            Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
+            hideBtns.setVisibility(View.INVISIBLE);
+        }*/
 
         return convertView;
     }

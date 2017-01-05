@@ -88,6 +88,12 @@ public class ViewUserDetails extends AppCompatActivity {
             deleteBtn.setVisibility(View.VISIBLE);
             chatBtn.setVisibility(View.VISIBLE);
             }
+        if(userAuths.matches("2")){
+            acceptBtn.setVisibility(View.VISIBLE);
+            acceptBtn.setText("Chat");
+            acceptBtn.setBackgroundColor(getResources().getColor(R.color.color_primary));
+
+        }
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
@@ -141,6 +147,7 @@ public class ViewUserDetails extends AppCompatActivity {
                     acceptBtn.setVisibility(View.VISIBLE);
                    Button btns = (Button) findViewById(R.id.accept_user_btn);
                     btns.setText("Employee List");
+                    btns.setBackgroundColor(getResources().getColor(R.color.navigationBarColor));
                 }
                 user.setAuth(auth);
                 user.setCompanyName(comNames);
@@ -156,9 +163,11 @@ public class ViewUserDetails extends AppCompatActivity {
 
             }
         });
-acceptBtn.setOnClickListener(new View.OnClickListener() {
+
+        acceptBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
+        if(!userAuths.matches("2")){
         if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
             user.setAuth("1");
             acceptedCompany(user);
@@ -169,7 +178,19 @@ acceptBtn.setOnClickListener(new View.OnClickListener() {
            getUserDetails(user.getCompanyName());
         }
 
-    }
+    }else {
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+            Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+            intent.putExtra(toEmail,user1.getUserName());
+            intent.putExtra(fromEmail, logged.getEmail());
+            intent.putExtra(sendId, user1.getSenderId());
+            intent.putExtra(notificationId,user1.getPushNotificationId());
+            intent.putExtra(firstName, user1.getFirstName());
+            intent.putExtra(lastName, user1.getLastName());
+            startActivity(intent);
+            }}
 });
 
         pendingBtn.setOnClickListener(new View.OnClickListener() {

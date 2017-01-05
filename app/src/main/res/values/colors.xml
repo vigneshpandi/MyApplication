@@ -12,4 +12,6 @@
     <color name="white">#ffffff</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#004080</color>
+    <color name="textColor">#0080ff</color>
+    <color name="blackColor">#000000</color>
 </resources>

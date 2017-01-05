@@ -36,7 +36,7 @@ public class UserDetailDto {
 
     @Override
     public String toString() {
-        return "userdetaildto{" +
+        return "UserDetailDto{" +
                 "loggedINEmail='" + loggedINEmail + '\'' +
                 ", loggedINChatPin='" + loggedINChatPin + '\'' +
                 ", role_val_det='" + role_val_det + '\'' +

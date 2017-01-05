@@ -80,7 +80,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-
                 android:layout_marginLeft="10dp"/>
 
         </LinearLayout>
@@ -153,7 +152,7 @@
             android:id="@+id/delete_user_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="Reject"
             android:textColor="#ffffff"
             android:background="#ff2600"
             android:layout_marginBottom="10dp"/>

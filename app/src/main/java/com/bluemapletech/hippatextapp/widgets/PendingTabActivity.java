@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
+import com.bluemapletech.hippatextapp.adapter.PendingBaseAdapter;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,7 +58,7 @@ public class PendingTabActivity extends Fragment {
                     }
                 }
                 if(getActivity()!=null){
-                    listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
+                    listview.setAdapter(new PendingBaseAdapter(getActivity(), userObj));
                 }
 
             }

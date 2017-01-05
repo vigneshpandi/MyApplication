@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,9 @@ public class Settings extends AppCompatActivity {
     ArrayList<String> arrlist;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    String emailValue;
     String role_Value;
+    private FirebaseDatabase firebaseDatabaseRef;
     public static final String roleValues = "roleValues";
     private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"};
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
@@ -102,12 +106,16 @@ public class Settings extends AppCompatActivity {
 
     public void deleteAcount(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d(TAG,"deleted userdetails...."+user.getEmail());
+        emailValue = user.getEmail().replace(".","-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
         user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "User account deleted.");
-
+                    DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("userDetails").child(emailValue);
+                    databaseRefs.removeValue();
                     Intent list = new Intent(getActivity(), HomeActivity.class);
                     startActivity(list);
                 }
