@@ -39,6 +39,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     public static final String notificationId = "notificationId";
     public static final String firstName = "firstName";
     public static final String lastName = "lastName";
+    public static final String role = "userRole";
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
@@ -123,6 +124,8 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                             intent.putExtra(firstName, userInfo.get(position).getFirstName());
                             intent.putExtra(lastName, userInfo.get(position).getLastName());
+                            intent.putExtra(role,userInfo.get(position).getRole());
+                            Log.d(TAG,"role role value..."+userInfo.get(position).getRole());
                             context.startActivity(intent);
                         } else {
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();

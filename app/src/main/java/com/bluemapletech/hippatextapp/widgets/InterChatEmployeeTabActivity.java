@@ -56,9 +56,9 @@ public class InterChatEmployeeTabActivity extends Fragment {
                 List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
-                    fName = snapshot.child("firstName").getValue(String.class);
+                   /* fName = snapshot.child("firstName").getValue(String.class);
                     lName = snapshot.child("lastName").getValue(String.class);
-                    userEmailName = snapshot.child("emailAddress").getValue(String.class);
+                    userEmailName = snapshot.child("emailAddress").getValue(String.class);*/
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
@@ -69,13 +69,20 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     user.setSenderId(snapshot.child("senderId").getValue(String.class));
                     user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
+                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
+                    user.setLastName(snapshot.child("lastName").getValue(String.class));
+
                     Log.d(TAG,"userFirstName and LastName.."+user.getFirstName()+user.getLastName());
-                    if(user.getFirstName()==null) {
+                    /*if(user.getFirstName()==null) {
                         Log.d(TAG,"inside null");
                         if (user.getFirstName()==null && user.getFirstName()==null) {
                             String[] valueuserName = user.getUserName().split("@");
                             user.setFirstName(valueuserName[0]);
                         }
+                    }*/
+                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
+                        String[] valueuserName = user.getUserName().split("@");
+                        user.setFirstName(valueuserName[0]);
                     }
                     if (!user.getRole().matches("root") && user.getAuth().matches("1")&& !loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);

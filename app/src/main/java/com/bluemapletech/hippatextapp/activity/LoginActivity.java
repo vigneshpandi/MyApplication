@@ -175,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                      pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                      editor = pref.edit();
                     editor.putString("chatPin",userChatPin);
+                    editor.putString("role",role);
                     editor.commit();
                 }
                 Log.d(TAG, "Logged in user information's:");

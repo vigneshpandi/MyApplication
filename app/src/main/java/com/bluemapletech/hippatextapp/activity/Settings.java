@@ -1,6 +1,8 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +26,9 @@ public class Settings extends AppCompatActivity {
     private ListView iv;
     private String roleValue;
     ArrayList<String> arrlist;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String role_Value;
     public static final String roleValues = "roleValues";
     private String[] lv_arr = {"Profile","Change Password","Delete An Acount","Notification Settings"};
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
@@ -33,13 +38,18 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         iv = (ListView) findViewById(R.id.list_view);
         roleValue = getIntent().getStringExtra(RootHomeActivity.role);
-        roleValue = getIntent().getStringExtra(ChangePassword.roleValuesReturn);
+        //roleValue = getIntent().getStringExtra(ChangePassword.roleValuesReturn);
+
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        role_Value =  pref.getString("role", "");
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        if(roleValue.matches("root")) {
+        if(role_Value.matches("root")) {
             iv.setAdapter(new ArrayAdapter<String>(Settings.this,
                     android.R.layout.simple_list_item_1, iv_arr_root));
         }else{
@@ -52,7 +62,7 @@ public class Settings extends AppCompatActivity {
                 Log.d("Settings","profilesSettings"+position);
                 int positionValue = position;
                 if(positionValue == 0){
-                    if(roleValue.matches("root")){
+                    if(role_Value.matches("root")){
                         Intent changePassword = new Intent(getActivity(), ChangePassword.class);
                         changePassword.putExtra(roleValues,roleValue);
                         startActivity(changePassword);
@@ -61,13 +71,14 @@ public class Settings extends AppCompatActivity {
                         startActivity(editProfile);
                     }
                } else if(positionValue == 1){
-                    if(roleValue.matches("root")){
+                    if(role_Value.matches("root")){
                         deleteAcount();
+                    }else {
+                        Intent changePassword = new Intent(getActivity(), ChangePassword.class);
+                        startActivity(changePassword);
                     }
-                    Intent changePassword = new Intent(getActivity(), ChangePassword.class);
-                    startActivity(changePassword);
                } else if(positionValue == 2){
-                    if(!roleValue.matches("root")) {
+                    if(!role_Value.matches("root")) {
                         deleteAcount();
                     }
                 } else if(positionValue == 3){
