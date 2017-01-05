@@ -155,7 +155,8 @@
             android:layout_height="wrap_content"
             android:text="Delete"
             android:textColor="#ffffff"
-            android:background="#ff2600"/>
+            android:background="#ff2600"
+            android:layout_marginBottom="10dp"/>
         <Button
             android:id="@+id/chat_user_btn"
             android:layout_width="match_parent"

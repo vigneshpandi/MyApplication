@@ -81,11 +81,12 @@ public class ViewUserDetails extends AppCompatActivity {
         acceptBtn.setVisibility(View.INVISIBLE);
         pendingBtn.setVisibility(View.INVISIBLE);
         deleteBtn.setVisibility(View.INVISIBLE);
-
+        chatBtn.setVisibility(View.INVISIBLE);
         if(userAuths.matches("0")){
             acceptBtn.setVisibility(View.VISIBLE);
             pendingBtn.setVisibility(View.VISIBLE);
             deleteBtn.setVisibility(View.VISIBLE);
+            chatBtn.setVisibility(View.VISIBLE);
             }
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);

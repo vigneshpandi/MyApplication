@@ -61,12 +61,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
     private String childappendid;
-    private String userName;
+    private String userName,userRole;
     private Toolbar toolbar;
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     boolean wallpaperimage = false;
+    private String roleValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         notificationId = getIntent().getStringExtra(PageEmployeeBaseAdpter.notificationId);
         userFirstName = getIntent().getStringExtra(PageEmployeeBaseAdpter.firstName);
         userLastName = getIntent().getStringExtra(PageEmployeeBaseAdpter.lastName);
+        userRole = getIntent().getStringExtra(PageEmployeeBaseAdpter.role);
+        Log.d(TAG,"Root Role...."+userRole);
         mListView = (ListView)findViewById(R.id.message_list);
         selectImage = (ImageView) findViewById(R.id.select_image);
         layout = (LinearLayout) findViewById(R.id.activity_caht_employee);
@@ -96,6 +99,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 break;
             }
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        roleValue =  pref.getString("role", "");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(toMail);
@@ -446,7 +451,20 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         int id= item.getItemId();
         switch (item.getItemId()){
             case android.R.id.home:
-                backPage();
+                Log.d(TAG,"roleValue......"+roleValue);
+                if(roleValue.matches("user")){
+                    Log.d(TAG,"userRole... user..."+userRole);
+                    backPage();
+                }
+                Log.d(TAG,"roleValue......"+roleValue);
+                if(roleValue.matches("root")){
+                    Log.d(TAG,"userRole....root.."+userRole);
+                    backPageRoot();
+                }
+                if(roleValue.matches("admin")){
+                    Log.d(TAG,"userRole....admin.."+userRole);
+                    backPageAdmin();
+                }
                 return true;
         }
         if(id == R.id.delete){
@@ -470,6 +488,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private void backPage() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+    }
+    private void backPageRoot() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),RootHomeActivity.class));
+    }
+    private void backPageAdmin() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
     public ChatEmployeeActivity getActivity() {
         return this;

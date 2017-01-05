@@ -1,10 +1,13 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +30,7 @@ public class ChangePassword extends AppCompatActivity {
     private Button changePassword;
     public static final String roleValuesReturn = "roleValuesReturn";
     private EditText emailAddress;
+
     String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,11 @@ public class ChangePassword extends AppCompatActivity {
         emailAddress.setText(logged.getEmail());
         roleValue = getIntent().getStringExtra(Settings.roleValues);
         init();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public void init(){
@@ -64,6 +73,20 @@ public class ChangePassword extends AppCompatActivity {
                 });
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
     public ChangePassword getActivity() { return this;  }
 }
