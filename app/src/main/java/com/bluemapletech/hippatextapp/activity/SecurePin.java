@@ -79,21 +79,14 @@ public class SecurePin extends AppCompatActivity {
                     user.setStatus("login");
                 if (user.getAuth().matches("1") && user.getRole().matches("root")) {
                     Log.d(TAG, "Redirected to root admin dash board");
-                    Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
-                    startActivity(rootHome);
+                    saveChatPinRoot(user);
                 } else if (user.getAuth().matches("1") && user.getRole().matches("admin")) {
                     Log.d("secureactivity","admin");
                     saveChatPinCompany(user);
                 } else if (user.getAuth().matches("1") && user.getRole().matches("user")) {
                     saveChatPinEmp(user);
                 }else if(!user.getAuth().matches("1")){
-         if(user.getRole().matches("user")){
-             saveChatPinUser(user);
-        }else if(user.getRole().matches("admin")){
-             saveChatPinUser(user);
-        }if(user.getRole().matches("root")){
-                        saveChatPinUser(user);
-                    }
+                    saveChatPinUser(user);
                 }
                 }else{
                     Toast.makeText(getActivity(), "Sorry, chatPin Not Match!", Toast.LENGTH_LONG).show();
@@ -199,7 +192,20 @@ public class SecurePin extends AppCompatActivity {
             Log.d(TAG, "Error while adding the company, please try again!");
         }
     }
-
+    public void saveChatPinRoot(User user) {
+        Log.d(TAG, "saveChatPinEmp!");
+        final UserDao userDao = new UserDao();
+        boolean result = userDao.saveSecure(user);
+        Log.d("resullttt", String.valueOf(result));
+        if (result) {
+            addNotificationId();
+            Log.d(TAG, "Company accepted successfully!");
+            Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
+            startActivity(rootHome);
+        } else {
+            Log.d(TAG, "Error while adding the company, please try again!");
+        }
+    }
     public void saveChatPinUser(User user) {
         Log.d("dsdsdsdsd","dfdfdfdfd");
         final UserDao userDao = new UserDao();
