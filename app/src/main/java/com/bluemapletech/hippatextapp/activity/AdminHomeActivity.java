@@ -120,8 +120,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
 
         if (id == R.id.log_out) {
-            Intent logOut = new Intent(getActivity(), HomeActivity.class);
-            startActivity(logOut);
+
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
@@ -134,12 +133,15 @@ public class AdminHomeActivity extends AppCompatActivity {
             loginMail =  pref.getString("loginMail", "");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
-            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
-            dataReference.setValue(dateValue);
+            /*DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);*/
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
             editors.commit();
+
+            Intent logOut = new Intent(getActivity(), HomeActivity.class);
+            startActivity(logOut);
             onStop();
             finish();
             return true;

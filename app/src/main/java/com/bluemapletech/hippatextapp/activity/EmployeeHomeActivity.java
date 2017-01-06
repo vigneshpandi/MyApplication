@@ -104,8 +104,8 @@ public class EmployeeHomeActivity extends AppCompatActivity {
 
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
-            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
-            dataReference.setValue(dateValue);
+            /*DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);*/
 
 
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
