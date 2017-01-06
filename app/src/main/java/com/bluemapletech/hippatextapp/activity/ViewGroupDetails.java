@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +42,9 @@ import com.bluemapletech.hippatextapp.dao.EmployeeDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.Groups;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.Utility;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,14 +52,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.R.attr.value;
 import static com.bluemapletech.hippatextapp.R.layout.view_groupimage_dialog;
 
 public class ViewGroupDetails extends AppCompatActivity{
@@ -64,7 +82,7 @@ public class ViewGroupDetails extends AppCompatActivity{
     Groups group = new Groups();
     List<Groups> groupObj = new ArrayList<Groups>();
     List<Groups> groupObjs = new ArrayList<Groups>();
-    private String loggedEmail;
+    private String loggedEmail,loggedINEmail;
     ImageView viewImage;
     private Toolbar toolbar;
     private Toolbar toolbars;
@@ -73,14 +91,23 @@ public class ViewGroupDetails extends AppCompatActivity{
     public int listPosition;
      Groups  groupInformation;
     private String userMailId;
-    private String reArrangeEmails;
+    private String reArrangeEmails,reArrangeEmailId;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     FirebaseUser logged;
     Map<String,String> maps = new HashMap<String,String>();
     ImageView backPageArrow;
-    String groupValues;
-    String editGroupName;
+    String groupValues,editGroupName,profile;
+    final private int SELECT_FILE = 1;
+    final private int REQUEST_CAMERA = 2;
+    private String base64Profile;
+    private StorageReference mStorage;
+    Uri value,downloadUrl;
+    String reArrangeEmail;
+    private  ImageView displayImage;
+    private SecureRandom random;
+    private String senderID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +144,8 @@ public class ViewGroupDetails extends AppCompatActivity{
             pref = getSharedPreferences("MyPref",MODE_PRIVATE);
             Log.d(TAG,"groupNamedialogVAlue"+pref.getString("groupNameValue",""));
             groupName =  pref.getString("groupNameValue","");
+            loggedINEmail = pref.getString("loginMail","");
+
         }
         TextView name = (TextView) findViewById(R.id.group_name);
        name.setText(groupName);
@@ -237,12 +266,15 @@ public class ViewGroupDetails extends AppCompatActivity{
                 dialog.setContentView(R.layout.view_groupimage_dialog);
                 Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
                 ImageView backPageArrow = (ImageView) dialog.findViewById(R.id.backarrow);
+                ImageView takePhoto = (ImageView) dialog.findViewById(R.id.gallery_camera);
+                displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
                 if (toolbar != null) {
                     setSupportActionBar(toolbar);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     dialog.show();
                 }
                 //dialog.addContentView();
+                Log.d(TAG,"randomNameLogin"+group.getRandomName());
                 ImageView showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
                 Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(showImage);
                 dialog.show();
@@ -257,8 +289,135 @@ public class ViewGroupDetails extends AppCompatActivity{
 
                         }
                     });
+                takePhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                                "Cancel" };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                        builder.setTitle("Add Photo!");
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+                                boolean result= Utility.checkPermission(ViewGroupDetails.this);
+                                if (items[item].equals("Take Photo")) {
+                                    if(result)
+                                        cameraIntent();
+                                } else if (items[item].equals("Choose from Library")) {
+                                    if(result)
+                                        galleryIntent();
+                                } else if (items[item].equals("Cancel")) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+                });
                 }
         });
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+    private void galleryIntent()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+        }
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        assert thumbnail != null:"Image Could not be set!";
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+      //  userImage.setImageBitmap(thumbnail);
+        base64Profile = bitmapToBase64(thumbnail);
+        value = data.getData();
+        Log.d(TAG,"valuess"+value);
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        Bitmap bm = null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //userImage.setImageBitmap(bm);
+        base64Profile = bitmapToBase64(bm);
+        value = data.getData();
+        Log.d(TAG,"valuess"+value);
+    }
+
+    private void saveImage() {
+        final  EmployeeDao empDao = new EmployeeDao();
+        random = new SecureRandom();
+        senderID = new BigInteger(130, random).toString(32);
+        String randomValue = senderID.substring(0, 7);
+        Log.d("randomValue",randomValue);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        Log.d(TAG,"R.drawable.groupimage..."+R.drawable.groupimage+group.getRandomName());
+      //  Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + base64Profile);
+        StorageReference filePath = mStorage.child(groupName+senderID);
+        Log.d(TAG,"value...value.."+value);
+        filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl " + downloadUrl);
+                Log.d(TAG,"group.getGroupEmailId()....."+group.getGroupEmailId());
+                String[] valueuserName = group.getGroupEmailId().split(";");
+               /* for(int k =0; k<valueuserName.length; k++){
+                    reArrangeEmailId = valueuserName[k].replace(".","-");
+                    Log.d(TAG,"reArrangeEmailId..."+reArrangeEmailId + group.getRandomName());
+                    DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupImage");
+                    dataReference.setValue(downloadUrl);
+                }*/
+
+                finish();
+                startActivity(getIntent());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

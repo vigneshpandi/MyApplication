@@ -55,7 +55,7 @@
             android:layout_marginRight="14dp"
             android:layout_marginEnd="14dp"
             android:layout_marginTop="13dp"
-            android:id="@+id/gallery" />
+            android:id="@+id/gallery_camera" />
     </RelativeLayout>
 
     <ImageView  android:layout_width="fill_parent"

@@ -341,6 +341,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         userImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
+        value = data.getData();
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -360,13 +361,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private void saveImage() {
        // Uri uri = data.getData();
         if(value!=null){
-            Log.d(TAG,"value"+value);
+            Log.d(TAG,"valuejjjjjj"+value);
             StorageReference filePath = mStorage.child(reArrangeEmail);
             filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                    Log.d(TAG,"downloadUrl"+downloadUrl);
+                    Log.d(TAG,"downloadUrlEditProfile"+downloadUrl);
                     profile = String.valueOf(downloadUrl);
                     saveProfile();
                 }
