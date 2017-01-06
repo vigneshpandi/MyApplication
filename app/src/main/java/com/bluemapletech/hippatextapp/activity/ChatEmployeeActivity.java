@@ -45,6 +45,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -177,41 +178,79 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
             LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams)userFirstAndLastName.getLayoutParams();
             int sdk = Build.VERSION.SDK_INT;
+
+
+
+            //format of given date
+            String myFormat = "yyyy-MM-dd HH:mm:ss z";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+            String formattedDate = df.format(c.getTime());
+            System.out.println("today's date = "+ formattedDate);
+
+            Calendar c1 = Calendar.getInstance();
+            c1.add(Calendar.DATE, -1);
+            String yest_date = df.format(c1.getTime());
+            System.out.println("Yesterday's date = "+ yest_date);
+
+
+
+
+
+            String msg_date = null;
+            Date date = null;
+            Date date1 = null;
+            String val = null;
+            String d1 = null;
+            String d2 = null;
+            try {
+                // convert for date format showing
+                date = sdf.parse(message.getDateAndTime("dateandtime"));
+                sdf = new SimpleDateFormat("hh:mm a");
+                d1 = sdf.format(date);
+                sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                d2 = sdf.format(date);
+                val = d2+d1;
+                Log.d(TAG,"message.getDateAndTime = "+ val);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if(formattedDate.matches(d2)){
+                Log.d(TAG,"today"+"today");
+                msg_date = "today";
+
+            }else if(yest_date.matches(d2)){
+                Log.d(TAG,"yesterday"+"yesterday");
+                msg_date = "yesterday";
+            }else{
+                msg_date = val;
+            }
+
+
+
             if (message.getMsender().equals(fromMail)){
+                userFirstAndLastName.setVisibility(View.GONE);
                 if(message.getMtext()!=null && !message.getMtext().matches("")){
                     imageView.setVisibility(View.GONE);
                     nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1");
-                       // userFirstAndLastName.setText(userName);
-                        String myFormat = "yyyy-MM-dd HH:mm:ss z";
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                     //   String dateValue = sdf.format(message.getDateAndTime("dateandtime"));
-                     //Log.d(TAG,"message.getDateAndTime"+ dateValue);
 
-                        Date date = null;
-                        try {
-                            date = sdf.parse(message.getDateAndTime("dateandtime"));
-
-                            sdf = new SimpleDateFormat("hh:mm a");
-                            Log.d(TAG,"message.getDateAndTime"+ sdf.format(date));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                       String dateVal = message.getDateAndTime("dateandtime");
-
-                        Log.d(TAG,"message.dateVal"+ dateVal);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                       // dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                        // layoutParams2.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...11");
-                      //  userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                        // layoutParams2.gravity = Gravity.RIGHT;
@@ -222,22 +261,23 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...111");
-                       // userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                         //layoutParams2.gravity = Gravity.RIGHT;
                     } else {
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1111");
-                       // userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                         //layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }
             }else if(!message.getMsender().equals(fromMail)){
+                userFirstAndLastName.setVisibility(View.VISIBLE);
                 if(message.getMtext()!=null && !message.getMtext().matches("")){
                     nameView.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.GONE);
@@ -245,7 +285,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...2");
                         userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
                         layoutParams2.gravity = Gravity.LEFT;
@@ -253,7 +293,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...22");
                         userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
                         layoutParams2.gravity = Gravity.LEFT;
@@ -265,7 +305,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...222");
                         userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
                         layoutParams2.gravity = Gravity.LEFT;
@@ -273,7 +313,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...2222");
                         userFirstAndLastName.setText(userName);
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
                         layoutParams2.gravity = Gravity.LEFT;

@@ -87,6 +87,12 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
+
+            SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
+            SharedPreferences.Editor editors = preferencess.edit();
+            editors.clear();
+            editors.commit();
+
                 onStop();
                 finish();
             return true;

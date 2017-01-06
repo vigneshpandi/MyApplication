@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -117,6 +118,11 @@ public class AdminHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
+
+            SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
+            SharedPreferences.Editor editors = preferencess.edit();
+            editors.clear();
+            editors.commit();
             onStop();
             finish();
             return true;

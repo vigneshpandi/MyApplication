@@ -55,8 +55,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.acl.Group;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 public class GroupMessageEmployeeActivity extends AppCompatActivity implements View.OnClickListener,GroupMessageDao.MessagesCallbacks {
@@ -66,7 +71,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private String mConvoId;
         private GroupMessageDao.MessagesListener mListener;
         private String randomValue;
-        private String fromMail, senderId;
+        private String fromMail, senderId, userName;
     private String childappendid;
     Message message;
         private ImageView selectImage;
@@ -213,8 +218,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 convertView = super.getView(position, convertView, parent);
                  message = getItem(position);
                 childappendid = message.getChildappendid();
-                Log.d(TAG,"childappendiddddddddd..."+childappendid);
+                Log.d(TAG,"child Mail..."+message.getMsender());
+
+                String[] valueuserName = message.getMsender().split("@");
+                userName = valueuserName[0];
+
                 TextView nameView = (TextView)convertView.findViewById(R.id.msg);
+                TextView userFirstAndLastName = (TextView) convertView.findViewById(R.id.user_name);
                 nameView.setText(message.getMtext());
                 TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
                 ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
@@ -226,21 +236,74 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 }
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
+                LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams)userFirstAndLastName.getLayoutParams();
+
+
+             //format of given date
+                String myFormat = "yyyy-MM-dd HH:mm:ss z";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(c.getTime());
+                System.out.println("today's date = "+ formattedDate);
+
+                Calendar c1 = Calendar.getInstance();
+                c1.add(Calendar.DATE, -1);
+                String yest_date = df.format(c1.getTime());
+                System.out.println("Yesterday's date = "+ yest_date);
+
+
+
+
+
+                String msg_date = null;
+                Date date = null;
+                Date date1 = null;
+                String val = null;
+                String d1 = null;
+                String d2 = null;
+                try {
+                    // convert for date format showing
+                    date = sdf.parse(message.getDateAndTime("dateandtime"));
+                    sdf = new SimpleDateFormat("hh:mm a");
+                   d1 = sdf.format(date);
+                    sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                    d2 = sdf.format(date);
+                    val = d2+d1;
+                    Log.d(TAG,"message.getDateAndTime = "+ val);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(formattedDate.matches(d2)){
+                    Log.d(TAG,"today"+"today");
+                    msg_date = "today";
+
+                }else if(yest_date.matches(d2)){
+                    Log.d(TAG,"yesterday"+"yesterday");
+                    msg_date = "yesterday";
+                }else{
+                    msg_date = val;
+                }
                  int sdk = Build.VERSION.SDK_INT;
                 if (message.getSenderId().equals(senderId)){
+                    userFirstAndLastName.setVisibility(View.GONE);
                     if(message.getMtext()!=null && !message.getMtext().matches("")){
                         imageView.setVisibility(View.GONE);
                         nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1");
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                      //  dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...11");
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                     }
@@ -250,31 +313,36 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
                             Log.d(TAG,"inside...111");
-                            dateTime.setText(message.getDateAndTime("dateandtime"));
+                            dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.RIGHT;
                             layoutParams1.gravity = Gravity.RIGHT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
                             Log.d(TAG,"inside...1111");
-                            dateTime.setText(message.getDateAndTime("dateandtime"));
+                            dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.RIGHT;
                             layoutParams1.gravity = Gravity.RIGHT;
                         }
                     }
                 }else if(!message.getMsender().equals(fromMail)){
+                    userFirstAndLastName.setVisibility(View.VISIBLE);
                     if(message.getMtext()!=null && !message.getMtext().matches("")){
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...2");
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
                         Log.d(TAG,"inside...22");
-                        dateTime.setText(message.getDateAndTime("dateandtime"));
+                        userFirstAndLastName.setText(userName);
+                        dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
                         layoutParams1.gravity = Gravity.LEFT;
+                        layoutParams2.gravity = Gravity.LEFT;
                     }
                 }else if(message.getImage()!=null && !message.getImage().matches("")){
                         nameView.setVisibility(View.GONE);
@@ -282,15 +350,19 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
                             Log.d(TAG,"inside...222");
-                            dateTime.setText(message.getDateAndTime("dateandtime"));
+                            userFirstAndLastName.setText(userName);
+                            dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.LEFT;
                             layoutParams1.gravity = Gravity.LEFT;
+                            layoutParams2.gravity = Gravity.LEFT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
                             Log.d(TAG,"inside...2222");
-                            dateTime.setText(message.getDateAndTime("dateandtime"));
+                            userFirstAndLastName.setText(userName);
+                            dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.LEFT;
                             layoutParams1.gravity = Gravity.LEFT;
+                            layoutParams2.gravity = Gravity.LEFT;
                         }
                     }}
                 imageView.setLayoutParams(layoutParams);

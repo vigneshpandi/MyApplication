@@ -44,8 +44,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -248,6 +251,13 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         user.setProviderName("");
         user.setProviderNPIId("");
         user.setProfilePjhoto(String.valueOf(downloadUrl));
+
+        Calendar c = Calendar.getInstance();
+        String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String dateValue = sdf.format(c.getTime());
+        user.setCreateDate(dateValue);
+        user.setUpdateDate(dateValue);
         boolean insertUser = userDao.createEmployee(user);
         Log.d(TAG, "Returned user result: " + insertUser);
         if (insertUser) {

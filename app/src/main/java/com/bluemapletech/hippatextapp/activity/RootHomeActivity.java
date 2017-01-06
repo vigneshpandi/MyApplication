@@ -73,6 +73,17 @@ public class RootHomeActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
 
         if (id == R.id.log_out) {
+
+            SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
+
+            SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
+            SharedPreferences.Editor editors = preferencess.edit();
+            editors.clear();
+            editors.commit();
+
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);
             onStop();

@@ -150,13 +150,12 @@ public class LoginActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(usernameTxts);
         return matcher.matches();
     }
-
-
     public void init() {
         usernameTxt = (EditText) findViewById(R.id.user_name);
         passwordTxt = (EditText) findViewById(R.id.password);
         loginBtn = (Button) findViewById(R.id.login_btn);
         forgetPassword = (Button) findViewById(R.id.reset_button);
+        pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
     }
 
     public void getUserInformation() {
@@ -183,7 +182,6 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                     pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                      editor = pref.edit();
                     editor.putString("chatPin",text);
                     editor.putString("role",role);
@@ -194,6 +192,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Logged in user information's:");
                 if(status.matches("login")){
+                    String loginKey = "loginKey";
+                      editor.putString("loginKey",loginKey);
+                    editor.commit();
                     if (auth.matches("1") && role.matches("root")) {
                         addNotificationId();
                         Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);

@@ -64,6 +64,8 @@ public class SecurePin extends AppCompatActivity {
                     pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                     editor = pref.edit();
                     editor.putString("chatPin",securePin);
+                    String loginKey = "loginKey";
+                    editor.putString("loginKey",loginKey);
                     editor.commit();
                     Log.d("userChatPin", pref.getString("chatPin", ""));
                     byte[] data = new byte[0];
@@ -158,7 +160,8 @@ public class SecurePin extends AppCompatActivity {
                 user.setProviderName(map.get("providerName"));
                 user.setRole(map.get("role"));
                 user.setSenderId(map.get("senderId"));
-
+                user.setCreateDate(map.get("createdDate"));
+                user.setUpdateDate(map.get("updatedDate"));
 
             }
 

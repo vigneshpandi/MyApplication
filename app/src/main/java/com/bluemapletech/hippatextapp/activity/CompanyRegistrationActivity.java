@@ -53,6 +53,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -266,6 +269,12 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     Log.d("randomValue",randomValue);
                     comInfo.setSenderId(randomValue);
                     comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
+                    Calendar c = Calendar.getInstance();
+                    String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                    String dateValue = sdf.format(c.getTime());
+                    comInfo.setCreateDate(dateValue);
+                    comInfo.setUpdateDate(dateValue);
                     Log.d(TAG, "Company information's " + comInfo.toString());
                     boolean data = userDao.createCompany(comInfo);
                   if (data){

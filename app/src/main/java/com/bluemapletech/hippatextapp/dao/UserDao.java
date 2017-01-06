@@ -65,6 +65,8 @@ public class UserDao {
         empData.put("senderId",user.getSenderId());
         empData.put("status",user.getStatus());
         empData.put("pushNotificationId","");
+        empData.put("createdDate",user.getCreateDate());
+        empData.put("updatedDate",user.getUpdateDate());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
@@ -93,6 +95,8 @@ public class UserDao {
         compData.put("senderId",user.getSenderId());
         compData.put("status",user.getStatus());
         compData.put("pushNotificationId","");
+        compData.put("createdDate",user.getCreateDate());
+        compData.put("updatedDate",user.getUpdateDate());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
@@ -176,7 +180,6 @@ public class UserDao {
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String dateValue = sdf.format(c.getTime());
-
 
         Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
@@ -388,6 +391,8 @@ public class UserDao {
         compData.put("profilePhoto",user.getProfilePjhoto());
         compData.put("senderId",user.getSenderId());
         compData.put("pushNotificationId","");
+        compData.put("createdDate",user.getCreateDate());
+        compData.put("updatedDate",user.getUpdateDate());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
