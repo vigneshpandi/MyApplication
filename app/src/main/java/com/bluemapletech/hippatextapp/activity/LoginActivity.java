@@ -174,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                 String userChatPin = map.get("chatPin");
                 String companyName = map.get("companyName");
                 String text = null;
-                if(userChatPin!=null) {
+                if(userChatPin!=null && !userChatPin.matches("") ) {
                     byte[] data1 = Base64.decode(userChatPin, Base64.NO_WRAP);
                     try {
                         text = new String(data1, "UTF-8");
