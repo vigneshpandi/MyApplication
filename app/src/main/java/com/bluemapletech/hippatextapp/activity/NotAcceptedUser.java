@@ -13,6 +13,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.bluemapletech.hippatextapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class NotAcceptedUser extends AppCompatActivity {
     public static final String rootValue = "rootValue";
     public static final String role = "role";
@@ -21,6 +28,7 @@ public class NotAcceptedUser extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String loginroleValue;
     String roleVal;
+    private String loginMail;
     private String underProcess;
     private String loginEmailId;
     private String[] userEmail;
@@ -82,6 +90,29 @@ public class NotAcceptedUser extends AppCompatActivity {
         }
 
         if (id == R.id.log_out) {
+            SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
+
+            Calendar c = Calendar.getInstance();
+            String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            String dateValue = sdf.format(c.getTime());
+            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+            loginMail =  pref.getString("loginMail", "");
+
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            String reArrangeEmail = loginMail.replace(".", "-");
+            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);
+
+
+            SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
+            SharedPreferences.Editor editors = preferencess.edit();
+            editors.clear();
+            editors.commit();
+
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);
             onStop();

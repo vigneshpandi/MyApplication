@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        Log.d(TAG,"homeControlle has been called");
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginRole =  pref.getString("role", "");
         loginKey = pref.getString("loginKey","");

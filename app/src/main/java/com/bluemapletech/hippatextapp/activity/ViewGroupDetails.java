@@ -145,8 +145,8 @@ public class ViewGroupDetails extends AppCompatActivity{
             Log.d(TAG,"groupNamedialogVAlue"+pref.getString("groupNameValue",""));
             groupName =  pref.getString("groupNameValue","");
             loggedINEmail = pref.getString("loginMail","");
-
         }
+
         TextView name = (TextView) findViewById(R.id.group_name);
        name.setText(groupName);
 
@@ -277,7 +277,7 @@ public class ViewGroupDetails extends AppCompatActivity{
                 Log.d(TAG,"randomNameLogin"+group.getRandomName());
                 ImageView showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
                 Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(showImage);
-                dialog.show();
+               dialog.show();
                 backPageArrow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -357,7 +357,7 @@ public class ViewGroupDetails extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-      //  userImage.setImageBitmap(thumbnail);
+        displayImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
         value = data.getData();
         Log.d(TAG,"valuess"+value);
@@ -372,10 +372,11 @@ public class ViewGroupDetails extends AppCompatActivity{
                 e.printStackTrace();
             }
         }
-        //userImage.setImageBitmap(bm);
+        displayImage.setImageBitmap(bm);
         base64Profile = bitmapToBase64(bm);
         value = data.getData();
         Log.d(TAG,"valuess"+value);
+        saveImage();
     }
 
     private void saveImage() {
@@ -396,15 +397,20 @@ public class ViewGroupDetails extends AppCompatActivity{
                 Log.d(TAG,"downloadUrl " + downloadUrl);
                 Log.d(TAG,"group.getGroupEmailId()....."+group.getGroupEmailId());
                 String[] valueuserName = group.getGroupEmailId().split(";");
-               /* for(int k =0; k<valueuserName.length; k++){
-                    reArrangeEmailId = valueuserName[k].replace(".","-");
-                    Log.d(TAG,"reArrangeEmailId..."+reArrangeEmailId + group.getRandomName());
+             for(int p =0; p<valueuserName.length; p++){
+                 Log.d("valueuserName",valueuserName[p]);
+                    reArrangeEmailId = valueuserName[p].replace(".","-");
+                 fireBaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupImage");
-                    dataReference.setValue(downloadUrl);
-                }*/
+                 String valuesd = String.valueOf(downloadUrl);
+                    dataReference.setValue(valuesd);
+                /* l=0;
+                 k=0;
+                 int i=0;*/
+                }
 
-                finish();
-                startActivity(getIntent());
+                //finish();
+                //startActivity(getIntent());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -448,10 +454,10 @@ public class ViewGroupDetails extends AppCompatActivity{
 
     private void getGroupUser(String userMail, String randomValue) {
         userMailId = userMail;
+        groupObj = new ArrayList<Groups>();
         final Groups  groupValue = new Groups();
         groupValue.setUserMail(userMail);
         groupValue.setUserImage(groupObjs.get(k).getUserImage());
-        k++;
         reArrangeEmails = userMail.replace(".", "-");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(randomValue);
         dataReference.addValueEventListener(new ValueEventListener() {
@@ -478,7 +484,7 @@ public class ViewGroupDetails extends AppCompatActivity{
         });
     }
 
-    private void getUserProfile(String userMail) {
+    private void getUserProfile(final String userMail) {
         groupInformation = new Groups();
         reArrangeEmails = userMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmails);
@@ -489,10 +495,8 @@ public class ViewGroupDetails extends AppCompatActivity{
                    groupInformation.setUserImage(map.get("profilePhoto"));
               // maps.put(separated[l],groupInformation.getUserImage());
                 groupObjs.add(groupInformation);
-               Log.d(TAG,"separated[l]"+separated[l]);
-                Log.d(TAG,"group.getRandomName()"+group.getRandomName());
-                getGroupUser(separated[l],group.getRandomName());
-                l++;
+                getGroupUser(userMail,group.getRandomName());
+               // l++;
             }
 
             @Override

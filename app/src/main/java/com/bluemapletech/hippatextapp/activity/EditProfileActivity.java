@@ -78,7 +78,7 @@ public class EditProfileActivity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private String comNames, emailAddress, firstName,designation, lastName, userId, auth, chatPin, companyCin, password, profile;
-    private String providerNPI,providerName, notification,role, senderId, status;
+    private String providerNPI,providerName, notification,role, senderId, status,createDate,updateDate;
     private String compFirstName, compLastName, compEmail, compCompany, compEmployee, compDesignation;
     private String loginRole,loginAuth;
     @Override
@@ -136,6 +136,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 providerNPI = map.get("providerNPIId");
                 providerName = map.get("providerName");
                 notification = map.get("pushNotificationId");
+                createDate = map.get("createdDate");
+                updateDate = map.get("updatedDate");
                 role = map.get("role");
                 senderId = map.get("senderId");
                 status = map.get("status");
@@ -324,6 +326,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
+        Log.d(TAG,"DataCamera"+data.getExtras().get("data"));
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         assert thumbnail != null:"Image Could not be set!";
@@ -342,9 +345,12 @@ public class EditProfileActivity extends AppCompatActivity {
         userImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
         value = data.getData();
+
+        Log.d(TAG,"camera"+value);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
+        Log.d(TAG,"galleryData"+data);
         Bitmap bm = null;
         if (data != null) {
             try {
@@ -356,18 +362,19 @@ public class EditProfileActivity extends AppCompatActivity {
         userImage.setImageBitmap(bm);
         base64Profile = bitmapToBase64(bm);
          value = data.getData();
+        Log.d(TAG,"gallery"+value);
     }
 
     private void saveImage() {
        // Uri uri = data.getData();
         if(value!=null){
-            Log.d(TAG,"valuejjjjjj"+value);
+            Log.d(TAG,"value"+value);
             StorageReference filePath = mStorage.child(reArrangeEmail);
             filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                    Log.d(TAG,"downloadUrlEditProfile"+downloadUrl);
+                    Log.d(TAG,"downloadUrl"+downloadUrl);
                     profile = String.valueOf(downloadUrl);
                     saveProfile();
                 }
@@ -406,6 +413,8 @@ public class EditProfileActivity extends AppCompatActivity {
         user.setRole(role);
         user.setSenderId(senderId);
         user.setStatus(status);
+        user.setCreateDate(createDate);
+        user.setUpdateDate(updateDate);
         boolean data = userDao.createCompany(user);
         if (data){
             progressDialog.dismiss();

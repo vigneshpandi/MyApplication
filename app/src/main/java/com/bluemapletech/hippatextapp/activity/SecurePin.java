@@ -162,7 +162,6 @@ public class SecurePin extends AppCompatActivity {
                 user.setSenderId(map.get("senderId"));
                 user.setCreateDate(map.get("createdDate"));
                 user.setUpdateDate(map.get("updatedDate"));
-
             }
 
             @Override

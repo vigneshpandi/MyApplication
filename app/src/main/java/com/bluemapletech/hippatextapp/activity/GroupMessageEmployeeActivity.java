@@ -279,11 +279,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 }
                 if(formattedDate.matches(d2)){
                     Log.d(TAG,"today"+"today");
-                    msg_date = "today";
+                    msg_date = "Today";
 
                 }else if(yest_date.matches(d2)){
                     Log.d(TAG,"yesterday"+"yesterday");
-                    msg_date = "yesterday";
+                    msg_date = "Yesterday";
                 }else{
                     msg_date = val;
                 }

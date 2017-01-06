@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
@@ -24,13 +25,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 
 public class EmployeeHomeActivity extends AppCompatActivity {
-
+   private String loginMail;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
     private FirebaseAuth firebaseAuth;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +94,19 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
+
+            Calendar c = Calendar.getInstance();
+            String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            String dateValue = sdf.format(c.getTime());
+            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+            loginMail =  pref.getString("loginMail", "");
+
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            String reArrangeEmail = loginMail.replace(".", "-");
+            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);
+
 
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();

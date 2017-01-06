@@ -22,11 +22,19 @@ import com.bluemapletech.hippatextapp.widgets.GroupAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AdminHomeActivity extends AppCompatActivity {
 
     private static final String TAG = AdminHomeActivity.class.getCanonicalName();
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    private String loginMail;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
@@ -118,7 +126,16 @@ public class AdminHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
-
+            Calendar c = Calendar.getInstance();
+            String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            String dateValue = sdf.format(c.getTime());
+            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+            loginMail =  pref.getString("loginMail", "");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            String reArrangeEmail = loginMail.replace(".", "-");
+            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
