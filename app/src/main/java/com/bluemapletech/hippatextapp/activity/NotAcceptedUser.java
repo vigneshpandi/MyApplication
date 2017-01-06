@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.bluemapletech.hippatextapp.R;
 public class NotAcceptedUser extends AppCompatActivity {
@@ -19,17 +21,26 @@ public class NotAcceptedUser extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String loginroleValue;
     String roleVal;
+    private String underProcess;
+    private String loginEmailId;
+    private String[] userEmail;
+    private static final String TAG = NotAcceptedUser.class.getCanonicalName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_not_accepted_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView underProcess = (TextView) findViewById(R.id.underProcess);
         setSupportActionBar(toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginroleValue =  pref.getString("role", "");
+        loginEmailId = pref.getString("loginMail","");
+        userEmail = loginEmailId.split("@");
+        Log.d(TAG,"useremail..."+userEmail);
+        underProcess.setText("Welcome,'"+userEmail[0]+"'\n Your account is under process!");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,6 +89,15 @@ public class NotAcceptedUser extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
+        {
+            this.moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     public NotAcceptedUser getActivity() {
         return this;

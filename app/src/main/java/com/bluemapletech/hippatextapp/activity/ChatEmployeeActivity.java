@@ -64,7 +64,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String base64Profile;
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
-    private String childappendid;
+    private String childappendid,loginRole,loginAuth;
     private String userName,userRole;
     private Toolbar toolbar;
     private  LinearLayout layout;
@@ -105,6 +105,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         roleValue =  pref.getString("role", "");
+        loginRole = pref.getString("role","");
+        loginAuth = pref.getString("auth","");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(toMail);
@@ -474,19 +476,28 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         switch (item.getItemId()){
             case android.R.id.home:
                 Log.d(TAG,"roleValue......"+roleValue);
-                if(roleValue.matches("user")){
-                    Log.d(TAG,"userRole... user..."+userRole);
-                    backPage();
-                }
-                Log.d(TAG,"roleValue......"+roleValue);
-                if(roleValue.matches("root")){
+                if(roleValue.matches("user")&&loginAuth.matches("1")){
+                Log.d(TAG,"userRole... user..."+userRole);
+                backPage();
+            }else
+                if(roleValue.matches("root")&&loginAuth.matches("1")){
                     Log.d(TAG,"userRole....root.."+userRole);
                     backPageRoot();
-                }
-                if(roleValue.matches("admin")){
+                }else
+                if(roleValue.matches("admin")&&loginAuth.matches("1")){
                     Log.d(TAG,"userRole....admin.."+userRole);
                     backPageAdmin();
+                }else
+                if(!loginAuth.matches("1")&& loginRole.matches("root")){
+                    startActivity(new Intent(getActivity(),ListOfRoots.class));
+                }else if(!loginAuth.matches("1")&& loginRole.matches("admin")){
+                    startActivity(new Intent(getActivity(),ListOfRoots.class));
+                }else if(!loginAuth.matches("1")&& loginRole.matches("user")){
+                    startActivity(new Intent(getActivity(),ListOfRoots.class));
                 }
+
+
+
                 return true;
         }
         if(id == R.id.delete){

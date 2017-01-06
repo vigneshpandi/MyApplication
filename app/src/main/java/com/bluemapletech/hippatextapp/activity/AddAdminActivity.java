@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.GMailSender;
 import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +32,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -53,7 +58,8 @@ public class AddAdminActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
-
+    private StorageReference mStorage;
+    private Uri downloadUrl;
 
     private EditText adminEmailTxt, adminProviderNPItxt, adminProviderName;
     private Button addAminBtn;
@@ -176,7 +182,7 @@ public class AddAdminActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    entryAuth();
+                    saveImage();
                 }else{
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
@@ -211,7 +217,7 @@ public class AddAdminActivity extends AppCompatActivity {
         String senderIdRandomValue = senderID.substring(0, 7);
         Log.d("randomValue",senderIdRandomValue);
         comInfo.setSenderId(senderIdRandomValue);
-        comInfo.setProfilePjhoto("");
+        comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
         Log.d(TAG, "Company information's " + comInfo.toString());
         boolean data = userDao.createCompany(comInfo);
         if (data){
@@ -303,6 +309,25 @@ public class AddAdminActivity extends AppCompatActivity {
                 Toast.makeText(getActivity(),"Please enter valid NPI ID",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void saveImage() {
+        final  String reArrangeEmailId = adminEmailTxt.getText().toString().replace(".", "-");
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
+        StorageReference filePath = mStorage.child(reArrangeEmailId);
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl"+downloadUrl);
+                entryAuth();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
     }
 
    /* class MyAsyncClass extends AsyncTask<Void, Void, Void> {

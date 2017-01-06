@@ -2,8 +2,10 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -73,10 +75,12 @@ public class EditProfileActivity extends AppCompatActivity {
     String reArrangeEmail;
     User user = new User();
     private ProgressDialog progressDialog;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     private String comNames, emailAddress, firstName,designation, lastName, userId, auth, chatPin, companyCin, password, profile;
     private String providerNPI,providerName, notification,role, senderId, status;
     private String compFirstName, compLastName, compEmail, compCompany, compEmployee, compDesignation;
-
+    private String loginRole,loginAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +91,9 @@ public class EditProfileActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginRole = pref.getString("role","");
+        loginAuth = pref.getString("auth","");
         init();
     }
 
@@ -220,20 +227,29 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(role.equals("admin")) {
+
             switch (item.getItemId()) {
                 case android.R.id.home:
-                    backPageAdmin();
+                    if(role.equals("admin")&&loginAuth.matches("1")) {
+                        backPageAdmin();
+                    }else if(role.equals("user")&&loginAuth.matches("1")) {
+                        backPageEmp();
+                    }else if(role.equals("root")&&loginAuth.matches("1")) {
+                        backPageRoot();
+                    }else
+                    if(!loginAuth.matches("1")&& loginRole.matches("root")){
+                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                    }else if(!loginAuth.matches("1")&& loginRole.matches("admin")){
+                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                    }else if(!loginAuth.matches("1")&& loginRole.matches("user")){
+                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                    }
                     return true;
             }
-        }
-        if(role.equals("user")) {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    backPageEmp();
-                    return true;
-            }
-        }
+
+
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -245,6 +261,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private void backPageAdmin() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+    private void backPageRoot() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
 
     // show the popup for capture the image

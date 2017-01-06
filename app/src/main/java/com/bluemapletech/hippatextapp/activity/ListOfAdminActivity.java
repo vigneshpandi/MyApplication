@@ -44,7 +44,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
     // private   List<User> userObj;
-    List<User> userObj = new ArrayList<User>();
+    List<User> userObj ;
     ImageView selection;
     String groupMail;
     private HashMap<String, String> hm = new HashMap<String, String>();
@@ -80,7 +80,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
-
+                userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     user = new User();
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));

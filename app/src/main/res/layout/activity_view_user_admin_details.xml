@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chat"
-            android:background="#009193"
+            android:background="#34bf49"
             android:textColor="#ffffff"
             android:layout_marginBottom="10dp"/>
 

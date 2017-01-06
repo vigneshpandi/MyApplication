@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -30,8 +31,9 @@ public class ChangePassword extends AppCompatActivity {
     private Button changePassword;
     public static final String roleValuesReturn = "roleValuesReturn";
     private EditText emailAddress;
-
-    String email;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String email,loginRoleValue,loginAuthValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,9 @@ public class ChangePassword extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginRoleValue =  pref.getString("role", "");
+        loginAuthValue = pref.getString("auth","");
     }
 
     public void init(){
@@ -78,7 +83,22 @@ public class ChangePassword extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                backPage();
+                if(loginRoleValue.matches("root")&&loginAuthValue.matches("1")){
+                    startActivity(new Intent(getActivity(),RootHomeActivity.class));
+                }
+                if(loginRoleValue.matches("admin")&&loginAuthValue.matches("1")){
+                    startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+                }
+                if(loginRoleValue.matches("user")&&loginAuthValue.matches("1")){
+                    startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+                }else if(!loginAuthValue.matches("1")&& loginRoleValue.matches("root")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }else if(!loginAuthValue.matches("1")&& loginRoleValue.matches("admin")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }else if(!loginAuthValue.matches("1")&& loginRoleValue.matches("user")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

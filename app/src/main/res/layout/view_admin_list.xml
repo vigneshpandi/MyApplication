@@ -40,7 +40,8 @@
         android:layout_marginEnd="15dp"
         android:id="@+id/reject_btn"
         android:background="@color/cancel_btn"
-        android:layout_above="@+id/root_name" />
+        android:layout_above="@+id/root_name"
+        android:textColor="#ffffff"/>
 
 
 </RelativeLayout>

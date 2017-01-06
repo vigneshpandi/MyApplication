@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,11 +20,15 @@ import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -44,6 +49,8 @@ public class AddRootActivity extends AppCompatActivity {
     private String senderID;
     private String passRandomValue;
     private User empInfos = new User();
+    private StorageReference mStorage;
+    private Uri downloadUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,6 +172,24 @@ public class AddRootActivity extends AppCompatActivity {
             Intent intent = new Intent(getActivity(), AddRootActivity.class);
             startActivity(intent);
         }
+    }
+    private void saveImage() {
+        final  String reArrangeEmailId = addRootEmailId.getText().toString().replace(".", "-");
+        Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
+        StorageReference filePath = mStorage.child(reArrangeEmailId);
+        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"downloadUrl"+downloadUrl);
+                entryAuth();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
     }
 
     @Override

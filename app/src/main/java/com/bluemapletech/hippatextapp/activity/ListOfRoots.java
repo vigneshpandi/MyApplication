@@ -55,7 +55,7 @@ public class ListOfRoots extends AppCompatActivity {
     private HashMap<String, String> hm = new HashMap<String, String>();
     public int listPosition;
     private String groupName = "";
-    private String rootValue;
+    private String rootValue,loginRole,loginAuth;
     private String not_acp_user;
     private String role;
     UserDetailDto userDetailDto = new UserDetailDto();
@@ -70,15 +70,33 @@ public class ListOfRoots extends AppCompatActivity {
         }
         rootValue = getIntent().getStringExtra(RootHomeActivity.rootValue);
         role = getIntent().getStringExtra(RootHomeActivity.role);
-        Log.d("rootDetails","rootDetailsssssssssss"+role);
+        role = getIntent().getStringExtra(NotAcceptedUser.role);
         not_acp_user = getIntent().getStringExtra(RootHomeActivity.NotAcceptUser);
         rootValue = getIntent().getStringExtra(NotAcceptedUser.rootValue);
-        role = getIntent().getStringExtra(NotAcceptedUser.role);
         not_acp_user = getIntent().getStringExtra(NotAcceptedUser.NotAcceptUser);
+        pref = getApplicationContext().getSharedPreferences("listOfRootDetail", MODE_PRIVATE);
+        if(rootValue!=null){
+
+            editor = pref.edit();
+            editor.putString("rootValue",rootValue);
+            editor.putString("rolValue",role);
+            editor.putString("notUserValue",not_acp_user);
+            editor.commit();
+        }else{
+            rootValue = pref.getString("rootValue","");
+            role = pref.getString("rolValue","");
+            not_acp_user = pref.getString("notUserValue","");
+        }
+
+
+
+
         //checkUserExistence();
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         String loginMail =  pref.getString("loginMail", "");
         String chatPin =  pref.getString("chatPin", "");
+        loginRole = pref.getString("role","");
+        loginAuth = pref.getString("auth","");
         loggedINEmail = loginMail;
         userDetailDto.setLoggedINChatPin(chatPin);
         userDetailDto.setLoggedINEmail(loginMail);
@@ -151,17 +169,19 @@ public class ListOfRoots extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                backPage();
+                if(!loginAuth.matches("1")&& loginRole.matches("root")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }else if(!loginAuth.matches("1")&& loginRole.matches("admin")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }else if(!loginAuth.matches("1")&& loginRole.matches("user")){
+                    startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+                }else {
+                    startActivity(new Intent(getActivity(),RootHomeActivity.class));
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void backPage() {
-        Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),RootHomeActivity.class));
-    }
-
     public ListOfRoots getActivity() {
         return this;
     }

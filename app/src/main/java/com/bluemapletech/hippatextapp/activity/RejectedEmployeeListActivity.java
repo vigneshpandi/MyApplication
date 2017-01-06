@@ -81,7 +81,7 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    if (user.getRole().matches("user") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
+                    if (user.getRole().matches("user") && user.getAuth().matches("3") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
                         userObj.add(user);
                         Log.d("adminDetails","adminDetails"+user);
                     }
@@ -175,7 +175,7 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
             convertView.findViewById(R.id.user_id).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(context, ViewUserAdminDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(userEmails, userInfo.get(position).getUserName());
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);

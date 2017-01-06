@@ -25,7 +25,8 @@
         android:gravity="left"
         android:layout_below="@+id/user_mail"
         android:layout_alignLeft="@+id/user_mail"
-        android:layout_alignStart="@+id/user_mail" />
+        android:layout_alignStart="@+id/user_mail"
+        android:textColor="#0080ff"/>
 
     <Button
         android:text="Chat"
