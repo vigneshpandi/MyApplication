@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Kumaresan on 20-10-2016.
@@ -78,8 +79,6 @@ public class CompanyDao {
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
-        DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(user.getCompanyName());
-        databaseRefs.removeValue();
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
             Log.d(TAG,"user......"+acceptEmail);
@@ -93,7 +92,36 @@ public class CompanyDao {
         }
         return true;
     }
+    public boolean deleteCompanyAdminAndUser(List<User> emailId) {
+        Log.d(TAG, "Add invited company dao method has been called!");
 
+        for(int i=0;i<emailId.size();i++){
+            String reArrangeEmail = emailId.get(i).getUserName().replace(".", "-");
+            firebaseDatabaseRef = FirebaseDatabase.getInstance();
+            DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
+            databaseRef.setValue("3");
+            if(emailId.get(i).getRole().matches("admin")){
+                DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(emailId.get(i).getCompanyName());
+                databaseRefs.removeValue();
+            }
+
+            try {
+                String acceptEmail = emailId.get(i).getUserName().replace("-", ".");
+                Log.d(TAG,"user......"+acceptEmail);
+                MailSender runners = new MailSender();
+                String value = "This email is to notify you that your profile has been rejected by HippaText.\n" +
+                        "Thanks for showing interest.";
+                runners.execute("Profile has been rejected!",value,"hipaatext123@gmail.com",acceptEmail);
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
+        }
+
+
+
+        return true;
+    }
     public boolean profileImageUrl(User comInfos) {
         Log.d(TAG, "Add profileImage url!");
         String reArrangeEmail = comInfos.getUserName().replace(".", "-");

@@ -32,7 +32,7 @@ public class AcceptedTabActivity extends Fragment {
     SharedPreferences.Editor editor;
     private ListView listview;
     ArrayList compList = new ArrayList();
-    HashMap<String,Integer> hashValue = new HashMap<String, Integer>();
+
     private static final String TAG = AcceptedTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +48,8 @@ public class AcceptedTabActivity extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
                 List<User> userObj = new ArrayList<User>();
+                List<User> userObj1 = new ArrayList<User>();
+                HashMap<String,Integer> hashValue = new HashMap<String, Integer>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
@@ -68,9 +70,13 @@ public class AcceptedTabActivity extends Fragment {
                         Log.d(TAG, "Snapshot values from admin: " + snapshot.toString());
                         userObj.add(user);
                     }
+                    if (user.getRole().matches("user") && user.getAuth().matches("1")) {
+                        userObj1.add(user);
+                    }
+
                 }
 if(getActivity() !=null) {
-    listview.setAdapter(new PageBaseAdapter(getActivity(), userObj));
+   listview.setAdapter(new PageBaseAdapterRejectaceptCompany(getActivity(), userObj, userObj1 ,hashValue));
 }
             }
 
