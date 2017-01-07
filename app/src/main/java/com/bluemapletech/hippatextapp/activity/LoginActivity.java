@@ -36,7 +36,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
-
+    boolean loginaccess = true;
     FirebaseAuth firebaseAuth;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
         init();
         firebaseAuth = FirebaseAuth.getInstance();
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -166,71 +167,71 @@ public class LoginActivity extends AppCompatActivity {
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, String> map = (Map) dataSnapshot.getValue();
-                String auth = map.get("auth");
-                String role = map.get("role");
-                String status = map.get("status");
-                String userName = map.get("emailAddress");
-                String userChatPin = map.get("chatPin");
-                String companyName = map.get("companyName");
-                String text = null;
-                if(userChatPin!=null && !userChatPin.matches("") ) {
-                    byte[] data1 = Base64.decode(userChatPin, Base64.NO_WRAP);
-                    try {
-                        text = new String(data1, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                if (loginaccess == true) {
+                    Map<String, String> map = (Map) dataSnapshot.getValue();
+                    String auth = map.get("auth");
+                    String role = map.get("role");
+                    String status = map.get("status");
+                    String userName = map.get("emailAddress");
+                    String userChatPin = map.get("chatPin");
+                    String companyName = map.get("companyName");
+                    String text = null;
+                    if (userChatPin != null && !userChatPin.matches("")) {
+                        byte[] data1 = Base64.decode(userChatPin, Base64.NO_WRAP);
+                        try {
+                            text = new String(data1, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                     editor = pref.edit();
-                    editor.putString("chatPin",text);
-                    editor.putString("role",role);
-                    editor.putString("loginMail",userName);
-                    editor.putString("loginCompanyName",companyName);
-                    editor.putString("auth",auth);
+                    editor = pref.edit();
+                    editor.putString("chatPin", text);
+                    editor.putString("role", role);
+                    editor.putString("loginMail", userName);
+                    editor.putString("loginCompanyName", companyName);
+                    editor.putString("auth", auth);
                     editor.commit();
 
-                Log.d(TAG, "Logged in user information's:");
-                if(status.matches("login")){
-                    String loginKey = "loginKey";
-                      editor.putString("loginKey",loginKey);
-                    editor.commit();
-                    if (auth.matches("1") && role.matches("root")) {
-                        addNotificationId();
-                        Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
-                        startActivity(rootHome);
-                        progressDialog.dismiss();
-                    } else if (auth.matches("1") && role.matches("admin")) {
-                        addNotificationId();
-                        Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
-                        startActivity(adminHome);
-                        progressDialog.dismiss();
-                    } else if (auth.matches("1") && role.matches("user")) {
-                        addNotificationId();
-                        Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
-                        startActivity(employeeHome);
-                        progressDialog.dismiss();
-                    } else {
-                        progressDialog.dismiss();
-                        Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
-                        redirect.putExtra(userLogiMailId,userName);
-                        startActivity(redirect);
+                    Log.d(TAG, "Logged in user information's:");
+                    if (status.matches("login")) {
+                        String loginKey = "loginKey";
+                        editor.putString("loginKey", loginKey);
+                        editor.commit();
+                        if (auth.matches("1") && role.matches("root")) {
+                            addNotificationId();
+                            Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
+                            startActivity(rootHome);
+                            progressDialog.dismiss();
+                        } else if (auth.matches("1") && role.matches("admin")) {
+                            addNotificationId();
+                            Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
+                            startActivity(adminHome);
+                            progressDialog.dismiss();
+                        } else if (auth.matches("1") && role.matches("user")) {
+                            addNotificationId();
+                            Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
+                            startActivity(employeeHome);
+                            progressDialog.dismiss();
+                        } else {
+                            progressDialog.dismiss();
+                            Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
+                            redirect.putExtra(userLogiMailId, userName);
+                            startActivity(redirect);
                         /*Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
                         Log.d("loginActivity", "under working");*/
-                    }}
-                else  if(status.matches("chatPin")){
-                    progressDialog.dismiss();
-                    Intent redirect = new Intent(getActivity(), SecurePin.class);
-                    redirect.putExtra(userLogiMailId,userName);
-                    startActivity(redirect);
+                        }
+                    } else if (status.matches("chatPin")) {
+                        progressDialog.dismiss();
+                        Intent redirect = new Intent(getActivity(), SecurePin.class);
+                        redirect.putExtra(userLogiMailId, userName);
+                        startActivity(redirect);
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
+                        Log.d("loginActivity", "under working");
+                    }
                 }
-                else{
-                    progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
-                    Log.d("loginActivity", "under working");
-                }
-            }
-
+            } // login access end
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -239,12 +240,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addNotificationId() {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG,"refreshedToken After login" + refreshedToken);
-        String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
-        dataReferences.setValue(refreshedToken);
+        if(loginaccess == true) {
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d(TAG, "refreshedToken After login" + refreshedToken);
+            String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
+            dataReferences.setValue(refreshedToken);
+        }
     }
 
 

@@ -19,7 +19,7 @@ public class HomeActivity extends AppCompatActivity {
     String  loginRole,loginKey,loginAuth,loginMail;
     public static final String userLogiMailId = "userLogiMailId";
     private static final String TAG = HomeActivity.class.getCanonicalName();
-
+    public static final String createUser = "createUser";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +72,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Employee registration has been clicked!");
-                Intent intent = new Intent(getActivity(), CompanyRegistrationActivity.class);
+                Intent intent = new Intent(getActivity(), TermsCondition.class);
+                intent.putExtra(createUser,"admin");
                 startActivity(intent);
             }
         });
@@ -82,7 +83,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Employee registration has been clicked!");
-                Intent intent = new Intent(getActivity(), EmployeeRegisterActivity.class);
+
+                Intent intent = new Intent(getActivity(), TermsCondition.class);
+                intent.putExtra(createUser,"user");
                 startActivity(intent);
             }
         });

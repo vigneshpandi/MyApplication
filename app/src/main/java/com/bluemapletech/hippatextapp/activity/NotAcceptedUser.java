@@ -53,7 +53,7 @@ public class NotAcceptedUser extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(loginroleValue.matches("admin")){
+        if(loginroleValue.matches("admin") ){
             getMenuInflater().inflate(R.menu.not_accept_user_menu, menu);
         }else if(loginroleValue.matches("user")){
             getMenuInflater().inflate(R.menu.not_accept_user, menu);

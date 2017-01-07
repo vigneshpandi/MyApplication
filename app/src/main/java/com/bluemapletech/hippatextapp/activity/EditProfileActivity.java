@@ -321,7 +321,8 @@ public class EditProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+                Log.d(TAG,"DataValuesss"+data);
+             onCaptureImageResult(data);
         }
     }
 

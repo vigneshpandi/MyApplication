@@ -133,8 +133,11 @@ public class AdminHomeActivity extends AppCompatActivity {
             loginMail =  pref.getString("loginMail", "");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
-            /*DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
-            dataReference.setValue(dateValue);*/
+            DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
+            dataReference.setValue(dateValue);
+
+            DatabaseReference dataReference1= mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
+            dataReference1.setValue("");
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
