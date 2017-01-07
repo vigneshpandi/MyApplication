@@ -119,9 +119,6 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                     chatPinn.setHint("Enter your chat pin");
                     alert.setView(chatPinn);
 
-
-
-
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String srt = chatPinn.getEditableText().toString();
@@ -202,10 +199,6 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                         chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         chatPinn.setHint("Enter your chat pin");
                         alert.setView(chatPinn);
-
-
-
-
                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String srt = chatPinn.getEditableText().toString();

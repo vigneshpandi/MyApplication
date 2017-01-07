@@ -1,14 +1,18 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.activity.NotAcceptedUser;
+import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +41,8 @@ public class InterChatEmployeeTabActivity extends Fragment {
     private String userFirstName;
     private String userLastName;
     private String fName, lName, userEmailName;
+    public static final String userEmails = "userEmails";
+    List<User> userObj;
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,12 +59,9 @@ public class InterChatEmployeeTabActivity extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user;
-                List<User> userObj = new ArrayList<User>();
+                 userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
-                   /* fName = snapshot.child("firstName").getValue(String.class);
-                    lName = snapshot.child("lastName").getValue(String.class);
-                    userEmailName = snapshot.child("emailAddress").getValue(String.class);*/
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
@@ -71,15 +74,9 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
                     user.setFirstName(snapshot.child("firstName").getValue(String.class));
                     user.setLastName(snapshot.child("lastName").getValue(String.class));
-
+                    user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
+                    user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
                     Log.d(TAG,"userFirstName and LastName.."+user.getFirstName()+user.getLastName());
-                    /*if(user.getFirstName()==null) {
-                        Log.d(TAG,"inside null");
-                        if (user.getFirstName()==null && user.getFirstName()==null) {
-                            String[] valueuserName = user.getUserName().split("@");
-                            user.setFirstName(valueuserName[0]);
-                        }
-                    }*/
                     if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
@@ -98,6 +95,14 @@ public class InterChatEmployeeTabActivity extends Fragment {
 
             }
         });
+       /* listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent redirect = new Intent(getActivity(), ViewUserDetailTabActivity.class);
+                redirect.putExtra(userEmails, userObj.get(position).getUserName());
+                startActivity(redirect);
+        }
+        });*/
         return rootView;
     }
 

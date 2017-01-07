@@ -72,7 +72,8 @@
         <activity android:name=".activity.RejectedAdminList" />
         <activity android:name=".activity.ViewUserAdminDetailss" />
         <activity android:name=".activity.ViewUserAdminDetails" />
-        <activity android:name=".activity.TermsCondition"></activity>
+        <activity android:name=".activity.TermsCondition" />
+        <activity android:name=".activity.ViewUserDetailTabActivity"></activity>
     </application>
 
 </manifest>

@@ -13,15 +13,6 @@
         android:layout_height="50dp"
         android:id="@+id/user_image"
        />
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_field_name"
-        android:gravity="left"
-        android:layout_alignBaseline="@+id/user_image"
-        android:layout_alignBottom="@+id/user_image"
-        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="chat"
@@ -37,4 +28,23 @@
         android:layout_alignTop="@+id/layout_field_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_field_name"
+        android:gravity="left"
+        android:layout_alignTop="@+id/user_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_field_id"
+        android:layout_alignBottom="@+id/user_image"
+        android:layout_alignLeft="@+id/layout_field_name"
+        android:layout_alignStart="@+id/layout_field_name" />
 </RelativeLayout>

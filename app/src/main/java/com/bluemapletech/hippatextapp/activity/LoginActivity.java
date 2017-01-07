@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,10 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editors;
+
+
     private EditText usernameTxt, passwordTxt;
     private Button loginBtn , forgetPassword;
     private ProgressDialog progressDialog;
@@ -55,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        prefs = getApplicationContext().getSharedPreferences("checkForLogin", MODE_PRIVATE);
         init();
         firebaseAuth = FirebaseAuth.getInstance();
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    editors = prefs.edit();
+                                    editors.putString("checkloginstatus", "true");
+                                    editors.commit();
                                     //  Toast.makeText(getActivity(), "You are logged in successfully!", Toast.LENGTH_LONG).show();
                                     getUserInformation();
                                 } else {
@@ -167,7 +175,11 @@ public class LoginActivity extends AppCompatActivity {
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (loginaccess == true) {
+                String checkLogin = prefs.getString("checkloginstatus", "");
+                if (checkLogin.matches("true")) {
+                    editors = prefs.edit();
+                    editors.putString("checkloginstatus", "false");
+                    editors.commit();
                     Map<String, String> map = (Map) dataSnapshot.getValue();
                     String auth = map.get("auth");
                     String role = map.get("role");
@@ -199,16 +211,19 @@ public class LoginActivity extends AppCompatActivity {
                         editor.commit();
                         if (auth.matches("1") && role.matches("root")) {
                             addNotificationId();
+                            onlineUser();
                             Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                             startActivity(rootHome);
                             progressDialog.dismiss();
                         } else if (auth.matches("1") && role.matches("admin")) {
                             addNotificationId();
+                            onlineUser();
                             Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
                             startActivity(adminHome);
                             progressDialog.dismiss();
                         } else if (auth.matches("1") && role.matches("user")) {
                             addNotificationId();
+                            onlineUser();
                             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                             startActivity(employeeHome);
                             progressDialog.dismiss();
@@ -231,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("loginActivity", "under working");
                     }
                 }
-            } // login access end
+            }// end
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -240,16 +255,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addNotificationId() {
-        if(loginaccess == true) {
+
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             Log.d(TAG, "refreshedToken After login" + refreshedToken);
             String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
             dataReferences.setValue(refreshedToken);
-        }
     }
-
+    private void onlineUser() {
+        HashMap<String, Object> onlineUser = new HashMap<>();
+        onlineUser.put("onlineUser",usernameTxt.getText().toString());
+        String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.setValue(onlineUser);
+    }
 
     public LoginActivity getActivity() {
         return this;

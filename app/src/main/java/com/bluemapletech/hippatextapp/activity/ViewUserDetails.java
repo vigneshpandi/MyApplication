@@ -1,11 +1,15 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +47,7 @@ public class ViewUserDetails extends AppCompatActivity {
     String adminMailId = null;
     String reArrangeEmail;
     String userAuths;
-    String role,roleValue;
+    String role,roleValue,loginChatPin;
     private ListView iv;
     private FirebaseAuth firebaseAuth;
     List<User> userObj;
@@ -67,7 +72,7 @@ public class ViewUserDetails extends AppCompatActivity {
 
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         roleValue =  pref.getString("role", "");
-
+        loginChatPin= pref.getString("chatPin", "");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -189,17 +194,41 @@ public class ViewUserDetails extends AppCompatActivity {
         }
 
     }else {
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-            Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-            intent.putExtra(toEmail,user1.getUserName());
-            intent.putExtra(fromEmail, logged.getEmail());
-            intent.putExtra(sendId, user1.getSenderId());
-            intent.putExtra(notificationId,user1.getPushNotificationId());
-            intent.putExtra(firstName, user1.getFirstName());
-            intent.putExtra(lastName, user1.getLastName());
-            startActivity(intent);
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Security check");
+            final EditText chatPinn = new EditText(getActivity());
+            chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            chatPinn.setHint("Enter your chat pin");
+            alert.setView(chatPinn);
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String srt = chatPinn.getEditableText().toString();
+                    if (srt.matches(loginChatPin)) {
+                        firebaseAuth = FirebaseAuth.getInstance();
+                        FirebaseUser logged = firebaseAuth.getCurrentUser();
+                        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                        Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                        intent.putExtra(toEmail,user1.getUserName());
+                        intent.putExtra(fromEmail, logged.getEmail());
+                        intent.putExtra(sendId, user1.getSenderId());
+                        intent.putExtra(notificationId,user1.getPushNotificationId());
+                        intent.putExtra(firstName, user1.getFirstName());
+                        intent.putExtra(lastName, user1.getLastName());
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
+
             }}
 });
 
@@ -230,17 +259,41 @@ public class ViewUserDetails extends AppCompatActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseUser logged = firebaseAuth.getCurrentUser();
-                Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-                Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-                intent.putExtra(toEmail,user1.getUserName());
-                intent.putExtra(fromEmail, logged.getEmail());
-                intent.putExtra(sendId, user1.getSenderId());
-                intent.putExtra(notificationId,user1.getPushNotificationId());
-                intent.putExtra(firstName, user1.getFirstName());
-                intent.putExtra(lastName, user1.getLastName());
-                startActivity(intent);
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Security check");
+                final EditText chatPinn = new EditText(getActivity());
+                chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                chatPinn.setHint("Enter your chat pin");
+                alert.setView(chatPinn);
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String srt = chatPinn.getEditableText().toString();
+                        if (srt.matches(loginChatPin)) {
+                            firebaseAuth = FirebaseAuth.getInstance();
+                            FirebaseUser logged = firebaseAuth.getCurrentUser();
+                            Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                            Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                            intent.putExtra(toEmail,user1.getUserName());
+                            intent.putExtra(fromEmail, logged.getEmail());
+                            intent.putExtra(sendId, user1.getSenderId());
+                            intent.putExtra(notificationId,user1.getPushNotificationId());
+                            intent.putExtra(firstName, user1.getFirstName());
+                            intent.putExtra(lastName, user1.getLastName());
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = alert.create();
+                alertDialog.show();
+
             }
         });
 

@@ -1,7 +1,9 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +50,8 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     private Button resetPinBtn;
     private  String reArrangeEmail;
     private String text;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         init();
         resetPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +100,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             valid = false;
             return;
         }else{
+            editor = pref.edit();
+            editor.putString("chatPin", confirmChatPin.getText().toString());
+            editor.commit();
             final UserDao userDao = new UserDao();
             boolean result = userDao.saveSecurePin(user);
             Log.d("result", String.valueOf(result));

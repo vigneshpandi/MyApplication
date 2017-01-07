@@ -118,6 +118,8 @@ public class Settings extends AppCompatActivity {
                     Log.d(TAG, "User account deleted.");
                     DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("userDetails").child(emailValue);
                     databaseRefs.removeValue();
+                    DatabaseReference databaseRefse = firebaseDatabaseRef.getReference().child("group").child(emailValue);
+                    databaseRefse.removeValue();
                     Intent list = new Intent(getActivity(), HomeActivity.class);
                     startActivity(list);
                 }

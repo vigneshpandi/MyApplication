@@ -1,16 +1,22 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +25,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +44,8 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
     private String loggedInCompanyValue;
     private String loggedINEmail;
     private ListView iv;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
@@ -85,7 +94,10 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                         userObj.add(user);
                         Log.d("adminDetails","adminDetails"+user);
                     }
-                    iv.setAdapter(new RejectedEmployeeListActivity.PageAdminBaseAdaptersEmployee(getActivity(), userObj,loggedINEmail));
+                    UserDetailDto userDto = new UserDetailDto();
+                    pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+                    userDto.setLoggedINChatPin(pref.getString("chatPin", ""));
+                    iv.setAdapter(new RejectedEmployeeListActivity.PageAdminBaseAdaptersEmployee(getActivity(), userObj,loggedINEmail,userDto));
                 }
             }
             @Override
@@ -121,10 +133,12 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
         LayoutInflater inflater;
         Context context;
         private String loginMail;
-        public PageAdminBaseAdaptersEmployee(Context context, List<User> user , String loginMail) {
+        UserDetailDto InfouserDto = new UserDetailDto();
+        public PageAdminBaseAdaptersEmployee(Context context, List<User> user , String loginMail,UserDetailDto userDto) {
             this.context = context;
             this.userInfo = user;
             this.loginMail = loginMail;
+            this.InfouserDto = userDto;
             inflater = LayoutInflater.from(this.context);
         }
 
@@ -161,15 +175,39 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
             convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Security check");
+                    final EditText chatPinn = new EditText(context);
+                    chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    chatPinn.setHint("Enter your chat pin");
+                    alert.setView(chatPinn);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String srt = chatPinn.getEditableText().toString();
+                            if (srt.matches(InfouserDto.getLoggedINChatPin())) {
+                                Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                                intent.putExtra(fromEmail, loginMail);
+                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
+                                intent.putExtra(firstName, userInfo.get(position).getFirstName());
+                                intent.putExtra(lastName, userInfo.get(position).getLastName());
+                                context.startActivity(intent);
+                            } else {
+                                Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
 
-                    Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                    intent.putExtra(fromEmail, loginMail);
-                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
-                    intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
-                    intent.putExtra(firstName, userInfo.get(position).getFirstName());
-                    intent.putExtra(lastName, userInfo.get(position).getLastName());
-                    context.startActivity(intent);
+
                 }
             });
             convertView.findViewById(R.id.user_id).setOnClickListener(new View.OnClickListener() {

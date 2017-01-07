@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
+import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
+import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +42,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     public static final String firstName = "firstName";
     public static final String lastName = "lastName";
     public static final String role = "userRole";
+    public static final String userEmails = "userEmails";
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
@@ -88,12 +91,23 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         final User info = getItem(position);
        /* firstName = userInfo.get(position).getFirstName().toString();
         lastName = userInfo.get(position).getLastName();*/
-      // mViewHolder.fieldId.setText(info.getEmpId());
+        if(info.getRole().matches("user")) {
+            mViewHolder.fieldId.setText(info.getEmpId());
+        }else if(info.getRole().matches("admin")){
+            mViewHolder.fieldId.setText(info.getProviderNPIId());
+        }
         mViewHolder.fieldName.setText(info.getUserName());
         if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {
             Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
         }
-
+convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(context, ViewUserDetailTabActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(userEmails, userInfo.get(position).getUserName());
+        context.startActivity(intent);
+    }
+});
         convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +163,7 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
         private ImageView userImage;
 
         public MyViewHolder(View item) {
-            //fieldId = (TextView) item.findViewById(R.id.layout_field_id);
+            fieldId = (TextView) item.findViewById(R.id.layout_field_id);
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);
             userImage = (ImageView) item.findViewById(R.id.user_image);
         }
