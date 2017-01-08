@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         app:titleTextColor="@color/btn_text_color"
+        app:subtitleTextColor="@color/btn_text_color"
         android:background="@color/colorPrimary"
         layout="@layout/toolbar_header" />
     <LinearLayout

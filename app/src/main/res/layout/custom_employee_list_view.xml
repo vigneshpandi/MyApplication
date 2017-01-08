@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -47,4 +48,13 @@
         android:layout_alignBottom="@+id/user_image"
         android:layout_alignLeft="@+id/layout_field_name"
         android:layout_alignStart="@+id/layout_field_name" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/online"
+        android:id="@+id/onlineImageView"
+        android:layout_below="@+id/layout_field_name"
+        android:layout_alignRight="@+id/user_image"
+        android:layout_alignEnd="@+id/user_image" />
 </RelativeLayout>

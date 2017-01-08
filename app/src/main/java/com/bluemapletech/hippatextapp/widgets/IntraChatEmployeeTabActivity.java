@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,6 +42,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
     private String userLastName;
     private String fName, lName, userEmailName;
     List<User> userObj;
+    HashMap<String,String> onlineHash;
     public static final String userEmails = "userEmails";
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
@@ -60,6 +62,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
         });*/
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
+        checkOnlineUser();
         checkCompanyExistence();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
         dataReference.addValueEventListener(new ValueEventListener() {
@@ -87,12 +90,12 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
+                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName())) {
                         userObj.add(user);
                     }
                 }
                 if (getActivity() != null) {
-                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHash));
                 }
 
             }
@@ -130,5 +133,25 @@ public class IntraChatEmployeeTabActivity extends Fragment {
         });
     }
 
+    public void checkOnlineUser(){
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onlineHash = new HashMap<String, String>();
+                String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
+                onlineHash.put(onlineUser,onlineUser);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

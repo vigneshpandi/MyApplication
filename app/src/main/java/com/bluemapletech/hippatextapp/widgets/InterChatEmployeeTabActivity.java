@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,6 +43,7 @@ public class InterChatEmployeeTabActivity extends Fragment {
     private String userLastName;
     private String fName, lName, userEmailName;
     public static final String userEmails = "userEmails";
+    HashMap<String,String> onlineHash;
     List<User> userObj;
     private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
 
@@ -54,6 +56,7 @@ public class InterChatEmployeeTabActivity extends Fragment {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         checkCompanyExistence();
+        checkOnlineUser();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -86,7 +89,7 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     }
                 }
                if(getActivity() !=null) {
-                   listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+                   listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHash));
                }
             }
 
@@ -128,5 +131,25 @@ public class InterChatEmployeeTabActivity extends Fragment {
         });
     }
 
+public void checkOnlineUser(){
+    fireBaseDatabase = FirebaseDatabase.getInstance();
+    firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser logged = firebaseAuth.getCurrentUser();
+    Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+    String reArrangeEmail = logged.getEmail().replace(".", "-");
+    DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+    dataReferences.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            onlineHash = new HashMap<String, String>();
+          String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
+            onlineHash.put(onlineUser,onlineUser);
+        }
 
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+}
 }

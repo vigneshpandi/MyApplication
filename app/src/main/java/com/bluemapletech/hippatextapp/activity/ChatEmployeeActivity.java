@@ -65,7 +65,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String base64Profile;
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
-    private String childappendid,loginRole,loginAuth;
+    private String childappendid,loginRole,loginAuth,chatOnline,userStaus;
     private String userName,userRole;
     private Toolbar toolbar;
     private  LinearLayout layout;
@@ -77,6 +77,15 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caht_employee);
+        chatOnline = getIntent().getStringExtra(PageEmployeeBaseAdpter.chatOnline);
+        if(chatOnline.matches("true")){
+            Log.d("user","user is online");
+            userStaus = "online";
+        }else{
+            Log.d("user","user is  not online");
+            userStaus = "";
+        }
+
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
@@ -110,7 +119,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         loginAuth = pref.getString("auth","");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(toMail);
+            String[] chatName = toMail.split("@");
+            getSupportActionBar().setTitle(chatName[0]);
+            getSupportActionBar().setSubtitle(userStaus);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
@@ -341,7 +352,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     message = getItem(position);
                     Log.d(TAG,"lonngpress"+"longPress");
                     toolbar.getMenu().findItem(R.id.delete).setVisible(true);
-                    return false;
+                    return true;
 
                 }
             });

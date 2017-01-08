@@ -23,11 +23,21 @@ import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Win7v5 on 10/24/2016.
@@ -43,6 +53,10 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     public static final String lastName = "lastName";
     public static final String role = "userRole";
     public static final String userEmails = "userEmails";
+    public static final String chatOnline = "chatOnline";
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase fireBaseDatabase;
+    HashMap<String,String> onlineHash = new HashMap<String, String>();
     LayoutInflater inflater;
     Context context;
     private String fromMAil;
@@ -52,11 +66,12 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
 
-    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin) {
+    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin,HashMap<String,String> hashValue) {
         this.context = context;
         this.userInfo = user;
         this.fromMAil = fromEmail;
         this.chatPin = loggedINChatPin;
+        this.onlineHash = hashValue;
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -132,6 +147,17 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
 
                         if (srt.matches(text)) {
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            String checkOnline = onlineHash.get(info.getUserName());
+                            Log.d("checkOnline","checkOnline"+checkOnline);
+                            if (checkOnline!=null) {
+                                intent.putExtra(chatOnline, "true");
+                                Log.d("it is online", "success");
+
+                            } else {
+                                intent.putExtra(chatOnline, "false");
+                                Log.d("it is not online", "success");
+                            }
+
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
                             intent.putExtra(sendId, userInfo.get(position).getSenderId());
@@ -155,6 +181,49 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                 alertDialog.show();
             }
         });
+
+            String checkOnline = onlineHash.get(info.getUserName());
+        Log.d("checkOnline","checkOnline"+checkOnline);
+                if (checkOnline!=null) {
+                    Log.d("it is online", "success");
+                    View img = convertView.findViewById(R.id.onlineImageView);
+                    img.setVisibility(View.VISIBLE);
+                } else {
+                    View img = convertView.findViewById(R.id.onlineImageView);
+                    img.setVisibility(View.INVISIBLE);
+                }
+
+
+       /* fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onlineHash = new HashMap<String, String>();
+                String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
+                onlineHash.put(onlineUser,onlineUser);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+if(!info.equals("") && info != null){
+    if(!onlineHash.equals("")) {
+        String checkOnline = onlineHash.get(info.getUserName());
+        if (checkOnline.matches(info.getUserName())) {
+            Log.d("it is online", "success");
+        } else {
+            Log.d("user is not online", "success");
+        }
+    }
+}*/
+
         return convertView;
     }
 
