@@ -148,7 +148,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         mConvoId = ids[1]+ids[0]+ids[2];
         mListener = UserDao.addMessagesListener(mConvoId, this);
 
-        newMessageView.addTextChangedListener(new TextWatcher() {
+       /* newMessageView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -158,19 +158,19 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 HashMap<String, String> typing = new HashMap<>();
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("messages").child(mConvoId).child("typingIndicator").push();
-        String urlValue = dataReferences.toString();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("messages").child(mConvoId).child("typingIndicator");
+       *//* String urlValue = dataReferences.toString();
         String[] re = urlValue.split("/");
-        Log.d("values",re[6]);
-        typing.put("re[6]","true");
-        dataReferences.setValue("true");
+        Log.d("values",re[6]);*//*
+        typing.put(senderId,"true");
+        dataReferences.setValue(typing);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
         checkOnlineUser();
 
@@ -225,6 +225,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected  void onStart(){
         super.onStart();
+        checkOnlineUser();
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -574,7 +575,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void saveMessages (){
-
         String newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
@@ -698,9 +698,12 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
+
         });
 
     }
+
 
     public void checkStatus(){
         String checkOnline = onlineHash.get(toMail);
@@ -711,10 +714,86 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         } else {
             userStaus = "";
             Log.d("it is not online", "success");
+            checklastUpdate();
         }
 
     }
 
+    public void checklastUpdate(){
+        Log.d("toMailupdate",toMail);
+        String reArrangeEmail = toMail.replace(".", "-");
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String  lastUpdateDate = (String) dataSnapshot.child("updatedDate").getValue();
+//format of given date
+                String myFormat = "yyyy-MM-dd HH:mm:ss z";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.US);
+
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(c.getTime());
+                System.out.println("today's date = "+ formattedDate);
+
+                Calendar c1 = Calendar.getInstance();
+                c1.add(Calendar.DATE, -1);
+                String yest_date = df.format(c1.getTime());
+                System.out.println("Yesterday's date = "+ yest_date);
+
+
+                Date now = new Date();
+
+
+
+
+                Date date = null;
+                String val = null;
+                String d1 = null;
+                String d2 = null; String d3 = null;
+
+                try {
+                    // convert for date format showing
+                    date = sdf.parse(lastUpdateDate);
+                    sdf = new SimpleDateFormat("hh:mm a");
+                    d1 = sdf.format(date);
+                    sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                    sdf1 = new SimpleDateFormat("MMM dd,yyyy");
+                    d2 = sdf.format(date);
+                    d3 = sdf1.format(date);
+                    val = d2+d1;
+                    Log.d(TAG,"message.getDateAndTime = "+ val);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(formattedDate.matches(d2)){
+                    Log.d(TAG,"today"+"today");
+                   String lastSeen = "today at "+d1;
+                    userStaus = lastSeen;
+                }else if(yest_date.matches(d2)){
+                    String lastSeen = "yesterday at "+d1;
+                    userStaus = lastSeen;
+                }else{
+                    String lastSeen = "last seen "+d3;
+                    userStaus = lastSeen;
+                }
+
+               /* userStaus = lastUpdateDate;*/
+                Log.d("it is last updated date", "success"+lastUpdateDate);
+                getSupportActionBar().setSubtitle(userStaus);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
 
 
 

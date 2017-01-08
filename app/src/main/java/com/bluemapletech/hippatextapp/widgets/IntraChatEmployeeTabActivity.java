@@ -64,49 +64,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
         final User user = new User();
         checkOnlineUser();
         checkCompanyExistence();
-        DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
-        dataReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user;
-                 userObj = new ArrayList<User>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
-                    user = new User();
-                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
-                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
-                    user.setPassword(snapshot.child("password").getValue(String.class));
-                    user.setRole(snapshot.child("role").getValue(String.class));
-                    user.setAuth(snapshot.child("auth").getValue(String.class));
-                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
-                    user.setSenderId(snapshot.child("senderId").getValue(String.class));
-                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
-                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
-                    user.setLastName(snapshot.child("lastName").getValue(String.class));
-                    user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
-                    user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
-                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
-                        String[] valueuserName = user.getUserName().split("@");
-                        user.setFirstName(valueuserName[0]);
-                    }
-                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
-                        userObj.add(user);
-                    }
-                }
-                if (getActivity() != null) {
-                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHash));
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
+        loadingUserDetail();
         return rootView;
     }
 
@@ -147,6 +105,53 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                     Log.d("dfdfdfdfdf", "dfdfdfdfdf" + onlineUser);
                     onlineHash.put(onlineUser, onlineUser);
                 }
+                loadingUserDetail();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+
+        });
+    }
+
+    public void  loadingUserDetail(){
+        DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
+        dataReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user;
+                userObj = new ArrayList<User>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
+                    user = new User();
+                    user.setCompanyName(snapshot.child("companyName").getValue(String.class));
+                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
+                    user.setPassword(snapshot.child("password").getValue(String.class));
+                    user.setRole(snapshot.child("role").getValue(String.class));
+                    user.setAuth(snapshot.child("auth").getValue(String.class));
+                    user.setUserName(snapshot.child("emailAddress").getValue(String.class));
+                    user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
+                    user.setSenderId(snapshot.child("senderId").getValue(String.class));
+                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
+                    user.setFirstName(snapshot.child("firstName").getValue(String.class));
+                    user.setLastName(snapshot.child("lastName").getValue(String.class));
+                    user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
+                    user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
+                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
+                        String[] valueuserName = user.getUserName().split("@");
+                        user.setFirstName(valueuserName[0]);
+                    }
+                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
+                        userObj.add(user);
+                    }
+                }
+                if (getActivity() != null) {
+                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHash));
+                }
 
             }
 
@@ -155,9 +160,8 @@ public class IntraChatEmployeeTabActivity extends Fragment {
 
             }
         });
+
     }
-
-
 
 
 
