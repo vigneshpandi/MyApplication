@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
@@ -27,6 +28,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -37,6 +39,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     private ViewPageAdapter viewPagerAdapter;
     private FirebaseAuth firebaseAuth;
     SharedPreferences pref;
+    private FirebaseDatabase fireBaseDatabase;
     SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,35 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         editor.commit();
         super.onDestroy();
     }
+   /* @Override
+    public void onStop()
+    {
+        Log.d("emplstop","stop");
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.removeValue();
+        super.onStop();
+        //Do whatever you want to do when the application stops.
+    }*/
 
+   /* @Override
+    protected  void onRestart(){
+        Log.d("employerestart","onREStart");
+        HashMap<String, Object> onlineReenter = new HashMap<>();
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        onlineReenter.put("onlineUser",logged.getEmail());
+        dataReferences.setValue(onlineReenter);
+        super.onRestart();
+    }*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -158,6 +189,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
+            Log.d("sdsdsdsd","sdsdsdsdsd");
             this.moveTaskToBack(true);
             return true;
         }

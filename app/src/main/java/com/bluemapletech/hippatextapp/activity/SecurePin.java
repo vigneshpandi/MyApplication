@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SecurePin extends AppCompatActivity {
@@ -170,6 +171,7 @@ public class SecurePin extends AppCompatActivity {
         boolean result = userDao.saveSecure(user);
         if (result) {
             addNotificationId();
+            onlineUser();
             Log.d(TAG, "Company secure pin added successfully!");
             Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(adminHome);
@@ -185,6 +187,7 @@ public class SecurePin extends AppCompatActivity {
         Log.d("resullttt", String.valueOf(result));
         if (result) {
             addNotificationId();
+            onlineUser();
             Log.d(TAG, "Company accepted successfully!");
             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
             startActivity(employeeHome);
@@ -199,6 +202,7 @@ public class SecurePin extends AppCompatActivity {
         Log.d("resullttt", String.valueOf(result));
         if (result) {
             addNotificationId();
+            onlineUser();
             Log.d(TAG, "Company accepted successfully!");
             Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(rootHome);
@@ -212,6 +216,7 @@ public class SecurePin extends AppCompatActivity {
         boolean result = userDao.saveSecure(user);
         if (result) {
             addNotificationId();
+            onlineUser();
             Log.d(TAG, "Company accepted successfully!");
             Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
             startActivity(redirect);
@@ -229,6 +234,17 @@ public class SecurePin extends AppCompatActivity {
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
         dataReferences.setValue(refreshedToken);
     }
+
+
+    private void onlineUser() {
+        HashMap<String, Object> onlineUser = new HashMap<>();
+        onlineUser.put("onlineUser",userEmail);
+        String reArrangeEmail = userEmail.replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.setValue(onlineUser);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

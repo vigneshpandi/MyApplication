@@ -181,48 +181,20 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                 alertDialog.show();
             }
         });
+        Log.d("dfdfdfdf","info.getUserName()"+info.getUserName());
 
-            String checkOnline = onlineHash.get(info.getUserName());
-        Log.d("checkOnline","checkOnline"+checkOnline);
-                if (checkOnline!=null) {
-                    Log.d("it is online", "success");
+                if (onlineHash.containsKey(info.getUserName())) {
+                    Log.d("it is  online", "success");
                     View img = convertView.findViewById(R.id.onlineImageView);
                     img.setVisibility(View.VISIBLE);
+
                 } else {
+                    Log.d("it is not online", "success");
                     View img = convertView.findViewById(R.id.onlineImageView);
                     img.setVisibility(View.INVISIBLE);
                 }
 
 
-       /* fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
-        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        dataReferences.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                onlineHash = new HashMap<String, String>();
-                String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
-                onlineHash.put(onlineUser,onlineUser);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-if(!info.equals("") && info != null){
-    if(!onlineHash.equals("")) {
-        String checkOnline = onlineHash.get(info.getUserName());
-        if (checkOnline.matches(info.getUserName())) {
-            Log.d("it is online", "success");
-        } else {
-            Log.d("user is not online", "success");
-        }
-    }
-}*/
 
         return convertView;
     }

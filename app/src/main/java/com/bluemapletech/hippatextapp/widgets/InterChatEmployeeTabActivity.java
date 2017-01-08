@@ -133,19 +133,18 @@ public class InterChatEmployeeTabActivity extends Fragment {
 
 public void checkOnlineUser(){
     fireBaseDatabase = FirebaseDatabase.getInstance();
-    firebaseAuth = FirebaseAuth.getInstance();
-    FirebaseUser logged = firebaseAuth.getCurrentUser();
-    Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-    String reArrangeEmail = logged.getEmail().replace(".", "-");
-    DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+    DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser");
+
     dataReferences.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             onlineHash = new HashMap<String, String>();
-          String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
-            onlineHash.put(onlineUser,onlineUser);
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                String onlineUser = dataSnapshot.child("onlineUser").getValue(String.class);
+                Log.d("dfdfdfdfdf", "dfdfdfdfdf" + onlineUser);
+                onlineHash.put(onlineUser, onlineUser);
+            }
         }
-
         @Override
         public void onCancelled(DatabaseError databaseError) {
 

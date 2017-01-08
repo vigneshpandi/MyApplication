@@ -17,11 +17,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -36,6 +39,13 @@ import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.utils.Utility;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -60,6 +71,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String fromMail, senderId, userFirstName, userLastName;
     private String notificationId;
     private ImageView selectImage;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase fireBaseDatabase;
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
@@ -73,19 +86,21 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     SharedPreferences.Editor editor;
     boolean wallpaperimage = false;
     private String roleValue;
+    EditText newMessageView;
+    HashMap<String,String> onlineHash = new HashMap<String,String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caht_employee);
-        chatOnline = getIntent().getStringExtra(PageEmployeeBaseAdpter.chatOnline);
-        if(chatOnline.matches("true")){
+        //chatOnline = getIntent().getStringExtra(PageEmployeeBaseAdpter.chatOnline);
+       /* if(chatOnline.matches("true")){
             Log.d("user","user is online");
             userStaus = "online";
         }else{
             Log.d("user","user is  not online");
             userStaus = "";
-        }
-
+        }*/
+         newMessageView = (EditText)findViewById(R.id.new_message);
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
@@ -121,7 +136,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             setSupportActionBar(toolbar);
             String[] chatName = toMail.split("@");
             getSupportActionBar().setTitle(chatName[0]);
-            getSupportActionBar().setSubtitle(userStaus);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
@@ -133,6 +147,32 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         Arrays.sort(ids);
         mConvoId = ids[1]+ids[0]+ids[2];
         mListener = UserDao.addMessagesListener(mConvoId, this);
+
+        newMessageView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                HashMap<String, String> typing = new HashMap<>();
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("messages").child(mConvoId).child("typingIndicator").push();
+        String urlValue = dataReferences.toString();
+        String[] re = urlValue.split("/");
+        Log.d("values",re[6]);
+        typing.put("re[6]","true");
+        dataReferences.setValue("true");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        checkOnlineUser();
 
 
        /* background image for chatting */
@@ -162,8 +202,57 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG,"destroygggg");
         UserDao.stop(mListener);
     }
+
+   /* @Override
+    public void onStop()
+    {
+        Log.d(TAG,"stoppp");
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.removeValue();
+        super.onStop();
+        //Do whatever you want to do when the application stops.
+    }*/
+
+
+    @Override
+    protected  void onStart(){
+        super.onStart();
+        selectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
+    }
+
+   /* @Override
+    protected  void onRestart(){
+        Log.d("ssdfdfdf","onREStart");
+        HashMap<String, Object> onlineReenter = new HashMap<>();
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        onlineReenter.put("onlineUser",logged.getEmail());
+        dataReferences.setValue(onlineReenter);
+        super.onRestart();
+    }*/
+
+
+
+
+
+
     private class MessagesAdapter extends ArrayAdapter<Message> {
         MessagesAdapter(ArrayList<Message> messages){
             super(ChatEmployeeActivity.this, R.layout.item, R.id.msg, messages);
@@ -373,19 +462,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    // show the popup for capture the image
-    @Override
-    protected  void onStart(){
-        super.onStart();
-        selectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
 
-
-    }
 
     public void chooseImage (){
         final CharSequence[] items = { "Take Photo", "Choose from Library",
@@ -497,7 +574,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void saveMessages (){
-        EditText newMessageView = (EditText)findViewById(R.id.new_message);
+
         String newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
@@ -555,7 +632,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             Log.d(TAG,"mConvoId...."+mConvoId);
             UserDao.deleteChatMessage(message,mConvoId);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
-            finish();
             startActivity(getIntent());
            /* mMessages.clear();
             mListener = UserDao.addMessagesListener(mConvoId, this);
@@ -601,4 +677,46 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             return null;
         }
     }
+
+
+    public void checkOnlineUser(){
+        Log.d("toMail",toMail);
+        String reArrangeEmail = toMail.replace(".", "-");
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onlineHash = new HashMap<String, String>();
+                String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
+                onlineHash.put(onlineUser,onlineUser);
+                Log.d("onlineUsersss", "success");
+                checkStatus();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void checkStatus(){
+        String checkOnline = onlineHash.get(toMail);
+        if (checkOnline!=null) {
+            userStaus = "online";
+            Log.d("it is online", "success");
+            getSupportActionBar().setSubtitle(userStaus);
+        } else {
+            userStaus = "";
+            Log.d("it is not online", "success");
+        }
+
+    }
+
+
+
+
+
 }

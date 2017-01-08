@@ -222,13 +222,15 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(adminHome);
                             progressDialog.dismiss();
                         } else if (auth.matches("1") && role.matches("user")) {
-                            addNotificationId();
                             onlineUser();
+                            addNotificationId();
                             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                             startActivity(employeeHome);
                             progressDialog.dismiss();
                         } else {
                             progressDialog.dismiss();
+                            addNotificationId();
+                            onlineUser();
                             Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
                             redirect.putExtra(userLogiMailId, userName);
                             startActivity(redirect);
@@ -255,7 +257,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void addNotificationId() {
-
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             Log.d(TAG, "refreshedToken After login" + refreshedToken);
             String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");

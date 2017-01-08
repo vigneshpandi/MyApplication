@@ -90,7 +90,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName())) {
+                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }
                 }
@@ -136,16 +136,18 @@ public class IntraChatEmployeeTabActivity extends Fragment {
     public void checkOnlineUser(){
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
-        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser");
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 onlineHash = new HashMap<String, String>();
-                String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
-                onlineHash.put(onlineUser,onlineUser);
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
+                    String onlineUser =  snapshot.child("onlineUser").getValue(String.class);
+                    Log.d("dfdfdfdfdf", "dfdfdfdfdf" + onlineUser);
+                    onlineHash.put(onlineUser, onlineUser);
+                }
+
             }
 
             @Override
@@ -154,4 +156,15 @@ public class IntraChatEmployeeTabActivity extends Fragment {
             }
         });
     }
+
+
+
+
+
+
 }
+
+
+
+
+
