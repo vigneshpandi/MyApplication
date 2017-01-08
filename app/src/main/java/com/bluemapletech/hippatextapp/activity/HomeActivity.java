@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.bluemapletech.hippatextapp.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -33,15 +37,19 @@ public class HomeActivity extends AppCompatActivity {
         if(!loginKey.matches("")){
             Log.d("login","BeforeLoginKeyCalled"+loginKey);
             if(loginRole.matches("role") && loginAuth.matches("1") ) {
+                onlineUser();
                 Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                 startActivity(rootHome);
             }else if(loginRole.matches("admin") && loginAuth.matches("1") ) {
+                onlineUser();
                 Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
                 startActivity(adminHome);
             }else if(loginRole.matches("user") && loginAuth.matches("1") ) {
+               onlineUser();
                 Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                 startActivity(employeeHome);
             }else if(loginRole.matches("role") && !loginAuth.matches("1") ) {
+              onlineUser();
                 Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
                 redirect.putExtra(userLogiMailId, loginMail);
                 startActivity(redirect);
@@ -90,7 +98,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
+    private void onlineUser() {
+        HashMap<String, Object> onlineUser = new HashMap<>();
+        onlineUser.put("onlineUser",loginMail);
+        String reArrangeEmail = loginMail.replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.setValue(onlineUser);
+    }
     public HomeActivity getActivity(){
         return this;
     }
