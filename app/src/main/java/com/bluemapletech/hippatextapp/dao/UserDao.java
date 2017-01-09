@@ -372,7 +372,6 @@ public class UserDao {
 
     public boolean saveSecure(User user){
         boolean success = false;
-        Log.d(TAG, "Create company dao method has been called!");
         HashMap<String, Object> compData = new HashMap<>();
         compData.put("auth",user.getAuth());
         compData.put("chatPin",user.getChatPin());

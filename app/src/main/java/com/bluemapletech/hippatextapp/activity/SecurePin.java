@@ -136,26 +136,28 @@ public class SecurePin extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-                 auth = map.get("auth");
-                 role = map.get("role");
-                user = new User();
-                user.setAuth(map.get("auth"));
-                user.setChatPin(map.get("chatPin"));
-                user.setTINorEIN(map.get("companyCINNumber"));
-                user.setCompanyName(map.get("companyName"));
-                user.setDesignation(map.get("designation"));
-                user.setUserName(map.get("emailAddress"));
-                user.setEmpId(map.get("employeeId"));
-                user.setFirstName(map.get("firstName"));
-                user.setLastName(map.get("lastName"));
-                user.setPassword(map.get("password"));
-                user.setProfilePjhoto(map.get("profilePhoto"));
-                user.setProviderNPIId(map.get("providerNPIId"));
-                user.setProviderName(map.get("providerName"));
-                user.setRole(map.get("role"));
-                user.setSenderId(map.get("senderId"));
-                user.setCreateDate(map.get("createdDate"));
-                user.setUpdateDate(map.get("updatedDate"));
+                if((map != null)) {
+                    auth = map.get("auth");
+                    role = map.get("role");
+                    user = new User();
+                    user.setAuth(map.get("auth"));
+                    user.setChatPin(map.get("chatPin"));
+                    user.setTINorEIN(map.get("companyCINNumber"));
+                    user.setCompanyName(map.get("companyName"));
+                    user.setDesignation(map.get("designation"));
+                    user.setUserName(map.get("emailAddress"));
+                    user.setEmpId(map.get("employeeId"));
+                    user.setFirstName(map.get("firstName"));
+                    user.setLastName(map.get("lastName"));
+                    user.setPassword(map.get("password"));
+                    user.setProfilePjhoto(map.get("profilePhoto"));
+                    user.setProviderNPIId(map.get("providerNPIId"));
+                    user.setProviderName(map.get("providerName"));
+                    user.setRole(map.get("role"));
+                    user.setSenderId(map.get("senderId"));
+                    user.setCreateDate(map.get("createdDate"));
+                    user.setUpdateDate(map.get("updatedDate"));
+                }
             }
 
             @Override

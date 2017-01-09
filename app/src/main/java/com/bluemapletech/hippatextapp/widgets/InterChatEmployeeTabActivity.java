@@ -126,6 +126,7 @@ public class InterChatEmployeeTabActivity extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
+
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setPassword(snapshot.child("password").getValue(String.class));
@@ -144,8 +145,11 @@ public class InterChatEmployeeTabActivity extends Fragment {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
-                        userObj.add(user);
+                    Log.d(TAG,"loggedINCompanyloggedINCompany"+loggedINCompany +loggedINEmail);
+                    if(loggedINCompany!=null && loggedINEmail!=null) {
+                        if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
+                            userObj.add(user);
+                        }
                     }
                 }
                 if (getActivity() != null) {

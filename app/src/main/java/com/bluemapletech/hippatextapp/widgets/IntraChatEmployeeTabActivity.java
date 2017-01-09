@@ -145,8 +145,10 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
-                        userObj.add(user);
+                    if(loggedINCompany!=null && loggedINEmail!=null ) {
+                        if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
+                            userObj.add(user);
+                        }
                     }
                 }
                 if (getActivity() != null) {
