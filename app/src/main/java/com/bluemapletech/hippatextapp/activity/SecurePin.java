@@ -41,6 +41,7 @@ public class SecurePin extends AppCompatActivity {
     private String auth;
     private String role;
     private String securePin;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,10 @@ public class SecurePin extends AppCompatActivity {
                     Toast.makeText(getActivity(),"Please enter the Chat Pin",Toast.LENGTH_LONG).show();
                     return;
                 }else if(chatPin.getText().toString().matches(conformChatPin.getText().toString())){
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Processing save chat pin...");
+                    progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     securePin = chatPin.getText().toString();
                     pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                     editor = pref.edit();
@@ -174,6 +179,7 @@ public class SecurePin extends AppCompatActivity {
         if (result) {
             addNotificationId();
             onlineUser();
+            progressDialog.dismiss();
             Log.d(TAG, "Company secure pin added successfully!");
             Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(adminHome);
@@ -190,6 +196,7 @@ public class SecurePin extends AppCompatActivity {
         if (result) {
             addNotificationId();
             onlineUser();
+            progressDialog.dismiss();
             Log.d(TAG, "Company accepted successfully!");
             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
             startActivity(employeeHome);
@@ -205,6 +212,7 @@ public class SecurePin extends AppCompatActivity {
         if (result) {
             addNotificationId();
             onlineUser();
+            progressDialog.dismiss();
             Log.d(TAG, "Company accepted successfully!");
             Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(rootHome);
@@ -219,6 +227,7 @@ public class SecurePin extends AppCompatActivity {
         if (result) {
             addNotificationId();
             onlineUser();
+            progressDialog.dismiss();
             Log.d(TAG, "Company accepted successfully!");
             Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
             startActivity(redirect);
