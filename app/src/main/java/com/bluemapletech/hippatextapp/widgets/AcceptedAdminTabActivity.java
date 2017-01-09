@@ -57,8 +57,10 @@ public class AcceptedAdminTabActivity extends Fragment{
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setRole(snapshot.child("role").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                    if (user.getRole().matches("user") && user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName())) {
-                        userObj.add(user);
+                    if(loggedINCompany!=null) {
+                        if (user.getRole().matches("user") && user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName())) {
+                            userObj.add(user);
+                        }
                     }
                 }
                 if(getActivity()!=null) {

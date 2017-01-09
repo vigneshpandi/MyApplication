@@ -39,6 +39,8 @@ public class Settings extends AppCompatActivity {
     String emailValue;
     String role_Value,auth;
     private Switch mySwitch;
+    private static final String CHECK_OP_NO_THROW = "checkOpNoThrow";
+    private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
     private FirebaseDatabase firebaseDatabaseRef;
     public static final String roleValues = "roleValues";
     private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"," Show Online"};
@@ -151,6 +153,7 @@ public class Settings extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //Empty coding....
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             });
             showOnline.setOnClickListener(new View.OnClickListener() {

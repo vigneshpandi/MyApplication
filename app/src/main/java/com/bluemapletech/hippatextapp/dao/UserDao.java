@@ -395,11 +395,13 @@ public class UserDao {
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        Task<Void> result =  databaseRef.setValue(compData);
+        databaseRef.setValue(compData);
+        /*Task<Void> result =  databaseRef.setValue(compData);
         if(result.isSuccessful()){
             success = true;
         }
-        return success;
+        return success;*/
+        return true;
     }
 
     private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {

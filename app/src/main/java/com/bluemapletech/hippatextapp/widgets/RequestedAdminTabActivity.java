@@ -56,8 +56,10 @@ public class RequestedAdminTabActivity extends Fragment {
                 user.setRole(snapshot.child("role").getValue(String.class));
                 user.setAuth(snapshot.child("auth").getValue(String.class));
                 user.setUserName(snapshot.child("emailAddress").getValue(String.class));
-                if (user.getRole().matches("user") && user.getAuth().matches("0")&& loggedINCompany.matches(user.getCompanyName())) {
-                    userObj.add(user);
+                if(loggedINCompany!=null) {
+                    if (user.getRole().matches("user") && user.getAuth().matches("0") && loggedINCompany.matches(user.getCompanyName())) {
+                        userObj.add(user);
+                    }
                 }
             }
             if(getActivity()!=null){

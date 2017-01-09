@@ -74,7 +74,7 @@ public class AdminGroupBaseAdapter extends BaseAdapter {
         AdminGroupBaseAdapter.MyViewHolder mViewHolder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.custom_admin_chat, parent, false);
+            convertView = inflater.inflate(R.layout.custom_admin_groupchat, parent, false);
             mViewHolder = new AdminGroupBaseAdapter.MyViewHolder(convertView);
             convertView.setTag(mViewHolder);
         } else {

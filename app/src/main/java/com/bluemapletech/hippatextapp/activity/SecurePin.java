@@ -192,16 +192,15 @@ public class SecurePin extends AppCompatActivity {
         Log.d(TAG, "saveChatPinEmp!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
-        Log.d("resullttt", String.valueOf(result));
         if (result) {
             addNotificationId();
             onlineUser();
             progressDialog.dismiss();
-            Log.d(TAG, "Company accepted successfully!");
+            Log.d(TAG, "employee  chatPin adding successfully!");
             Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
             startActivity(employeeHome);
         } else {
-            Log.d(TAG, "Error while adding the company, please try again!");
+            Log.d(TAG, "Error while adding the employee chatPin, please try again!");
         }
     }
     public void saveChatPinRoot(User user) {
@@ -217,22 +216,21 @@ public class SecurePin extends AppCompatActivity {
             Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(rootHome);
         } else {
-            Log.d(TAG, "Error while adding the company, please try again!");
+            Log.d(TAG, "Error while adding the root chatpin , please try again!");
         }
     }
     public void saveChatPinUser(User user) {
-        Log.d("dsdsdsdsd","dfdfdfdfd");
         final UserDao userDao = new UserDao();
         boolean result = userDao.saveSecure(user);
         if (result) {
             addNotificationId();
             onlineUser();
             progressDialog.dismiss();
-            Log.d(TAG, "Company accepted successfully!");
+            Log.d(TAG, "saveChatPinUser chatpin adding successfully!");
             Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
             startActivity(redirect);
         } else {
-            Log.d(TAG, "Error while adding the company, please try again!");
+            Log.d(TAG, "Error while adding the saveChatPinUser, please try again!");
         }
     }
 

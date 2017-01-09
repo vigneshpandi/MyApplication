@@ -129,9 +129,10 @@ public class ChatAdminActivity extends Fragment{
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
+                    if(loggedINCompany!=null && loggedINEmail!=null ){
                     if (user.getRole().matches("user") && user.getAuth().matches("1")&& loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
-                    }
+                    }}
                 }
                 if(getActivity() !=null) {
                     listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHashing));

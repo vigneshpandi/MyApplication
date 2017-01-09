@@ -22,11 +22,13 @@ import com.bluemapletech.hippatextapp.widgets.GroupAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class AdminHomeActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private String loginMail;
     private TabLayout tabLayout;
+    private FirebaseDatabase fireBaseDatabase;
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
     private ActionBar actionBar;
@@ -171,7 +174,35 @@ public class AdminHomeActivity extends AppCompatActivity {
         }*/
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onPause()
+    {
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        dataReferences.removeValue();
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
 
+
+    @Override
+    protected  void onResume(){
+
+        HashMap<String, Object> onlineReenter = new HashMap<>();
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        String reArrangeEmail =  logged.getEmail().replace(".", "-");
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+        onlineReenter.put("onlineUser",logged.getEmail());
+        dataReferences.setValue(onlineReenter);
+        super.onResume();
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {

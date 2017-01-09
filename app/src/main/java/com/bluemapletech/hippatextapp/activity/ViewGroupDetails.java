@@ -334,7 +334,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 if (!myDir.exists()) {
                                     myDir.mkdirs();
                                 }
-                                String name = "vikash.jpg";
+                               String ran_img_name  = new BigInteger(130, random).toString(32);
+                                String randomValue = ran_img_name.substring(0, 7);
+                                String name = randomValue+".jpg";
                                 myDir = new File(myDir, name);
                                 FileOutputStream out = new FileOutputStream(myDir);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
