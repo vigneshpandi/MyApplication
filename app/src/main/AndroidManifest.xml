@@ -4,14 +4,20 @@
 
     <!-- Enable internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.CAMERA" />-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.HomeActivity">
@@ -70,10 +76,18 @@
         <activity android:name=".activity.NotAcceptedUser" />
         <activity android:name=".activity.RejectedEmployeeListActivity" />
         <activity android:name=".activity.RejectedAdminList" />
-        <activity android:name=".activity.ViewUserAdminDetailss" />
         <activity android:name=".activity.ViewUserAdminDetails" />
         <activity android:name=".activity.TermsCondition" />
-        <activity android:name=".activity.ViewUserDetailTabActivity"></activity>
+        <activity android:name=".activity.ViewUserDetailTabActivity" />
+
+        <receiver
+            android:name="com.bluemapletech.hippatextapp.utils.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

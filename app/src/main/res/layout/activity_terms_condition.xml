@@ -2,20 +2,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_terms_condition"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="com.bluemapletech.hippatextapp.activity.TermsCondition">
-
-    <Button
-        android:text="Button"
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Terms And Condition"
+        android:gravity="center_horizontal"
+        android:id="@+id/terms_and_condition"
+        android:layout_marginLeft="125dp"
+        android:textStyle="normal"
+        android:textColor="@color/blackColor"
+        />
+
+    <TableRow
+        android:id="@+id/hr"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#444"></TableRow>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/multi_line_text"
+        android:text="This Terms of Service Agreement sets forth the terms and conditions by which we, CuteSoft Components Inc, provide the My LiveChat Application Services to site visitors, users, registered members and account holders. By visiting our site, using any of the tools and services provided via our site, or registering an account, you thereby agree to be bound by each of the terms and conditions of this Agreement \n
+        We may automatically amend this Agreement at any time by informing you of the amended terms via email to an email address you provide to us, if you are a registered account holder. Such amendments will be effective when sent to your last known email address. It is your duty to keep your email address up to date and to maintain a valid email address and to ensure that emails we send you are not filtered or stopped by spam filters or other types of email blocking functionalities. Alternatively, we may merely post the amended terms and make them available to be read by current account holders. In such cases, the modified terms and conditions of this Agreement are effective and in force when posted by us."
+        android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
+        android:textSize="15dp"/>
+</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="169dp"
-        android:id="@+id/aggre_btn" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+        <Button
+            android:text="I Agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="22dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="11dp"
+            android:id="@+id/aggre_btn"
+            android:textColor="@color/white"
+            android:background="@color/navigationBarColor"/>
+    </RelativeLayout>
+
 </RelativeLayout>

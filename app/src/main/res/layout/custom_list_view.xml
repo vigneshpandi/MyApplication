@@ -27,19 +27,6 @@
         android:layout_alignLeft="@+id/accept_btn"
         android:layout_alignStart="@+id/accept_btn" />
 
-    <Button
-        android:text="Invite"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/accept_btn"
-        android:background="@color/accept_btn"
-        android:textColor="@color/btn_text_color"
-        android:layout_marginRight="49dp"
-        android:layout_marginEnd="49dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/layout_field_name" />
-
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -50,6 +37,19 @@
         android:layout_below="@+id/layout_field_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Invite"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/accept_btn"
+        android:background="@color/accept_btn"
+        android:textColor="@color/btn_text_color"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignTop="@+id/layout_field_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

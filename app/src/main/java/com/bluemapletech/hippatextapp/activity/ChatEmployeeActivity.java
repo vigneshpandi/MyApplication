@@ -100,7 +100,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             Log.d("user","user is  not online");
             userStaus = "";
         }*/
-         newMessageView = (EditText)findViewById(R.id.new_message);
+        newMessageView = (EditText)findViewById(R.id.new_message);
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
         senderId = getIntent().getStringExtra(PageEmployeeBaseAdpter.sendId);
@@ -176,7 +176,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
 
        /* background image for chatting */
-       pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
+        pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
         String backgroundImageValue =  pref.getString("backgroundImage", "");
         if(backgroundImageValue!=null){
             Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
@@ -342,11 +342,11 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1");
 
-                       // dateTime.setText(message.getDateAndTime("dateandtime"));
+                        // dateTime.setText(message.getDateAndTime("dateandtime"));
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                       // layoutParams2.gravity = Gravity.RIGHT;
+                        // layoutParams2.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...11");
@@ -354,7 +354,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                       // layoutParams2.gravity = Gravity.RIGHT;
+                        // layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }  else if(message.getImage()!=null && !message.getImage().matches("")){
                     imageView.setVisibility(View.VISIBLE);
@@ -605,9 +605,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             case android.R.id.home:
                 Log.d(TAG,"roleValue......"+roleValue);
                 if(roleValue.matches("user")&&loginAuth.matches("1")){
-                Log.d(TAG,"userRole... user..."+userRole);
-                backPage();
-            }else
+                    Log.d(TAG,"userRole... user..."+userRole);
+                    backPage();
+                }else
                 if(roleValue.matches("root")&&loginAuth.matches("1")){
                     Log.d(TAG,"userRole....root.."+userRole);
                     backPageRoot();
@@ -771,7 +771,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 }
                 if(formattedDate.matches(d2)){
                     Log.d(TAG,"today"+"today");
-                   String lastSeen = "today at "+d1;
+                    String lastSeen = "today at "+d1;
                     userStaus = lastSeen;
                 }else if(yest_date.matches(d2)){
                     String lastSeen = "yesterday at "+d1;

@@ -112,6 +112,7 @@ public class AddAdminActivity extends AppCompatActivity {
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage("Added Admin...");
                     progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     AsyncTaskRunner runner = new AsyncTaskRunner();
                     runner.execute(adminProviderNPItxt.getText().toString());
 

@@ -44,13 +44,14 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
 
-
+    private static FirebaseDatabase firebaseDatabaseRef;
     private EditText usernameTxt, passwordTxt;
     private Button loginBtn , forgetPassword;
     private ProgressDialog progressDialog;
     private static final String TAG = LoginActivity.class.getCanonicalName();
     public static final String userLogiMailId = "userLogiMailId";
     User user = new User();
+    private String userPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog = new ProgressDialog(getActivity());
                         progressDialog.setMessage("Please wait...");
                         progressDialog.show();
+                        progressDialog.setCanceledOnTouchOutside(false);
                        // firebaseAuth = FirebaseAuth.getInstance();
                         FirebaseUser userin = firebaseAuth.getCurrentUser();
                         firebaseAuth.signInWithEmailAndPassword(usernameTxt.getText().toString(),
@@ -187,7 +189,32 @@ public class LoginActivity extends AppCompatActivity {
                     String userName = map.get("emailAddress");
                     String userChatPin = map.get("chatPin");
                     String companyName = map.get("companyName");
+                    String Password = map.get("password");
                     String text = null;
+                    if (Password != null && !Password.matches("")) {
+                        byte[] dataPass = Base64.decode(userChatPin, Base64.NO_WRAP);
+                        try {
+                            text = new String(dataPass, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    userPassword = passwordTxt.getText().toString();
+                    byte[] enCode = new byte[0];
+                    try {
+                        enCode = userPassword.getBytes("UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
+                    if(!text.matches(passwordTxt.getText().toString())){
+                        String reArrangeEmail = userName.replace(".", "-");
+                        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("password");
+                        databaseRef.setValue(enCodes);
+
+                    }
+                    String text1 = null;
                     if (userChatPin != null && !userChatPin.matches("")) {
                         byte[] data1 = Base64.decode(userChatPin, Base64.NO_WRAP);
                         try {

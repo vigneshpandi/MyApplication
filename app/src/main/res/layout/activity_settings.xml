@@ -4,13 +4,119 @@
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:orientation="vertical"
+    android:orientation="vertical"
     tools:context="com.bluemapletech.hippatextapp.activity.Settings">
     <include
         android:id="@+id/toolbar_header"
         layout="@layout/toolbar_header" />
-    <ListView
-        android:id="@+id/list_view"
+
+    <TextView
+        android:text="Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/profile" />
+
+    <TableRow
+        android:id="@+id/hr"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
+    <TextView
+        android:text="Change Secure Chat Pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/change_secure_chat_pin"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"/>
+
+    <TableRow
+        android:id="@+id/hr1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
+    <TextView
+        android:text="Change Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/change_password"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"/>
+
+    <TableRow
+        android:id="@+id/hr2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
+    <TextView
+        android:text="Delete An Acount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete_an_account"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"/>
+
+    <TableRow
+        android:id="@+id/hr3"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
+    <TextView
+        android:text="Notification Settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notification_setting"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"/>
+
+    <TableRow
+        android:id="@+id/hr4"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
+    <Switch
+        android:text="Show Online"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/show_online"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"/>
+
+    <TableRow
+        android:id="@+id/hr5"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d9d9d9"
+        android:layout_marginTop="15dp"></TableRow>
+
 </LinearLayout>

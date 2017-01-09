@@ -135,6 +135,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                             Log.d(TAG,"npi.."+providerNPIId.getText().toString());
                             progressDialog.setMessage("registering...");
                             progressDialog.show();
+                            progressDialog.setCanceledOnTouchOutside(false);
                             AsyncTaskRunner runner = new AsyncTaskRunner();
                             runner.execute(providerNPIId.getText().toString());
 

@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ public class ChangePassword extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private String roleValue;
     private Button changePassword;
+    private ProgressDialog progressDialog;
     public static final String roleValuesReturn = "roleValuesReturn";
     private EditText emailAddress;
     SharedPreferences pref;
@@ -61,6 +63,11 @@ public class ChangePassword extends AppCompatActivity {
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG,"progrssBar is show...");
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Processing change password...");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
                 Log.d(TAG,"clicking the button"+email);
                 auth.sendPasswordResetEmail(String.valueOf(emailAddress.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -68,6 +75,7 @@ public class ChangePassword extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "reset the password link send  your mail!", Toast.LENGTH_LONG).show();
                            /* startActivity(new Intent(getActivity(),Settings.class));*/
+                            progressDialog.dismiss();
                             Intent changePassword = new Intent(getActivity(), Settings.class);
                             changePassword.putExtra(roleValuesReturn,roleValue);
                             startActivity(changePassword);

@@ -101,6 +101,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage("Added Root...");
                     progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();
                 }
 

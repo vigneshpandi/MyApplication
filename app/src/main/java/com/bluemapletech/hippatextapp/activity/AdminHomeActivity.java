@@ -142,7 +142,6 @@ public class AdminHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
             editors.commit();
-
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
             startActivity(logOut);
             onStop();

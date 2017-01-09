@@ -108,6 +108,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage("registering...");
                     progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();
                 }
             }

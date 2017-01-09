@@ -62,7 +62,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = EditProfileActivity.class.getCanonicalName();
     private EditText editFirstName, editLastName, editEmail, editCompanyName, editEmployeeId, editDesignation;
     private Button updateProfileBtn;
-    private  ImageView userImage;
+    private ImageView userImage;
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
     private String base64Profile;
@@ -77,10 +77,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    private String comNames, emailAddress, firstName,designation, lastName, userId, auth, chatPin, companyCin, password, profile;
-    private String providerNPI,providerName, notification,role, senderId, status,createDate,updateDate;
+    private String comNames, emailAddress, firstName, designation, lastName, userId, auth, chatPin, companyCin, password, profile;
+    private String providerNPI, providerName, notification, role, senderId, status, createDate, updateDate;
     private String compFirstName, compLastName, compEmail, compCompany, compEmployee, compDesignation;
-    private String loginRole,loginAuth;
+    private String loginRole, loginAuth;
+    Bitmap bm = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,13 +94,13 @@ public class EditProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        loginRole = pref.getString("role","");
-        loginAuth = pref.getString("auth","");
+        loginRole = pref.getString("role", "");
+        loginAuth = pref.getString("auth", "");
         init();
     }
 
     private void init() {
-        Log.d(TAG,"init method called");
+        Log.d(TAG, "init method called");
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -110,11 +112,11 @@ public class EditProfileActivity extends AppCompatActivity {
         editEmployeeId = (EditText) findViewById(R.id.edit_emp_id);
         editDesignation = (EditText) findViewById(R.id.edit_designation);
         updateProfileBtn = (Button) findViewById(R.id.update_profile);
-         userImage = (ImageView) findViewById(R.id.user_image);
+        userImage = (ImageView) findViewById(R.id.user_image);
         // fireBaseDatabase = FirebaseDatabase.getInstance();
-        Log.d(TAG,"logged....."+logged);
+        Log.d(TAG, "logged....." + logged);
         if (logged != null) {
-            Log.d("logged",logged.toString());
+            Log.d("logged", logged.toString());
             reArrangeEmail = logged.getEmail().replace(".", "-");
         }
         databaseRef = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
@@ -156,65 +158,72 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-    updateProfileBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(!validate()){
-                Toast.makeText(getActivity(),"Update failed",Toast.LENGTH_LONG).show();
-            }else{
-                saveImage();
-            }
-        }
-        private boolean validate() {
-            compFirstName = editFirstName.getText().toString().trim();
-            compLastName = editLastName.getText().toString().trim();
-            compEmail = editEmail.getText().toString().trim();
-            compCompany = editCompanyName.getText().toString().trim();
-            compEmployee = editEmployeeId.getText().toString().trim();
-            compDesignation = editDesignation.getText().toString().trim();
-            boolean valid = true;
-            if(!isValidEmail(compEmail)){
-                editEmail.setError("Invalid Email");
-                valid = false;
+        updateProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!validate()) {
+                    Log.d(TAG,"progressBar is not used..");
+                    Toast.makeText(getActivity(), "Update failed", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d(TAG,"progrssBar is show...");
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Processing update profile...");
+                    progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    saveImage();
+                }
             }
 
-            if(compFirstName.isEmpty()||compFirstName.length()<2){
-                editFirstName.setError("Provider NPI Id is invalid");
-                valid = false;
-            }else{
-                editFirstName.setError(null);
-            }
+            private boolean validate() {
+                compFirstName = editFirstName.getText().toString().trim();
+                compLastName = editLastName.getText().toString().trim();
+                compEmail = editEmail.getText().toString().trim();
+                compCompany = editCompanyName.getText().toString().trim();
+                compEmployee = editEmployeeId.getText().toString().trim();
+                compDesignation = editDesignation.getText().toString().trim();
+                boolean valid = true;
+                if (!isValidEmail(compEmail)) {
+                    editEmail.setError("Invalid Email");
+                    valid = false;
+                }
 
-            if(compLastName.isEmpty()||compLastName.length()<2){
-                editLastName.setError("Provider Name is invalid");
-                valid = false;
-            }else{
-                editLastName.setError(null);
-            }
+                if (compFirstName.isEmpty() || compFirstName.length() < 2) {
+                    editFirstName.setError("Provider NPI Id is invalid");
+                    valid = false;
+                } else {
+                    editFirstName.setError(null);
+                }
 
-            if(compCompany.isEmpty()||compCompany.length()<2){
-                editCompanyName.setError("Provider Name is invalid");
-                valid = false;
-            }else{
-                editCompanyName.setError(null);
-            }
+                if (compLastName.isEmpty() || compLastName.length() < 2) {
+                    editLastName.setError("Provider Name is invalid");
+                    valid = false;
+                } else {
+                    editLastName.setError(null);
+                }
 
-            if(compEmployee.isEmpty()||compEmployee.length()<2){
-                editEmployeeId.setError("Provider Name is invalid");
-                valid = false;
-            }else{
-                editEmployeeId.setError(null);
-            }
+                if (compCompany.isEmpty() || compCompany.length() < 2) {
+                    editCompanyName.setError("Provider Name is invalid");
+                    valid = false;
+                } else {
+                    editCompanyName.setError(null);
+                }
 
-            if(compDesignation.isEmpty()||compDesignation.length()<2){
-                editDesignation.setError("Provider Name is invalid");
-                valid = false;
-            }else{
-                editDesignation.setError(null);
+                if (compEmployee.isEmpty() || compEmployee.length() < 2) {
+                    editEmployeeId.setError("Provider Name is invalid");
+                    valid = false;
+                } else {
+                    editEmployeeId.setError(null);
+                }
+
+                if (compDesignation.isEmpty() || compDesignation.length() < 2) {
+                    editDesignation.setError("Provider Name is invalid");
+                    valid = false;
+                } else {
+                    editDesignation.setError(null);
+                }
+                return valid;
             }
-            return valid;
-        }
-    });
+        });
 
     }
 
@@ -224,71 +233,69 @@ public class EditProfileActivity extends AppCompatActivity {
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(compEmailtxts);
-        return  matcher.matches();
+        return matcher.matches();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    if(role.equals("admin")&&loginAuth.matches("1")) {
-                        backPageAdmin();
-                    }else if(role.equals("user")&&loginAuth.matches("1")) {
-                        backPageEmp();
-                    }else if(role.equals("root")&&loginAuth.matches("1")) {
-                        backPageRoot();
-                    }else
-                    if(!loginAuth.matches("1")&& loginRole.matches("root")){
-                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
-                    }else if(!loginAuth.matches("1")&& loginRole.matches("admin")){
-                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
-                    }else if(!loginAuth.matches("1")&& loginRole.matches("user")){
-                        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
-                    }
-                    return true;
-            }
-
-
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (role.equals("admin") && loginAuth.matches("1")) {
+                    backPageAdmin();
+                } else if (role.equals("user") && loginAuth.matches("1")) {
+                    backPageEmp();
+                } else if (role.equals("root") && loginAuth.matches("1")) {
+                    backPageRoot();
+                } else if (!loginAuth.matches("1") && loginRole.matches("root")) {
+                    startActivity(new Intent(getActivity(), NotAcceptedUser.class));
+                } else if (!loginAuth.matches("1") && loginRole.matches("admin")) {
+                    startActivity(new Intent(getActivity(), NotAcceptedUser.class));
+                } else if (!loginAuth.matches("1") && loginRole.matches("user")) {
+                    startActivity(new Intent(getActivity(), NotAcceptedUser.class));
+                }
+                return true;
+        }
 
 
         return super.onOptionsItemSelected(item);
     }
 
     private void backPageEmp() {
-        Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+        Log.d(TAG, "back page..");
+        startActivity(new Intent(getActivity(), EmployeeHomeActivity.class));
     }
 
     private void backPageAdmin() {
-        Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+        Log.d(TAG, "back page..");
+        startActivity(new Intent(getActivity(), AdminHomeActivity.class));
     }
+
     private void backPageRoot() {
-        Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),RootHomeActivity.class));
+        Log.d(TAG, "back page..");
+        startActivity(new Intent(getActivity(), RootHomeActivity.class));
     }
 
     // show the popup for capture the image
     @Override
-    protected  void onStart(){
+    protected void onStart() {
         super.onStart();
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] items = { "Take Photo", "Choose from Library",
-                        "Cancel" };
+                final CharSequence[] items = {"Take Photo", "Choose from Library",
+                        "Cancel"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
                 builder.setTitle("Add Photo!");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        boolean result= Utility.checkPermission(EditProfileActivity.this);
+                        boolean result = Utility.checkPermission(EditProfileActivity.this);
                         if (items[item].equals("Take Photo")) {
-                            if(result)
+                            if (result)
                                 cameraIntent();
                         } else if (items[item].equals("Choose from Library")) {
-                            if(result)
+                            if (result)
                                 galleryIntent();
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
@@ -302,80 +309,92 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-    private void cameraIntent()
-    {
+    private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, REQUEST_CAMERA);
     }
-    private void galleryIntent()
-    {
+
+    private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
+            System.out.println("data====11111 resultcode "+requestCode);
+            if (requestCode == SELECT_FILE) {
+                System.out.println("data====22222 resultcode "+requestCode);
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                Log.d(TAG,"DataValuesss"+data);
-             onCaptureImageResult(data);
+            } else if (requestCode == REQUEST_CAMERA)
+                System.out.println("data===3333 resultcode "+requestCode);
+                Log.d(TAG, "DataValuesss" + data);
+            onCaptureImageResult(data);
         }
     }
 
     private void onCaptureImageResult(Intent data) {
-        Log.d(TAG,"DataCamera"+data.getExtras().get("data"));
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        assert thumbnail != null:"Image Could not be set!";
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-        FileOutputStream fo;
+        Log.d(TAG, "DataCamera" +bm);
         try {
+            Bitmap thumbnail = bm;
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            assert thumbnail != null : "Image Could not be set!";
+            thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+            File destination = new File(Environment.getExternalStorageDirectory(),
+                    System.currentTimeMillis() + ".jpg");
+            FileOutputStream fo;
+
             destination.createNewFile();
             fo = new FileOutputStream(destination);
             fo.write(bytes.toByteArray());
             fo.close();
+            userImage.setImageBitmap(thumbnail);
+            base64Profile = bitmapToBase64(thumbnail);
+            value = data.getData();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("data====555555  "+e);
+            e.printStackTrace();
         }
-        userImage.setImageBitmap(thumbnail);
-        base64Profile = bitmapToBase64(thumbnail);
-        value = data.getData();
-
-        Log.d(TAG,"camera"+value);
+        Log.d(TAG, "camera" + value);
     }
 
+
     private void onSelectFromGalleryResult(Intent data) {
-        Log.d(TAG,"galleryData"+data);
-        Bitmap bm = null;
+        Log.d(TAG, "galleryData" + data);
+
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                userImage.setImageBitmap(bm);
+                base64Profile = bitmapToBase64(bm);
+                value = data.getData();
             } catch (IOException e) {
+                System.out.println("data====6666 "+e);
                 e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.out.println("data====6666 "+e);
             }
         }
-        userImage.setImageBitmap(bm);
-        base64Profile = bitmapToBase64(bm);
-         value = data.getData();
-        Log.d(TAG,"gallery"+value);
+
+        Log.d(TAG, "gallery" + value);
     }
 
     private void saveImage() {
-       // Uri uri = data.getData();
-        if(value!=null){
-            Log.d(TAG,"value"+value);
+        // Uri uri = data.getData();
+        if (value != null) {
+            Log.d(TAG, "value" + value);
             StorageReference filePath = mStorage.child(reArrangeEmail);
             filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                    Log.d(TAG,"downloadUrl"+downloadUrl);
+                    Log.d(TAG, "downloadUrl" + downloadUrl);
                     profile = String.valueOf(downloadUrl);
                     saveProfile();
                 }
@@ -385,17 +404,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 }
             });
-        }else  if(value==null){
-            Log.d(TAG,"value null"+value);
+        } else if (value == null) {
+            Log.d(TAG, "value null" + value);
             saveProfile();
         }
     }
 
     private void saveProfile() {
-        Log.d(TAG, "update profile successfully!");
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Update...");
-        progressDialog.show();
+        Log.d(TAG, "update profile is called!");
         final UserDao userDao = new UserDao();
         user.setAuth(auth);
         user.setChatPin(chatPin);
@@ -417,7 +433,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.setCreateDate(createDate);
         user.setUpdateDate(updateDate);
         boolean data = userDao.createCompany(user);
-        if (data){
+        if (data) {
             progressDialog.dismiss();
             Log.d(TAG, "Update Profile successfuly!");
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
@@ -434,9 +450,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+
     public EditProfileActivity getActivity() {
         return this;
     }

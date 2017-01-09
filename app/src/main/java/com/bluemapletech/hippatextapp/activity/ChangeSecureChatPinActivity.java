@@ -83,6 +83,11 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
                     String enCode = Base64.encodeToString(data, Base64.NO_WRAP);
                     user.setChatPin(enCode);
                     user.setUserName(reArrangeEmail);
+                    Log.d(TAG,"progrssBar is show...");
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Processing change secure chat pin...");
+                    progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     resetPinBtn(user);
 
                 }else{
@@ -96,7 +101,8 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
        /* Log.d(TAG, "Add invited company method has been called!");*/
         boolean valid = true;
         if(text.matches(confirmChatPin.getText().toString())){
-            Toast.makeText(getActivity(),"Old chat pin and new chat pin are same..!",Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
+            Toast.makeText(getActivity(),"Old chat pin and new chat pin are not same..!",Toast.LENGTH_LONG).show();
             valid = false;
             return;
         }else{
@@ -108,8 +114,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             Log.d("result", String.valueOf(result));
             if (result) {
                 Log.d(TAG, "Changed Pin successfully!");
+                progressDialog.dismiss();
                 Toast.makeText(getActivity(),"Chat Pin has been changed successfully!",Toast.LENGTH_LONG).show();
-                Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
+                Intent adminHome = new Intent(getActivity(), Settings.class);
                 startActivity(adminHome);
             } else {
                 Log.d(TAG, "Unable to process, please try again!");
