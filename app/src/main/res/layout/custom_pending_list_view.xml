@@ -40,7 +40,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/layout_field_id"
         android:layout_alignStart="@+id/layout_field_id"
-        android:textColor="#666666"/>
+        android:textColor="#474747"
+        android:textStyle="bold"/>
 
     <Button
         android:text="Accept"

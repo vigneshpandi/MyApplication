@@ -12,7 +12,7 @@
         android:id="@+id/delete"
         android:orderInCategory="100"
         android:icon="@drawable/delete"
-        android:title="delete"
+        android:title="Delete"
         app:showAsAction="always"
          />
 

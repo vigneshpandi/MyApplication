@@ -40,7 +40,9 @@
         android:gravity="left"
         android:layout_alignTop="@+id/user_image"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:textColor="#474747"
+        android:textStyle="bold"/>
 
     <TextView
         android:text="TextView"
@@ -49,7 +51,8 @@
         android:id="@+id/layout_field_id"
         android:layout_alignBottom="@+id/user_image"
         android:layout_alignLeft="@+id/layout_field_name"
-        android:layout_alignStart="@+id/layout_field_name" />
+        android:layout_alignStart="@+id/layout_field_name"
+        android:textColor="@color/textColor"/>
 
     <ImageView
         android:layout_width="wrap_content"

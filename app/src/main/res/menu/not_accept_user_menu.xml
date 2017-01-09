@@ -6,7 +6,7 @@
     <item
         android:id="@+id/list_of_roots"
         android:orderInCategory="101"
-        android:title="List of roots"
+        android:title="ListOfRoots"
         app:showAsAction="never" />
     <item
         android:id="@+id/settings"

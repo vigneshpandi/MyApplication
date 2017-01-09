@@ -10,7 +10,7 @@
     <item
         android:id="@+id/settings"
         android:orderInCategory="102"
-        android:title="settings"
+        android:title="Settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/log_out"

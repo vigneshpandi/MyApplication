@@ -54,7 +54,9 @@
         android:layout_marginStart="21dp"
         android:layout_alignBottom="@+id/reject_btn"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#474747"
+        android:textStyle="bold"/>
 
     <TextView
         android:text="TextView"
