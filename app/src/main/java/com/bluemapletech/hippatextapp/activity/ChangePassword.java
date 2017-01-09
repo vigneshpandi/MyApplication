@@ -51,6 +51,7 @@ public class ChangePassword extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Change Password");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

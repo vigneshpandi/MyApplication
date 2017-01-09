@@ -62,6 +62,7 @@ public class AddRootActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Add Root");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         random = new SecureRandom();

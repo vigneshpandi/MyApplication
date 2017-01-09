@@ -81,6 +81,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Employee Registration");
         }
         getAllCompanyList();
         mStorage = FirebaseStorage.getInstance().getReference();

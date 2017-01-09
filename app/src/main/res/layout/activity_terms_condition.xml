@@ -15,16 +15,18 @@
         android:text="Terms And Condition"
         android:gravity="center_horizontal"
         android:id="@+id/terms_and_condition"
-        android:layout_marginLeft="125dp"
+        android:layout_marginLeft="100dp"
         android:textStyle="normal"
         android:textColor="@color/blackColor"
-        />
+        android:textSize="18dp"
+        android:layout_marginTop="2dp"/>
 
     <TableRow
         android:id="@+id/hr"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="#444"></TableRow>
+        android:background="#444"
+        android:layout_marginTop="10dp"></TableRow>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

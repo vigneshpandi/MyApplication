@@ -2,6 +2,7 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -58,7 +59,8 @@ public class CreateGroup extends AppCompatActivity {
     private String loggedINChatPin;
     private String role;
     private Uri downloadUrl;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     private StorageReference mStorage;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
@@ -71,7 +73,7 @@ public class CreateGroup extends AppCompatActivity {
     private String groupName = "";
     private String storeMail;
     private SecureRandom random;
-    private String senderID;
+    private String senderID,roleValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +82,11 @@ public class CreateGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Select Member");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        roleValue =  pref.getString("role", "");
 
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
@@ -256,8 +261,17 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 Log.d(TAG,"downloadUrl " + downloadUrl);
 Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
                 boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl);
-                finish();
-                startActivity(getIntent());
+                //finish();
+                //startActivity(getIntent());
+                if(roleValue.matches("admin")){
+                    Log.d(TAG, "admin has been called!");
+                    Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+                    startActivity(intent);
+                }else if(roleValue.matches("user")){
+                    Log.d(TAG, "user has been called!");
+                    Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
+                    startActivity(intent);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

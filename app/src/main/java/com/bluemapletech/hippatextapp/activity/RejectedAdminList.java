@@ -60,6 +60,7 @@ public class RejectedAdminList extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Admin List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         checkUserExistence();
@@ -90,6 +91,10 @@ public class RejectedAdminList extends AppCompatActivity {
                     if (user.getRole().matches("admin") && user.getAuth().matches("3") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
                         userObj.add(user);
                         Log.d("adminDetails","adminDetails"+user);
+                        if(user.getRole().matches("admin")){
+                            Log.d(TAG,"admin list...");
+                            getSupportActionBar().setTitle("Admin List");
+                        }
                     }
                     UserDetailDto userDto = new UserDetailDto();
                     pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

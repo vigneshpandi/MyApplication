@@ -99,6 +99,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
 
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Company Registration");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mStorage = FirebaseStorage.getInstance().getReference();

@@ -86,6 +86,7 @@ public class AddAdminActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Add Admin");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         random = new SecureRandom();

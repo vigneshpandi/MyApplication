@@ -62,6 +62,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Admin List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

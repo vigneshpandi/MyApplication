@@ -66,6 +66,7 @@ public class ListOfRoots extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Root List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         rootValue = getIntent().getStringExtra(RootHomeActivity.rootValue);
@@ -87,7 +88,10 @@ public class ListOfRoots extends AppCompatActivity {
             role = pref.getString("rolValue","");
             not_acp_user = pref.getString("notUserValue","");
         }
-
+if(role.matches("admin")&& rootValue.matches("3")){
+    Log.d(TAG,"admin list..");
+    getSupportActionBar().setTitle("Admin List");
+}
 
 
 

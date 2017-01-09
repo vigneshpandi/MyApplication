@@ -74,6 +74,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Add Employee");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mStorage = FirebaseStorage.getInstance().getReference();

@@ -60,6 +60,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Change Secure Chat Pin");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
