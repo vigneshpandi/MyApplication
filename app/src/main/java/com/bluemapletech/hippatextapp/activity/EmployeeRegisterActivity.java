@@ -217,6 +217,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     saveImage();
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Entered email address is already exists! ", Toast.LENGTH_LONG).show();
                 }
             }
