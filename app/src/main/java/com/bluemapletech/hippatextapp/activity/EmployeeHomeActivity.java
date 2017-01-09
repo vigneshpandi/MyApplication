@@ -71,10 +71,9 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         editor.commit();
         super.onDestroy();
     }
-   /* @Override
-    public void onStop()
+    @Override
+    public void onPause()
     {
-        Log.d("emplstop","stop");
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
@@ -82,13 +81,14 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
         dataReferences.removeValue();
-        super.onStop();
+        super.onPause();
         //Do whatever you want to do when the application stops.
-    }*/
+    }
 
-   /* @Override
-    protected  void onRestart(){
-        Log.d("employerestart","onREStart");
+
+    @Override
+    protected  void onResume(){
+
         HashMap<String, Object> onlineReenter = new HashMap<>();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -98,8 +98,8 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
         onlineReenter.put("onlineUser",logged.getEmail());
         dataReferences.setValue(onlineReenter);
-        super.onRestart();
-    }*/
+        super.onResume();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);

@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,7 +39,8 @@ public class ChatAdminActivity extends Fragment{
     private String loggedINChatPin;
     private String userFirstName;
     private String userLastName;
-    private static final String TAG = IntraChatEmployeeTabActivity.class.getCanonicalName();
+    HashMap<String,String> onlineHashing;
+    private static final String TAG = ChatAdminActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +50,61 @@ public class ChatAdminActivity extends Fragment{
 
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
+        checkOnlineUser();
         checkCompanyExistence();
+        loadingUserDetail();
+
+
+        return rootView;
+    }
+
+
+    public void checkCompanyExistence() {
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
+                loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
+                loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void checkOnlineUser(){
+        Log.d(TAG,"checkOnlineUser");
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser");
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                onlineHashing = new HashMap<String, String>();
+                Log.d("dfdfdfdfdf", "online datasnapshot");
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String onlineUser = snapshot.child("onlineUser").getValue(String.class);
+                    Log.d("dfdfdfdfdf", "dfdfdfdfdf" + onlineUser);
+                    onlineHashing.put(onlineUser, onlineUser);
+                }
+                loadingUserDetail();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void loadingUserDetail(){
+        Log.d(TAG,"loadingUserDetail");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,7 +134,7 @@ public class ChatAdminActivity extends Fragment{
                     }
                 }
                 if(getActivity() !=null) {
-                    listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj, loggedINEmail, loggedINChatPin));
+                    listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHashing));
                 }
             }
 
@@ -87,30 +143,5 @@ public class ChatAdminActivity extends Fragment{
 
             }
         });
-        return rootView;
     }
-
-
-    public void checkCompanyExistence() {
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
-        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
-        dataReferences.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
-                loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
-                loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
 }

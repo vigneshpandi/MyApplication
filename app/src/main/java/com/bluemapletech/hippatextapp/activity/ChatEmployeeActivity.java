@@ -206,8 +206,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         UserDao.stop(mListener);
     }
 
-   /* @Override
-    public void onStop()
+    @Override
+    public void onPause()
     {
         Log.d(TAG,"stoppp");
         fireBaseDatabase = FirebaseDatabase.getInstance();
@@ -217,25 +217,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
         dataReferences.removeValue();
-        super.onStop();
+        super.onPause();
         //Do whatever you want to do when the application stops.
-    }*/
+    }
 
 
     @Override
-    protected  void onStart(){
-        super.onStart();
-        checkOnlineUser();
-        selectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
-    }
-
-   /* @Override
-    protected  void onRestart(){
+    protected  void onResume(){
         Log.d("ssdfdfdf","onREStart");
         HashMap<String, Object> onlineReenter = new HashMap<>();
         fireBaseDatabase = FirebaseDatabase.getInstance();
@@ -246,9 +234,19 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
         onlineReenter.put("onlineUser",logged.getEmail());
         dataReferences.setValue(onlineReenter);
-        super.onRestart();
-    }*/
-
+        super.onResume();
+    }
+   @Override
+   protected  void onStart(){
+       super.onStart();
+       checkOnlineUser();
+       selectImage.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               chooseImage();
+           }
+       });
+   }
 
 
 

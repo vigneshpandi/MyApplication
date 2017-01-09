@@ -80,6 +80,7 @@
         <activity android:name=".activity.TermsCondition" />
         <activity android:name=".activity.ViewUserDetailTabActivity" />
 
+
         <receiver
             android:name="com.bluemapletech.hippatextapp.utils.NetworkChangeReceiver"
             android:label="NetworkChangeReceiver" >
@@ -88,6 +89,10 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
+
+
+
     </application>
 
 </manifest>

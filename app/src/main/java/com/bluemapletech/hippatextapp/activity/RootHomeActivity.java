@@ -99,6 +99,9 @@ public class RootHomeActivity extends AppCompatActivity {
             DatabaseReference dataReference1= mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
             dataReference1.setValue("");
 
+            DatabaseReference dataReference2= mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReference2.removeValue();
+
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();

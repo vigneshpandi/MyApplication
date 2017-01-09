@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,12 +48,13 @@ public class PageAdminChatAdapter  extends BaseAdapter {
     private String userLastName;
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
-
-    public PageAdminChatAdapter(Context context, List<User> user, String fromEmail, String loggedINChatPin) {
+    HashMap<String,String> onlineHash = new HashMap<String, String>();
+    public PageAdminChatAdapter(Context context, List<User> user, String fromEmail, String loggedINChatPin,HashMap<String,String> hashValue) {
         this.context = context;
         this.userInfo = user;
         this.fromMAil = fromEmail;
         this.chatPin = loggedINChatPin;
+        this.onlineHash = hashValue;
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -141,6 +143,20 @@ public class PageAdminChatAdapter  extends BaseAdapter {
                 alertDialog.show();
             }
         });
+
+
+        if((onlineHash != null)) {
+            if (onlineHash.containsKey(info.getUserName())) {
+                Log.d("it is  online", "success");
+                View img = convertView.findViewById(R.id.onlineImageView);
+                img.setVisibility(View.VISIBLE);
+            } else {
+                Log.d("it is not online", "success");
+                View img = convertView.findViewById(R.id.onlineImageView);
+                img.setVisibility(View.INVISIBLE);
+            }
+        }
+
         return convertView;
     }
 

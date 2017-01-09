@@ -149,14 +149,14 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             String checkOnline = onlineHash.get(info.getUserName());
                             Log.d("checkOnline","checkOnline"+checkOnline);
-                            if (checkOnline!=null) {
+                           /* if (checkOnline!=null) {
                                 intent.putExtra(chatOnline, "true");
                                 Log.d("it is online", "success");
 
                             } else {
                                 intent.putExtra(chatOnline, "false");
                                 Log.d("it is not online", "success");
-                            }
+                            }*/
 
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
@@ -181,21 +181,20 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                 alertDialog.show();
             }
         });
-        Log.d("dfdfdfdf","info.getUserName()"+info.getUserName());
 
-                if (onlineHash.containsKey(info.getUserName())) {
-                    Log.d("it is  online", "success");
-                    View img = convertView.findViewById(R.id.onlineImageView);
-                    img.setVisibility(View.VISIBLE);
+        Log.d(TAG,"info.getUserName()"+info.getUserName());
+        if((onlineHash != null)) {
+            if (onlineHash.containsKey(info.getUserName())) {
+                Log.d("it is  online", "success");
+                View img = convertView.findViewById(R.id.onlineImageView);
+                img.setVisibility(View.VISIBLE);
 
-                } else {
-                    Log.d("it is not online", "success");
-                    View img = convertView.findViewById(R.id.onlineImageView);
-                    img.setVisibility(View.INVISIBLE);
-                }
-
-
-
+            } else {
+                Log.d("it is not online", "success");
+                View img = convertView.findViewById(R.id.onlineImageView);
+                img.setVisibility(View.INVISIBLE);
+            }
+        }
         return convertView;
     }
 
