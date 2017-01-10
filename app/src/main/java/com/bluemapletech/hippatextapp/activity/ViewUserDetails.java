@@ -65,6 +65,8 @@ public class ViewUserDetails extends AppCompatActivity {
     public static final String lastName = "lastName";
     private TextView userEmail, compName, empId, providerName, providerNPI, providerNpiLabel, providerNameLabel;
     private Button acceptBtn, pendingBtn, deleteBtn,chatBtn;
+    private AlertDialog.Builder alertDialog;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,12 +187,52 @@ public class ViewUserDetails extends AppCompatActivity {
         if(!userAuths.matches("2")){
         if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
             user.setAuth("1");
-            acceptedCompany(user);
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("");
+           alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    acceptedCompany(user);
+                }
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
         } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
             user.setAuth("1");
-            acceptedEmployee(user);
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("");
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    acceptedEmployee(user);
+                }
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
         } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
-           getUserDetails(user.getCompanyName());
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("");
+            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    getUserDetails(user.getCompanyName());
+                }
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
         }
 
     }else {
@@ -237,9 +279,35 @@ public class ViewUserDetails extends AppCompatActivity {
             public void onClick(View v) {
                 user.setAuth("2");
                 if(user.getRole().matches("admin")){
-                    pendingCompany(user);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            pendingCompany(user);
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 } else if(user.getRole().matches("user")){
-                    pendingEmployee(user);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            pendingEmployee(user);
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -249,9 +317,35 @@ public class ViewUserDetails extends AppCompatActivity {
             public void onClick(View v) {
                 user.setAuth("3");
                 if(user.getRole().matches("admin")){
-                    deleteCompany(user);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteCompany(user);
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 } else if(user.getRole().matches("user")){
-                    deleteEmployee(user);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteEmployee(user);
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });

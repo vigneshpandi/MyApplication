@@ -178,7 +178,16 @@ public class AddEmployeeActivity extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         user.setUserName(addEmpEmailId.getText().toString().trim());
         Log.d(TAG,"passRandomValue11.."+passRandomValue);
-        user.setPassword(passRandomValue);
+        String userPassword = passRandomValue;
+        byte[] enCode = new byte[0];
+        try {
+            enCode = userPassword.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
+        Log.d(TAG,"encrypt password"+enCodes);
+        user.setPassword(enCodes);
         user.setEmpId(addEmpEmployeeId.getText().toString().trim());
         user.setCompanyName(loggedINCompany);
         user.setAuth("1");

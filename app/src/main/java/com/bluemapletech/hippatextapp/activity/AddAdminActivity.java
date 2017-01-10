@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -205,7 +207,16 @@ public class AddAdminActivity extends AppCompatActivity {
         String passwordRandomValue = password.substring(0, 8);
         Log.d("randomValue",passwordRandomValue);*/
         Log.d("TAG","randomValue11..randomValue11......"+passRandomValue+loggedINCompany+firstName+lastName);
-        comInfo.setPassword(passRandomValue);
+        String userPassword = passRandomValue;
+        byte[] enCode = new byte[0];
+        try {
+            enCode = userPassword.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
+        Log.d(TAG,"encrypt password"+enCodes);
+        comInfo.setPassword(enCodes);
         comInfo.setCompanyName(loggedINCompany);
         comInfo.setTINorEIN("");
         comInfo.setProviderNPIId(adminProviderNPItxt.getText().toString());

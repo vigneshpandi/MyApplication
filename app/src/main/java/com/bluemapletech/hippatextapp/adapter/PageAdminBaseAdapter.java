@@ -1,8 +1,10 @@
 package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     List<User> userInfo = new ArrayList<User>();
+    private AlertDialog.Builder alertDialog;
+
 
     public PageAdminBaseAdapter(Context context, List<User> user) {
         this.context = context;
@@ -81,9 +85,37 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 } else if(userInfo.get(position).getAuth().matches("2")){
-                    accepted(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            accepted(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 } else if(userInfo.get(position).getAuth().matches("1")) {
-                    deleteEmpl(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteEmpl(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -91,7 +123,21 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(0).getAuth().matches("2")) {
-                    deleteEmpl(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteEmpl(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -203,6 +249,5 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
     }
-
 
 }

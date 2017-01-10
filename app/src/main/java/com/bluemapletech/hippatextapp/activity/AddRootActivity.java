@@ -134,7 +134,16 @@ public class AddRootActivity extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         user.setUserName(addRootEmailId.getText().toString());
         Log.d("TAG","randomValue11..randomValue11......"+passRandomValue);
-        user.setPassword(passRandomValue);
+        String userPassword = passRandomValue;
+        byte[] enCode = new byte[0];
+        try {
+            enCode = userPassword.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
+        Log.d(TAG,"encrypt password"+enCodes);
+        user.setPassword(enCodes);
         user.setEmpId("");
         user.setCompanyName("");
         user.setAuth("1");
