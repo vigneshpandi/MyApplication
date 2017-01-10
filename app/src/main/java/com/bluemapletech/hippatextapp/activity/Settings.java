@@ -49,6 +49,7 @@ public class Settings extends AppCompatActivity {
     private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"," Show Online"};
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
     private String login_mail;
+    Switch showOnline;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class Settings extends AppCompatActivity {
         TextView password = (TextView) findViewById(R.id.change_password);
         TextView deleteAcount = (TextView) findViewById(R.id.delete_an_account);
         TextView notificationSetting = (TextView) findViewById(R.id.notification_setting);
-        final Switch showOnline = (Switch) findViewById(R.id.show_online);
+         showOnline = (Switch) findViewById(R.id.show_online);
         TableRow hr = (TableRow) findViewById(R.id.hr);
         TableRow hr1 = (TableRow) findViewById(R.id.hr1);
         TableRow hr2 = (TableRow) findViewById(R.id.hr2);
@@ -166,7 +167,8 @@ public class Settings extends AppCompatActivity {
             showOnline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showOnline.setChecked(true);
+                    Log.d(TAG,"show online is clicked....");
+                  //  showOnline.setChecked(true);
                     showOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                         @Override
@@ -195,11 +197,16 @@ public class Settings extends AppCompatActivity {
             });
 
         }
+        if(isOnline.matches("true")){
+            showOnline.setChecked(true);
 
+        }else if(isOnline.matches("false")){
+            showOnline.setChecked(false);
 
-
+        }
     }
 
+   /* if(isOnline.matches("true")) {*/
     public void deleteAcount(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d(TAG,"deleted userdetails...."+user.getEmail());
@@ -254,9 +261,12 @@ public class Settings extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         boolean result = userDao.isOnline(user);
         if (result) {
+            Log.d(TAG,"user.getIsOnline..."+user.getIsOnlie());
             if(user.getIsOnlie()== "true") {
+               // showOnline.setChecked(true);
                 Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
             }else{
+               // showOnline.setChecked(false);
                 Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
             }
         } else {
