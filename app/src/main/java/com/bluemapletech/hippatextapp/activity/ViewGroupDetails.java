@@ -330,7 +330,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                         if (bitmap != null) {
                             try {
                                 String root = Environment.getExternalStorageDirectory().toString();
-                                File myDir = new File(root + "/yourDirectory");
+                                File myDir = new File(root + "/HippaText");
                                 if (!myDir.exists()) {
                                     myDir.mkdirs();
                                 }
