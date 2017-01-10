@@ -195,6 +195,8 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
