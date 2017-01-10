@@ -74,7 +74,6 @@ public class AddRootActivity extends AppCompatActivity {
 
     private void init() {
         Log.d(TAG, "Init method has been called!");
-
         addRootEmailId = (EditText) findViewById(R.id.email_address);
         addRootBtn = (Button) findViewById(R.id.submit_btn);
 

@@ -105,7 +105,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();
                 }
-
             }
             private boolean validate() {
                 String addEmailId = addEmpEmailId.getText().toString().trim();

@@ -121,7 +121,6 @@ public class AddAdminActivity extends AppCompatActivity {
                     runner.execute(adminProviderNPItxt.getText().toString());
 
                 }
-
             }
 
             private boolean validate() {
