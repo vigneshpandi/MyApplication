@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -319,10 +320,14 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                onBackPressed();
+                BackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void BackPressed() {
+        Log.d(TAG,"back press clicked");
+        startActivity(new Intent(getActivity(),HomeActivity.class));
     }
 
 
@@ -423,7 +428,14 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "Email send").show();
         }*//*
     }*/
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            BackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     public CompanyRegistrationActivity getActivity() {
         return this;
     }

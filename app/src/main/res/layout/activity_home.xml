@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/btn_color"
-            android:text="Register as Company"
+            android:text="Register As Company"
             android:textAppearance="@style/appFont"
             android:textColor="@color/btn_text_color" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/btn_color"
-            android:text="Register as Employee"
+            android:text="Register As Employee"
             android:textAppearance="@style/appFont"
             android:textColor="@color/btn_text_color" />
 

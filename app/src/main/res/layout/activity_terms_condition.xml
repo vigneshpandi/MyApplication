@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_terms_condition"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical"
+
     tools:context="com.bluemapletech.hippatextapp.activity.TermsCondition">
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Terms And Condition"
-        android:gravity="center_horizontal"
         android:id="@+id/terms_and_condition"
-        android:layout_marginLeft="100dp"
         android:textStyle="normal"
         android:textColor="@color/blackColor"
         android:textSize="18dp"
-        android:layout_marginTop="2dp"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:textAlignment="center"/>
 
     <TableRow
         android:id="@+id/hr"
@@ -27,6 +26,15 @@
         android:layout_height="0.5dp"
         android:background="#444"
         android:layout_marginTop="10dp"></TableRow>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,29 +44,19 @@
         android:inputType="textMultiLine"
         android:scrollHorizontally="false"
         android:textSize="15dp"/>
-</LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
 
         <Button
             android:text="I Agree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="22dp"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="11dp"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:id="@+id/aggre_btn"
             android:textColor="@color/white"
-            android:background="@color/navigationBarColor"/>
-    </RelativeLayout>
+            android:background="@color/navigationBarColor"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"/>
 
-</RelativeLayout>
+</LinearLayout>
+</ScrollView>
+
+
+</LinearLayout>
