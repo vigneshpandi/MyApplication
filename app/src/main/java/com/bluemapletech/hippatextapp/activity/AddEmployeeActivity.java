@@ -100,7 +100,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     Toast.makeText(getActivity(), "Add Root failed!", Toast.LENGTH_LONG).show();
                 } else {
                     progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Added Root...");
+                    progressDialog.setMessage("Processing Add Root...");
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();
@@ -180,6 +180,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Log.d(TAG,"passRandomValue11.."+passRandomValue);
         String userPassword = passRandomValue;
         byte[] enCode = new byte[0];
+
         try {
             enCode = userPassword.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {

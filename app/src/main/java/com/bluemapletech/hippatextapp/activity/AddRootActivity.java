@@ -85,7 +85,7 @@ public class AddRootActivity extends AppCompatActivity {
                     Toast.makeText(getActivity(), "Add Root failed!", Toast.LENGTH_LONG).show();
                 } else {
                     progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Added Root...");
+                    progressDialog.setMessage("Processing Add Root...");
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();

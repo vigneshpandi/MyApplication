@@ -113,7 +113,7 @@ public class AddAdminActivity extends AppCompatActivity {
                 } else{
                     Log.d(TAG, "Admin registered successfully!");
                     progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Added Admin...");
+                    progressDialog.setMessage("Processing Add Admin...");
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
                     AsyncTaskRunner runner = new AsyncTaskRunner();
@@ -209,6 +209,7 @@ public class AddAdminActivity extends AppCompatActivity {
         Log.d("TAG","randomValue11..randomValue11......"+passRandomValue+loggedINCompany+firstName+lastName);
         String userPassword = passRandomValue;
         byte[] enCode = new byte[0];
+
         try {
             enCode = userPassword.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
