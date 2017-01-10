@@ -99,6 +99,7 @@ public class AddAdminActivity extends AppCompatActivity {
         init();
     }
     public void init() {
+
         Log.d(TAG, "Init method has been called!");
         adminEmailTxt = (EditText) findViewById(R.id.comp_email_address);
         toEmail = adminEmailTxt.getText().toString();
