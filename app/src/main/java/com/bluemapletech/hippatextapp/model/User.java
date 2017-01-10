@@ -28,6 +28,8 @@ public class User {
     private String pushNotificationId;
     private String createDate;
     private String updateDate;
+    private String isOnlie;
+
     public String getAuth() {
         return auth;
     }
@@ -188,6 +190,14 @@ public class User {
         this.updateDate = updateDate;
     }
 
+    public String getIsOnlie() {
+        return isOnlie;
+    }
+
+    public void setIsOnlie(String isOnlie) {
+        this.isOnlie = isOnlie;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -211,6 +221,7 @@ public class User {
                 ", pushNotificationId='" + pushNotificationId + '\'' +
                 ", createDate='" + createDate + '\'' +
                 ", updateDate='" + updateDate + '\'' +
+                ", isOnlie='" + isOnlie + '\'' +
                 '}';
     }
 }

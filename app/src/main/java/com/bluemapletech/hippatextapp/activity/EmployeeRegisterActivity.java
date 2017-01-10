@@ -255,7 +255,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         user.setProviderName("");
         user.setProviderNPIId("");
         user.setProfilePjhoto(String.valueOf(downloadUrl));
-
+        user.setIsOnlie("true");
         Calendar c = Calendar.getInstance();
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);

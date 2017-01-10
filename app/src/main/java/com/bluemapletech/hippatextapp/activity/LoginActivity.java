@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
-
+    String isOnlineChecking;
     private static FirebaseDatabase firebaseDatabaseRef;
     private EditText usernameTxt, passwordTxt;
     private Button loginBtn , forgetPassword;
@@ -190,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                     String userChatPin = map.get("chatPin");
                     String companyName = map.get("companyName");
                     String Password = map.get("password");
+                    isOnlineChecking = map.get("showOnline");
                     String text = null;
                     if (Password != null && !Password.matches("")) {
                         byte[] dataPass = Base64.decode(userChatPin, Base64.NO_WRAP);
@@ -229,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("loginMail", userName);
                     editor.putString("loginCompanyName", companyName);
                     editor.putString("auth", auth);
+                    editor.putString("isOnline", isOnlineChecking);
                     editor.commit();
 
                     Log.d(TAG, "Logged in user information's:");
@@ -292,14 +294,17 @@ public class LoginActivity extends AppCompatActivity {
             dataReferences.setValue(refreshedToken);
     }
     private void onlineUser() {
-        HashMap<String, Object> onlineUser = new HashMap<>();
-        onlineUser.put("onlineUser",usernameTxt.getText().toString());
-        String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        dataReferences.setValue(onlineUser);
+        Log.d(TAG,"isOnlineCheckingout"+isOnlineChecking);
+        if(isOnlineChecking.matches("true")) {
+            Log.d(TAG,"isOnlineChecking"+isOnlineChecking);
+            HashMap<String, Object> onlineUser = new HashMap<>();
+            onlineUser.put("onlineUser", usernameTxt.getText().toString());
+            String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.setValue(onlineUser);
+        }
     }
-
     public LoginActivity getActivity() {
         return this;
     }

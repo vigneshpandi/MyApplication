@@ -271,6 +271,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     String randomValue = senderID.substring(0, 7);
                     Log.d("randomValue",randomValue);
                     comInfo.setSenderId(randomValue);
+                    comInfo.setIsOnlie("true");
                     comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
                     Calendar c = Calendar.getInstance();
                     String myFormat = "yyyy-MM-dd HH:mm:ss Z";

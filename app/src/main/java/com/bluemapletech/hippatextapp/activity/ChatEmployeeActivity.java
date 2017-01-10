@@ -75,7 +75,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private FirebaseDatabase fireBaseDatabase;
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
-    private String base64Profile;
+    private String base64Profile,isOnline;
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
     private String childappendid,loginRole,loginAuth,chatOnline,userStaus;
@@ -171,8 +171,11 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
             }
         });*/
-
-        checkOnlineUser();
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            checkOnlineUser();
+        }
 
 
        /* background image for chatting */
@@ -210,13 +213,17 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     public void onPause()
     {
         Log.d(TAG,"stoppp");
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail =  logged.getEmail().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        dataReferences.removeValue();
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
         super.onPause();
         //Do whatever you want to do when the application stops.
     }
@@ -224,22 +231,29 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected  void onResume(){
-        Log.d("ssdfdfdf","onREStart");
-        HashMap<String, Object> onlineReenter = new HashMap<>();
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail =  logged.getEmail().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        onlineReenter.put("onlineUser",logged.getEmail());
-        dataReferences.setValue(onlineReenter);
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
         super.onResume();
     }
    @Override
    protected  void onStart(){
        super.onStart();
-       checkOnlineUser();
+       pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+       isOnline =  pref.getString("isOnline", "");
+       if(isOnline.matches("true")) {
+           checkOnlineUser();
+       }
        selectImage.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {

@@ -33,7 +33,7 @@ import java.util.Locale;
 
 
 public class EmployeeHomeActivity extends AppCompatActivity {
-   private String loginMail;
+   private String loginMail,isOnline;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPageAdapter viewPagerAdapter;
@@ -74,30 +74,37 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail =  logged.getEmail().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        dataReferences.removeValue();
-        super.onPause();
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
         //Do whatever you want to do when the application stops.
+        super.onPause();
     }
 
 
     @Override
     protected  void onResume(){
-
-        HashMap<String, Object> onlineReenter = new HashMap<>();
-        fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail =  logged.getEmail().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-        onlineReenter.put("onlineUser",logged.getEmail());
-        dataReferences.setValue(onlineReenter);
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
         super.onResume();
     }
     @Override

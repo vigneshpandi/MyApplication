@@ -80,7 +80,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String comNames, emailAddress, firstName, designation, lastName, userId, auth, chatPin, companyCin, password, profile;
     private String providerNPI, providerName, notification, role, senderId, status, createDate, updateDate;
     private String compFirstName, compLastName, compEmail, compCompany, compEmployee, compDesignation;
-    private String loginRole, loginAuth;
+    private String loginRole, loginAuth,isOnline;
     Bitmap bm = null;
 
     @Override
@@ -141,6 +141,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 notification = map.get("pushNotificationId");
                 createDate = map.get("createdDate");
                 updateDate = map.get("updatedDate");
+                isOnline = map.get("showOnline");
                 role = map.get("role");
                 senderId = map.get("senderId");
                 status = map.get("status");
@@ -431,6 +432,7 @@ public class EditProfileActivity extends AppCompatActivity {
         user.setRole(role);
         user.setSenderId(senderId);
         user.setStatus(status);
+        user.setIsOnlie(isOnline);
         user.setCreateDate(createDate);
         user.setUpdateDate(updateDate);
         boolean data = userDao.createCompany(user);

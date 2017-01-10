@@ -145,6 +145,7 @@ public class AddRootActivity extends AppCompatActivity {
         user.setDesignation("");
         user.setFirstName("");
         user.setLastName("");
+        user.setIsOnlie("true");
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String randomValue = senderID.substring(0, 7);

@@ -216,6 +216,7 @@ public class AddAdminActivity extends AppCompatActivity {
         comInfo.setAuth("1");
         comInfo.setChatPin("");
         comInfo.setDesignation("");
+        comInfo.setIsOnlie("true");
         comInfo.setFirstName(firstName);
         comInfo.setLastName(lastName);
         random = new SecureRandom();

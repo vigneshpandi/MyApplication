@@ -67,6 +67,7 @@ public class UserDao {
         empData.put("pushNotificationId","");
         empData.put("createdDate",user.getCreateDate());
         empData.put("updatedDate",user.getUpdateDate());
+        empData.put("showOnline",user.getIsOnlie());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
@@ -97,6 +98,7 @@ public class UserDao {
         compData.put("pushNotificationId","");
         compData.put("createdDate",user.getCreateDate());
         compData.put("updatedDate",user.getUpdateDate());
+        compData.put("showOnline",user.getIsOnlie());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
@@ -258,8 +260,14 @@ public class UserDao {
         return;
     }
 
-
-
+    public boolean isOnline(User user) {
+        Log.d("loginMail","loginMailll"+user.getUserName());
+        String reArrangeEmailId = user.getUserName().replace(".", "-");
+        firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmailId).child("showOnline");
+        databaseRef.setValue(user.getIsOnlie());
+        return true;
+    }
 
     public static class MessagesListener implements ChildEventListener {
         private MessagesCallbacks callbacks;
@@ -392,6 +400,7 @@ public class UserDao {
         compData.put("pushNotificationId","");
         compData.put("createdDate",user.getCreateDate());
         compData.put("updatedDate",user.getUpdateDate());
+        compData.put("showOnline",user.getIsOnlie());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);

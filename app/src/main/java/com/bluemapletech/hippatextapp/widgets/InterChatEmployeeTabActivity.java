@@ -126,7 +126,6 @@ public class InterChatEmployeeTabActivity extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
-
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setPassword(snapshot.child("password").getValue(String.class));

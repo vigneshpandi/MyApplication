@@ -18,8 +18,11 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.dao.UserDao;
+import com.bluemapletech.hippatextapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +35,7 @@ import java.util.ArrayList;
 public class Settings extends AppCompatActivity {
     private static final String TAG = Settings.class.getCanonicalName();
     private ListView iv;
-    private String roleValue;
+    private String roleValue,isOnline;
     ArrayList<String> arrlist;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -45,6 +48,7 @@ public class Settings extends AppCompatActivity {
     public static final String roleValues = "roleValues";
     private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"," Show Online"};
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
+    private String login_mail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,9 @@ public class Settings extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         role_Value =  pref.getString("role", "");
         auth = pref.getString("auth","");
+        login_mail = pref.getString("loginMail","");
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
 
         TextView profile = (TextView) findViewById(R.id.profile);
         TextView chatPin = (TextView) findViewById(R.id.change_secure_chat_pin);
@@ -166,7 +173,19 @@ public class Settings extends AppCompatActivity {
                         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                             if(isChecked){
                                 //   switchStatus.setText("Switch is currently ON");
+                                Log.d("checked","dfdjfkdlfkldfjkldjf"+login_mail);
+                                User u = new User();
+                                u.setUserName(login_mail);
+                               u.setIsOnlie("true");
+
+                               showOnline(u);
                             }else{
+                                Log.d("not checked",login_mail);
+                                User u1 = new User();
+                                u1.setUserName(login_mail);
+                                u1.setIsOnlie("false");
+                                Log.d("nottchecked","dfdjfkdlfcccckldfjkldjf"+login_mail);
+                             showOnline(u1);
                                 //  switchStatus.setText("Switch is currently OFF");
                             }
 
@@ -231,7 +250,19 @@ public class Settings extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    public void showOnline(User user) {
+        final UserDao userDao = new UserDao();
+        boolean result = userDao.isOnline(user);
+        if (result) {
+            if(user.getIsOnlie()== "true") {
+                Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.d(TAG, "Error while show Online, please try again!");
+        }
+    }
 
     public Settings getActivity() {
         return this;
