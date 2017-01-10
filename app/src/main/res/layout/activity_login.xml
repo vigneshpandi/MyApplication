@@ -67,7 +67,7 @@
             android:layout_below="@+id/login_btn"
             android:layout_marginTop="@dimen/top_margin"
             android:background="@color/btn_color"
-            android:text="Forget your password"
+            android:text="Forgot Your Password"
             android:textAppearance="@style/appFont"
             android:textColor="@color/btn_text_color" />
     </LinearLayout>
