@@ -187,14 +187,16 @@ public class AdminHomeActivity extends AppCompatActivity {
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
-            super.onPause();
         }
+        super.onPause();
         //Do whatever you want to do when the application stops.
     }
 
 
     @Override
     protected  void onResume(){
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
@@ -205,8 +207,8 @@ public class AdminHomeActivity extends AppCompatActivity {
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             onlineReenter.put("onlineUser", logged.getEmail());
             dataReferences.setValue(onlineReenter);
-            super.onResume();
         }
+        super.onResume();
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
