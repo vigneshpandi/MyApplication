@@ -184,6 +184,7 @@ public class AddRootActivity extends AppCompatActivity {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
             finish();
+            Toast.makeText(getActivity(), "Root has been added successfully!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(intent);
         } else {

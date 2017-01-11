@@ -107,11 +107,27 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (!validate()) {
                     Toast.makeText(getActivity(), "Employee registered failed!", Toast.LENGTH_LONG).show();
                 } else {
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("registering...");
-                    progressDialog.show();
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    checkUserExistence();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Conform your Email Address");
+                    dialog.setIcon(R.mipmap.ic_launcher);
+                    dialog.setMessage("Are you sure do you want to use this email address " + emailTxt.getText());
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setMessage("registering...");
+                            progressDialog.show();
+                            progressDialog.setCanceledOnTouchOutside(false);
+
+                            checkUserExistence();
+                        }
+                    });
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    // Showing Alert Message
+                    dialog.show();
                 }
             }
 
@@ -129,8 +145,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     valid = false;
                 }
 
-                if (empPasswordTxt.isEmpty() || empPasswordTxt.length() < 8 || empPasswordTxt.length() > 16) {
-                    passwordTxt.setError("Password between 8 - 16 number and character");
+                if (empPasswordTxt.isEmpty() || empPasswordTxt.length() < 6 || empPasswordTxt.length() > 16) {
+                    passwordTxt.setError("Password between 6 - 16 number and character");
                     valid = false;
                 } else {
                     passwordTxt.setError(null);

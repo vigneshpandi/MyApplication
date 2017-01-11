@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="Company Name"
-                android:inputType="text" />
+                android:inputType="textPersonName" />
             <EditText
             android:id="@+id/provider_npi_id"
             android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="Provider Name"
-                android:inputType="text" />
+                android:inputType="textPersonName" />
             <Button
                 android:id="@+id/comp_register_btn"
                 android:layout_width="match_parent"

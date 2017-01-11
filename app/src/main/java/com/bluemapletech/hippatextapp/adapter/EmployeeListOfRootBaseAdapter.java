@@ -278,18 +278,18 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
             final UserDao userDao = new UserDao();
             boolean result = userDao.deleteUser(userMail);
             if (result) {
-                Toast.makeText(this.context, "Company has been Rejected by the admin!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, "Root has been Rejected!", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, "Error while reject the company, please try again!", Toast.LENGTH_LONG).show();
             }
         }
     public void acceptUser(String userMail){
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptUser(userMail);
         if (result) {
-            Toast.makeText(this.context, "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "Root has been accepted!", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "Error while accepted the company, please try again!", Toast.LENGTH_LONG).show();
         }
 
     }

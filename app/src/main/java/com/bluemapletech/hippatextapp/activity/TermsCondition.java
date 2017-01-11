@@ -3,6 +3,7 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,12 @@ public class TermsCondition extends AppCompatActivity {
         setContentView(R.layout.activity_terms_condition);
         createRole = getIntent().getStringExtra(HomeActivity.createUser);
         Log.d("createRole","valuees"+createRole);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle("Terms And Condition");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         init();
     }
 

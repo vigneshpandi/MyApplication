@@ -1,8 +1,10 @@
 package com.bluemapletech.hippatextapp.widgets;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,18 +86,31 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 }else if(userInfo.get(position).getAuth().matches("2")){
-                    accepted(userInfo.get(position));
+                            accepted(userInfo.get(position));
                 }
-
             }
         });
         convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("2")) {
-                    deleteCompany(userInfo.get(position));
+                            deleteCompany(userInfo.get(position));
+
                 }else if(userInfo.get(position).getAuth().matches("1")){
-                    deleteCompany(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setMessage("Do you want to cancel "+"'"+info.getCompanyName()+"'"+"company!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteCompany(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -237,7 +252,7 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
             boolean result = companyDao.deleteCompanyAdminAndUser(emailId);
             if (result) {
                 Log.d(TAG, "Company canceled successfully!");
-                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, "Company deleted successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Log.d(TAG, "Error while delete the company, please try again!");
             }
@@ -248,7 +263,7 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
             boolean result = companyDao.deleteCompanys(user);
             if (result) {
                 Log.d(TAG, "Company canceled successfully!");
-                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+               Toast.makeText(this.context, "Company deleted successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Log.d(TAG, "Error while delete the company, please try again!");
             }

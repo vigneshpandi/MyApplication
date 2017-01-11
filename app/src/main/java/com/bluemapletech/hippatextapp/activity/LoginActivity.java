@@ -145,8 +145,8 @@ public class LoginActivity extends AppCompatActivity {
             usernameTxt.setError("Invalid email address");
             valid = false;
         }
-        if (passwordTxts.isEmpty() || passwordTxts.length() < 8 || passwordTxts.length() > 16) {
-            passwordTxt.setError("Password should be between 8 to 16 alphanumerics");
+        if (passwordTxts.isEmpty() || passwordTxts.length() < 6 || passwordTxts.length() > 16) {
+            passwordTxt.setError("Password between 6 - 16 number and character");
             valid = false;
         } else {
             passwordTxt.setError(null);

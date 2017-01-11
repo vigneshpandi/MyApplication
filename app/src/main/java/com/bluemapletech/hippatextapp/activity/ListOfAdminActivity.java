@@ -188,7 +188,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
             final UserDao userDao = new UserDao();
             boolean result = userDao.deleteUser(userMail);
             if (result) {
-                Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
             }

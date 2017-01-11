@@ -227,6 +227,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
+            Toast.makeText(getActivity(), "Employee addedd successfully!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(intent);
         } else {

@@ -33,9 +33,7 @@ public class NetworkUtil {
     public static String getConnectivityStatusString(Context context) {
         int conn = NetworkUtil.getConnectivityStatus(context);
         String status = null;
-        if(conn != NetworkUtil.TYPE_WIFI && conn != NetworkUtil.TYPE_MOBILE && conn == NetworkUtil.TYPE_NOT_CONNECTED){
-            status = "Not connected to Internet";
-        }else
+
         if (conn == NetworkUtil.TYPE_WIFI) {
             status = "Wifi enabled";
         } else if (conn == NetworkUtil.TYPE_MOBILE) {

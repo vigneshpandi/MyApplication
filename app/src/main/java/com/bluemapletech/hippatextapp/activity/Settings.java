@@ -113,6 +113,7 @@ public class Settings extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //Empty coding....
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             });
 

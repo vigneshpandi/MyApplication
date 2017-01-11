@@ -119,6 +119,8 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                 user1.setAuth(map.get("auth"));
                 user1.setEmpId(map.get("employeeId"));
                 user1.setTINorEIN(map.get("companyCINNumber"));
+                user1.setEmpId(map.get("employeeId"));
+                Log.d(TAG,"user get empaid"+user1.getEmpId());
                 if(user1.getRole().equals("user")){
                     providerNPI.setVisibility(View.INVISIBLE);
                     providerName.setVisibility(View.INVISIBLE);
@@ -167,7 +169,27 @@ public class ViewUserAdminDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(userAuths.matches("3")){
-                    acceptedCompany(user1);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    //alert.setTitle("");
+                    Log.d(TAG,"user get empaid"+user1.getEmpId());
+                    if(user1.getRole().matches("admin")) {
+                        alert.setMessage("Do you want to accept  '" + user1.getCompanyName() + "' Company");
+                    }else if(user1.getRole().matches("user")) {
+                        alert.setMessage("Do you want to accept  '" + user1.getEmpId() + "' Emplpoyee!");
+                    }
+                    alert.setCancelable(false);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            acceptedCompany(user1);
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
 
                 }else{
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -244,7 +266,12 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
             startActivity(new Intent(getActivity(),AdminHomeActivity.class));
-            Toast.makeText(getActivity(), "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
+            if(user1.getRole().matches("admin")){
+                Toast.makeText(getActivity(), "Company is accepted successfully!", Toast.LENGTH_LONG).show();
+            }else if(user1.getRole().matches("user")){
+                Toast.makeText(getActivity(), "Employee is accepted successfully!", Toast.LENGTH_LONG).show();
+            }
+            //Toast.makeText(getActivity(), "Company is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while accepted the company, please try again!");
         }

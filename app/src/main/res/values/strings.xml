@@ -9,5 +9,6 @@
     <string name="log_out">LogOut</string>
     <string name="add_root">AddRoot</string>
     <string name="list_of_roots">ListOfRoots</string>
+    <string name="name">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ...</string>
 
 </resources>

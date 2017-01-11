@@ -1,8 +1,10 @@
 package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     List<User> userInfo = new ArrayList<User>();
+    private AlertDialog.Builder alertDialog;
+
 
     public PageAdminBaseAdapter(Context context, List<User> user) {
         this.context = context;
@@ -46,7 +50,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
     @Override
     public User getItem(int position) {
-        return userInfo.get(position);
+        return (User) userInfo.get(position);
     }
 
     @Override
@@ -69,10 +73,10 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
         final User info = getItem(position);
 
-        mViewHolder.fieldId.setText(info.getEmpId());
-        mViewHolder.fieldName.setText(info.getUserName());
+           mViewHolder.fieldId.setText(info.getEmpId());
+           mViewHolder.fieldName.setText(info.getUserName());
 
-        convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {
+        ((Button) convertView.findViewById(R.id.accept_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("0")) {
@@ -81,21 +85,63 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 } else if(userInfo.get(position).getAuth().matches("2")){
-                    accepted(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("Do you want to accept '"+info.getEmpId()+"' Employee!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            accepted(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 } else if(userInfo.get(position).getAuth().matches("1")) {
-                    deleteEmpl(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("Do you want to reject '"+info.getEmpId()+"' Employee!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteEmpl(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
-        convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
+        ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(0).getAuth().matches("2")) {
-                    deleteEmpl(userInfo.get(position));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("");
+                    alert.setMessage("Do you want to reject '"+info.getEmpId()+"'Employee!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteEmpl(userInfo.get(position));
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             }
         });
-        convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
+        ((TextView) convertView.findViewById(R.id.layout_field_id)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!userInfo.get(position).getAuth().matches("0")) {
@@ -123,8 +169,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
-            View btns = convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(View.INVISIBLE);
+            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(btns.INVISIBLE);
             TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
             id.setTextColor(Color.parseColor("#808080"));
         }
@@ -132,13 +178,13 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("Reject");
-            // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
+           // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
             TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
             textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
 
             btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            View btns = convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(View.INVISIBLE);
+            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(btns.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {
@@ -170,8 +216,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Company accepted successfully!");
+            Toast.makeText(this.context, "Company is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
@@ -184,8 +230,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         final UserDao userDao = new UserDao();
         boolean result = userDao.pendingEmployee(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Company pending successfully!");
+            Toast.makeText(this.context, "Company is requested to pending!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
@@ -198,11 +244,10 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         boolean result = userDao.deleteEmployee(user);
         if (result) {
             Log.d(TAG, "Company canceled successfully!");
-            Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
     }
-
 
 }

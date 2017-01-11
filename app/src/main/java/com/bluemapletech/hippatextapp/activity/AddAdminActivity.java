@@ -257,6 +257,7 @@ public class AddAdminActivity extends AppCompatActivity {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
+            Toast.makeText(getActivity(), "Admin addedd successfully!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
             startActivity(intent);
         } else {

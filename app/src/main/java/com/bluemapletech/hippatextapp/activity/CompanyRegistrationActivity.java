@@ -167,8 +167,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                     valid = false;
                 }
 
-                if(compPasswordtxts.isEmpty()||compPasswordtxts.length()< 8|| compPasswordtxts.length()> 16){
-                    compPasswordtxt.setError("Password between 8 - 16 number and character");
+                if(compPasswordtxts.isEmpty()||compPasswordtxts.length()< 6|| compPasswordtxts.length()> 16){
+                    compPasswordtxt.setError("Password between 6 - 16 number and character");
                     valid = false;
                 }else{
                     compPasswordtxt.setError(null);
