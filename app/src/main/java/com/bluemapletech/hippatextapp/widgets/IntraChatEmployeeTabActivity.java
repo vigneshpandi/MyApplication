@@ -51,15 +51,6 @@ public class IntraChatEmployeeTabActivity extends Fragment {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
 
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
-       /* listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("sdsdsd","sdsdsdsd");
-                Intent redirect = new Intent(getActivity(), ViewUserDetailTabActivity.class);
-                redirect.putExtra(userEmails, userObj.get(position).getUserName());
-                startActivity(redirect);
-            }
-        });*/
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         checkOnlineUser();

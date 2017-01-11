@@ -105,32 +105,32 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(spinner!=null){
-                    if (!validate()) {
-                        Toast.makeText(getActivity(), "Employee registered failed!", Toast.LENGTH_LONG).show();
-                    } else {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                        dialog.setTitle("Conform your Email Address");
-                        dialog.setIcon(R.mipmap.ic_launcher);
-                        dialog.setMessage("Are you sure do you want to use this email address " + emailTxt.getText());
-                        dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                progressDialog = new ProgressDialog(getActivity());
-                                progressDialog.setMessage("registering...");
-                                progressDialog.show();
-                                progressDialog.setCanceledOnTouchOutside(false);
+                if (!validate()) {
+                    Toast.makeText(getActivity(), "Employee registered failed!", Toast.LENGTH_LONG).show();
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Conform your Email Address");
+                    dialog.setIcon(R.mipmap.ic_launcher);
+                    dialog.setMessage("Are you sure do you want to use this email address " + emailTxt.getText());
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setMessage("registering...");
+                            progressDialog.show();
+                            progressDialog.setCanceledOnTouchOutside(false);
 
-                                checkUserExistence();
-                            }
-                        });
-                        dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        // Showing Alert Message
-                        dialog.show();
-                    }
-                }}
+                            checkUserExistence();
+                        }
+                    });
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    // Showing Alert Message
+                    dialog.show();
+                }
+            }}
 
             private boolean validate() {
                 String empFirstName = firstName.getText().toString();
@@ -333,7 +333,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     }
 
     private void saveImage() {
-        final  String reArrangeEmailId = emailTxt.getText().toString().replace(".", "-");
+       final  String reArrangeEmailId = emailTxt.getText().toString().replace(".", "-");
         Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
         StorageReference filePath = mStorage.child(reArrangeEmailId);
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

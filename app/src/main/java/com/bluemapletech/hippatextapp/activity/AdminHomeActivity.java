@@ -59,7 +59,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         viewPagerAdapter.addFragments(new AcceptedAdminTabActivity(),"Accepted");
         viewPagerAdapter.addFragments(new RequestedAdminTabActivity(),"Requested");
         viewPagerAdapter.addFragments(new PendingAdminTabActivity(),"Pending");
-        viewPagerAdapter.addFragments(new ChatAdminActivity(),"Chat");
+        viewPagerAdapter.addFragments(new ChatAdminActivity(),"Intra Chat");
         viewPagerAdapter.addFragments(new GroupAdminTabActivity(),"Group");
 
 
@@ -96,6 +96,11 @@ public class AdminHomeActivity extends AppCompatActivity {
         }
         if (id == R.id.admin_list) {
             Intent redirect = new Intent(getActivity(), ListOfAdminActivity.class);
+            startActivity(redirect);
+            return true;
+        }
+        if (id == R.id.Inter_Chat) {
+            Intent redirect = new Intent(getActivity(), Inter_chat_admin_activity.class);
             startActivity(redirect);
             return true;
         }
@@ -156,22 +161,6 @@ public class AdminHomeActivity extends AppCompatActivity {
             return true;
         }
 
-       /* if (id == R.id.profile) {
-            Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
-            startActivity(logOut);
-            onStop();
-            finish();
-            Log.d("menu selected", "menu New group selected");
-            return true;
-        }*/
-       /* if (id == R.id.change_pin) {
-            Intent logOut = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
-            startActivity(logOut);
-            onStop();
-            finish();
-            Log.d(TAG, "Change chat pin has called!");
-            return true;
-        }*/
         return super.onOptionsItemSelected(item);
     }
     @Override

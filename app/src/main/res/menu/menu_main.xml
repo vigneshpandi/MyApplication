@@ -34,25 +34,19 @@
         android:title="Rejected Employee List"
         app:showAsAction="never" />
     <item
-        android:id="@+id/settings"
+        android:id="@+id/Inter_Chat"
         android:orderInCategory="107"
+        android:title="InterChatList"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="108"
         android:title="Settings"
         app:showAsAction="never" />
 
-   <!-- <item
-        android:id="@+id/change_pin"
-        android:orderInCategory="108"
-        android:title="Change Secure Chat Pin"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/profile"
-        android:orderInCategory="109"
-        android:title="Profile"
-        app:showAsAction="never" />
--->
     <item
         android:id="@+id/log_out"
-        android:orderInCategory="108"
+        android:orderInCategory="109"
         android:title="@string/log_out"
         app:showAsAction="never" />
 

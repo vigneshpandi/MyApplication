@@ -1,7 +1,9 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -52,6 +54,7 @@ import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,12 +64,15 @@ public class AddAdminActivity extends AppCompatActivity {
     private static final String TAG = AddAdminActivity.class.getCanonicalName();
     private FirebaseAuth firebaseAuthRef;
     private FirebaseDatabase firebaseDatabaseRef;
+    private FirebaseDatabase fireBaseDatabase;
     private DatabaseReference databaseRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
     private StorageReference mStorage;
     private Uri downloadUrl;
-
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    String isOnline;
     private EditText adminEmailTxt, adminProviderNPItxt, adminProviderName;
     private Button addAminBtn;
     private String password;
@@ -79,7 +85,7 @@ public class AddAdminActivity extends AppCompatActivity {
     GMailSender sender;
     private String toEmail;
     private String compEmailtxts;
-
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -401,7 +407,42 @@ public class AddAdminActivity extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
+    @Override
+    public void onPause()
+    {
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
 
+
+    @Override
+    protected  void onResume(){
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
+    }
     public AddAdminActivity getActivity() {
         return this;
     }

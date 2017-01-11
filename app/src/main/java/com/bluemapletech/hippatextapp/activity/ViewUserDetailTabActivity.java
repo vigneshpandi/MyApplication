@@ -61,6 +61,10 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
 
 
         userEmails = getIntent().getStringExtra(PageEmployeeBaseAdpter.userEmails);
+
+        if(userEmails==null || userEmails.matches("")){
+            userEmails = getIntent().getStringExtra(Inter_chat_admin_activity.userEmails);
+        }
        /* if(userEmails ==null || userEmails.matches("")) {
             userEmails = getIntent().getStringExtra(IntraChatEmployeeTabActivity.userEmails);
         }*/
@@ -138,7 +142,11 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
 
     private void backPage() {
         Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+        if(logi_role_value.matches("user")) {
+            startActivity(new Intent(getActivity(), EmployeeHomeActivity.class));
+        }else if(logi_role_value.matches("admin")){
+            startActivity(new Intent(getActivity(), Inter_chat_admin_activity.class));
+        }
     }
     public ViewUserDetailTabActivity getActivity() {
         return this;
