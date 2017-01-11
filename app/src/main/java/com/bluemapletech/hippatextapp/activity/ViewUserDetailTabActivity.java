@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,13 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     User user1 = new User();
+
+
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
+    String isOnline;
+
+    private FirebaseDatabase fireBaseDatabase; private FirebaseAuth firebaseAuth;
     String logi_role_value,reArrangeEmail,userAuths,userEmails,userId;
     private TextView userEmail,compName,empId,providerNPI,providerName,providerNpiLabel,providerNameLabel;
     private static final String TAG = ViewUserDetailTabActivity.class.getCanonicalName();
@@ -147,6 +155,43 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         }else if(logi_role_value.matches("admin")){
             startActivity(new Intent(getActivity(), Inter_chat_admin_activity.class));
         }
+    }
+
+    @Override
+    public void onPause()
+    {
+        preflogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  preflogin.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
+
+
+    @Override
+    protected  void onResume(){
+        preflogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  preflogin.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
     }
     public ViewUserDetailTabActivity getActivity() {
         return this;

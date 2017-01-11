@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Settings extends AppCompatActivity {
     private static final String TAG = Settings.class.getCanonicalName();
@@ -52,6 +53,9 @@ public class Settings extends AppCompatActivity {
     private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
     private String login_mail;
     Switch showOnline;
+    SharedPreferences pref1;
+    SharedPreferences.Editor editor1;
+    private FirebaseDatabase fireBaseDatabase; private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -312,6 +316,44 @@ public class Settings extends AppCompatActivity {
             Log.d(TAG, "Error while show Online, please try again!");
         }
     }
+
+    @Override
+    public void onPause()
+    {
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
+
+
+    @Override
+    protected  void onResume(){
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
+    }
+
 
     public Settings getActivity() {
         return this;

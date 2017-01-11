@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RejectedAdminList extends AppCompatActivity {
@@ -44,6 +45,10 @@ public class RejectedAdminList extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private ListView iv;
+
+    SharedPreferences pref1;
+    SharedPreferences.Editor editor1;
+    String isOnline;
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
@@ -253,7 +258,42 @@ public class RejectedAdminList extends AppCompatActivity {
         return this;
     }
 
+    @Override
+    public void onPause()
+    {
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
 
+
+    @Override
+    protected  void onResume(){
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
+    }
 
     }
 
