@@ -295,5 +295,5 @@ public class RejectedAdminList extends AppCompatActivity {
         super.onResume();
     }
 
-    }
+}
 

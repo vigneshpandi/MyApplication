@@ -23,12 +23,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 public class ChangePassword extends AppCompatActivity {
     private static final String TAG = ChangePassword.class.getCanonicalName();
     private FirebaseDatabase firebaseDatabaseRef;
     private  DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuth;
-    private String roleValue;
+    private FirebaseDatabase fireBaseDatabase;
+    private String roleValue,isOnline;
     private Button changePassword;
     private ProgressDialog progressDialog;
     public static final String roleValuesReturn = "roleValuesReturn";
@@ -36,6 +39,8 @@ public class ChangePassword extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     String email,loginRoleValue,loginAuthValue;
+    SharedPreferences pref1;
+    SharedPreferences.Editor editor1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,5 +122,42 @@ public class ChangePassword extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
+    @Override
+    public void onPause()
+    {
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
+
+
+    @Override
+    protected  void onResume(){
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
+    }
+
     public ChangePassword getActivity() { return this;  }
 }

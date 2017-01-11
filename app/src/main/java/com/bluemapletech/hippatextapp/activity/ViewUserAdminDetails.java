@@ -149,7 +149,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                 Log.d(TAG,"userAuth...."+user1.getAuth());
                 if(user1.getAuth().matches("3")){
                     Log.d(TAG,"zzzzzzzzzz");
-                  acceptBtn.setText("Accept");
+                    acceptBtn.setText("Accept");
                     acceptBtn.setBackgroundColor(getResources().getColor(R.color.accept_btn));
                 }
 

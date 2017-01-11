@@ -54,8 +54,10 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private String rootValue,loginRole,loginAuth;
     private String not_acp_user;
-    private String loginCompanyName;
-
+    private String loginCompanyName,isOnline;
+    SharedPreferences pref1;
+    SharedPreferences.Editor editor1;
+    private FirebaseAuth firebaseAuth;
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
@@ -266,6 +268,42 @@ UserDetailDto userDetailDtos = new UserDetailDto();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public void onPause()
+    {
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
+
+
+    @Override
+    protected  void onResume(){
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
     }
     public Inter_chat_admin_activity getActivity() {
         return this;

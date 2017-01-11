@@ -187,7 +187,7 @@ public class ViewGroupDetails extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-    });
+        });
         groupNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -312,7 +312,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 saveProfileImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                         Bitmap bitmap = ((BitmapDrawable) showImage.getDrawable()).getBitmap();
+                        Bitmap bitmap = ((BitmapDrawable) showImage.getDrawable()).getBitmap();
                         if (bitmap != null) {
                             try {
                                 String root = Environment.getExternalStorageDirectory().toString();
@@ -320,7 +320,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 if (!myDir.exists()) {
                                     myDir.mkdirs();
                                 }
-                               String ran_img_name  = new BigInteger(130, random).toString(32);
+                                String ran_img_name  = new BigInteger(130, random).toString(32);
                                 String randomValue = ran_img_name.substring(0, 7);
                                 String name = randomValue+".jpg";
                                 myDir = new File(myDir, name);
@@ -480,7 +480,7 @@ public class ViewGroupDetails extends AppCompatActivity {
 
 
 
-// get user details
+    // get user details
     private void getUserProfile(final String userMail) {
         groupInformation = new Groups();
         reArrangeEmails = userMail.replace(".", "-");

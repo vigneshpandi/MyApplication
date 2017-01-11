@@ -99,7 +99,7 @@ public class AdminHomeActivity extends AppCompatActivity {
             startActivity(redirect);
             return true;
         }
-        if (id == R.id.Inter_Chat) {
+        if (id == R.id.inter_Chat) {
             Intent redirect = new Intent(getActivity(), Inter_chat_admin_activity.class);
             startActivity(redirect);
             return true;

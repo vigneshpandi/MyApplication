@@ -105,7 +105,7 @@ public class ViewUserDetails extends AppCompatActivity {
             pendingBtn.setVisibility(View.VISIBLE);
             deleteBtn.setVisibility(View.VISIBLE);
             chatBtn.setVisibility(View.VISIBLE);
-            }
+        }
         if(userAuths.matches("2")){
             acceptBtn.setVisibility(View.VISIBLE);
             acceptBtn.setText("Chat");
@@ -168,7 +168,7 @@ public class ViewUserDetails extends AppCompatActivity {
                 }
                 if(userAuths.matches("1") && role.matches("admin")){
                     acceptBtn.setVisibility(View.VISIBLE);
-                   Button btns = (Button) findViewById(R.id.accept_user_btn);
+                    Button btns = (Button) findViewById(R.id.accept_user_btn);
                     btns.setText("Employee List");
                     btns.setBackgroundColor(getResources().getColor(R.color.navigationBarColor));
                 }
@@ -188,51 +188,51 @@ public class ViewUserDetails extends AppCompatActivity {
         });
 
         acceptBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(!userAuths.matches("2")){
-        if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-           // alert.setTitle("");
-            alert.setMessage("Do you want to accept '"+user.getCompanyName()+"' Company!");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    acceptedCompany(user);
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
+            @Override
+            public void onClick(View v) {
+                if(!userAuths.matches("2")){
+                    if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
+                        user.setAuth("1");
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        // alert.setTitle("");
+                        alert.setMessage("Do you want to accept '"+user.getCompanyName()+"' Company!");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                acceptedCompany(user);
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
 
-        } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            //alert.setTitle("");
-            alert.setMessage("Do you want to accept '"+user1.getEmpId()+"' employee!");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    acceptedEmployee(user);
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
-        } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
+                    } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
+                        user.setAuth("1");
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        //alert.setTitle("");
+                        alert.setMessage("Do you want to accept '"+user1.getEmpId()+"' employee!");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                acceptedEmployee(user);
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
+                    } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
             /*AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             //alert.setTitle("");
             alert.setMessage("Do you want to accept '"+user.getCompanyName()+"' Company!");
             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {*/
-                    getUserDetails(user.getCompanyName());
+                        getUserDetails(user.getCompanyName());
                /* }
             });
             alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -242,46 +242,46 @@ public class ViewUserDetails extends AppCompatActivity {
             });
             AlertDialog alertDialog = alert.create();
             alertDialog.show();*/
-        }
-
-    }else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("Security check");
-            final EditText chatPinn = new EditText(getActivity());
-            chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-            chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            chatPinn.setHint("Enter your chat pin");
-            alert.setView(chatPinn);
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String srt = chatPinn.getEditableText().toString();
-                    if (srt.matches(loginChatPin)) {
-                        firebaseAuth = FirebaseAuth.getInstance();
-                        FirebaseUser logged = firebaseAuth.getCurrentUser();
-                        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-                        Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-                        intent.putExtra(toEmail,user1.getUserName());
-                        intent.putExtra(fromEmail, logged.getEmail());
-                        intent.putExtra(sendId, user1.getSenderId());
-                        intent.putExtra(notificationId,user1.getPushNotificationId());
-                        intent.putExtra(firstName, user1.getFirstName());
-                        intent.putExtra(lastName, user1.getLastName());
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
                     }
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
 
-            }}
-});
+                }else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle("Security check");
+                    final EditText chatPinn = new EditText(getActivity());
+                    chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    chatPinn.setHint("Enter your chat pin");
+                    alert.setView(chatPinn);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String srt = chatPinn.getEditableText().toString();
+                            if (srt.matches(loginChatPin)) {
+                                firebaseAuth = FirebaseAuth.getInstance();
+                                FirebaseUser logged = firebaseAuth.getCurrentUser();
+                                Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                                Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                                intent.putExtra(toEmail,user1.getUserName());
+                                intent.putExtra(fromEmail, logged.getEmail());
+                                intent.putExtra(sendId, user1.getSenderId());
+                                intent.putExtra(notificationId,user1.getPushNotificationId());
+                                intent.putExtra(firstName, user1.getFirstName());
+                                intent.putExtra(lastName, user1.getLastName());
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+
+                }}
+        });
 
         pendingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,7 +289,7 @@ public class ViewUserDetails extends AppCompatActivity {
                 user.setAuth("2");
                 if(user.getRole().matches("admin")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                   // alert.setTitle("");
+                    // alert.setTitle("");
                     alert.setMessage("Do you want to put pending '"+user.getCompanyName()+"' Company!");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -329,7 +329,7 @@ public class ViewUserDetails extends AppCompatActivity {
                 user.setAuth("3");
                 if(user.getRole().matches("admin")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                   // alert.setTitle("");
+                    // alert.setTitle("");
                     alert.setMessage("Do you want to reject '"+user.getCompanyName()+"' Company!");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -345,7 +345,7 @@ public class ViewUserDetails extends AppCompatActivity {
                     alertDialog.show();
                 } else if(user.getRole().matches("user")){
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                   // alert.setTitle("");
+                    // alert.setTitle("");
                     alert.setMessage("Do you want to reject '"+user1.getEmpId()+"' employee!");
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -444,8 +444,8 @@ public class ViewUserDetails extends AppCompatActivity {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
-                    startActivity(new Intent(getActivity(), RootHomeActivity.class));
-                   Toast.makeText(getActivity(), "Company is accepted successfully!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(), RootHomeActivity.class));
+            Toast.makeText(getActivity(), "Company is accepted successfully!", Toast.LENGTH_LONG).show();
 
         } else {
             Log.d(TAG, "Error while accepted the company, please try again!");
@@ -457,8 +457,8 @@ public class ViewUserDetails extends AppCompatActivity {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
         if (result) {
-           Toast.makeText(getActivity(), "Company is requested to pending!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getActivity(), RootHomeActivity.class));
+            Toast.makeText(getActivity(), "Company is requested to pending!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity(), RootHomeActivity.class));
 
         } else {
             Log.d(TAG, "Error while pending the company, please try again!");
@@ -470,7 +470,7 @@ public class ViewUserDetails extends AppCompatActivity {
         boolean result = companyDao.deleteCompany(user);
         if (result) {
             Toast.makeText(getActivity(), "Company is rejected successfully!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getActivity(), RootHomeActivity.class));
+            startActivity(new Intent(getActivity(), RootHomeActivity.class));
 
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -593,7 +593,7 @@ public class ViewUserDetails extends AppCompatActivity {
 
             final User info = getItem(position);
 
-                mViewHolder.mailId.setText(info.getUserName());
+            mViewHolder.mailId.setText(info.getUserName());
 
 
             return convertView;

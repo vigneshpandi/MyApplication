@@ -100,7 +100,7 @@ public class SelectUser extends AppCompatActivity {
                                 check = 1;
                             }
                         }
-                     if(check==0) {
+                        if(check==0) {
                             userObj.add(user);
                         }
                     }
@@ -131,7 +131,7 @@ public class SelectUser extends AppCompatActivity {
                         progressDialog.show();
                         progressDialog.setCanceledOnTouchOutside(false);
                         EmployeeDao empDao = new EmployeeDao();
-                     boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal);
+                        boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal);
                         if(success){
                             progressDialog.dismiss();
                             Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
@@ -267,7 +267,7 @@ public class SelectUser extends AppCompatActivity {
         }
         super.onResume();
     }
-   public SelectUser getActivity() {
-       return this;
-   }
+    public SelectUser getActivity() {
+        return this;
+    }
 }

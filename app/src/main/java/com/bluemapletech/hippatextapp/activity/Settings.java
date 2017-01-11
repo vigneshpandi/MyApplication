@@ -80,7 +80,7 @@ public class Settings extends AppCompatActivity {
         TextView password = (TextView) findViewById(R.id.change_password);
         TextView deleteAcount = (TextView) findViewById(R.id.delete_an_account);
         TextView notificationSetting = (TextView) findViewById(R.id.notification_setting);
-         showOnline = (Switch) findViewById(R.id.show_online);
+        showOnline = (Switch) findViewById(R.id.show_online);
         TableRow hr = (TableRow) findViewById(R.id.hr);
         TableRow hr1 = (TableRow) findViewById(R.id.hr1);
         TableRow hr2 = (TableRow) findViewById(R.id.hr2);
@@ -89,18 +89,18 @@ public class Settings extends AppCompatActivity {
         TableRow hr5 = (TableRow) findViewById(R.id.hr5);
 
         if(role_Value.matches("root")){
-             profile.setVisibility(View.GONE);
-             chatPin.setVisibility(View.GONE);
-             password.setVisibility(View.VISIBLE);
-             deleteAcount.setVisibility(View.VISIBLE);
-             notificationSetting.setVisibility(View.VISIBLE);
-             showOnline.setVisibility(View.GONE);
-             hr.setVisibility(View.GONE);
-             hr1.setVisibility(View.GONE);
-             hr2.setVisibility(View.VISIBLE);
-             hr3.setVisibility(View.VISIBLE);
-             hr4.setVisibility(View.VISIBLE);
-             hr5.setVisibility(View.GONE);
+            profile.setVisibility(View.GONE);
+            chatPin.setVisibility(View.GONE);
+            password.setVisibility(View.VISIBLE);
+            deleteAcount.setVisibility(View.VISIBLE);
+            notificationSetting.setVisibility(View.VISIBLE);
+            showOnline.setVisibility(View.GONE);
+            hr.setVisibility(View.GONE);
+            hr1.setVisibility(View.GONE);
+            hr2.setVisibility(View.VISIBLE);
+            hr3.setVisibility(View.VISIBLE);
+            hr4.setVisibility(View.VISIBLE);
+            hr5.setVisibility(View.GONE);
             password.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -202,7 +202,7 @@ public class Settings extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG,"show online is clicked....");
-                  //  showOnline.setChecked(true);
+                    //  showOnline.setChecked(true);
                     showOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                         @Override
@@ -216,9 +216,9 @@ public class Settings extends AppCompatActivity {
                                 Log.d("checked","dfdjfkdlfkldfjkldjf"+login_mail);
                                 User u = new User();
                                 u.setUserName(login_mail);
-                               u.setIsOnlie("true");
+                                u.setIsOnlie("true");
 
-                               showOnline(u);
+                                showOnline(u);
                             }else{
                                 pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                                 editor = pref.edit();
@@ -229,7 +229,7 @@ public class Settings extends AppCompatActivity {
                                 u1.setUserName(login_mail);
                                 u1.setIsOnlie("false");
                                 Log.d("nottchecked","dfdjfkdlfcccckldfjkldjf"+login_mail);
-                             showOnline(u1);
+                                showOnline(u1);
                                 //  switchStatus.setText("Switch is currently OFF");
                             }
 
@@ -248,7 +248,7 @@ public class Settings extends AppCompatActivity {
         }
     }
 
-   /* if(isOnline.matches("true")) {*/
+    /* if(isOnline.matches("true")) {*/
     public void deleteAcount(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d(TAG,"deleted userdetails...."+user.getEmail());
@@ -306,10 +306,10 @@ public class Settings extends AppCompatActivity {
         if (result) {
             Log.d(TAG,"user.getIsOnline..."+user.getIsOnlie());
             if(user.getIsOnlie()== "true") {
-               // showOnline.setChecked(true);
+                // showOnline.setChecked(true);
                 Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
             }else{
-               // showOnline.setChecked(false);
+                // showOnline.setChecked(false);
                 Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
             }
         } else {

@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -68,7 +69,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private ArrayList<Message> mMessages;
         private GroupMessageEmployeeActivity.MessagesAdapter mAdapter;
         private ListView mListView;
-        private String mConvoId;
+        private String mConvoId,isOnline;
         private GroupMessageDao.MessagesListener mListener;
         private String randomValue;
         private String fromMail, senderId, userName;
@@ -88,12 +89,15 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase fireBaseDatabase;
     boolean wallpaperImage = false;
     private Toolbar toolbar;
         private FirebaseDatabase firebaseDatabaseRef;
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
-
+    SharedPreferences pref1;
+    SharedPreferences.Editor editor1;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -623,6 +627,42 @@ Log.d("dsssssss","ssssppww");
             e.getMessage();
             return null;
         }
+    }
+    @Override
+    public void onPause()
+    {
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
+
+
+    @Override
+    protected  void onResume(){
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref1.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            HashMap<String, Object> onlineReenter = new HashMap<>();
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser logged = firebaseAuth.getCurrentUser();
+            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            onlineReenter.put("onlineUser", logged.getEmail());
+            dataReferences.setValue(onlineReenter);
+        }
+        super.onResume();
     }
     public GroupMessageEmployeeActivity getActivity() {
         return this;

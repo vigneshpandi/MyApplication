@@ -34,7 +34,7 @@
         android:title="Rejected Employee List"
         app:showAsAction="never" />
     <item
-        android:id="@+id/Inter_Chat"
+        android:id="@+id/inter_Chat"
         android:orderInCategory="107"
         android:title="InterChatList"
         app:showAsAction="never" />
