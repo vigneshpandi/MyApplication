@@ -1,4 +1,5 @@
 package com.bluemapletech.hippatextapp.activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,6 +75,7 @@ public class CreateGroup extends AppCompatActivity {
     private String storeMail;
     private SecureRandom random;
     private String senderID,roleValue;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,6 +225,11 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Creating group...");
+                    progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
                     groupName = input.getText().toString();
                     saveImage();
 
@@ -265,10 +272,14 @@ Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
                 //startActivity(getIntent());
                 if(roleValue.matches("admin")){
                     Log.d(TAG, "admin has been called!");
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(),"Group is created successfully!",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
                     startActivity(intent);
                 }else if(roleValue.matches("user")){
                     Log.d(TAG, "user has been called!");
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(),"Group is created successfully!",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
                     startActivity(intent);
                 }

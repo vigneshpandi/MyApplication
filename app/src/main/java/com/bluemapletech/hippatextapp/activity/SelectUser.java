@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +47,7 @@ public class SelectUser extends AppCompatActivity {
     Groups groupVal;
     private ArrayList<String> data = new ArrayList<>();
     List<User> userObj = new ArrayList<User>();
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,9 +119,14 @@ public class SelectUser extends AppCompatActivity {
                 dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d("SelectUser","serializablevalue"+ groupVal);
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setMessage("Please wait a moment...");
+                        progressDialog.show();
+                        progressDialog.setCanceledOnTouchOutside(false);
                         EmployeeDao empDao = new EmployeeDao();
                      boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal);
                         if(success){
+                            progressDialog.dismiss();
                             Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
                             intent.putExtra(groupNames,groupVal.getGroupName());
                             startActivity(intent);
@@ -200,6 +207,20 @@ public class SelectUser extends AppCompatActivity {
                 userImage = (ImageView) item.findViewById(R.id.user_image);
             }
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                backPage();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void backPage() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),ViewGroupDetails.class));
     }
    public SelectUser getActivity() {
        return this;

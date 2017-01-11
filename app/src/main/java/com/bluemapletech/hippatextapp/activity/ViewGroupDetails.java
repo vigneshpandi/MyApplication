@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -531,6 +532,16 @@ public class ViewGroupDetails extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            startActivity(new Intent(
+                    getActivity(), GroupMessageEmployeeActivity.class));
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private class GroupUserAdapter extends BaseAdapter {
 
         List<Groups> groupInfo = new ArrayList<Groups>();
@@ -614,4 +625,6 @@ public class ViewGroupDetails extends AppCompatActivity {
     public ViewGroupDetails getActivity() {
         return this;
     }
+
+
 }

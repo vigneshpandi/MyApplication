@@ -2,9 +2,11 @@ package com.bluemapletech.hippatextapp.activity;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -106,7 +108,21 @@ public class Settings extends AppCompatActivity {
             deleteAcount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteAcount();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setMessage("Do you want to delete the account!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteAcount();
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+
                 }
             });
             notificationSetting.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +171,20 @@ public class Settings extends AppCompatActivity {
             deleteAcount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteAcount();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setMessage("Do you want to delete the account!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteAcount();
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
                 }
             });
             notificationSetting.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +267,7 @@ public class Settings extends AppCompatActivity {
                     SharedPreferences.Editor editors = preferencess.edit();
                     editors.clear();
                     editors.commit();
+                    Toast.makeText(getActivity(),"Your acount is deleted successfully!",Toast.LENGTH_LONG).show();
                     Intent list = new Intent(getActivity(), HomeActivity.class);
                     startActivity(list);
                 }
