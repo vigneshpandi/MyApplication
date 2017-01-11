@@ -1,10 +1,8 @@
 package com.bluemapletech.hippatextapp.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +32,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
     LayoutInflater inflater;
     Context context;
     List<User> userInfo = new ArrayList<User>();
-    private AlertDialog.Builder alertDialog;
-
 
     public PageAdminBaseAdapter(Context context, List<User> user) {
         this.context = context;
@@ -50,7 +46,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
     @Override
     public User getItem(int position) {
-        return (User) userInfo.get(position);
+        return userInfo.get(position);
     }
 
     @Override
@@ -73,10 +69,10 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
         final User info = getItem(position);
 
-           mViewHolder.fieldId.setText(info.getEmpId());
-           mViewHolder.fieldName.setText(info.getUserName());
+        mViewHolder.fieldId.setText(info.getEmpId());
+        mViewHolder.fieldName.setText(info.getUserName());
 
-        ((Button) convertView.findViewById(R.id.accept_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("0")) {
@@ -85,63 +81,21 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                     intent.putExtra(userAuth, userInfo.get(position).getAuth());
                     context.startActivity(intent);
                 } else if(userInfo.get(position).getAuth().matches("2")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            accepted(userInfo.get(position));
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    accepted(userInfo.get(position));
                 } else if(userInfo.get(position).getAuth().matches("1")) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            deleteEmpl(userInfo.get(position));
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    deleteEmpl(userInfo.get(position));
                 }
             }
         });
-        ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(0).getAuth().matches("2")) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            deleteEmpl(userInfo.get(position));
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    deleteEmpl(userInfo.get(position));
                 }
             }
         });
-        ((TextView) convertView.findViewById(R.id.layout_field_id)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!userInfo.get(position).getAuth().matches("0")) {
@@ -169,8 +123,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
             TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
             id.setTextColor(Color.parseColor("#808080"));
         }
@@ -178,13 +132,13 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("Reject");
-           // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
+            // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
             TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
             textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
 
             btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {
@@ -249,5 +203,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Log.d(TAG, "Error while delete the company, please try again!");
         }
     }
+
 
 }

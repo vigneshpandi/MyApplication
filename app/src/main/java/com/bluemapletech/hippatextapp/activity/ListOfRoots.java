@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Set;
 
 public class ListOfRoots extends AppCompatActivity {
-
     private static final String TAG = ListOfRoots.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
@@ -92,7 +91,10 @@ if(role.matches("admin")&& rootValue.matches("3")){
     Log.d(TAG,"admin list..");
     getSupportActionBar().setTitle("Admin List");
 }
-
+        if(role.matches("admin")&& rootValue.matches("1")){
+            Log.d(TAG,"admin list..");
+            getSupportActionBar().setTitle("Admin List");
+        }
 
 
         //checkUserExistence();

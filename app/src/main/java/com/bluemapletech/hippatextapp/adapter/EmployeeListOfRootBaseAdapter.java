@@ -287,7 +287,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptUser(userMail);
         if (result) {
-            Toast.makeText(this.context, "Company has been Rejected by the admin!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "Company has been accepted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();
         }

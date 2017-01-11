@@ -80,41 +80,25 @@ import static com.bluemapletech.hippatextapp.R.layout.view_groupimage_dialog;
 
 public class ViewGroupDetails extends AppCompatActivity {
     private static final String TAG = ViewGroupDetails.class.getCanonicalName();
-    private String groupName;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase fireBaseDatabase;
+    private String groupName,loggedEmail, loggedINEmail,userMailId, reArrangeEmails, reArrangeEmailId,groupValues, editGroupName, profile, base64Profile;
+    String reArrangeEmail,senderID;
+    private FirebaseAuth firebaseAuth;  private FirebaseDatabase fireBaseDatabase;private StorageReference mStorage;
     private ListView iv;
     private String[] separated;
-    Groups group = new Groups();
-    List<Groups> groupObj = new ArrayList<Groups>();
-    List<Groups> groupObjs = new ArrayList<Groups>();
-    private String loggedEmail, loggedINEmail;
-    ImageView viewImage;
-    private Toolbar toolbar;
-    private Toolbar toolbars;
-    private int l = 0;
-    private int k = 0;
+    private SecureRandom random;
+    Groups group = new Groups(); Map<String, String> maps = new HashMap<String, String>();
+    List<Groups> groupObj = new ArrayList<Groups>(); List<Groups> groupObjs = new ArrayList<Groups>();
+    ImageView viewImage;ImageView backPageArrow; private ImageView displayImage;ImageView showImage;
+    Uri value, downloadUrl;
+    private Toolbar toolbar;private Toolbar toolbars;
+    private int l = 0;  private int k = 0;
+    private Bitmap bm;
     public int listPosition;
     Groups groupInformation;
-    private String userMailId;
-    private String reArrangeEmails, reArrangeEmailId;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    FirebaseUser logged;
-    Map<String, String> maps = new HashMap<String, String>();
-    ImageView backPageArrow;
-    String groupValues, editGroupName, profile;
-    final private int SELECT_FILE = 1;
-    final private int REQUEST_CAMERA = 2;
-    private String base64Profile;
-    private StorageReference mStorage;
-    Uri value, downloadUrl;
-    String reArrangeEmail;
-    private ImageView displayImage;
-    private SecureRandom random;
-    private String senderID;
-    private Bitmap bm;
-    ImageView showImage;
+    boolean adminAddedPermisson = false;
+    SharedPreferences pref;SharedPreferences.Editor editor;FirebaseUser logged;
+    final private int SELECT_FILE = 1;final private int REQUEST_CAMERA = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +146,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
         loggedEmail = logged.getEmail().replace(".", "-");
+        //get login user groupdetais
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(loggedEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
@@ -186,6 +171,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 Log.d("separated", "separated" + separated);
                 Log.d("separated", "separated" + separated.length);
                 for (int i = 0; i < separated.length; i++) {
+                    //get userProfile for   user  profile Image
                     getUserProfile(separated[i]);
                     // getGroupUser(separated[i],group.getRandomName());
                 }
@@ -196,14 +182,12 @@ public class ViewGroupDetails extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+    });
         groupNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(ViewGroupDetails.this);
                 alertDialog.setMessage("Enter your group name");
-
                 final EditText input = new EditText(ViewGroupDetails.this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -214,12 +198,8 @@ public class ViewGroupDetails extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 editGroupName = input.getText().toString();
-                                Log.d(TAG, "editGroupName.." + editGroupName);
-                                Log.d(TAG, "0000000000" + groupObj.get(0).getGroupName());
-                                Log.d(TAG, "0000000001" + groupObj.get(1).getGroupName());
                                 for (int m = 0; m < groupObj.size(); m++) {
                                     String us_mail = groupObj.get(m).getUserMail();
-                                    Log.d(TAG, "us_mail..." + us_mail);
                                     reArrangeEmails = us_mail.replace(".", "-");
                                     String r_value = groupObj.get(m).getRandomName();
                                     DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(r_value).child("groupName");
@@ -227,10 +207,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                                     TextView name = (TextView) findViewById(R.id.group_name);
                                     Log.d(TAG, "groupValioo" + editGroupName);
                                     name.setText(editGroupName);
-                                    l = 0;
+                                   /* l = 0;
                                     k = 0;
-                                    int i = 0;
-
+                                    int i = 0;*/
                                 }
                             }
                         });
@@ -242,27 +221,31 @@ public class ViewGroupDetails extends AppCompatActivity {
                 alertDialog.show();
             }
         });
+
+        //admin make user changed to admin
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 listPosition = position;
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setMessage("Make group admin");
-                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        EmployeeDao empDao = new EmployeeDao();
-                        boolean success = empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(), groupObj.get(listPosition).getUserMail());
-                    }
-                });
-                // Setting Negative "NO" Button
-                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                // Showing Alert Message
-                dialog.show();
-
+                if(adminAddedPermisson) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setMessage("Make group admin");
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            EmployeeDao empDao = new EmployeeDao();
+                            boolean success = empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(), groupObj.get(listPosition).getUserMail());
+                            groupObj.remove(position);
+                        }
+                    });
+                    // Setting Negative "NO" Button
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    // Showing Alert Message
+                    dialog.show();
+                }
             }
         });
 
@@ -290,9 +273,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 backPageArrow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d(TAG, "back arrow is clicked!");
                         groupName = getIntent().getStringExtra(SelectUser.groupNames);
-                        Log.d(TAG, "back arrow is clicked!....." + groupName);
                         Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
                         startActivity(intent);
 
@@ -491,12 +472,39 @@ public class ViewGroupDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+// get user details
+    private void getUserProfile(final String userMail) {
+        groupInformation = new Groups();
+        reArrangeEmails = userMail.replace(".", "-");
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmails);
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                groupInformation.setUserImage(map.get("profilePhoto"));
+                groupObjs.add(groupInformation);
+                getGroupUser(userMail, group.getRandomName());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
     private void getGroupUser(String userMail, String randomValue) {
         userMailId = userMail;
-        groupObj = new ArrayList<Groups>();
         final Groups groupValue = new Groups();
         groupValue.setUserMail(userMail);
+
         groupValue.setUserImage(groupObjs.get(k).getUserImage());
+        k++;
         reArrangeEmails = userMail.replace(".", "-");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(randomValue);
         dataReference.addValueEventListener(new ValueEventListener() {
@@ -521,29 +529,6 @@ public class ViewGroupDetails extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void getUserProfile(final String userMail) {
-        groupInformation = new Groups();
-        reArrangeEmails = userMail.replace(".", "-");
-        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmails);
-        dataReferences.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, String> map = (Map) dataSnapshot.getValue();
-                groupInformation.setUserImage(map.get("profilePhoto"));
-                // maps.put(separated[l],groupInformation.getUserImage());
-                groupObjs.add(groupInformation);
-                getGroupUser(userMail, group.getRandomName());
-                // l++;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     private class GroupUserAdapter extends BaseAdapter {
@@ -591,6 +576,7 @@ public class ViewGroupDetails extends AppCompatActivity {
             if (info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId)) {
                 Log.d(TAG, "valUES");
                 toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
+                adminAddedPermisson = true;
             } else if (info.getStatus().matches("user")) {
                 View btn = convertView.findViewById(R.id.btn_admin_view);
                 btn.setVisibility(View.GONE);

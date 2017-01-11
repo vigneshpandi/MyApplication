@@ -175,6 +175,10 @@ public class Settings extends AppCompatActivity {
                         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                             if(isChecked){
                                 //   switchStatus.setText("Switch is currently ON");
+                                pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                                editor = pref.edit();
+                                editor.putString("isOnline", "true");
+                                editor.commit();
                                 Log.d("checked","dfdjfkdlfkldfjkldjf"+login_mail);
                                 User u = new User();
                                 u.setUserName(login_mail);
@@ -182,6 +186,10 @@ public class Settings extends AppCompatActivity {
 
                                showOnline(u);
                             }else{
+                                pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                                editor = pref.edit();
+                                editor.putString("isOnline", "false");
+                                editor.commit();
                                 Log.d("not checked",login_mail);
                                 User u1 = new User();
                                 u1.setUserName(login_mail);

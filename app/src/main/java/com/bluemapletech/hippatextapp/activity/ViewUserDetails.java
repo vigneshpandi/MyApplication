@@ -65,8 +65,6 @@ public class ViewUserDetails extends AppCompatActivity {
     public static final String lastName = "lastName";
     private TextView userEmail, compName, empId, providerName, providerNPI, providerNpiLabel, providerNameLabel;
     private Button acceptBtn, pendingBtn, deleteBtn,chatBtn;
-    private AlertDialog.Builder alertDialog;
-    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +98,7 @@ public class ViewUserDetails extends AppCompatActivity {
             pendingBtn.setVisibility(View.VISIBLE);
             deleteBtn.setVisibility(View.VISIBLE);
             chatBtn.setVisibility(View.VISIBLE);
-            }
+        }
         if(userAuths.matches("2")){
             acceptBtn.setVisibility(View.VISIBLE);
             acceptBtn.setText("Chat");
@@ -162,7 +160,7 @@ public class ViewUserDetails extends AppCompatActivity {
                 }
                 if(userAuths.matches("1") && role.matches("admin")){
                     acceptBtn.setVisibility(View.VISIBLE);
-                   Button btns = (Button) findViewById(R.id.accept_user_btn);
+                    Button btns = (Button) findViewById(R.id.accept_user_btn);
                     btns.setText("Employee List");
                     btns.setBackgroundColor(getResources().getColor(R.color.navigationBarColor));
                 }
@@ -182,132 +180,66 @@ public class ViewUserDetails extends AppCompatActivity {
         });
 
         acceptBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(!userAuths.matches("2")){
-        if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("");
-           alert.setMessage("xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    acceptedCompany(user);
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
-        } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
-            user.setAuth("1");
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    acceptedEmployee(user);
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
-        } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("");
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    getUserDetails(user.getCompanyName());
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
-        }
-
-    }else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            alert.setTitle("Security check");
-            final EditText chatPinn = new EditText(getActivity());
-            chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-            chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            chatPinn.setHint("Enter your chat pin");
-            alert.setView(chatPinn);
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String srt = chatPinn.getEditableText().toString();
-                    if (srt.matches(loginChatPin)) {
-                        firebaseAuth = FirebaseAuth.getInstance();
-                        FirebaseUser logged = firebaseAuth.getCurrentUser();
-                        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-                        Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-                        intent.putExtra(toEmail,user1.getUserName());
-                        intent.putExtra(fromEmail, logged.getEmail());
-                        intent.putExtra(sendId, user1.getSenderId());
-                        intent.putExtra(notificationId,user1.getPushNotificationId());
-                        intent.putExtra(firstName, user1.getFirstName());
-                        intent.putExtra(lastName, user1.getLastName());
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+            @Override
+            public void onClick(View v) {
+                if(!userAuths.matches("2")){
+                    if(user.getRole().matches("admin")&& !user.getAuth().matches("1")){
+                        user.setAuth("1");
+                        acceptedCompany(user);
+                    } else if(user.getRole().matches("user")&& !user.getAuth().matches("1")){
+                        user.setAuth("1");
+                        acceptedEmployee(user);
+                    } else if(user.getRole().matches("admin")&& user.getAuth().matches("1")){
+                        getUserDetails(user.getCompanyName());
                     }
-                }
-            });
-            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
 
-            }}
-});
+                }else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle("Security check");
+                    final EditText chatPinn = new EditText(getActivity());
+                    chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                    chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    chatPinn.setHint("Enter your chat pin");
+                    alert.setView(chatPinn);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String srt = chatPinn.getEditableText().toString();
+                            if (srt.matches(loginChatPin)) {
+                                firebaseAuth = FirebaseAuth.getInstance();
+                                FirebaseUser logged = firebaseAuth.getCurrentUser();
+                                Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                                Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                                intent.putExtra(toEmail,user1.getUserName());
+                                intent.putExtra(fromEmail, logged.getEmail());
+                                intent.putExtra(sendId, user1.getSenderId());
+                                intent.putExtra(notificationId,user1.getPushNotificationId());
+                                intent.putExtra(firstName, user1.getFirstName());
+                                intent.putExtra(lastName, user1.getLastName());
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+
+                }}
+        });
 
         pendingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.setAuth("2");
                 if(user.getRole().matches("admin")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            pendingCompany(user);
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    pendingCompany(user);
                 } else if(user.getRole().matches("user")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            pendingEmployee(user);
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    pendingEmployee(user);
                 }
             }
         });
@@ -317,35 +249,9 @@ public class ViewUserDetails extends AppCompatActivity {
             public void onClick(View v) {
                 user.setAuth("3");
                 if(user.getRole().matches("admin")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            deleteCompany(user);
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    deleteCompany(user);
                 } else if(user.getRole().matches("user")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setTitle("");
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            deleteEmployee(user);
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                    deleteEmployee(user);
                 }
             }
         });
@@ -514,7 +420,7 @@ public class ViewUserDetails extends AppCompatActivity {
                     return true;
             }
         }
-        if(role.equals("admin") && roleValue.matches("admin")) {
+            if(role.equals("admin") && roleValue.matches("admin")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
                     backPageAdmins();
@@ -577,7 +483,7 @@ public class ViewUserDetails extends AppCompatActivity {
 
             final User info = getItem(position);
 
-                mViewHolder.mailId.setText(info.getUserName());
+            mViewHolder.mailId.setText(info.getUserName());
 
 
             return convertView;
