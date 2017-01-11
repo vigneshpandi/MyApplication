@@ -41,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:hint="First Name"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
                 android:inputType="text" />
             <EditText
                 android:id="@+id/emp_last_name"
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:hint="Last Name"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
                 android:inputType="text" />
             <EditText
                 android:id="@+id/emp_email_address"
