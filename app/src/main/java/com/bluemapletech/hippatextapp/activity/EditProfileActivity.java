@@ -439,8 +439,19 @@ public class EditProfileActivity extends AppCompatActivity {
         if (data) {
             progressDialog.dismiss();
             Log.d(TAG, "Update Profile successfuly!");
-            Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
-            startActivity(intent);
+            if(loginRole.matches("admin") && auth.matches("1")) {
+                Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+                startActivity(intent);
+            }else if(loginRole.matches("user") && auth.matches("1")) {
+                Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
+                startActivity(intent);
+            }else  if(loginRole.matches("root") && auth.matches("1")) {
+                Intent intent = new Intent(getActivity(), RootHomeActivity.class);
+                startActivity(intent);
+            }else if(!auth.matches("1")){
+                Intent intent = new Intent(getActivity(), NotAcceptedUser.class);
+                startActivity(intent);
+            }
         } else {
             Log.d(TAG, "profile not successfuly updated!");
             Toast.makeText(getActivity(), "profile not successfuly updated!", Toast.LENGTH_LONG).show();

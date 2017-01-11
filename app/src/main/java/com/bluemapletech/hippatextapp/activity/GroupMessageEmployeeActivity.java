@@ -86,6 +86,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editors;
     boolean wallpaperImage = false;
     private Toolbar toolbar;
         private FirebaseDatabase firebaseDatabaseRef;
@@ -187,8 +189,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 startActivity(intent);
             }
         });
-        pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
-        String backgroundImageValue =  pref.getString("backgroundImage", "");
+        prefs = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
+        String backgroundImageValue =  prefs.getString("backgroundImage", "");
         if(backgroundImageValue!=null){
             Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
             StringToBitMap(backgroundImageValue);
@@ -493,9 +495,9 @@ Log.d("dsssssss","ssssppww");
             BitmapDrawable myBackground = new BitmapDrawable(thumbnail);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-            editor = pref.edit();
-            editor.putString("backgroundImage", base64Profile);
-            editor.apply();
+            editors = prefs.edit();
+            editors.putString("backgroundImage", base64Profile);
+            editors.apply();
         }
     }
 
@@ -517,10 +519,19 @@ Log.d("dsssssss","ssssppww");
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-            editor = pref.edit();
-            editor.putString("backgroundImage", base64Profile);
-            editor.apply();
+            editors = prefs.edit();
+            editors.putString("backgroundImage", base64Profile);
+            editors.apply();
         }
+    }
+
+
+    public void noWallpaper(){
+        layout.setBackgroundResource(0);
+        SharedPreferences preferencess = getSharedPreferences("myBackgroundImage", 0);
+        SharedPreferences.Editor editors = preferencess.edit();
+        editors.clear();
+        editors.commit();
     }
 
     private String bitmapToBase64(Bitmap bitmap) {
@@ -580,6 +591,10 @@ Log.d("dsssssss","ssssppww");
         if(id == R.id.chat_image_background){
             wallpaperImage = true;
             chooseImage();
+        }
+
+        if(id == R.id.no_wallpaper){
+            noWallpaper();
         }
         return super.onOptionsItemSelected(item);
     }

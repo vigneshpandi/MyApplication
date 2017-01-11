@@ -9,6 +9,12 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/no_wallpaper"
+        android:orderInCategory="101"
+        android:title="No Wallpaper"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/delete"
         android:orderInCategory="100"
         android:icon="@drawable/delete"

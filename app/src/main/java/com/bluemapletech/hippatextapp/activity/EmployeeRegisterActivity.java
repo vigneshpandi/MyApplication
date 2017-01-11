@@ -104,6 +104,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(spinner!=null){
                 if (!validate()) {
                     Toast.makeText(getActivity(), "Employee registered failed!", Toast.LENGTH_LONG).show();
                 } else {
@@ -129,7 +130,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     // Showing Alert Message
                     dialog.show();
                 }
-            }
+            }}
 
             private boolean validate() {
                 String empFirstName = firstName.getText().toString();
@@ -172,17 +173,20 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 } else {
                     firstName.setError(null);
                 }
-
-                String selectedItem = spinner.getSelectedItem().toString();
-                View selectedView = spinner.getSelectedView();
-                if (selectedItem.equalsIgnoreCase("Select Company") ||
-                        selectedItem.equalsIgnoreCase("") && selectedView != null && selectedView instanceof TextView) {
-                    TextView selectedTextView = (TextView) selectedView;
-                    selectedTextView.setTextColor(Color.RED);
-                    selectedTextView.setText("Select Company");
-                    selectedTextView.setError("Please select company name!");
-                    valid = false;
+                String selectedItem = null;
+                if(spinner != null && spinner.getSelectedItem() !=null ) {
+                    selectedItem  = spinner.getSelectedItem().toString();
+                    View selectedView = spinner.getSelectedView();
+                    if (selectedItem.equalsIgnoreCase("Select Company") ||
+                            selectedItem.equalsIgnoreCase("") && selectedView != null && selectedView instanceof TextView) {
+                        TextView selectedTextView = (TextView) selectedView;
+                        selectedTextView.setTextColor(Color.RED);
+                        selectedTextView.setText("Select Company");
+                        selectedTextView.setError("Please select company name!");
+                        valid = false;
+                    }
                 }
+
                 return valid;
             }
         });

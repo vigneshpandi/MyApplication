@@ -324,6 +324,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
                                 out.flush();
                                 out.close();
+                                Toast.makeText(getActivity(), "group profile image has been saved successfully!", Toast.LENGTH_LONG).show();
                             } catch (Exception e) {
                                 // some action
                             }

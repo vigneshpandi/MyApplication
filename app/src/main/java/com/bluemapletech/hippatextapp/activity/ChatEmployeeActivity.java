@@ -84,6 +84,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editors;
     boolean wallpaperimage = false;
     private String roleValue;
     EditText newMessageView;
@@ -179,10 +181,10 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
 
        /* background image for chatting */
-        pref = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
-        String backgroundImageValue =  pref.getString("backgroundImage", "");
+        prefs = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
+        String backgroundImageValue =  prefs.getString("backgroundImage", "");
         if(backgroundImageValue!=null){
-            Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
+            Log.d(TAG,"backgroundImageValueStringToBitMap"+backgroundImageValue);
             StringToBitMap(backgroundImageValue);
         }
         //toolbar clicking
@@ -548,9 +550,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             BitmapDrawable myBackground = new BitmapDrawable(thumbnail);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-            editor = pref.edit();
-            editor.putString("backgroundImage", base64Profile);
-            editor.apply();
+            editors = prefs.edit();
+            editors.putString("backgroundImage", base64Profile);
+            editors.apply();
         }
     }
 
@@ -572,9 +574,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-            editor = pref.edit();
-            editor.putString("backgroundImage", base64Profile);
-            editor.apply();
+
+
+
         }
 
     }
@@ -583,7 +585,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+       String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        if(wallpaperimage==true){
+            editors = prefs.edit();
+            editors.putString("backgroundImage", val);
+            editors.apply();
+        }
+        return val;
     }
 
     public void saveMessages (){
@@ -653,6 +661,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             wallpaperimage = true;
             chooseImage();
         }
+        if(id == R.id.no_wallpaper){
+            noWallpaper();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -679,6 +690,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
      */
     public Bitmap StringToBitMap(String encodedString){
         try{
+            Log.d(TAG,"encodedString"+encodedString);
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
             Bitmap bitmapValue=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             BitmapDrawable myBackground = new BitmapDrawable(bitmapValue);
@@ -690,7 +702,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-
+public void noWallpaper(){
+    layout.setBackgroundResource(0);
+    SharedPreferences preferencess = getSharedPreferences("myBackgroundImage", 0);
+    SharedPreferences.Editor editors = preferencess.edit();
+    editors.clear();
+    editors.commit();
+}
     public void checkOnlineUser(){
         Log.d("toMail",toMail);
         String reArrangeEmail = toMail.replace(".", "-");
