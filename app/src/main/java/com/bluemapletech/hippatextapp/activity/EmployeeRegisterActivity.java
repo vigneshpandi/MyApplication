@@ -160,14 +160,14 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     empIdTxt.setError(null);
                 }
 
-                if (empFirstName.isEmpty()) {
+                if (empFirstName.isEmpty()|| !validName(empFirstName)) {
                     firstName.setError("Employee First Name is invalid");
                     valid = false;
                 } else {
                     firstName.setError(null);
                 }
 
-                if (empLastName.isEmpty()) {
+                if (empLastName.isEmpty() || !validLastName(empLastName)) {
                     lastName.setError("Employee Last Name is invalid");
                     valid = false;
                 } else {
@@ -190,6 +190,20 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 return valid;
             }
         });
+    }
+
+    private boolean validLastName(String empLastName) {
+        String USER_LASTNAME = "[a-zA-Z ]";
+        Pattern pattern = Pattern.compile(USER_LASTNAME);
+        Matcher matcher = pattern.matcher(empLastName);
+        return matcher.matches();
+    }
+
+    private boolean validName(String empFirstName) {
+        String USER_FIRSTNAME = "[a-zA-Z ]";
+        Pattern pattern = Pattern.compile(USER_FIRSTNAME);
+        Matcher matcher = pattern.matcher(empFirstName);
+        return matcher.matches();
     }
 
 
