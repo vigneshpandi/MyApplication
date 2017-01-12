@@ -17,6 +17,24 @@
         android:background="@color/colorPrimary"
         layout="@layout/toolbar_header" />
 
+    <!--<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terms And Condition"
+        android:id="@+id/terms_and_condition"
+        android:textStyle="normal"
+        android:textColor="@color/blackColor"
+        android:textSize="18dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:textAlignment="center"/>
+
+    <TableRow
+        android:id="@+id/hr"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#444"
+        android:layout_marginTop="10dp"></TableRow>-->
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content">

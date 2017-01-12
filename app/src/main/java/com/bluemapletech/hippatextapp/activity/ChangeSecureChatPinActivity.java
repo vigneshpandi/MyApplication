@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -292,6 +293,27 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (role.equals("admin") && !login_auth.matches("1")) {
+                backPageAdminNotAccept();
+            }
+            if (role.equals("admin") && login_auth.matches("1")) {
+                backPageAdmin();
+            }
+            if (role.equals("user") && !login_auth.matches("1")) {
+                backPageEmpNotAccept();
+            }
+            if (role.equals("user") && login_auth.matches("1")) {
+                backPageEmp();
+            }
+           // this.moveTaskToBack(true);
+                return true;
+            }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     public ChangeSecureChatPinActivity getActivity() {

@@ -70,7 +70,7 @@ public class GroupMessageDao {
         Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
-        msg.put("childByAppendid",re[7]);
+        msg.put("childByAppendId",re[7]);
        value.setValue(msg);
         Log.d(TAG,"groupPusNotificatuionEmailId"+message.getPushNotificationId());
         String arr[] = message.getPushNotificationId().split(";");
@@ -117,7 +117,7 @@ public class GroupMessageDao {
             message.setSenderId(msg.get("senderId"));
             String srt = msg.get("text");
             message.setImage(msg.get("image"));
-            message.setChildappendid(msg.get("childByAppendid"));
+            message.setChildappendid(msg.get("childByAppendId"));
             byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
             String text = null;
             try {
