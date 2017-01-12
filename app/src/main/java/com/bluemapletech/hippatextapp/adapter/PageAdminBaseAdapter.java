@@ -19,6 +19,7 @@ import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.bluemapletech.hippatextapp.utils.MailSender;
 
 import java.util.ArrayList;
@@ -36,11 +37,12 @@ public class PageAdminBaseAdapter extends BaseAdapter {
     Context context;
     List<User> userInfo = new ArrayList<User>();
     private AlertDialog.Builder alertDialog;
+    private UserDetailDto userDetailDtos = new UserDetailDto();
 
-
-    public PageAdminBaseAdapter(Context context, List<User> user) {
+    public PageAdminBaseAdapter(Context context, List<User> user,UserDetailDto userDetailDto) {
         this.context = context;
         this.userInfo = user;
+        this.userDetailDtos = userDetailDto;
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -51,7 +53,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
 
     @Override
     public User getItem(int position) {
-        return (User) userInfo.get(position);
+        return userInfo.get(position);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
            mViewHolder.fieldId.setText(info.getEmpId());
            mViewHolder.fieldName.setText(info.getUserName());
 
-        ((Button) convertView.findViewById(R.id.accept_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("0")) {
@@ -120,7 +122,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                 }
             }
         });
-        ((Button) convertView.findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userInfo.get(0).getAuth().matches("2")) {
@@ -142,7 +144,7 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                 }
             }
         });
-        ((TextView) convertView.findViewById(R.id.layout_field_id)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!userInfo.get(position).getAuth().matches("0")) {
@@ -170,8 +172,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
             TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
             id.setTextColor(Color.parseColor("#808080"));
         }
@@ -184,8 +186,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
 
             btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);
+            View btns = convertView.findViewById(R.id.cancel_btn);
+            btns.setVisibility(View.INVISIBLE);
         }
 
         if (userInfo.get(0).getAuth().matches("2")) {

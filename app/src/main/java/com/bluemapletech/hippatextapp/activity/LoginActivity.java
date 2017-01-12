@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getCanonicalName();
     public static final String userLogiMailId = "userLogiMailId";
     User user = new User();
-    private String userPassword;
+    private String userPassword,loginsenderId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                     String companyName = map.get("companyName");
                     String Password = map.get("password");
                     isOnlineChecking = map.get("showOnline");
+                    loginsenderId = map.get("senderId");
                     String text = null;
                     if (Password != null && !Password.matches("")) {
                         byte[] dataPass = Base64.decode(userChatPin, Base64.NO_WRAP);
@@ -231,6 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("loginCompanyName", companyName);
                     editor.putString("auth", auth);
                     editor.putString("isOnline", isOnlineChecking);
+                    editor.putString("senderId", loginsenderId);
                     editor.commit();
 
                     Log.d(TAG, "Logged in user information's:");

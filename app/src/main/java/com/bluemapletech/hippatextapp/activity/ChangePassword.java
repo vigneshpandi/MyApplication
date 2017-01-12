@@ -65,7 +65,7 @@ public class ChangePassword extends AppCompatActivity {
     }
 
     public void init(){
-       final  FirebaseAuth   auth = FirebaseAuth.getInstance();
+        final  FirebaseAuth   auth = FirebaseAuth.getInstance();
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +85,7 @@ public class ChangePassword extends AppCompatActivity {
                             Intent changePassword = new Intent(getActivity(), Settings.class);
                             changePassword.putExtra(roleValuesReturn,roleValue);
                             startActivity(changePassword);
-                    } else{
+                        } else{
                             Toast.makeText(getActivity(), "reset the password send again!", Toast.LENGTH_LONG).show();
                         }
                     }

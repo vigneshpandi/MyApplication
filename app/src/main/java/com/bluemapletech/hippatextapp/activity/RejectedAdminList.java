@@ -45,9 +45,11 @@ public class RejectedAdminList extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private ListView iv;
-
+    private String loginsenderId;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
+    SharedPreferences prefr;
+    SharedPreferences.Editor editorr;
     String isOnline;
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
@@ -69,6 +71,7 @@ public class RejectedAdminList extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         checkUserExistence();
+
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
@@ -104,6 +107,8 @@ public class RejectedAdminList extends AppCompatActivity {
                     UserDetailDto userDto = new UserDetailDto();
                     pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
                     userDto.setLoggedINChatPin(pref.getString("chatPin", ""));
+                    loginsenderId = pref.getString("senderId","");
+                    userDto.setLoginSenderId(loginsenderId);
                     iv.setAdapter(new RejectedAdminList.PageAdminBaseAdaptersAdmin(getActivity(), userObj,loggedINEmail,userDto));
                 }
             }
@@ -196,7 +201,7 @@ public class RejectedAdminList extends AppCompatActivity {
                                 Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(toEmail, userInfo.get(position).getUserName());
                                 intent.putExtra(fromEmail, loginMail);
-                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(sendId, InfouserDto.getLoginSenderId());
                                 intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                 intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());

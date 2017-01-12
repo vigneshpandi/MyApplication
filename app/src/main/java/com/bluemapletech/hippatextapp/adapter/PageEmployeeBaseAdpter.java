@@ -23,6 +23,7 @@ import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -65,13 +66,14 @@ public class PageEmployeeBaseAdpter extends BaseAdapter {
     private String userLastName;
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
-
-    public PageEmployeeBaseAdpter(Context context, List<User> user, String fromEmail, String loggedINChatPin,HashMap<String,String> hashValue) {
+UserDetailDto userDetailDtos = new UserDetailDto();
+    public PageEmployeeBaseAdpter(Context context, List<User> user, UserDetailDto userDetailDto, String loggedINChatPin,HashMap<String,String> hashValue) {
         this.context = context;
         this.userInfo = user;
-        this.fromMAil = fromEmail;
+        this.fromMAil = userDetailDtos.getLoggedINEmail();
         this.chatPin = loggedINChatPin;
         this.onlineHash = hashValue;
+        this.userDetailDtos = userDetailDto;
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -160,7 +162,7 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
 
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
-                            intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                            intent.putExtra(sendId, userDetailDtos.getLoginSenderId());
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                             intent.putExtra(firstName, userInfo.get(position).getFirstName());
                             intent.putExtra(lastName, userInfo.get(position).getLastName());

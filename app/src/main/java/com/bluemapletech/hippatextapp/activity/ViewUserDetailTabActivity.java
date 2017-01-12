@@ -93,41 +93,43 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, dataSnapshot.toString());
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-                user1.setUserName(map.get("emailAddress"));
-                user1.setPushNotificationId(map.get("pushNotificationId"));
-                user1.setSenderId(map.get("senderId"));
-                user1.setFirstName(map.get("firstName"));
-                user1.setLastName(map.get("lastName"));
-                user1.setCompanyName(map.get("companyName"));
-                user1.setProviderNPIId( map.get("providerNPIId"));
-                user1.setProviderName(map.get("providerName"));
-                user1.setRole( map.get("role"));
-                user1.setAuth(map.get("auth"));
-                user1.setEmpId(map.get("employeeId"));
-                user1.setTINorEIN(map.get("companyCINNumber"));
-                if(user1.getRole().equals("user")){
-                    providerNPI.setVisibility(View.INVISIBLE);
-                    providerName.setVisibility(View.INVISIBLE);
-                    providerNpiLabel.setVisibility(View.INVISIBLE);
-                    providerNameLabel.setVisibility(View.INVISIBLE);
-                }
-                if (user1.getFirstName().matches("") && user1.getLastName().matches("")) {
-                    String[] valueuserName = user1.getUserName().split("@");
-                    user1.setFirstName(valueuserName[0]);
-                }
-                Log.d(TAG,"userAuth...."+user1.getAuth());
+                if(map!=null) {
+                    user1.setUserName(map.get("emailAddress"));
+                    user1.setPushNotificationId(map.get("pushNotificationId"));
+                    user1.setSenderId(map.get("senderId"));
+                    user1.setFirstName(map.get("firstName"));
+                    user1.setLastName(map.get("lastName"));
+                    user1.setCompanyName(map.get("companyName"));
+                    user1.setProviderNPIId(map.get("providerNPIId"));
+                    user1.setProviderName(map.get("providerName"));
+                    user1.setRole(map.get("role"));
+                    user1.setAuth(map.get("auth"));
+                    user1.setEmpId(map.get("employeeId"));
+                    user1.setTINorEIN(map.get("companyCINNumber"));
+                    if (user1.getRole().equals("user")) {
+                        providerNPI.setVisibility(View.INVISIBLE);
+                        providerName.setVisibility(View.INVISIBLE);
+                        providerNpiLabel.setVisibility(View.INVISIBLE);
+                        providerNameLabel.setVisibility(View.INVISIBLE);
+                    }
+                    if (user1.getFirstName().matches("") && user1.getLastName().matches("")) {
+                        String[] valueuserName = user1.getUserName().split("@");
+                        user1.setFirstName(valueuserName[0]);
+                    }
+                    Log.d(TAG, "userAuth...." + user1.getAuth());
 
 // set the value for textFields
-                if(user1.getEmpId()!=null){
-                    userId = user1.getEmpId();
-                }else if(user1.getTINorEIN()!=null){
-                    userId = user1.getTINorEIN();
+                    if (user1.getEmpId() != null) {
+                        userId = user1.getEmpId();
+                    } else if (user1.getTINorEIN() != null) {
+                        userId = user1.getTINorEIN();
+                    }
+                    userEmail.setText(user1.getUserName());
+                    empId.setText(userId);
+                    compName.setText(user1.getCompanyName());
+                    providerNPI.setText(user1.getProviderNPIId());
+                    providerName.setText(user1.getProviderName());
                 }
-                userEmail.setText(user1.getUserName());
-                empId.setText(userId);
-                compName.setText(user1.getCompanyName());
-                providerNPI.setText(user1.getProviderNPIId());
-                providerName.setText(user1.getProviderName());
             }
 
             @Override

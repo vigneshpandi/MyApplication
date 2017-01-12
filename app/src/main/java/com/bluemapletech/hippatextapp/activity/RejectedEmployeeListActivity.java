@@ -103,6 +103,7 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                     UserDetailDto userDto = new UserDetailDto();
                     pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
                     userDto.setLoggedINChatPin(pref.getString("chatPin", ""));
+                    userDto.setLoginSenderId(pref.getString("senderId", ""));
                     iv.setAdapter(new RejectedEmployeeListActivity.PageAdminBaseAdaptersEmployee(getActivity(), userObj,loggedINEmail,userDto));
                 }
             }
@@ -195,7 +196,7 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                                 Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(toEmail, userInfo.get(position).getUserName());
                                 intent.putExtra(fromEmail, loginMail);
-                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(sendId, InfouserDto.getLoginSenderId());
                                 intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                 intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());

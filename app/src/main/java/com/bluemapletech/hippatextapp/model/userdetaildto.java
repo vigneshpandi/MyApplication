@@ -9,7 +9,7 @@ public class UserDetailDto {
     private String loggedINEmail;
     private String loggedINChatPin;
     private String role_val_det;
-
+    private String loginSenderId;
     public String getLoggedINEmail() {
         return loggedINEmail;
     }
@@ -34,12 +34,21 @@ public class UserDetailDto {
         this.role_val_det = role_val_det;
     }
 
+    public String getLoginSenderId() {
+        return loginSenderId;
+    }
+
+    public void setLoginSenderId(String loginSenderId) {
+        this.loginSenderId = loginSenderId;
+    }
+
     @Override
     public String toString() {
         return "UserDetailDto{" +
                 "loggedINEmail='" + loggedINEmail + '\'' +
                 ", loggedINChatPin='" + loggedINChatPin + '\'' +
                 ", role_val_det='" + role_val_det + '\'' +
+                ", loginSenderId='" + loginSenderId + '\'' +
                 '}';
     }
 }

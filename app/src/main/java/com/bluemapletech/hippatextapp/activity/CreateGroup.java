@@ -65,7 +65,7 @@ public class CreateGroup extends AppCompatActivity {
     private StorageReference mStorage;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
- // private   List<User> userObj;
+    // private   List<User> userObj;
     List<User> userObj = new ArrayList<User>();
     ImageView selection;
     String groupMail;
@@ -127,17 +127,17 @@ public class CreateGroup extends AppCompatActivity {
             }
         });
 
-iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        listPosition = position - iv.getFirstVisiblePosition();
-        if (iv.getChildAt(listPosition).findViewById(R.id.tickIcon).getVisibility() == View.INVISIBLE){
-            iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.VISIBLE);
-            hm.put(userObj.get(position).getUserName(),userObj.get(position).getUserName());
-        }else{
-            hm.remove(userObj.get(position).getUserName());
-            iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.INVISIBLE);
-        }
+        iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                listPosition = position - iv.getFirstVisiblePosition();
+                if (iv.getChildAt(listPosition).findViewById(R.id.tickIcon).getVisibility() == View.INVISIBLE){
+                    iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.VISIBLE);
+                    hm.put(userObj.get(position).getUserName(),userObj.get(position).getUserName());
+                }else{
+                    hm.remove(userObj.get(position).getUserName());
+                    iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.INVISIBLE);
+                }
        /* Set<String> keys = hm.keySet();
         for(String key: keys){
             Log.d("Valueof",hm.get(key));
@@ -145,9 +145,9 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             groupMail = groupMail +";"+storeMail;
             Log.d("groupMail",groupMail);
         }*/
-        iv.getChildAt(listPosition).setSelected(true);
-    }
-});
+                iv.getChildAt(listPosition).setSelected(true);
+            }
+        });
     }
 
 
@@ -217,45 +217,45 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 }
 
             }
-        if(i>0) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("Group Name");
-            // Set up the input
-            final EditText input = new EditText(this);
-            alert.setView(input);
-            // Set up the buttons
-            alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            if(i>0) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle("Group Name");
+                // Set up the input
+                final EditText input = new EditText(this);
+                alert.setView(input);
+                // Set up the buttons
+                alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Creating group...");
-                    progressDialog.show();
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    groupName = input.getText().toString();
-                    saveImage();
+                        progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setMessage("Creating group...");
+                        progressDialog.show();
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        groupName = input.getText().toString();
+                        saveImage();
 
-                }
-            });
+                    }
+                });
 
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
-            alert.show();
-            return true;
-        }else{
-            Log.d(TAG,"employee not selected...");
-            Toast.makeText(getActivity(),"Please select the user..!",Toast.LENGTH_LONG).show();
-        }
+                alert.show();
+                return true;
+            }else{
+                Log.d(TAG,"employee not selected...");
+                Toast.makeText(getActivity(),"Please select the user..!",Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
     private void saveImage() {
-       final  EmployeeDao empDao = new EmployeeDao();
+        final  EmployeeDao empDao = new EmployeeDao();
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String randomValue = senderID.substring(0, 7);
@@ -268,7 +268,7 @@ iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                 Log.d(TAG,"downloadUrl " + downloadUrl);
-Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
+                Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
                 boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl);
                 //finish();
                 //startActivity(getIntent());
@@ -354,7 +354,7 @@ Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
             //mViewHolder.fieldId.setText(info.getEmpId());
             mViewHolder.fieldName.setText(info.getUserName());
             final View finalConvertView = convertView;
-             selection = (ImageView)convertView.findViewById(R.id.tickIcon);
+            selection = (ImageView)convertView.findViewById(R.id.tickIcon);
             if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
                 Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
             }
@@ -384,7 +384,7 @@ Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
             private TextView fieldId, fieldName;
             private ImageView tickMark, userImage;
             public MyViewHolder(View item) {
-               //fieldId = (TextView) item.findViewById(R.id.employee_id);
+                //fieldId = (TextView) item.findViewById(R.id.employee_id);
                 fieldName = (TextView) item.findViewById(R.id.employee_mail);
                 tickMark = (ImageView) item.findViewById(R.id.tickIcon);
                 userImage = (ImageView) item.findViewById(R.id.user_image);

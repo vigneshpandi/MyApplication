@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
@@ -49,10 +50,12 @@ public class PageAdminChatAdapter  extends BaseAdapter {
     private AlertDialog.Builder alertDialog;
     List<User> userInfo = new ArrayList<User>();
     HashMap<String,String> onlineHash = new HashMap<String, String>();
-    public PageAdminChatAdapter(Context context, List<User> user, String fromEmail, String loggedINChatPin,HashMap<String,String> hashValue) {
+    UserDetailDto userDetailDtos =new UserDetailDto();
+    public PageAdminChatAdapter(Context context, List<User> user, UserDetailDto userDto, String loggedINChatPin,HashMap<String,String> hashValue) {
         this.context = context;
         this.userInfo = user;
-        this.fromMAil = fromEmail;
+        this.fromMAil = userDto.getLoggedINEmail();
+        this.userDetailDtos = userDto;
         this.chatPin = loggedINChatPin;
         this.onlineHash = hashValue;
         inflater = LayoutInflater.from(this.context);
@@ -122,7 +125,7 @@ public class PageAdminChatAdapter  extends BaseAdapter {
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
-                            intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                            intent.putExtra(sendId, userDetailDtos.getLoginSenderId());
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                             intent.putExtra(firstName, userInfo.get(position).getFirstName());
                             intent.putExtra(lastName, userInfo.get(position).getLastName());

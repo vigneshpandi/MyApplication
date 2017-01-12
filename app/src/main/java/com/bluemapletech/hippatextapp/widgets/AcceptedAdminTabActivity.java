@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.PageAdminBaseAdapter;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +32,7 @@ public class AcceptedAdminTabActivity extends Fragment{
     ArrayList empList = new ArrayList();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedINCompany;
+    private String loggedINCompany,loginsenderId;
     private static final String TAG = AcceptedTabActivity.class.getCanonicalName();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,8 +64,10 @@ public class AcceptedAdminTabActivity extends Fragment{
                         }
                     }
                 }
+                UserDetailDto userDetailDto = new UserDetailDto();
+                userDetailDto.setLoginSenderId(loginsenderId);
                 if(getActivity()!=null) {
-                    listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj));
+                    listview.setAdapter(new PageAdminBaseAdapter(getActivity(), userObj,userDetailDto));
                 }
             }
 
@@ -88,6 +91,7 @@ public class AcceptedAdminTabActivity extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
+                loginsenderId = (String) dataSnapshot.child("senderId").getValue();
             }
 
             @Override

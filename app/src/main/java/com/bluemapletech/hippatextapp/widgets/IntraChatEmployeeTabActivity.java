@@ -14,6 +14,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +40,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
     private String loggedINEmail;
     private String loggedINChatPin;
     private String userFirstName;
-    private String userLastName;
+    private String userLastName,loginsenderId;
     private String fName, lName, userEmailName;
     List<User> userObj;
     HashMap<String,String> onlineHash;
@@ -73,6 +74,7 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+                loginsenderId = (String) dataSnapshot.child("senderId").getValue();
             }
 
             @Override
@@ -142,8 +144,11 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                         }
                     }
                 }
+                UserDetailDto userDetailDto = new UserDetailDto();
+                userDetailDto.setLoginSenderId(loginsenderId);
+                userDetailDto.setLoggedINEmail(loggedINEmail);
                 if (getActivity() != null) {
-                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHash));
+                    listview.setAdapter(new PageEmployeeBaseAdpter(getActivity(), userObj, userDetailDto, loggedINChatPin,onlineHash));
                 }
 
             }

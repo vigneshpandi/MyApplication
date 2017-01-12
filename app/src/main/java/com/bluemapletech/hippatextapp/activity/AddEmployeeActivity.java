@@ -67,6 +67,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private String passRandomValue;
     private String loggedINCompany;
     GMailSender sender;
+
     private String toEmail;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -276,6 +277,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
+
+
+
+
     @Override
     public void onPause()
     {
@@ -312,6 +317,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         }
         super.onResume();
     }
+
 
     public AddEmployeeActivity getActivity() { return this;  }
 

@@ -44,7 +44,7 @@ public class ListOfRoots extends AppCompatActivity {
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin,isOnline;
-
+    String loginsenderId;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
     // private   List<User> userObj;
@@ -90,10 +90,10 @@ public class ListOfRoots extends AppCompatActivity {
             role = pref.getString("rolValue","");
             not_acp_user = pref.getString("notUserValue","");
         }
-if(role.matches("admin")&& rootValue.matches("3")){
-    Log.d(TAG,"admin list..");
-    getSupportActionBar().setTitle("Admin List");
-}
+        if(role.matches("admin")&& rootValue.matches("3")){
+            Log.d(TAG,"admin list..");
+            getSupportActionBar().setTitle("Admin List");
+        }
         if(role.matches("admin")&& rootValue.matches("1")){
             Log.d(TAG,"admin list..");
             getSupportActionBar().setTitle("Admin List");
@@ -106,10 +106,11 @@ if(role.matches("admin")&& rootValue.matches("3")){
         String chatPin =  pref.getString("chatPin", "");
         loginRole = pref.getString("role","");
         loginAuth = pref.getString("auth","");
+        loginsenderId = pref.getString("senderId","");
         loggedINEmail = loginMail;
         userDetailDto.setLoggedINChatPin(chatPin);
         userDetailDto.setLoggedINEmail(loginMail);
-
+        userDetailDto.setLoginSenderId(loginsenderId);
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");

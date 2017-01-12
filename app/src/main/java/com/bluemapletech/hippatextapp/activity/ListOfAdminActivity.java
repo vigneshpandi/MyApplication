@@ -75,7 +75,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
         loggedINEmail = loginMail;
         loggedInCompanyValue = companyName;
         Log.d("loggedInCoInCom",loggedInCompanyValue);
-       // checkUserExistence();
+        // checkUserExistence();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");

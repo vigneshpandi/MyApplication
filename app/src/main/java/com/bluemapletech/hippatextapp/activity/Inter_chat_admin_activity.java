@@ -54,7 +54,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private String rootValue,loginRole,loginAuth;
     private String not_acp_user;
-    private String loginCompanyName,isOnline;
+    private String loginCompanyName,isOnline,loginsenderId;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
     private FirebaseAuth firebaseAuth;
@@ -85,10 +85,11 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
         loginRole = pref.getString("role","");
         loginAuth = pref.getString("auth","");
         loginCompanyName = pref.getString("loginCompanyName","");
+        loginsenderId = pref.getString("senderId","");
         loggedINEmail = loginMail;
         userDetailDto.setLoggedINChatPin(chatPin);
         userDetailDto.setLoggedINEmail(loginMail);
-
+        userDetailDto.setLoginSenderId(loginsenderId);
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
@@ -139,7 +140,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
         private String fromMAil;
         private AlertDialog.Builder alertDialog;
         List<User> userInfo = new ArrayList<User>();
-UserDetailDto userDetailDtos = new UserDetailDto();
+        UserDetailDto userDetailDtos = new UserDetailDto();
         public adminInterChatBaseAdapter(Context context, List<User> user,UserDetailDto userDetailDto) {
             this.context = context;
             this.userInfo = user;
@@ -211,8 +212,8 @@ UserDetailDto userDetailDtos = new UserDetailDto();
                             if (srt.matches(userDetailDtos.getLoggedINChatPin())) {
                                 Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(toEmail, userInfo.get(position).getUserName());
-                                intent.putExtra(fromEmail, fromMAil);
-                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(fromEmail, userDetailDtos.getLoggedINEmail());
+                                intent.putExtra(sendId, userDetailDtos.getLoginSenderId());
                                 intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                 intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());

@@ -336,7 +336,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 onSelectFromGalleryResult(data);
             } else if (requestCode == REQUEST_CAMERA)
                 System.out.println("data===3333 resultcode "+requestCode);
-                Log.d(TAG, "DataValuesss" + data);
+            Log.d(TAG, "DataValuesss" + data);
             onCaptureImageResult(data);
         }
     }

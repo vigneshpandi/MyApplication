@@ -12,6 +12,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.PageAdminChatAdapter;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +39,7 @@ public class ChatAdminActivity extends Fragment{
     private String loggedINEmail;
     private String loggedINChatPin;
     private String userFirstName;
-    private String userLastName;
+    private String userLastName,loginsenderId;
     HashMap<String,String> onlineHashing;
     private static final String TAG = ChatAdminActivity.class.getCanonicalName();
 
@@ -72,6 +73,7 @@ public class ChatAdminActivity extends Fragment{
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loggedINEmail = (String) dataSnapshot.child("emailAddress").getValue();
                 loggedINChatPin = (String) dataSnapshot.child("chatPin").getValue();
+                loginsenderId = (String) dataSnapshot.child("senderId").getValue();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -134,8 +136,11 @@ public class ChatAdminActivity extends Fragment{
                         userObj.add(user);
                     }}
                 }
+                UserDetailDto userDetailDto = new UserDetailDto();
+                userDetailDto.setLoginSenderId(loginsenderId);
+                userDetailDto.setLoggedINEmail(loggedINEmail);
                 if(getActivity() !=null) {
-                    listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj, loggedINEmail, loggedINChatPin,onlineHashing));
+                    listview.setAdapter(new PageAdminChatAdapter(getActivity(), userObj,userDetailDto , loggedINChatPin,onlineHashing));
                 }
             }
 

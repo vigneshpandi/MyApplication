@@ -57,11 +57,13 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
     private  String loginChatPin;
     private String not_acp_user;
     private String role_user_val;
+    private String loginSenderId;
         public EmployeeListOfRootBaseAdapter(Context context, List<User> user , UserDetailDto userDetailDto,String not_acp_user) {
             this.context = context;
             this.userInfo = user;
             this.loginMail = userDetailDto.getLoggedINEmail();
             this.loginChatPin = userDetailDto.getLoggedINChatPin();
+            this.loginSenderId = userDetailDto.getLoginSenderId();
             this.not_acp_user = not_acp_user;
             this.role_user_val = userDetailDto.getRole_val_det();
             inflater = LayoutInflater.from(this.context);
@@ -128,7 +130,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                 Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(toEmail, userInfo.get(position).getUserName());
                                 intent.putExtra(fromEmail, loginMail);
-                                intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                intent.putExtra(sendId, loginSenderId);
                                 intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                 intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());
@@ -172,7 +174,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                     Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra(toEmail, userInfo.get(position).getUserName());
                                     intent.putExtra(fromEmail, loginMail);
-                                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                    intent.putExtra(sendId, loginSenderId);
                                     intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                     intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                     intent.putExtra(lastName, userInfo.get(position).getLastName());
@@ -205,7 +207,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                     Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra(toEmail, userInfo.get(position).getUserName());
                                     intent.putExtra(fromEmail, loginMail);
-                                    intent.putExtra(sendId, userInfo.get(position).getSenderId());
+                                    intent.putExtra(sendId, loginSenderId);
                                     intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                                     intent.putExtra(firstName, userInfo.get(position).getFirstName());
                                     intent.putExtra(lastName, userInfo.get(position).getLastName());

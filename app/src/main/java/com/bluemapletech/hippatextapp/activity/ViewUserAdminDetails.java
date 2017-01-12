@@ -29,6 +29,7 @@ import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,10 +44,11 @@ import java.util.Map;
 public class ViewUserAdminDetails extends AppCompatActivity {
     private static final String TAG = ViewUserAdminDetails.class.getCanonicalName();
     String empMailId = null;
-    String userId;
+    String userId,loginsenderId;
     String adminMailId = null;
     String reArrangeEmail;
     String userAuths;
+    HashMap<String,String> isUserChecking = new HashMap<String, String>();
     String userEmails;
     String role,roleValue,loginChatPin;
     private ListView iv;
@@ -79,7 +81,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         roleValue =  pref.getString("role", "");
         loginChatPin= pref.getString("chatPin", "");
-
+        loginsenderId = pref.getString("senderId","");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -91,7 +93,6 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         acceptBtn = (Button) findViewById(R.id.accept_user_btn);
         userAuths =  getIntent().getStringExtra(RejectedAdminList.userAuth);
         userEmails = getIntent().getStringExtra(RejectedAdminList.userEmails);
-
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
@@ -99,14 +100,8 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         providerName = (TextView) findViewById(R.id.provider_name_text);
         providerNpiLabel = (TextView) findViewById(R.id.provider_npi);
         providerNameLabel = (TextView) findViewById(R.id.provider_name);
-
-        Log.d(TAG,"userAuths..."+userAuths);
-        /*if(userAuths.matches("1")&& roleValue.matches("admin")){
-            Log.d(TAG,"inside admin rejected list....");
-            acceptBtn.setText("Accept");
-            acceptBtn.setBackgroundColor(getResources().getColor(R.color.accept_btn));
-        }*/
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
+        checkUserDelete();
         reArrangeEmail = userEmails.replace(".", "-");
         databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.addValueEventListener(new ValueEventListener() {
@@ -114,56 +109,50 @@ public class ViewUserAdminDetails extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, dataSnapshot.toString());
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-                user1.setUserName(map.get("emailAddress"));
-                user1.setPushNotificationId(map.get("pushNotificationId"));
-                user1.setSenderId(map.get("senderId"));
-                user1.setFirstName(map.get("firstName"));
-                user1.setLastName(map.get("lastName"));
-                user1.setCompanyName(map.get("companyName"));
-                user1.setProviderNPIId( map.get("providerNPIId"));
-                user1.setProviderName(map.get("providerName"));
-                user1.setRole( map.get("role"));
-                user1.setAuth(map.get("auth"));
-                user1.setEmpId(map.get("employeeId"));
-                user1.setTINorEIN(map.get("companyCINNumber"));
-                user1.setEmpId(map.get("employeeId"));
-                Log.d(TAG,"user get empaid"+user1.getEmpId());
-                if(user1.getRole().equals("user")){
-                    providerNPI.setVisibility(View.INVISIBLE);
-                    providerName.setVisibility(View.INVISIBLE);
-                    providerNpiLabel.setVisibility(View.INVISIBLE);
-                    providerNameLabel.setVisibility(View.INVISIBLE);
-                }
-               /*
-                if (adminMailId != null) {
-                    userId = map.get("companyCINNumber");
-                } else if(empMailId!=null) {
-                    userId = map.get("employeeId");
-
-                }*/
-
-                if (user1.getFirstName().matches("") && user1.getLastName().matches("")) {
-                    String[] valueuserName = user1.getUserName().split("@");
-                    user1.setFirstName(valueuserName[0]);
-                }
-                Log.d(TAG,"userAuth...."+user1.getAuth());
-                if(user1.getAuth().matches("3")){
-                    Log.d(TAG,"zzzzzzzzzz");
-                    acceptBtn.setText("Accept");
-                    acceptBtn.setBackgroundColor(getResources().getColor(R.color.accept_btn));
-                }
+                if(map !=null) {
+                    user1.setUserName(map.get("emailAddress"));
+                    user1.setPushNotificationId(map.get("pushNotificationId"));
+                    user1.setSenderId(map.get("senderId"));
+                    user1.setFirstName(map.get("firstName"));
+                    user1.setLastName(map.get("lastName"));
+                    user1.setCompanyName(map.get("companyName"));
+                    user1.setProviderNPIId(map.get("providerNPIId"));
+                    user1.setProviderName(map.get("providerName"));
+                    user1.setRole(map.get("role"));
+                    user1.setAuth(map.get("auth"));
+                    user1.setEmpId(map.get("employeeId"));
+                    user1.setTINorEIN(map.get("companyCINNumber"));
+                    user1.setEmpId(map.get("employeeId"));
+                    Log.d(TAG, "user get empaid" + user1.getEmpId());
+                    if (user1.getRole().equals("user")) {
+                        providerNPI.setVisibility(View.INVISIBLE);
+                        providerName.setVisibility(View.INVISIBLE);
+                        providerNpiLabel.setVisibility(View.INVISIBLE);
+                        providerNameLabel.setVisibility(View.INVISIBLE);
+                    }
+                    if (user1.getFirstName().matches("") && user1.getLastName().matches("")) {
+                        String[] valueuserName = user1.getUserName().split("@");
+                        user1.setFirstName(valueuserName[0]);
+                    }
+                    if (user1.getAuth().matches("3")) {
+                        acceptBtn.setText("Accept");
+                        acceptBtn.setBackgroundColor(getResources().getColor(R.color.accept_btn));
+                    }
 
 // set the value for textFields
-                if(user1.getEmpId()!=null){
-                    userId = user1.getEmpId();
-                }else if(user1.getTINorEIN()!=null){
-                    userId = user1.getTINorEIN();
+                    if (user1.getEmpId() != null) {
+                        userId = user1.getEmpId();
+                    } else if (user1.getTINorEIN() != null) {
+                        userId = user1.getTINorEIN();
+                    }
+                    userEmail.setText(user1.getUserName());
+                    empId.setText(userId);
+                    compName.setText(user1.getCompanyName());
+                    providerNPI.setText(user1.getProviderNPIId());
+                    providerName.setText(user1.getProviderName());
+                }else{
+                    showAlert();
                 }
-                userEmail.setText(user1.getUserName());
-                empId.setText(userId);
-                compName.setText(user1.getCompanyName());
-                providerNPI.setText(user1.getProviderNPIId());
-                providerName.setText(user1.getProviderName());
             }
 
             @Override
@@ -175,65 +164,71 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userAuths.matches("3")){
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                    //alert.setTitle("");
-                    Log.d(TAG,"user get empaid"+user1.getEmpId());
-                    if(user1.getRole().matches("admin")) {
-                        alert.setMessage("Do you want to accept  '" + user1.getCompanyName() + "' Company");
-                    }else if(user1.getRole().matches("user")) {
-                        alert.setMessage("Do you want to accept  '" + user1.getEmpId() + "' Emplpoyee!");
-                    }
-                    alert.setCancelable(false);
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            acceptedCompany(user1);
+                String reArrangeDeleUserMail = user.getUserName().replace("-", ".");
+                if (isUserChecking.get(reArrangeDeleUserMail) == null) {
+                    if (userAuths.matches("3")) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        //alert.setTitle("");
+                        Log.d(TAG, "user get empaid" + user1.getEmpId());
+                        if (user1.getRole().matches("admin")) {
+                            alert.setMessage("Do you want to accept  '" + user1.getCompanyName() + "' Company");
+                        } else if (user1.getRole().matches("user")) {
+                            alert.setMessage("Do you want to accept  '" + user1.getEmpId() + "' Emplpoyee!");
                         }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
-
-                }else{
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                    alert.setTitle("Security check");
-                    final EditText chatPinn = new EditText(getActivity());
-                    chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                    chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    chatPinn.setHint("Enter your chat pin");
-                    alert.setView(chatPinn);
-                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String srt = chatPinn.getEditableText().toString();
-                            if (srt.matches(loginChatPin)) {
-                                firebaseAuth = FirebaseAuth.getInstance();
-                                FirebaseUser logged = firebaseAuth.getCurrentUser();
-                                Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-                                Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
-                                intent.putExtra(toEmail, user1.getUserName());
-                                intent.putExtra(fromEmail, logged.getEmail());
-                                intent.putExtra(sendId, user1.getSenderId());
-                                intent.putExtra(notificationId, user1.getPushNotificationId());
-                                intent.putExtra(firstName, user1.getFirstName());
-                                intent.putExtra(lastName, user1.getLastName());
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                        alert.setCancelable(false);
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                acceptedCompany(user1);
                             }
-                        }
-                    });
-                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.show();
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
+
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        alert.setTitle("Security check");
+                        final EditText chatPinn = new EditText(getActivity());
+                        chatPinn.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                        chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        chatPinn.setHint("Enter your chat pin");
+                        alert.setView(chatPinn);
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String srt = chatPinn.getEditableText().toString();
+                                if (srt.matches(loginChatPin)) {
+                                    firebaseAuth = FirebaseAuth.getInstance();
+                                    FirebaseUser logged = firebaseAuth.getCurrentUser();
+                                    Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                                    Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
+                                    intent.putExtra(toEmail, user1.getUserName());
+                                    intent.putExtra(fromEmail, logged.getEmail());
+                                    intent.putExtra(sendId, loginsenderId);
+                                    intent.putExtra(notificationId, user1.getPushNotificationId());
+                                    intent.putExtra(firstName, user1.getFirstName());
+                                    intent.putExtra(lastName, user1.getLastName());
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
+                    }
+                }else{
+                    showAlert();
                 }
+                //
             }
         });
     }
@@ -284,7 +279,28 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         }
 
     }
+    public void showAlert(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        // alert.setTitle("");
+        alert.setMessage("Error this account please try again!");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                if(roleValue.matches("admin")){
+                    startActivity(new Intent(getActivity(), AdminHomeActivity.class));
+                }else if(roleValue.matches("root")){
+                    startActivity(new Intent(getActivity(), RootHomeActivity.class));
+                }
+            }
+        });
+        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
 
+    }
     private void backPageAdmin() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
@@ -388,6 +404,35 @@ public class ViewUserAdminDetails extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
+    }
+
+    public void checkUserDelete(){
+        databaseRef = firebaseDatabaseRef.getReference().child("userDetails");
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Map<String, String> dataValue = (Map)dataSnapshot.getValue();
+                String deleteEmail = dataValue.get("emailAddress");
+                isUserChecking.put(deleteEmail,deleteEmail);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
     public ViewUserAdminDetails getActivity() {
         return this;
