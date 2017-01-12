@@ -1,5 +1,6 @@
 package com.bluemapletech.hippatextapp.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +42,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     SharedPreferences pref;
     private FirebaseDatabase fireBaseDatabase;
     SharedPreferences.Editor editor;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +128,12 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.log_out) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage("Processing...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
+            progressDialog.dismiss();
             startActivity(logOut);
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
