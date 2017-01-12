@@ -18,6 +18,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,7 +178,16 @@ public class PendingBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company accept successfully!";
+                runners.execute("Company is accepted successfully!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
+            Log.d(TAG, "Company accepted successfully!");
             Toast.makeText(this.context, "Company is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -204,6 +214,15 @@ public class PendingBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.deleteCompanys(user);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company canceled successfully!";
+                runners.execute("Company is rejected successfully!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
         } else {

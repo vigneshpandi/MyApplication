@@ -25,6 +25,7 @@ import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.model.UserDetailDto;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 
 import org.w3c.dom.Text;
 
@@ -102,6 +103,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                      if (userInfo.get(position).getAuth().matches("3")) {
+                         Log.d(TAG,"deleted accepted company");
                         acceptUser(userInfo.get(position).getUserName());
                     }
 
@@ -151,6 +153,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (userInfo.get(position).getAuth().matches("1") && !not_acp_user.matches("notAcceptUser")) {
+                        Log.d(TAG,"deleted reject company");
                         deleteUser(userInfo.get(position).getUserName());
                     }
 
@@ -162,10 +165,6 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                         chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         chatPinn.setHint("Enter your chat pin");
                         alert.setView(chatPinn);
-
-
-
-
                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String srt = chatPinn.getEditableText().toString();
@@ -277,7 +276,18 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         public void deleteUser(String userMail) {
             final UserDao userDao = new UserDao();
             boolean result = userDao.deleteUser(userMail);
+            Log.d(TAG,"userMail....."+userMail);
             if (result) {
+                try {
+                    //  new MyAsyncClass().execute();
+                    MailSender runners = new MailSender();
+                    Log.d(TAG,"userMail..11..."+userMail);
+                    String  value = "Root has been Rejected!";
+                    runners.execute("Root has been Rejected!",value,"hipaatext123@gmail.com",userMail);
+
+                } catch (Exception ex) {
+                    // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+                }
                 Toast.makeText(this.context, "Root has been Rejected!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this.context, "Error while reject the company, please try again!", Toast.LENGTH_LONG).show();
@@ -287,6 +297,16 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptUser(userMail);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                Log.d(TAG,"userMail....."+userMail);
+                String  value = "Root has been accepted!";
+                runners.execute("Root has been accepted!",value,"hipaatext123@gmail.com",userMail);
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Toast.makeText(this.context, "Root has been accepted!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this.context, "Error while accepted the company, please try again!", Toast.LENGTH_LONG).show();

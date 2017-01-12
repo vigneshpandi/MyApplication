@@ -83,7 +83,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private  String reArrangeEmail;
         private String role;
         private FirebaseAuth firebaseAuthRef;
-        private String groupName;
+        private String groupName,loginRoleValue;
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -120,6 +120,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         senderId =  pref.getString("senderId", "");
         randomValue =  pref.getString("randomValue", "");
         notificationId =  pref.getString("notificationId", "");
+        loginRoleValue = pref.getString("role","");
     }
             //groupName =  getIntent().getStringExtra(EmployeeGroupsAdapter.groupName);
             mListView = (ListView)findViewById(R.id.message_list);
@@ -663,6 +664,20 @@ Log.d("dsssssss","ssssppww");
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if(loginRoleValue.matches("root")){
+                startActivity(new Intent(getActivity(), RootHomeActivity.class));
+            }
+            if(loginRoleValue.matches("admin")){
+                startActivity(new Intent(getActivity(), AdminHomeActivity.class));
+            }
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     public GroupMessageEmployeeActivity getActivity() {
         return this;

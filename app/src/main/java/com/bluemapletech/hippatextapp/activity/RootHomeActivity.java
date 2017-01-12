@@ -86,10 +86,6 @@ public class RootHomeActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
 
         if (id == R.id.log_out) {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Processing...");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
@@ -104,6 +100,10 @@ public class RootHomeActivity extends AppCompatActivity {
 
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage("Processing...");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
             dataReference.setValue(dateValue);
 

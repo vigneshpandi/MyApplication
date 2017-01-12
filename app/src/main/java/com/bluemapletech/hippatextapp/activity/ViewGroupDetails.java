@@ -593,12 +593,19 @@ public class ViewGroupDetails extends AppCompatActivity {
                 Log.d(TAG, "valUES");
                 toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
                 adminAddedPermisson = true;
+                View btn = convertView.findViewById(R.id.btn_admin_view);
+                btn.setVisibility(View.VISIBLE);
             } else if (info.getStatus().matches("user")) {
                 View btn = convertView.findViewById(R.id.btn_admin_view);
                 btn.setVisibility(View.GONE);
             }
-            mViewHolder.fieldName.setText(info.getUserMail());
+            String[] valueuserName = info.getUserMail().split("@");
+            mViewHolder.fieldName.setText(valueuserName[0]);
             mViewHolder.btnName.setText("admin");
+            if (info.getStatus().matches("admin")) {
+                View btn = convertView.findViewById(R.id.btn_admin_view);
+                btn.setVisibility(View.VISIBLE);
+            }
             if (info.getUserImage() != null) {
                 Log.d(TAG, "info.getUserImage()" + info.getUserImage());
                 //  Picasso.with(context).load(info.getUserImage()).fit().centerCrop().into(mViewHolder.userImage);

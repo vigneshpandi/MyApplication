@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -189,7 +190,17 @@ public class ListOfAdminActivity extends AppCompatActivity {
         public void deleteUser(String userMail) {
             final UserDao userDao = new UserDao();
             boolean result = userDao.deleteUser(userMail);
+            Log.d(TAG,"Company is rejected successfully!"+userMail);
             if (result) {
+                try {
+                    //  new MyAsyncClass().execute();
+                    MailSender runners = new MailSender();
+                    String  value = "Company is rejected successfully!";
+                    runners.execute("Company is rejected successfully!",value,"hipaatext123@gmail.com",userMail);
+
+                } catch (Exception ex) {
+                    // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+                }
                 Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this.context, "Error while delete the company, please try again!", Toast.LENGTH_LONG).show();

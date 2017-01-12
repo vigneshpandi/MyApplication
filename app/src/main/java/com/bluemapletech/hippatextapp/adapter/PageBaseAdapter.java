@@ -16,6 +16,7 @@ import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +188,15 @@ public class PageBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company canceled successfully!";
+                runners.execute("Company has been deleted by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
@@ -212,6 +222,15 @@ public class PageBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.deleteCompanys(user);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company canceled successfully!";
+                runners.execute("Company has been deleted by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {

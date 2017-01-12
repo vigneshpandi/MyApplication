@@ -169,7 +169,7 @@ public class AddAdminActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
-                Log.d(TAG,"loggedINCompany...."+loggedINCompany);
+
             }
 
             @Override
@@ -190,7 +190,7 @@ public class AddAdminActivity extends AppCompatActivity {
     public void checkUserExistence() {
         firebaseAuthRef = FirebaseAuth.getInstance();
 
-        Log.d("TAG","randomValue..randomValue......"+passRandomValue);
+        Log.d("TAG","Checkuserexistence method is called");
         firebaseAuthRef.createUserWithEmailAndPassword(adminEmailTxt.getText().toString(),
                 passRandomValue).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
@@ -208,11 +208,6 @@ public class AddAdminActivity extends AppCompatActivity {
         User comInfo = new User();
         final UserDao userDao = new UserDao();
         comInfo.setUserName(adminEmailTxt.getText().toString());
-        /*random = new SecureRandom();
-        password = new BigInteger(130, random).toString(32);
-        String passwordRandomValue = password.substring(0, 8);
-        Log.d("randomValue",passwordRandomValue);*/
-        Log.d("TAG","randomValue11..randomValue11......"+passRandomValue+loggedINCompany+firstName+lastName);
         String userPassword = passRandomValue;
         byte[] enCode = new byte[0];
 
@@ -222,7 +217,6 @@ public class AddAdminActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
-        Log.d(TAG,"encrypt password"+enCodes);
         comInfo.setPassword(enCodes);
         comInfo.setCompanyName(loggedINCompany);
         comInfo.setTINorEIN("");
@@ -249,7 +243,6 @@ public class AddAdminActivity extends AppCompatActivity {
         String dateValue = sdf.format(c.getTime());
         comInfo.setCreateDate(dateValue);
         comInfo.setUpdateDate(dateValue);
-        Log.d(TAG, "Company information's " + comInfo.toString());
         boolean data = userDao.createCompany(comInfo);
         if (data){
             progressDialog.dismiss();
@@ -277,7 +270,7 @@ public class AddAdminActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            Log.d(TAG, "params: " + params[0]);
+            Log.d(TAG, "DoInBackground method is called " + params[0]);
             String url = "https://npiregistry.cms.hhs.gov/api?pretty=true&limit=1";
             url = url + "&number=" + params[0];
             Log.d(TAG, url);
@@ -346,14 +339,11 @@ public class AddAdminActivity extends AppCompatActivity {
     private void saveImage() {
         final  String reArrangeEmailId = adminEmailTxt.getText().toString().replace(".", "-");
         Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
-        Log.d("saveImagesaveImagew",reArrangeEmailId);
         StorageReference filePath = mStorage.child(reArrangeEmailId);
-        Log.d("saveImagesaveImagee",reArrangeEmailId);
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                Log.d(TAG,"downloadUrl"+downloadUrl);
                 entryAuth();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -364,34 +354,6 @@ public class AddAdminActivity extends AppCompatActivity {
         });
     }
 
-   /* class MyAsyncClass extends AsyncTask<Void, Void, Void> {
-        String compEmailtxts = adminEmailTxt.getText().toString().trim();
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... mApi) {
-            Log.d(TAG,"mail method is called"+compEmailtxts);
-            try {
-                // Add subject, Body, your mail Id, and receiver mail Id.
-
-                sender.sendMail("My App", " HI welcome to TCT Text Application"+passRandomValue, "hipaatext123@gmail.com", compEmailtxts);
-            }
-
-            catch (Exception ex) {
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //Toast.makeText(getApplicationContext(), "Email send").show();
-        }
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

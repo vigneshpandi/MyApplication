@@ -28,6 +28,7 @@ import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
+import com.bluemapletech.hippatextapp.utils.MailSender;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -443,7 +444,17 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("1");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
+        Log.d(TAG,"company mail id.."+user.getUserName());
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company is accepted by root.";
+                runners.execute("Company is accepted successfully!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             startActivity(new Intent(getActivity(), RootHomeActivity.class));
             Toast.makeText(getActivity(), "Company is accepted successfully!", Toast.LENGTH_LONG).show();
 
@@ -456,7 +467,17 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("2");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
+        Log.d(TAG,"company pending employee id.."+user.getUserName());
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company is put to pendind .";
+                runners.execute("Company is requested to pending!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Toast.makeText(getActivity(), "Company is requested to pending!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), RootHomeActivity.class));
 
@@ -468,7 +489,17 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("3");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.deleteCompany(user);
+        Log.d(TAG,"deleted company"+user.getUserName());
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Company is put to pendind .";
+                runners.execute("Company is requested to pending!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Toast.makeText(getActivity(), "Company is rejected successfully!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(), RootHomeActivity.class));
 
@@ -480,7 +511,17 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("1");
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
+        Log.d(TAG,"employeee email id.."+user.getUserName());
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Employee accepted successfully!";
+                runners.execute("Employee accepted successfully!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             startActivity(new Intent(getActivity(),AdminHomeActivity.class));
             Toast.makeText(getActivity(), "Employee is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
@@ -494,6 +535,15 @@ public class ViewUserDetails extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         boolean result = userDao.pendingEmployee(user);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Employee is requested to pending!";
+                runners.execute("Employee is requested to pending!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Toast.makeText(getActivity(), "Employee is requested to pending!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(),AdminHomeActivity.class));
         } else {
@@ -506,6 +556,15 @@ public class ViewUserDetails extends AppCompatActivity {
         final UserDao userDao = new UserDao();
         boolean result = userDao.deleteEmployee(user);
         if (result) {
+            try {
+                //  new MyAsyncClass().execute();
+                MailSender runners = new MailSender();
+                String  value = "Employee is rejected successfully!";
+                runners.execute("Employee is rejected successfully!",value,"hipaatext123@gmail.com",user.getUserName());
+
+            } catch (Exception ex) {
+                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+            }
             Toast.makeText(getActivity(), "Employee is rejected successfully!", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getActivity(),AdminHomeActivity.class));
         } else {
