@@ -63,28 +63,21 @@ public class AddAdminActivity extends AppCompatActivity {
 
     private static final String TAG = AddAdminActivity.class.getCanonicalName();
     private FirebaseAuth firebaseAuthRef;
+    private StorageReference mStorage;
     private FirebaseDatabase firebaseDatabaseRef;
     private FirebaseDatabase fireBaseDatabase;
     private DatabaseReference databaseRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
-    private StorageReference mStorage;
     private Uri downloadUrl;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    String isOnline;
     private EditText adminEmailTxt, adminProviderNPItxt, adminProviderName;
     private Button addAminBtn;
-    private String password;
-    private String senderID;
-    private String loggedINCompany;
-    private String firstName;
-    private String lastName;
+    private String password,senderID,isOnline,loggedINCompany,firstName,lastName,passRandomValue;
     private User comInfos = new User();
-    private String passRandomValue;
     GMailSender sender;
-    private String toEmail;
-    private String compEmailtxts;
+    private String toEmail,compEmailtxts;
     private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +182,6 @@ public class AddAdminActivity extends AppCompatActivity {
 
     public void checkUserExistence() {
         firebaseAuthRef = FirebaseAuth.getInstance();
-
         Log.d("TAG","Checkuserexistence method is called");
         firebaseAuthRef.createUserWithEmailAndPassword(adminEmailTxt.getText().toString(),
                 passRandomValue).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {

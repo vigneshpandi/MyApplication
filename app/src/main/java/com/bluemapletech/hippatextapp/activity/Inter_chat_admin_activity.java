@@ -52,8 +52,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
     private ArrayList<String> data = new ArrayList<>();
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    private String rootValue,loginRole,loginAuth;
-    private String not_acp_user;
+    private String rootValue,loginRole,loginAuth,not_acp_user;
     private String loginCompanyName,isOnline,loginsenderId;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;

@@ -54,25 +54,19 @@ public class CreateGroup extends AppCompatActivity {
     private static final String TAG = CreateGroup.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedINCompany;
-    private String loggedINEmail;
-    private String loggegINRole;
-    private String loggedINChatPin;
-    private String role;
+    private String loggedINEmail,loggedINCompany,loggegINRole,loggedINChatPin,role;
     private Uri downloadUrl;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private StorageReference mStorage;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
-    // private   List<User> userObj;
     List<User> userObj = new ArrayList<User>();
     ImageView selection;
-    String groupMail;
     private HashMap<String, String> hm = new HashMap<String, String>();
     public int listPosition;
     private String groupName = "";
-    private String storeMail;
+    private String storeMail,groupMail;
     private SecureRandom random;
     private String senderID,roleValue,isOnline;
     private ProgressDialog progressDialog;
@@ -113,9 +107,7 @@ public class CreateGroup extends AppCompatActivity {
                     user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
                     if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
-                    }/* else if(user.getRole().matches("admin") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName()) && loggegINRole.matches("admin") ){
-                        userObj.add(user);
-                    }*/
+                    }
                     iv.setAdapter(new EmployeeCreateGroupBaseAdapter(getActivity(), userObj,loggedINEmail));
                 }
 
@@ -138,13 +130,6 @@ public class CreateGroup extends AppCompatActivity {
                     hm.remove(userObj.get(position).getUserName());
                     iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.INVISIBLE);
                 }
-       /* Set<String> keys = hm.keySet();
-        for(String key: keys){
-            Log.d("Valueof",hm.get(key));
-            String storeMail = hm.get(key);
-            groupMail = groupMail +";"+storeMail;
-            Log.d("groupMail",groupMail);
-        }*/
                 iv.getChildAt(listPosition).setSelected(true);
             }
         });
@@ -270,8 +255,6 @@ public class CreateGroup extends AppCompatActivity {
                 Log.d(TAG,"downloadUrl " + downloadUrl);
                 Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
                 boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl);
-                //finish();
-                //startActivity(getIntent());
                 if(roleValue.matches("admin")){
                     Log.d(TAG, "admin has been called!");
                     progressDialog.dismiss();
@@ -351,30 +334,12 @@ public class CreateGroup extends AppCompatActivity {
 
 
             final User info = getItem(position);
-            //mViewHolder.fieldId.setText(info.getEmpId());
             mViewHolder.fieldName.setText(info.getUserName());
             final View finalConvertView = convertView;
             selection = (ImageView)convertView.findViewById(R.id.tickIcon);
             if(info.getProfilePjhoto()!= null && !info.getProfilePjhoto().matches("")){
                 Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
             }
-           /* ((TextView) convertView.findViewById(R.id.employee_mail)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String  value = hm.get(userInfo.get(position).getUserName());
-                    if(value == null){
-                        hm.put(userInfo.get(position).getUserName(),userInfo.get(position).getUserName());
-                    }else{
-                       // selection.setVisibility(View.GONE);
-                        hm.remove(userInfo.get(position).getUserName());
-                    }
-                    Set<String> keys = hm.keySet();
-                    for(String key: keys){
-                        Log.d("Valueof",hm.get(key));
-                    }
-                }
-            });*/
-
 
             return convertView;
         }
@@ -384,7 +349,6 @@ public class CreateGroup extends AppCompatActivity {
             private TextView fieldId, fieldName;
             private ImageView tickMark, userImage;
             public MyViewHolder(View item) {
-                //fieldId = (TextView) item.findViewById(R.id.employee_id);
                 fieldName = (TextView) item.findViewById(R.id.employee_mail);
                 tickMark = (ImageView) item.findViewById(R.id.tickIcon);
                 userImage = (ImageView) item.findViewById(R.id.user_image);

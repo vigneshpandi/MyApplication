@@ -42,12 +42,10 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
     private static final String TAG = ListOfAdminActivity.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedInCompanyValue;
-    private String loggedINEmail;
+    private String loggedInCompanyValue,loggedINEmail;
     private ListView iv;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
     String isOnline;
@@ -98,7 +96,6 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                     }
                     if (user.getRole().matches("user") && user.getAuth().matches("3") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
                         userObj.add(user);
-                        Log.d("adminDetails","adminDetails"+user);
                     }
                     UserDetailDto userDto = new UserDetailDto();
                     pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

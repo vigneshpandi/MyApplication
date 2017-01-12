@@ -66,14 +66,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView userImage;
     final private int SELECT_FILE = 1;
     final private int REQUEST_CAMERA = 2;
-    private String base64Profile;
+    private String base64Profile,reArrangeEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private DatabaseReference databaseRef;
     private StorageReference mStorage;
     Uri value;
     Uri downloadUrl;
-    String reArrangeEmail;
     User user = new User();
     private ProgressDialog progressDialog;
     SharedPreferences pref;
@@ -117,7 +116,6 @@ public class EditProfileActivity extends AppCompatActivity {
         editDesignation = (EditText) findViewById(R.id.edit_designation);
         updateProfileBtn = (Button) findViewById(R.id.update_profile);
         userImage = (ImageView) findViewById(R.id.user_image);
-        // fireBaseDatabase = FirebaseDatabase.getInstance();
         Log.d(TAG, "logged....." + logged);
         if (logged != null) {
             Log.d("logged", logged.toString());
@@ -267,21 +265,17 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void backPageEmp() {
-        Log.d(TAG, "back page..");
         startActivity(new Intent(getActivity(), EmployeeHomeActivity.class));
     }
 
     private void backPageAdmin() {
-        Log.d(TAG, "back page..");
         startActivity(new Intent(getActivity(), AdminHomeActivity.class));
     }
 
     private void backPageRoot() {
-        Log.d(TAG, "back page..");
         startActivity(new Intent(getActivity(), RootHomeActivity.class));
     }
 
-    // show the popup for capture the image
     @Override
     protected void onStart() {
         super.onStart();
@@ -330,19 +324,14 @@ public class EditProfileActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            System.out.println("data====11111 resultcode "+requestCode);
             if (requestCode == SELECT_FILE) {
-                System.out.println("data====22222 resultcode "+requestCode);
                 onSelectFromGalleryResult(data);
             } else if (requestCode == REQUEST_CAMERA)
-                System.out.println("data===3333 resultcode "+requestCode);
-            Log.d(TAG, "DataValuesss" + data);
             onCaptureImageResult(data);
         }
     }
 
     private void onCaptureImageResult(Intent data) {
-        Log.d(TAG, "DataCamera" +bm);
         try {
             Bitmap thumbnail = bm;
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -362,16 +351,12 @@ public class EditProfileActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("data====555555  "+e);
             e.printStackTrace();
         }
-        Log.d(TAG, "camera" + value);
     }
 
 
     private void onSelectFromGalleryResult(Intent data) {
-        Log.d(TAG, "galleryData" + data);
-
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
@@ -379,19 +364,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 base64Profile = bitmapToBase64(bm);
                 value = data.getData();
             } catch (IOException e) {
-                System.out.println("data====6666 "+e);
                 e.printStackTrace();
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                System.out.println("data====6666 "+e);
             }
         }
 
-        Log.d(TAG, "gallery" + value);
     }
 
     private void saveImage() {
-        // Uri uri = data.getData();
         if (value != null) {
             Log.d(TAG, "value" + value);
             StorageReference filePath = mStorage.child(reArrangeEmail);
@@ -399,7 +380,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                    Log.d(TAG, "downloadUrl" + downloadUrl);
                     profile = String.valueOf(downloadUrl);
                     saveProfile();
                 }
@@ -410,13 +390,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
         } else if (value == null) {
-            Log.d(TAG, "value null" + value);
             saveProfile();
         }
     }
 
     private void saveProfile() {
-        Log.d(TAG, "update profile is called!");
         final UserDao userDao = new UserDao();
         user.setAuth(auth);
         user.setChatPin(chatPin);
@@ -441,7 +419,6 @@ public class EditProfileActivity extends AppCompatActivity {
         boolean data = userDao.createCompany(user);
         if (data) {
             progressDialog.dismiss();
-            Log.d(TAG, "Update Profile successfuly!");
             if(loginRole.matches("admin") && auth.matches("1")) {
                 Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
                 startActivity(intent);
@@ -456,7 +433,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         } else {
-            Log.d(TAG, "profile not successfuly updated!");
             Toast.makeText(getActivity(), "profile not successfuly updated!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(intent);
@@ -486,7 +462,6 @@ public class EditProfileActivity extends AppCompatActivity {
             dataReferences.removeValue();
         }
         super.onPause();
-        //Do whatever you want to do when the application stops.
     }
 
 

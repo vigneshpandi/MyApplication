@@ -270,10 +270,7 @@ public class SecurePin extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*private void backPage() {
-        Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),LoginActivity.class));
-    }*/
+
     @Override
     public void onPause()
     {
@@ -289,7 +286,6 @@ public class SecurePin extends AppCompatActivity {
             dataReferences.removeValue();
         }
         super.onPause();
-        //Do whatever you want to do when the application stops.
     }
 
 

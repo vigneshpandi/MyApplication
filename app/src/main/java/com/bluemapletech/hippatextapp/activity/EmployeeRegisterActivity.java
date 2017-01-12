@@ -54,20 +54,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmployeeRegisterActivity extends AppCompatActivity {
-
+    private static final String TAG = EmployeeRegisterActivity.class.getCanonicalName();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuthRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
-
-    private static final String TAG = EmployeeRegisterActivity.class.getCanonicalName();
-
     private EditText firstName, lastName, emailTxt, passwordTxt, empIdTxt;
     private Button regBtn;
     private Spinner spinner;
-    private String password;
-    private String senderID;
+    private String password,senderID;
     private StorageReference mStorage;
     private Uri uri;
     private StorageReference filePath;
@@ -127,7 +123,6 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                             dialog.cancel();
                         }
                     });
-                    // Showing Alert Message
                     dialog.show();
                 }
             }}
@@ -289,25 +284,22 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             try {
                 String subject = "Thanks for your registration, Please wait your admin's confirmation.\n" +
                         "Thanks for showing your interest.";
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 runners.execute("Profile has been created!",subject,"hipaatext123@gmail.com",emailTxt.getText().toString());
 
             } catch (Exception ex) {
-                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
             alertDialog.setTitle("Thank You Registering");
             alertDialog.setMessage("You will receive an email once we verify the  details");
-            // Setting OK Button
+
             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(getActivity(), HomeActivity.class);
                     startActivity(intent);
                 }
             });
-            // Showing Alert Message
             alertDialog.show();
         } else {
             Log.d(TAG, "Employee insertion not successful!");

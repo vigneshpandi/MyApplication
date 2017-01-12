@@ -44,20 +44,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AddRootActivity extends AppCompatActivity {
+    private static final String TAG = AddRootActivity.class.getCanonicalName();
     private FirebaseDatabase firebaseDatabaseRef;
     private DatabaseReference databaseRef;
     private FirebaseAuth firebaseAuthRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
-    private static final String TAG = AddRootActivity.class.getCanonicalName();
+    private Uri downloadUrl;
     private EditText addRootEmailId, addRootPassword;
     private Button addRootBtn;
-    private String password;
-    private String senderID,isOnline;
-    private String passRandomValue;
+    private String senderID,isOnline,password,passRandomValue;
     private User empInfos = new User();
     private StorageReference mStorage;
-    private Uri downloadUrl;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private FirebaseDatabase fireBaseDatabase;
@@ -76,7 +74,6 @@ public class AddRootActivity extends AppCompatActivity {
         random = new SecureRandom();
         password = new BigInteger(130, random).toString(32);
         String randomValue = password.substring(0, 8);
-        Log.d("randomValue",randomValue);
         passRandomValue = randomValue.toString();
     }
 
@@ -140,7 +137,6 @@ public class AddRootActivity extends AppCompatActivity {
         User user = new User();
         final UserDao userDao = new UserDao();
         user.setUserName(addRootEmailId.getText().toString());
-        Log.d("TAG","randomValue11..randomValue11......"+passRandomValue);
         String userPassword = passRandomValue;
         byte[] enCode = new byte[0];
         try {
@@ -149,7 +145,6 @@ public class AddRootActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
-        Log.d(TAG,"encrypt password"+enCodes);
         user.setPassword(enCodes);
         user.setEmpId("");
         user.setCompanyName("");

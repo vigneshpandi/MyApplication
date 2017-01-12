@@ -306,10 +306,8 @@ public class Settings extends AppCompatActivity {
         if (result) {
             Log.d(TAG,"user.getIsOnline..."+user.getIsOnlie());
             if(user.getIsOnlie()== "true") {
-                // showOnline.setChecked(true);
                 Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
             }else{
-                // showOnline.setChecked(false);
                 Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
             }
         } else {
@@ -332,7 +330,6 @@ public class Settings extends AppCompatActivity {
             dataReferences.removeValue();
         }
         super.onPause();
-        //Do whatever you want to do when the application stops.
     }
 
 

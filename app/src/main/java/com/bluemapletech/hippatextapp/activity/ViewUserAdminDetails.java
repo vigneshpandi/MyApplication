@@ -44,21 +44,16 @@ import java.util.Map;
 public class ViewUserAdminDetails extends AppCompatActivity {
     private static final String TAG = ViewUserAdminDetails.class.getCanonicalName();
     String empMailId = null;
-    String userId,loginsenderId;
+    String userId,loginsenderId,reArrangeEmail,userAuths,userEmails;
     String adminMailId = null;
-    String reArrangeEmail;
-    String userAuths;
     HashMap<String,String> isUserChecking = new HashMap<String, String>();
-    String userEmails;
     String role,roleValue,loginChatPin;
     private ListView iv;
     private FirebaseAuth firebaseAuth;
     List<User> userObj;
-
     SharedPreferences preflogin;
     SharedPreferences.Editor editorlogin;
     String isOnline;
-
     private FirebaseDatabase fireBaseDatabase;
     User user = new User();
     User user1 = new User();
@@ -314,60 +309,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
-  /*  private class viewUserAdapter extends BaseAdapter {
 
-        List<User> userInfo = new ArrayList<User>();
-        LayoutInflater inflater;
-        Context context;
-        public viewUserAdapter(Context context, List<User> user) {
-            this.context = context;
-            this.userInfo = user;
-            inflater = LayoutInflater.from(this.context);
-        }
-
-
-        public int getCount() {
-            return userInfo.size();
-        }
-
-        @Override
-        public User getItem(int position) {
-            return userInfo.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            viewUserAdapter.MyViewHolder mViewHolder  = null;
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.list_of_user_under_admin, parent, false);
-                mViewHolder = new viewUserAdapter.MyViewHolder(convertView);
-                convertView.setTag(mViewHolder);
-            } else {
-                mViewHolder = (viewUserAdapter.MyViewHolder) convertView.getTag();
-            }
-
-            final User info = getItem(position);
-
-            mViewHolder.mailId.setText(info.getUserName());
-
-
-            return convertView;
-        }
-
-
-        private class MyViewHolder {
-            private TextView mailId;
-            public MyViewHolder(View item) {
-                mailId = (TextView) item.findViewById(R.id.user_mail);
-            }
-        }
-    }*/
 
     @Override
     public void onPause()

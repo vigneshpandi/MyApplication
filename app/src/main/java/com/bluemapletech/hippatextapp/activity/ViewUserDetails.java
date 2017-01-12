@@ -46,14 +46,11 @@ import java.util.Map;
 public class ViewUserDetails extends AppCompatActivity {
     private static final String TAG = ViewUserDetails.class.getCanonicalName();
     String empMailId = null;
-    String userId;
+    String userId,reArrangeEmail,userAuths,loginsenderId;
     String adminMailId = null;
-    String reArrangeEmail;
-    String userAuths,loginsenderId;
     SharedPreferences preflogin;
     SharedPreferences.Editor editorlogin;
-    String isOnline;
-    String role,roleValue,loginChatPin;
+    String role,roleValue,loginChatPin,isOnline;
     private ListView iv;
     private FirebaseDatabase fireBaseDatabase;
     private FirebaseAuth firebaseAuth;
@@ -519,7 +516,6 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("1");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.acceptedCompany(user);
-        Log.d(TAG,"company mail id.."+user.getUserName());
         if (result) {
             try {
                 //  new MyAsyncClass().execute();
@@ -542,7 +538,6 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("2");
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
-        Log.d(TAG,"company pending employee id.."+user.getUserName());
         if (result) {
             try {
                 //  new MyAsyncClass().execute();
@@ -586,7 +581,6 @@ public class ViewUserDetails extends AppCompatActivity {
         user.setAuth("1");
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
-        Log.d(TAG,"employeee email id.."+user.getUserName());
         if (result) {
             try {
                 //  new MyAsyncClass().execute();
@@ -675,16 +669,13 @@ public class ViewUserDetails extends AppCompatActivity {
     }
 
     private void backPageAdmin() {
-        Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
 
     private void backPageRoot() {
-        Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
     private void backPageAdmins() {
-        Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
     private class viewUserAdapter extends BaseAdapter {

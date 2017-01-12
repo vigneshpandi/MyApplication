@@ -97,29 +97,19 @@ public class RootHomeActivity extends AppCompatActivity {
             String dateValue = sdf.format(c.getTime());
             pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
             loginMail =  pref.getString("loginMail", "");
-
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Processing...");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
             dataReference.setValue(dateValue);
-
             DatabaseReference dataReference1= mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
             dataReference1.setValue("");
-
             DatabaseReference dataReference2= mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReference2.removeValue();
-
             SharedPreferences preferencess = getSharedPreferences("loginUserDetails", 0);
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
             editors.commit();
-
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
-            progressDialog.dismiss();
             startActivity(logOut);
             onStop();
             finish();

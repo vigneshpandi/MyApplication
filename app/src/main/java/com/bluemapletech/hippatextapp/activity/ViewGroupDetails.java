@@ -113,7 +113,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
         firebaseAuth = FirebaseAuth.getInstance();
         logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("");
@@ -139,7 +138,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         if (groupName == null) {
             Log.d(TAG, "inside groupName is null");
             pref = getSharedPreferences("MyPref", MODE_PRIVATE);
-            Log.d(TAG, "groupNamedialogVAlue" + pref.getString("groupNameValue", ""));
             groupName = pref.getString("groupNameValue", "");
             loggedINEmail = pref.getString("loginMail", "");
         }
@@ -173,12 +171,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                     }
                 }
                 separated = group.getGroupEmailId().split(";");
-                Log.d("separated", "separated" + separated);
-                Log.d("separated", "separated" + separated.length);
                 for (int i = 0; i < separated.length; i++) {
                     //get userProfile for   user  profile Image
                     getUserProfile(separated[i]);
-                    // getGroupUser(separated[i],group.getRandomName());
                 }
 
             }
@@ -212,9 +207,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                     TextView name = (TextView) findViewById(R.id.group_name);
                                     Log.d(TAG, "groupValioo" + editGroupName);
                                     name.setText(editGroupName);
-                                   /* l = 0;
-                                    k = 0;
-                                    int i = 0;*/
+
                                 }
                             }
                         });
@@ -333,7 +326,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 // some action
                             }
                         }
-                        //  Log.i("filepath:"," "+filepath) ;
+
 
 
                     }
@@ -384,7 +377,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         displayImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
         value = data.getData();
-        Log.d(TAG, "valuess" + value);
+
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -399,7 +392,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         displayImage.setImageBitmap(bm);
         base64Profile = bitmapToBase64(bm);
         value = data.getData();
-        Log.d(TAG, "valuess" + value);
         saveImage();
     }
 
@@ -411,7 +403,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         Log.d("randomValue", randomValue);
         mStorage = FirebaseStorage.getInstance().getReference();
         Log.d(TAG, "R.drawable.groupimage..." + R.drawable.groupimage + group.getRandomName());
-        //  Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + base64Profile);
         StorageReference filePath = mStorage.child(groupName + senderID);
         Log.d(TAG, "value...value.." + value);
         filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -428,13 +419,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                     DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupImage");
                     String valuesd = String.valueOf(downloadUrl);
                     dataReference.setValue(valuesd);
-                /* l=0;
-                 k=0;
-                 int i=0;*/
+
                 }
 
-                //finish();
-                //startActivity(getIntent());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -523,7 +510,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                 groupValue.setGroupImage(map.get("groupImage"));
                 groupValue.setGroupEmailId(map.get("groupEmailId"));
                 groupValue.setAdmin(map.get("admin"));
-                Log.d(TAG, "groupsssss" + groupValue);
                 groupObj.add(groupValue);
                 if (getActivity() != null) {
                     iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, logged.getEmail()));
@@ -590,7 +576,6 @@ public class ViewGroupDetails extends AppCompatActivity {
 
             final Groups info = getItem(position);
             if (info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId)) {
-                Log.d(TAG, "valUES");
                 toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
                 adminAddedPermisson = true;
                 View btn = convertView.findViewById(R.id.btn_admin_view);
@@ -607,7 +592,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                 btn.setVisibility(View.VISIBLE);
             }
             if (info.getUserImage() != null) {
-                Log.d(TAG, "info.getUserImage()" + info.getUserImage());
                 //  Picasso.with(context).load(info.getUserImage()).fit().centerCrop().into(mViewHolder.userImage);
             }
             return convertView;

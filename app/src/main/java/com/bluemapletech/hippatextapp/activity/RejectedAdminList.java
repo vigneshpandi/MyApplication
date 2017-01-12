@@ -40,8 +40,7 @@ public class RejectedAdminList extends AppCompatActivity {
     private static final String TAG = RejectedAdminList.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedInCompanyValue;
-    private String loggedINEmail;
+    private String loggedInCompanyValue,loggedINEmail;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private ListView iv;
@@ -91,14 +90,12 @@ public class RejectedAdminList extends AppCompatActivity {
                     user.setFirstName(snapshot.child("firstName").getValue(String.class));
                     user.setLastName(snapshot.child("lastName").getValue(String.class));
                     user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
-                    Log.d("adminDetails","adminDetails"+user.getCompanyName());
                     if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
                     if (user.getRole().matches("admin") && user.getAuth().matches("3") && !loggedINEmail.matches(user.getUserName())&& loggedInCompanyValue.matches(user.getCompanyName())) {
                         userObj.add(user);
-                        Log.d("adminDetails","adminDetails"+user);
                         if(user.getRole().matches("admin")){
                             Log.d(TAG,"admin list...");
                             getSupportActionBar().setTitle("Admin List");

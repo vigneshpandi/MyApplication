@@ -66,7 +66,6 @@ public class EmployeeHomeActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d("emphomeActvity","Destroy");
         SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -167,46 +166,15 @@ public class EmployeeHomeActivity extends AppCompatActivity {
                 finish();
             return true;
         }
-        /*if (id == R.id.profile) {
-            Intent logOut = new Intent(getActivity(), EditProfileActivity.class);
-            startActivity(logOut);
-            onStop();
-            finish();
-            return true;
-        }
-        if (id == R.id.change_pin) {
-            Intent logOut = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
-            startActivity(logOut);
-            onStop();
-            finish();
-            return true;
-        }*/
 
         return super.onOptionsItemSelected(item);
     }
 
-   /*private boolean clearPusNotificationId() {
-        Log.d("log","logoout method called");
-       boolean successvalue = false;
-        Intent logOut = new Intent(getActivity(), HomeActivity.class);
-        startActivity(logOut);
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
-       Task<Void> success = dataReferences.setValue("111");
-       if(success.isSuccessful()){
-           successvalue = true;
-       }
-        return successvalue;
-    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
-            Log.d("sdsdsdsd","sdsdsdsdsd");
             this.moveTaskToBack(true);
             return true;
         }

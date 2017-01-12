@@ -90,7 +90,6 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
                     String enCode = Base64.encodeToString(data, Base64.NO_WRAP);
                     user.setChatPin(enCode);
                     user.setUserName(reArrangeEmail);
-                    Log.d(TAG,"progrssBar is show...");
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage("Processing change secure chat pin...");
                     progressDialog.show();
@@ -105,7 +104,6 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     }
 
     private void resetPinBtn(User user) {
-       /* Log.d(TAG, "Add invited company method has been called!");*/
         boolean valid = true;
         if(text.matches(confirmChatPin.getText().toString())){
             progressDialog.dismiss();
@@ -180,17 +178,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     }
 
     private boolean validate() {
-        //  String oldChatPins = oldChatPin.getText().toString().trim();
         String newChatPins = newChatPin.getText().toString().trim();
         String confirmChatPins = confirmChatPin.getText().toString();
         boolean valid = true;
-       /* if (oldChatPins.isEmpty() || oldChatPins.length() < 4) {
-            oldChatPin.setError("Old Chat Pin is invalid");
-            valid = false;
-        } else {
-            oldChatPin.setError(null);
-        }*/
-
         if (newChatPins.isEmpty() || newChatPins.length() < 4) {
             newChatPin.setError("New Chat Pin is invalid");
             valid = false;

@@ -41,12 +41,9 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     User user1 = new User();
-
-
     SharedPreferences preflogin;
     SharedPreferences.Editor editorlogin;
     String isOnline;
-
     private FirebaseDatabase fireBaseDatabase; private FirebaseAuth firebaseAuth;
     String logi_role_value,reArrangeEmail,userAuths,userEmails,userId;
     private TextView userEmail,compName,empId,providerNPI,providerName,providerNpiLabel,providerNameLabel;
@@ -73,9 +70,7 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         if(userEmails==null || userEmails.matches("")){
             userEmails = getIntent().getStringExtra(Inter_chat_admin_activity.userEmails);
         }
-       /* if(userEmails ==null || userEmails.matches("")) {
-            userEmails = getIntent().getStringExtra(IntraChatEmployeeTabActivity.userEmails);
-        }*/
+
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);
@@ -151,7 +146,6 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     }
 
     private void backPage() {
-        Log.d(TAG,"back page..");
         if(logi_role_value.matches("user")) {
             startActivity(new Intent(getActivity(), EmployeeHomeActivity.class));
         }else if(logi_role_value.matches("admin")){

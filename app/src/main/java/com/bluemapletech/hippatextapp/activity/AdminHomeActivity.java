@@ -144,13 +144,8 @@ public class AdminHomeActivity extends AppCompatActivity {
             isOnline =  pref.getString("isOnline", "");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Processing...");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
             dataReference.setValue(dateValue);
-
             DatabaseReference dataReference1= mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("pushNotificationId");
             dataReference1.setValue("");
        if(isOnline.matches("true")) {
