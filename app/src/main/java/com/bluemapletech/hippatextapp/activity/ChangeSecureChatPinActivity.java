@@ -51,7 +51,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     private EditText oldChatPin, newChatPin, confirmChatPin;
     private Button resetPinBtn;
     private  String reArrangeEmail;
-    private String text;
+    private String text,login_auth;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SharedPreferences pref1;
@@ -68,6 +68,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        login_auth =  pref.getString("auth", "");
         init();
         resetPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,14 +208,29 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(role.equals("admin")) {
+        if(role.equals("admin")&& !login_auth.matches("1")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdminNotAccept();
+
+                    return true;
+            }
+        }
+        if(role.equals("admin")&& login_auth.matches("1")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
                     backPageAdmin();
                     return true;
             }
         }
-        if(role.equals("user")) {
+        if(role.equals("user") && !login_auth.matches("1")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageEmpNotAccept();
+                    return true;
+            }
+        }
+        if(role.equals("user") && login_auth.matches("1")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
                     backPageEmp();
@@ -228,10 +244,18 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
     }
+    private void backPageAdminNotAccept() {
+        Log.d(TAG,"back page..not accept");
+        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
+    }
 
     private void backPageAdmin() {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+    }
+    private void backPageEmpNotAccept() {
+        Log.d(TAG,"back page..not accept");
+        startActivity(new Intent(getActivity(),NotAcceptedUser.class));
     }
     @Override
     public void onPause()
