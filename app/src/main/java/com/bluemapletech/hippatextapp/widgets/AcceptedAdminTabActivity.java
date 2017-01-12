@@ -51,7 +51,6 @@ public class AcceptedAdminTabActivity extends Fragment{
                 User user;
                 List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
@@ -84,7 +83,6 @@ public class AcceptedAdminTabActivity extends Fragment{
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {

@@ -29,13 +29,11 @@ public class EmployeeDao {
         String profileUrl = String.valueOf(downloadUrl);
         HashMap<String, Object> empData = new HashMap<>();
         Log.d(TAG, "CreateGroup employee dao method has been called!");
-        Log.d("groupMail",groupMail);
         String[] seprated = groupMail.split(";");
         Log.d("seprated","lebngthofthe seprated"+seprated.length);
         random = new SecureRandom();
         randomName = new BigInteger(130, random).toString(32);
         String randomValue = randomName.substring(0, 7);
-        Log.d("randomValue",randomValue);
         empData.put("admin",loggedINEmail);
         empData.put("groupEmailId",groupMail);
         empData.put("groupImage",profileUrl);

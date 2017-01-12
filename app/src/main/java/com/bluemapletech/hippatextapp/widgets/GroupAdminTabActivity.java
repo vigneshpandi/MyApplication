@@ -59,7 +59,6 @@ public class GroupAdminTabActivity extends Fragment {
                 Groups group;
                 List<Groups> groupObj = new ArrayList<Groups>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     group = new Groups();
                     group.setGroupName(snapshot.child("groupName").getValue(String.class));
                     group.setAdmin(snapshot.child("admin").getValue(String.class));
@@ -86,7 +85,6 @@ public class GroupAdminTabActivity extends Fragment {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {

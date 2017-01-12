@@ -51,7 +51,6 @@ public class AcceptedTabActivity extends Fragment {
                 List<User> userObj1 = new ArrayList<User>();
                 HashMap<String,Integer> hashValue = new HashMap<String, Integer>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
@@ -61,13 +60,11 @@ public class AcceptedTabActivity extends Fragment {
                     if (user.getRole().matches("admin") && user.getAuth().matches("1")) {
                         if (hashValue.get( user.getCompanyName()) == null) {
                             hashValue.put(user.getCompanyName(),1);
-                            Log.d(TAG, "Snapshot working from admin: " + snapshot.toString());
                         }else{
                             int com_count = hashValue.get( user.getCompanyName());
                             com_count++;
                             hashValue.put(user.getCompanyName(),com_count);
                         }
-                        Log.d(TAG, "Snapshot values from admin: " + snapshot.toString());
                         userObj.add(user);
                     }
                     if (user.getRole().matches("user") && user.getAuth().matches("1")) {

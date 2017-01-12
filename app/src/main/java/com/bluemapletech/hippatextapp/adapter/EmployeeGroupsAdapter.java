@@ -130,8 +130,6 @@ public class EmployeeGroupsAdapter extends BaseAdapter {
                 alertDialog.show();
             }
         });
-
-            Log.d(TAG,"info.getGroupImages()"+info.getGroupImage());
             Picasso.with(context).load(info.getGroupImage()).fit().centerCrop().into(mViewHolder.userImage);
 
         mViewHolder.fieldName.setText(info.getGroupName());

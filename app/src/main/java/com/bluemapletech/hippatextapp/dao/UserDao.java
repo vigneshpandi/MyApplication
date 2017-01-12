@@ -105,11 +105,6 @@ public class UserDao {
         dataReference.setValue(compData.get("companyName"));
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(compData);
-
-       /* Task<Void> result =  databaseRef.setValue(compData);
-        if(result.isSuccessful()){
-            success = true;
-        }*/
         return true;
     }
 
@@ -118,12 +113,10 @@ public class UserDao {
         Log.d(TAG, "Add invited company dao method has been called!");
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        Log.d("sdsdsdsd","ssdsdsdsdsdsdsdsdsd"+reArrangeEmail);
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
-            Log.d(TAG,"user......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been accepted by admin.\n" +
                     "Thanks for showing interest.";
@@ -152,7 +145,6 @@ public class UserDao {
         databaseRef.setValue(user.getAuth());
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
-            Log.d(TAG,"user......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been rejected by admin.\n" +
                     "Thanks for showing interest.";
@@ -182,8 +174,6 @@ public class UserDao {
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String dateValue = sdf.format(c.getTime());
-
-        Log.d(TAG,"date " + dateValue);
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");
         String[] ids = {sendMail,"+", toMail};
@@ -198,10 +188,8 @@ public class UserDao {
         msg.put("senderId",message.getSenderId());
         msg.put("image",message.getImage());
         DatabaseReference value = sRef.child("messages").child(convIds).child("chat").push();
-        Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
-        Log.d("values",re[6]);
         msg.put("childappendid",re[6]);
         Task<Void> result =  value.setValue(msg);
         AsyncTaskRunners runner = new AsyncTaskRunners();
@@ -242,7 +230,6 @@ public class UserDao {
     }
 
     public static void deleteChatMessage(Message message, String mConvoId) {
-        Log.d(TAG,"message....."+message.getChildappendid());
         String childappendid =  message.getChildappendid();
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendid);
@@ -253,10 +240,8 @@ public class UserDao {
     public static void deleteGroupChatMessage(Message message, String mConvoId) {
         String childappendid =  message.getChildappendid();
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        Log.d(TAG,"removing the group message"+mConvoId);
         databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child(mConvoId).child("message").child(childappendid);
         databaseRef.removeValue();
-        Log.d(TAG,"remove the value");
         return;
     }
 
@@ -416,7 +401,6 @@ public class UserDao {
     private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
-            Log.d(TAG, "params Text: " + params[1]);
             Object json = null;
             try {
                 URL url1;
@@ -432,8 +416,6 @@ public class UserDao {
                 root1.put("notification",root);
                 root1.put("to",params[0]);
                 root1.put("priority","high");
-                Log.d(TAG,"rootValue1"+root1);
-                Log.d(TAG,"rootValue"+root);
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 wr.write(root1.toString());
                 wr.flush();
@@ -460,21 +442,6 @@ public class UserDao {
         }
     }
 
-   /* public boolean deleteUser(String userMail) {
-        String reArrangeEmail = userMail.replace(".", "-");
-        firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
-        databaseRef.removeValue();
-        return  true;
-    }
-    public static void deleteChatMessage(Message message, String mConvoId) {
-        Log.d(TAG,"message....."+message.getChildappendid());
-        String childappendid =  message.getChildappendid();
-        firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendid);
-        databaseRef.removeValue();
-        return;
-    }*/
     public UserDao getActivity() {
         return this;
     }

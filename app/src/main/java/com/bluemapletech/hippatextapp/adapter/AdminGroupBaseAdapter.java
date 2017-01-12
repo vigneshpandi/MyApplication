@@ -128,9 +128,6 @@ public class AdminGroupBaseAdapter extends BaseAdapter {
             }
         });
 
-        Log.d(TAG,"info.getGroupImages()"+info.getGroupImage());
-        //Picasso.with(context).load(info.getGroupImage()).fit().centerCrop().into(mViewHolder.userImage);
-
         mViewHolder.fieldName.setText(info.getGroupName());
         mViewHolder.fieldId.setText(groupInfo.get(position).getGroupEmailId());
 
@@ -140,12 +137,10 @@ public class AdminGroupBaseAdapter extends BaseAdapter {
     private class MyViewHolder {
 
         private TextView fieldName,fieldId;
-      //  private ImageView userImage;
         public MyViewHolder(View item) {
 
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);
             fieldId = (TextView) item.findViewById(R.id.user_id);
-           // userImage = (ImageView) item.findViewById(R.id.user_image);
         }
     }
 

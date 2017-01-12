@@ -85,7 +85,6 @@ public class PendingBaseAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 } else if (userInfo.get(position).getAuth().matches("2")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    //alert.setTitle("");
                     alert.setMessage("Do you want to accept"+"'"+ info.getCompanyName() +"'"+"company");
                     alert.setCancelable(false);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -109,7 +108,6 @@ public class PendingBaseAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("2")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    //alert.setTitle("");
                     alert.setMessage("Do you want to reject"+"'"+ info.getCompanyName() +"'"+"company1");
                     alert.setCancelable(false);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -126,7 +124,6 @@ public class PendingBaseAdapter extends BaseAdapter {
                     alertDialog.show();
                 } else if (userInfo.get(position).getAuth().matches("1")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    //alert.setTitle("");
                     alert.setMessage("Do you want to reject"+"'"+ info.getCompanyName() +"'"+"company11");
                     alert.setCancelable(false);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -148,7 +145,6 @@ public class PendingBaseAdapter extends BaseAdapter {
         convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // int position=(Integer)v.getTag();
                 if (!userInfo.get(position).getAuth().matches("0")) {
                     Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(userEmail, userInfo.get(position).getUserName());
@@ -157,8 +153,6 @@ public class PendingBaseAdapter extends BaseAdapter {
                 }
             }
         });
-
-
         return convertView;
     }
 
@@ -179,15 +173,13 @@ public class PendingBaseAdapter extends BaseAdapter {
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company accept successfully!";
                 runners.execute("Company is accepted successfully!",value,"hipaatext123@gmail.com",user.getUserName());
 
             } catch (Exception ex) {
-                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+
             }
-            Log.d(TAG, "Company accepted successfully!");
             Toast.makeText(this.context, "Company is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -201,7 +193,6 @@ public class PendingBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -215,15 +206,13 @@ public class PendingBaseAdapter extends BaseAdapter {
         boolean result = companyDao.deleteCompanys(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company canceled successfully!";
                 runners.execute("Company is rejected successfully!",value,"hipaatext123@gmail.com",user.getUserName());
 
             } catch (Exception ex) {
-                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");

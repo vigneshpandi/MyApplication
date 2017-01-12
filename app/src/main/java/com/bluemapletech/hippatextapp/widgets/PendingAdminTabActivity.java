@@ -85,13 +85,11 @@ if(getActivity()!=null) {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "List of company: " + dataSnapshot.child("companyName").getValue());
                 loggedINCompany = (String) dataSnapshot.child("companyName").getValue();
                 loginsenderId = (String) dataSnapshot.child("senderId").getValue();
             }

@@ -75,7 +75,6 @@ public class InterChatEmployeeTabActivity extends Fragment {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
@@ -101,11 +100,8 @@ public class InterChatEmployeeTabActivity extends Fragment {
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "checkOnliecallingdatasnapshot");
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String onlineUser = dataSnapshot.child("onlineUser").getValue(String.class);
-                    Log.d("dfdfdfdfdf", "insidecalling" + onlineUser);
                     onlineHash.put(onlineUser, onlineUser);
                 }
                 loadingUserDetail();
@@ -126,7 +122,6 @@ public class InterChatEmployeeTabActivity extends Fragment {
                 User user;
                 userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
@@ -141,12 +136,10 @@ public class InterChatEmployeeTabActivity extends Fragment {
                     user.setLastName(snapshot.child("lastName").getValue(String.class));
                     user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
                     user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
-                    Log.d(TAG, "userFirstName and LastName.." + user.getFirstName() + user.getLastName());
                     if (!user.getLastName().matches("") && !user.getFirstName().matches("")) {
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
                     }
-                    Log.d(TAG,"loggedINCompanyloggedINCompany"+loggedINCompany +loggedINEmail);
                     if(loggedINCompany!=null && loggedINEmail!=null) {
                         if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
                             userObj.add(user);

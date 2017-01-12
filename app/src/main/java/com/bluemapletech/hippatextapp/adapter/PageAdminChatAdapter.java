@@ -90,14 +90,8 @@ public class PageAdminChatAdapter  extends BaseAdapter {
         }
 
         final User info = getItem(position);
-       /* firstName = userInfo.get(position).getFirstName().toString();
-        lastName = userInfo.get(position).getLastName();*/
-        // mViewHolder.fieldId.setText(info.getEmpId());
         mViewHolder.fieldName.setText(info.getUserName());
         mViewHolder.fieldId.setText(info.getEmpId());
-       /* if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {
-            Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
-        }*/
 
         convertView.findViewById(R.id.chat_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +124,6 @@ public class PageAdminChatAdapter  extends BaseAdapter {
                             intent.putExtra(firstName, userInfo.get(position).getFirstName());
                             intent.putExtra(lastName, userInfo.get(position).getLastName());
                             intent.putExtra(role,userInfo.get(position).getRole());
-                            Log.d(TAG,"role role value..."+userInfo.get(position).getRole());
                             context.startActivity(intent);
                         } else {
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
@@ -165,12 +158,10 @@ public class PageAdminChatAdapter  extends BaseAdapter {
 
     private class MyViewHolder {
         private TextView fieldId, fieldName;
-       // private ImageView userImage;
 
         public MyViewHolder(View item) {
             fieldId = (TextView) item.findViewById(R.id.user_id);
             fieldName = (TextView) item.findViewById(R.id.layout_field_name);
-           // userImage = (ImageView) item.findViewById(R.id.user_image);
         }
     }
 }

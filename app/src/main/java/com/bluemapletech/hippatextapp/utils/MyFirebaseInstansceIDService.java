@@ -19,7 +19,6 @@ public class MyFirebaseInstansceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG,"refreshedToken " + refreshedToken);
         sendRegistrationToServer(refreshedToken);
 
     }
@@ -29,11 +28,7 @@ public class MyFirebaseInstansceIDService extends FirebaseInstanceIdService {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("notificationId", token);
-        editor.commit();
-
-       /*String userFirstLogin = pref.getString("notificationId",null);
-        Log.d(TAG,"userFirstLogin"+userFirstLogin);*/
-    }
+        editor.commit();}
     public MyFirebaseInstansceIDService getActivity() {
         return this;
     }

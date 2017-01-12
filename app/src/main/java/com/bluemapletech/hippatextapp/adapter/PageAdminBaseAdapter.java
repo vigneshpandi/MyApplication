@@ -155,19 +155,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
                 }
             }
         });
-
-       /* if (userInfo.get(position).getAuth().matches("1")) {
-           *//* View btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setVisibility(btn.INVISIBLE);
-           View btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(btns.INVISIBLE);*//*
-            *//*Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("View");*//*
-            Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("Delete");
-            btn.setBackgroundColor(Color.parseColor("#ff3322"));
-        }*/
-
         if (userInfo.get(0).getAuth().matches("0")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
@@ -181,7 +168,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         if (userInfo.get(0).getAuth().matches("1")) {
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("Reject");
-           // btn.setTextColor(convertView.getResources().getColor(R.color.textColor));
             TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
             textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
 
@@ -218,10 +204,8 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         Log.d(TAG, "Add invited company method has been called!");
         final UserDao userDao = new UserDao();
         boolean result = userDao.acceptedEmployee(user);
-        Log.d(TAG,"Company is accepted successfully!"+user.getUserName());
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company is accepted successfully!";
                 runners.execute("Company is accepted successfully!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -229,7 +213,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company accepted successfully!");
             Toast.makeText(this.context, "Company is accepted successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -243,7 +226,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         final UserDao userDao = new UserDao();
         boolean result = userDao.pendingEmployee(user);
         if (result) {
-            Log.d(TAG, "Company pending successfully!");
             Toast.makeText(this.context, "Company is requested to pending!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -257,7 +239,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
         boolean result = userDao.deleteEmployee(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company is rejected successfully!";
                 runners.execute("Company is rejected successfully!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -265,7 +246,6 @@ public class PageAdminBaseAdapter extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company is rejected successfully!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");

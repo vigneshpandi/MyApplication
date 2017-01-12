@@ -46,7 +46,6 @@ public class PendingTabActivity extends Fragment {
                 User user;
                 List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));

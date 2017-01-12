@@ -106,8 +106,6 @@ UserDetailDto userDetailDtos = new UserDetailDto();
         }
 
         final User info = getItem(position);
-       /* firstName = userInfo.get(position).getFirstName().toString();
-        lastName = userInfo.get(position).getLastName();*/
         if(info.getRole().matches("user")) {
             mViewHolder.fieldId.setText(info.getEmpId());
         }else if(info.getRole().matches("admin")){
@@ -150,24 +148,13 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                         if (srt.matches(text)) {
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             String checkOnline = onlineHash.get(info.getUserName());
-                            Log.d("checkOnline","checkOnline"+checkOnline);
-                           /* if (checkOnline!=null) {
-                                intent.putExtra(chatOnline, "true");
-                                Log.d("it is online", "success");
-
-                            } else {
-                                intent.putExtra(chatOnline, "false");
-                                Log.d("it is not online", "success");
-                            }*/
-
-                            intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                           intent.putExtra(toEmail, userInfo.get(position).getUserName());
                             intent.putExtra(fromEmail, fromMAil);
                             intent.putExtra(sendId, userDetailDtos.getLoginSenderId());
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());
                             intent.putExtra(firstName, userInfo.get(position).getFirstName());
                             intent.putExtra(lastName, userInfo.get(position).getLastName());
                             intent.putExtra(role,userInfo.get(position).getRole());
-                            Log.d(TAG,"role role value..."+userInfo.get(position).getRole());
                             context.startActivity(intent);
                         } else {
                             Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
@@ -184,15 +171,12 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
             }
         });
 
-        Log.d(TAG,"info.getUserName()"+info.getUserName());
         if((onlineHash != null)) {
             if (onlineHash.containsKey(info.getUserName())) {
-                Log.d("it is  online", "success");
                 View img = convertView.findViewById(R.id.onlineImageView);
                 img.setVisibility(View.VISIBLE);
 
             } else {
-                Log.d("it is not online", "success");
                 View img = convertView.findViewById(R.id.onlineImageView);
                 img.setVisibility(View.INVISIBLE);
             }

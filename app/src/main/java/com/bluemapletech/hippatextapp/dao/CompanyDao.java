@@ -33,7 +33,6 @@ public class CompanyDao {
         databaseRef.setValue(user.getAuth());
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
-            Log.d(TAG,"user......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been accepted by HippaText.\n" +
                     "Thanks for showing interest.";
@@ -62,7 +61,6 @@ public class CompanyDao {
         databaseRef.setValue(user.getAuth());
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
-            Log.d(TAG,"user......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been rejected by HippaText.\n" +
                     "Thanks for showing interest.";
@@ -81,7 +79,6 @@ public class CompanyDao {
         databaseRef.setValue(user.getAuth());
         try {
             String acceptEmail = user.getUserName().replace("-", ".");
-            Log.d(TAG,"user......"+acceptEmail);
             MailSender runners = new MailSender();
             String value = "This email is to notify you that your profile has been rejected by HippaText.\n" +
                     "Thanks for showing interest.";
@@ -107,7 +104,6 @@ public class CompanyDao {
 
             try {
                 String acceptEmail = emailId.get(i).getUserName().replace("-", ".");
-                Log.d(TAG,"user......"+acceptEmail);
                 MailSender runners = new MailSender();
                 String value = "This email is to notify you that your profile has been rejected by HippaText.\n" +
                         "Thanks for showing interest.";

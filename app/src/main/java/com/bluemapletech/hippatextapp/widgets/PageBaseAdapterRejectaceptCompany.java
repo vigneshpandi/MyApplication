@@ -208,7 +208,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company canceled successfully!";
                 runners.execute("Company has been deleted by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -216,7 +215,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -230,7 +228,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
         boolean result = companyDao.pendingCompany(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company rejected by Root.";
                 runners.execute("Company has been pending by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -238,7 +235,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -248,10 +244,7 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
         List<User> emailId = new ArrayList<User>();
         Log.d(TAG, "Company canceled successfully!");
         int com_count = hashValue.get( user.getCompanyName());
-        Log.d(TAG,"dasasda"+com_count);
-
         if(com_count == 1){
-            Log.d(TAG,"dasasdasfsdfsdf");
             String companyName = user.getCompanyName();
             User user1;
             emailId.add(user);
@@ -265,8 +258,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
                 }
 
             }
-
-            Log.d(TAG, "Coasdasdadadasd");
            final CompanyDao companyDao = new CompanyDao();
             boolean result = companyDao.deleteCompanyAdminAndUser(emailId);
             if (result) {
@@ -279,7 +270,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
                 } catch (Exception ex) {
                     // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
                 }
-                Log.d(TAG, "Company canceled successfully!");
                 Toast.makeText(this.context, "Company deleted successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Log.d(TAG, "Error while delete the company, please try again!");
@@ -291,7 +281,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
             boolean result = companyDao.deleteCompanys(user);
             if (result) {
                 try {
-                    //  new MyAsyncClass().execute();
                     MailSender runners = new MailSender();
                     String  value = "Company deleted successfully!";
                     runners.execute("Company Rejected successfully!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -299,7 +288,6 @@ public class PageBaseAdapterRejectaceptCompany extends BaseAdapter {
                 } catch (Exception ex) {
                     // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
                 }
-                Log.d(TAG, "Company canceled successfully!");
                Toast.makeText(this.context, "Company deleted successfully!", Toast.LENGTH_LONG).show();
             } else {
                 Log.d(TAG, "Error while delete the company, please try again!");

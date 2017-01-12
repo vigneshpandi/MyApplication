@@ -97,7 +97,6 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
             }
 
             final User info = getItem(position);
-            Log.d("getUserName",info.getUserName());
             mViewHolder.fieldName.setText(info.getUserName());
             String[] separated = info.getUserName().split("@");
             mViewHolder.rootNname.setText(separated[0]);
@@ -250,8 +249,6 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
 
                 View btns = convertView.findViewById(R.id.chat_btn);
                 btns.setVisibility(View.INVISIBLE);
-               /* View btn3 = (Button) convertView.findViewById(R.id.chat_btn);
-                btns.setVisibility(btns.INVISIBLE);*/
             }
 
             if (userInfo.get(position).getAuth().matches("3")) {
@@ -278,12 +275,9 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         public void deleteUser(String userMail) {
             final UserDao userDao = new UserDao();
             boolean result = userDao.deleteUser(userMail);
-            Log.d(TAG,"userMail....."+userMail);
             if (result) {
                 try {
-                    //  new MyAsyncClass().execute();
                     MailSender runners = new MailSender();
-                    Log.d(TAG,"userMail..11..."+userMail);
                     String  value = "Root has been Rejected!";
                     runners.execute("Root has been Rejected!",value,"hipaatext123@gmail.com",userMail);
 
@@ -300,9 +294,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
         boolean result = userDao.acceptUser(userMail);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
-                Log.d(TAG,"userMail....."+userMail);
                 String  value = "Root has been accepted!";
                 runners.execute("Root has been accepted!",value,"hipaatext123@gmail.com",userMail);
 

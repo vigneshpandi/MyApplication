@@ -67,12 +67,10 @@ public class GroupMessageDao {
         msg.put("dateandtime",dateValue);
         msg.put("senderId",message.getSenderId());
         DatabaseReference value = sRef.child("groupmessage").child("message").child(message.getRandomValue()).child("message").push();
-        Log.d("rootMessage",value.toString());
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
         msg.put("childByAppendId",re[7]);
        value.setValue(msg);
-        Log.d(TAG,"groupPusNotificatuionEmailId"+message.getPushNotificationId());
         String arr[] = message.getPushNotificationId().split(";");
         for(int i = 0; i < arr.length; i++){
             String reArrangeEmail = arr[i].trim().replace(".", "-");
@@ -163,7 +161,6 @@ public class GroupMessageDao {
     private static  class AsyncTaskRunnerss extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
-            Log.d(TAG, "params Text: " + params[1]);
             Object json = null;
             try {
                 URL url1;
@@ -179,8 +176,6 @@ public class GroupMessageDao {
                 root1.put("notification",root);
                 root1.put("to",params[0]);
                 root1.put("priority","high");
-                Log.d(TAG,"rootValue1"+root1);
-                Log.d(TAG,"rootValue"+root);
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
                 wr.write(root1.toString());
                 wr.flush();

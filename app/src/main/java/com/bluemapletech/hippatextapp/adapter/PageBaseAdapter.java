@@ -100,7 +100,6 @@ public class PageBaseAdapter extends BaseAdapter {
         convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-               // int position=(Integer)v.getTag();
                     if (!userInfo.get(position).getAuth().matches("0")) {
                         Intent intent = new Intent(context, ViewUserDetails.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra(userEmail, userInfo.get(position).getUserName());
@@ -112,18 +111,6 @@ public class PageBaseAdapter extends BaseAdapter {
         });
 
         if (userInfo.get(0).getAuth().matches("0")) {
-            /*Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("View Request");
-            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
-            id.setTextColor(Color.parseColor("#666633"));
-            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
-            companyName.setTextColor(Color.parseColor("#000000"));
-            btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
-            View btns = convertView.findViewById(R.id.cancel_btn);
-            btns.setVisibility(View.INVISIBLE);
-            btn.setVisibility(View.INVISIBLE);
-            *//*Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
-            hideBtns.setVisibility(View.VISIBLE);*/
             Button btn = (Button) convertView.findViewById(R.id.accept_btn);
             btn.setText("View Request");
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.navigationBarColor));
@@ -134,18 +121,6 @@ public class PageBaseAdapter extends BaseAdapter {
         }
 
         if (userInfo.get(0).getAuth().matches("1")) {
-           /* Button btn = (Button) convertView.findViewById(R.id.cancel_btn);
-            btn.setText("Reject");
-            btn.setBackgroundColor(Color.parseColor("#ff3322"));
-            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
-            id.setTextColor(Color.parseColor("#0080ff"));
-            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
-            companyName.setTextColor(Color.parseColor("#000000"));
-            View btns = convertView.findViewById(R.id.accept_btn);
-            btns.setVisibility(View.INVISIBLE);
-            btn.setVisibility(View.INVISIBLE);
-            *//*Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
-            hideBtns.setVisibility(View.VISIBLE);*/
             Button btn = (Button) convertView.findViewById(R.id.cancel_btn);
             btn.setText("Reject");
             btn.setBackgroundColor(convertView.getResources().getColor(R.color.cancel_btn));
@@ -153,23 +128,7 @@ public class PageBaseAdapter extends BaseAdapter {
             btns.setVisibility(View.INVISIBLE);
             TextView textColor = (TextView) convertView.findViewById(R.id.layout_field_id);
             textColor.setTextColor(convertView.getResources().getColor(R.color.textColor));
-
-
         }
-
-       /* if (userInfo.get(0).getAuth().matches("2")) {
-            TextView id = (TextView) convertView.findViewById(R.id.layout_field_id);
-            id.setTextColor(Color.parseColor("#0080ff"));
-            TextView companyName = (TextView) convertView.findViewById(R.id.layout_field_name);
-            companyName.setTextColor(Color.parseColor("#000000"));
-            Button btn = (Button) convertView.findViewById(R.id.accept_btn);
-            btn.setText("Accept");
-            Button btns = (Button) convertView.findViewById(R.id.cancel_btn);
-            btns.setText("Reject");
-            Button hideBtns = (Button) convertView.findViewById(R.id.accept_btn1);
-            hideBtns.setVisibility(View.INVISIBLE);
-        }*/
-
         return convertView;
     }
 
@@ -189,7 +148,6 @@ public class PageBaseAdapter extends BaseAdapter {
         boolean result = companyDao.acceptedCompany(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company canceled successfully!";
                 runners.execute("Company has been deleted by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -197,7 +155,6 @@ public class PageBaseAdapter extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -210,7 +167,6 @@ public class PageBaseAdapter extends BaseAdapter {
         final CompanyDao companyDao = new CompanyDao();
         boolean result = companyDao.pendingCompany(user);
         if (result) {
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been pending by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");
@@ -223,7 +179,6 @@ public class PageBaseAdapter extends BaseAdapter {
         boolean result = companyDao.deleteCompanys(user);
         if (result) {
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Company canceled successfully!";
                 runners.execute("Company has been deleted by the admin!",value,"hipaatext123@gmail.com",user.getUserName());
@@ -231,7 +186,6 @@ public class PageBaseAdapter extends BaseAdapter {
             } catch (Exception ex) {
                 // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
-            Log.d(TAG, "Company canceled successfully!");
             Toast.makeText(this.context, "Company has been deleted by the admin!", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "Error while delete the company, please try again!");

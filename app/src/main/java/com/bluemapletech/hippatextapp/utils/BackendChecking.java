@@ -38,7 +38,6 @@ public class BackendChecking extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        Log.d("ssdfdfdf","onREStart");
         HashMap<String, Object> onlineReenter = new HashMap<>();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();

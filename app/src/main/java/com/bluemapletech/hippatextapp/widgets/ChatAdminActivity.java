@@ -64,7 +64,6 @@ public class ChatAdminActivity extends Fragment{
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
         String reArrangeEmail = logged.getEmail().replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
@@ -90,10 +89,8 @@ public class ChatAdminActivity extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 onlineHashing = new HashMap<String, String>();
-                Log.d("dfdfdfdfdf", "online datasnapshot");
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String onlineUser = snapshot.child("onlineUser").getValue(String.class);
-                    Log.d("dfdfdfdfdf", "dfdfdfdfdf" + onlineUser);
                     onlineHashing.put(onlineUser, onlineUser);
                 }
                 loadingUserDetail();
@@ -114,7 +111,6 @@ public class ChatAdminActivity extends Fragment{
                 User user;
                 List<User> userObj = new ArrayList<User>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "Snapshot value: " + snapshot.toString());
                     user = new User();
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
