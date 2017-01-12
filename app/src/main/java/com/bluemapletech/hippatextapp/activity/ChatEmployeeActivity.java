@@ -89,19 +89,12 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     boolean wallpaperimage = false;
     private String roleValue;
     EditText newMessageView;
+    String newMessage;
     HashMap<String,String> onlineHash = new HashMap<String,String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caht_employee);
-        //chatOnline = getIntent().getStringExtra(PageEmployeeBaseAdpter.chatOnline);
-       /* if(chatOnline.matches("true")){
-            Log.d("user","user is online");
-            userStaus = "online";
-        }else{
-            Log.d("user","user is  not online");
-            userStaus = "";
-        }*/
         newMessageView = (EditText)findViewById(R.id.new_message);
         toMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.toEmail);
         fromMail = getIntent().getStringExtra(PageEmployeeBaseAdpter.fromEmail);
@@ -150,29 +143,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         mConvoId = ids[1]+ids[0]+ids[2];
         mListener = UserDao.addMessagesListener(mConvoId, this);
 
-       /* newMessageView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                HashMap<String, String> typing = new HashMap<>();
-        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("messages").child(mConvoId).child("typingIndicator");
-       *//* String urlValue = dataReferences.toString();
-        String[] re = urlValue.split("/");
-        Log.d("values",re[6]);*//*
-        typing.put(senderId,"true");
-        dataReferences.setValue(typing);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
@@ -194,6 +165,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
             }
         });*/
+
     }
     public void onClick(View v) {
         saveMessages();
@@ -595,20 +567,26 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void saveMessages (){
-        String newMessage = newMessageView.getText().toString();
+         newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
+        /*if(newMessage!=null || !newMessage.matches("")){
+            Log.d(TAG,"valueeee"+base64Profile);
+            base64Profile ="";
+        }*/
         msg.setMtext(newMessage);
         msg.setMsender(fromMail);
         msg.setToChatEmail(toMail);
         msg.setSenderId(senderId);
         msg.setPushNotificationId(notificationId);
-        if(base64Profile!=null) {
+        if(base64Profile!=null && newMessage != null) {
             msg.setImage(base64Profile);
+            newMessage = "";
         }else{
             msg.setImage("");
         }
         UserDao.saveMessage(msg, mConvoId);
+        base64Profile ="";
     }
 
     @Override

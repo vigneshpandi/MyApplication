@@ -75,6 +75,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private String fromMail, senderId, userName;
     private String childappendid;
     Message message;
+    String newMessage;
         private ImageView selectImage;
         private String notificationId;
         final private int SELECT_FILE = 1;
@@ -548,7 +549,7 @@ Log.d("dsssssss","ssssppww");
 
     public void saveMessages (){
         EditText newMessageView = (EditText)findViewById(R.id.new_message);
-        String newMessage = newMessageView.getText().toString();
+        newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
         msg.setMtext(newMessage);
@@ -558,10 +559,12 @@ Log.d("dsssssss","ssssppww");
         msg.setPushNotificationId(notificationId);
         if(base64Profile!=null) {
             msg.setImage(base64Profile);
+            newMessage = "";
         }else{
             msg.setImage("");
         }
         GroupMessageDao.saveMessage(msg, randomValue);
+        base64Profile ="";
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
