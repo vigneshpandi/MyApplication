@@ -96,6 +96,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     private Bitmap bm;
     public int listPosition;
     Groups groupInformation;
+
     boolean adminAddedPermisson = false;
     SharedPreferences pref;SharedPreferences.Editor editor;FirebaseUser logged;
     final private int SELECT_FILE = 1;final private int REQUEST_CAMERA = 2;
