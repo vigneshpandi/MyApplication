@@ -47,8 +47,8 @@
         android:id="@+id/accept_btn"
         android:background="@color/accept_btn"
         android:textColor="@color/btn_text_color"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp"
         android:layout_alignTop="@+id/layout_field_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

@@ -547,9 +547,24 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             }
         }
         if(id == R.id.delete){
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            // alert.setTitle("");
+            alert.setMessage("Delete message?");
+            alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
             UserDao.deleteGroupChatMessage(message,randomValue);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
+                }
+
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
         }
         if(id == R.id.chat_image_background){
             wallpaperImage = true;
