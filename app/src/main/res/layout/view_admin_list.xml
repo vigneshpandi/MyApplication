@@ -32,16 +32,15 @@
     <Button
         android:text="Reject"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/root_mail"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="21dp"
+        android:layout_marginEnd="21dp"
         android:id="@+id/reject_btn"
         android:background="@color/cancel_btn"
-        android:layout_above="@+id/root_name"
-        android:textColor="#ffffff"/>
+        android:textColor="#ffffff"
+        android:layout_alignTop="@+id/root_mail"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>
