@@ -156,7 +156,6 @@ public class AdminHomeActivity extends AppCompatActivity {
             editors.clear();
             editors.commit();
             Intent logOut = new Intent(getActivity(), HomeActivity.class);
-            progressDialog.dismiss();
             startActivity(logOut);
             onStop();
             finish();

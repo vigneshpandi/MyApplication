@@ -266,8 +266,8 @@ public class ViewGroupDetails extends AppCompatActivity {
                 }
                 //dialog.addContentView();
                 Log.d(TAG, "randomNameLogin" + group.getRandomName());
-                showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
-                Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(showImage);
+                //showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
+                Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(displayImage);
                 dialog.show();
                 backPageArrow.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -306,7 +306,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                 saveProfileImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Bitmap bitmap = ((BitmapDrawable) showImage.getDrawable()).getBitmap();
+                        Log.d(TAG,"save group profile1");
+                        Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
+                        Log.d(TAG,"save group profile2");
                         if (bitmap != null) {
                             try {
                                 String root = Environment.getExternalStorageDirectory().toString();
@@ -320,9 +322,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 myDir = new File(myDir, name);
                                 FileOutputStream out = new FileOutputStream(myDir);
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
                                 out.flush();
                                 out.close();
-                                Toast.makeText(getActivity(), "group profile image has been saved successfully!", Toast.LENGTH_LONG).show();
                             } catch (Exception e) {
                                 // some action
                             }

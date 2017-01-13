@@ -163,12 +163,10 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
             editors.commit();
-
                 onStop();
                 finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

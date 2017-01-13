@@ -70,7 +70,7 @@ UserDetailDto userDetailDtos = new UserDetailDto();
     public PageEmployeeBaseAdpter(Context context, List<User> user, UserDetailDto userDetailDto, String loggedINChatPin,HashMap<String,String> hashValue) {
         this.context = context;
         this.userInfo = user;
-        this.fromMAil = userDetailDtos.getLoggedINEmail();
+        this.fromMAil = userDetailDto.getLoggedINEmail();
         this.chatPin = loggedINChatPin;
         this.onlineHash = hashValue;
         this.userDetailDtos = userDetailDto;
@@ -96,7 +96,7 @@ UserDetailDto userDetailDtos = new UserDetailDto();
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         PageEmployeeBaseAdpter.MyViewHolder mViewHolder;
-
+Log.d(TAG,"userDetailDtos"+userDetailDtos);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.custom_employee_list_view, parent, false);
             mViewHolder = new PageEmployeeBaseAdpter.MyViewHolder(convertView);
@@ -149,6 +149,7 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                             Intent intent = new Intent(context, ChatEmployeeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             String checkOnline = onlineHash.get(info.getUserName());
                            intent.putExtra(toEmail, userInfo.get(position).getUserName());
+                            Log.d(TAG,"fromMAil"+fromMAil);
                             intent.putExtra(fromEmail, fromMAil);
                             intent.putExtra(sendId, userDetailDtos.getLoginSenderId());
                             intent.putExtra(notificationId, userInfo.get(position).getPushNotificationId());

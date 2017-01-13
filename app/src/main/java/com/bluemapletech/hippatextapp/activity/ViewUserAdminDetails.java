@@ -159,7 +159,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String reArrangeDeleUserMail = user.getUserName().replace("-", ".");
+                String reArrangeDeleUserMail = user1.getUserName().replace("-", ".");
                 if (isUserChecking.get(reArrangeDeleUserMail) == null) {
                     if (userAuths.matches("3")) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -185,6 +185,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                         alertDialog.show();
 
                     } else {
+                        Log.d(TAG,"chat button is clicked in list of admin View");
                         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         alert.setTitle("Security check");
                         final EditText chatPinn = new EditText(getActivity());
@@ -192,6 +193,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                         chatPinn.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         chatPinn.setHint("Enter your chat pin");
                         alert.setView(chatPinn);
+                        Log.d(TAG,"chat button is clicked ");
                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String srt = chatPinn.getEditableText().toString();

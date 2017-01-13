@@ -303,22 +303,21 @@ public class Settings extends AppCompatActivity {
             Log.d(TAG,"user.getIsOnline..."+user.getIsOnlie());
             if(user.getIsOnlie()== "true") {
                 Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
-                //fireBaseDatabase = FirebaseDatabase.getInstance();
-                FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-                String reArrangeEmailId = user.getUserName().replace(".", "-");
-                DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmailId);
-                dataReferences.removeValue();
-            }else{
-                Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
                 HashMap<String, Object> onlineReenters = new HashMap<>();
                 fireBaseDatabase = FirebaseDatabase.getInstance();
-               /* firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseUser logged = firebaseAuth.getCurrentUser();*/
                 String reArrangeEmail = user.getUserName().replace(".", "-");
                 FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
                 DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
                 onlineReenters.put("onlineUser", user.getUserName());
                 dataReferences.setValue(onlineReenters);
+
+            }else{
+                Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
+                FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+                String reArrangeEmailId = user.getUserName().replace(".", "-");
+                DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmailId);
+                dataReferences.removeValue();
+
             }
         } else {
             Log.d(TAG, "Error while show Online, please try again!");

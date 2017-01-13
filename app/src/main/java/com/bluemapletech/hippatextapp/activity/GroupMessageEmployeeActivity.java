@@ -79,12 +79,14 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         final private int REQUEST_CAMERA = 2;
         private String base64Profile;
         private  String reArrangeEmail;
-        private String role;
+        private String role,login_role;
         private FirebaseAuth firebaseAuthRef;
         private String groupName,loginRoleValue;
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    SharedPreferences prefss;
+    SharedPreferences.Editor editorss;
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
     private FirebaseAuth firebaseAuth;
@@ -100,6 +102,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_group_message_employee);
+            prefss = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+            login_role =  prefss.getString("role", "");
             layout = (LinearLayout) findViewById(R.id.activity_group_chat_employee);
             fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
@@ -639,13 +643,15 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            if(loginRoleValue.matches("root")){
+            if(login_role.matches("root")){
                 startActivity(new Intent(getActivity(), RootHomeActivity.class));
             }
-            if(loginRoleValue.matches("admin")){
+            if(login_role.matches("admin")){
                 startActivity(new Intent(getActivity(), AdminHomeActivity.class));
             }
-
+            if(login_role.matches("user")){
+                startActivity(new Intent(getActivity(), EmployeeHomeActivity.class));
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);

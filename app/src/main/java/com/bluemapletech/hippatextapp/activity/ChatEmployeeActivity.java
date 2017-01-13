@@ -212,21 +212,21 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         super.onResume();
     }
-   @Override
-   protected  void onStart(){
-       super.onStart();
-       pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-       isOnline =  pref.getString("isOnline", "");
-       if(isOnline.matches("true")) {
-           checkOnlineUser();
-       }
-       selectImage.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               chooseImage();
-           }
-       });
-   }
+    @Override
+    protected  void onStart(){
+        super.onStart();
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        if(isOnline.matches("true")) {
+            checkOnlineUser();
+        }
+        selectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
+    }
 
 
 
@@ -764,11 +764,10 @@ public void noWallpaper(){
                     e.printStackTrace();
                 }
                 if(formattedDate.matches(d2)){
-                    Log.d(TAG,"today"+"today");
-                    String lastSeen = "today at "+d1;
+                    String lastSeen = "Today at "+d1;
                     userStaus = lastSeen;
                 }else if(yest_date.matches(d2)){
-                    String lastSeen = "yesterday at "+d1;
+                    String lastSeen = "last seen Yesterday at "+d1;
                     userStaus = lastSeen;
                 }else{
                     String lastSeen = "last seen "+d3;
