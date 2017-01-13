@@ -604,11 +604,27 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
                 return true;
         }
-        if(id == R.id.delete){
-            Log.d(TAG,"mConvoId...."+mConvoId);
-            UserDao.deleteChatMessage(message,mConvoId);
-            toolbar.getMenu().findItem(R.id.delete).setVisible(false);
-            startActivity(getIntent());
+        if (id == R.id.delete) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            // alert.setTitle("");
+            alert.setMessage("Delete message?");
+            alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    Log.d(TAG, "mConvoId...." + mConvoId);
+                    UserDao.deleteChatMessage(message, mConvoId);
+                    toolbar.getMenu().findItem(R.id.delete).setVisible(false);
+                    startActivity(getIntent());
+                }
+
+            });
+            alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
         }
         if(id == R.id.chat_image_background){
             wallpaperimage = true;
