@@ -65,11 +65,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
     private ListView mListView;
-    private String mConvoId;
     private UserDao.MessagesListener mListener;
-    private String toMail;
-    private String fromMail, senderId, userFirstName, userLastName;
-    private String notificationId;
+    private String childappendid,loginRole,loginAuth,chatOnline,userStaus,userName,userRole,toMail;
+    private String fromMail, senderId, userFirstName, userLastName,mConvoId,notificationId;
     private ImageView selectImage;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
@@ -78,8 +76,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private String base64Profile,isOnline;
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
-    private String childappendid,loginRole,loginAuth,chatOnline,userStaus;
-    private String userName,userRole;
+
+
     private Toolbar toolbar;
     private  LinearLayout layout;
     SharedPreferences pref;
@@ -158,13 +156,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             Log.d(TAG,"backgroundImageValueStringToBitMap"+backgroundImageValue);
             StringToBitMap(backgroundImageValue);
         }
-        //toolbar clicking
-       /* toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });*/
 
     }
     public void onClick(View v) {

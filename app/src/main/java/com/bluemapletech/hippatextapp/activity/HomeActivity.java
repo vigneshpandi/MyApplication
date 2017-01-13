@@ -37,25 +37,20 @@ public class HomeActivity extends AppCompatActivity {
         loginMail = pref.getString("loginMail","");
         if(!loginKey.matches("") && !loginRole.matches("")){
             Log.d("login","BeforeLoginKeyCalled"+loginKey);
-            Log.d(TAG,"BeforeLoginKeyCalled"+loginRole);
-            if(loginRole.matches("root") && loginAuth.matches("1") ) {
-                Log.d(TAG,"BeforeLoginKeyCalled"+loginRole);
+            if(loginRole.matches("root") && loginAuth.matches("1") && !loginMail.matches("")) {
                 onlineUser();
                 Intent rootHome = new Intent(getActivity(), RootHomeActivity.class);
                 startActivity(rootHome);
             }else if(loginRole.matches("admin") && loginAuth.matches("1") ) {
-                Log.d(TAG,"BeforeLoginKeyCalled"+loginRole);
                 onlineUser();
                 Intent adminHome = new Intent(getActivity(), AdminHomeActivity.class);
                 startActivity(adminHome);
             }else if(loginRole.matches("user") && loginAuth.matches("1") ) {
-                Log.d(TAG,"BeforeLoginKeyCalled"+loginRole);
-                onlineUser();
+               onlineUser();
                 Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                 startActivity(employeeHome);
             }else if(loginRole.matches("role") && !loginAuth.matches("1") ) {
-                Log.d(TAG,"BeforeLoginKeyCalled"+loginRole);
-                onlineUser();
+              onlineUser();
                 Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
                 redirect.putExtra(userLogiMailId, loginMail);
                 startActivity(redirect);

@@ -213,22 +213,18 @@ public class Settings extends AppCompatActivity {
                                 editor = pref.edit();
                                 editor.putString("isOnline", "true");
                                 editor.commit();
-                                Log.d("checked","dfdjfkdlfkldfjkldjf"+login_mail);
                                 User u = new User();
                                 u.setUserName(login_mail);
                                 u.setIsOnlie("true");
-
                                 showOnline(u);
                             }else{
                                 pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                                 editor = pref.edit();
                                 editor.putString("isOnline", "false");
                                 editor.commit();
-                                Log.d("not checked",login_mail);
                                 User u1 = new User();
                                 u1.setUserName(login_mail);
                                 u1.setIsOnlie("false");
-                                Log.d("nottchecked","dfdjfkdlfcccckldfjkldjf"+login_mail);
                                 showOnline(u1);
                                 //  switchStatus.setText("Switch is currently OFF");
                             }
@@ -307,8 +303,22 @@ public class Settings extends AppCompatActivity {
             Log.d(TAG,"user.getIsOnline..."+user.getIsOnlie());
             if(user.getIsOnlie()== "true") {
                 Toast.makeText(getActivity(), "show online is  enabled!", Toast.LENGTH_LONG).show();
+                //fireBaseDatabase = FirebaseDatabase.getInstance();
+                FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+                String reArrangeEmailId = user.getUserName().replace(".", "-");
+                DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmailId);
+                dataReferences.removeValue();
             }else{
                 Toast.makeText(getActivity(), "show online is  disabled!", Toast.LENGTH_LONG).show();
+                HashMap<String, Object> onlineReenters = new HashMap<>();
+                fireBaseDatabase = FirebaseDatabase.getInstance();
+               /* firebaseAuth = FirebaseAuth.getInstance();
+                FirebaseUser logged = firebaseAuth.getCurrentUser();*/
+                String reArrangeEmail = user.getUserName().replace(".", "-");
+                FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+                onlineReenters.put("onlineUser", user.getUserName());
+                dataReferences.setValue(onlineReenters);
             }
         } else {
             Log.d(TAG, "Error while show Online, please try again!");
