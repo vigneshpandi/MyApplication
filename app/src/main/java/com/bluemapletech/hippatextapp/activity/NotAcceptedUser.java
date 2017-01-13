@@ -32,9 +32,7 @@ public class NotAcceptedUser extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String loginroleValue;
     String roleVal;
-    private String loginMail;
-    private String underProcess;
-    private String loginEmailId,isOnline;
+    private String loginMail,underProcess,isOnline,loginEmailId;
     private String[] userEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
@@ -54,7 +52,6 @@ public class NotAcceptedUser extends AppCompatActivity {
         loginroleValue =  pref.getString("role", "");
         loginEmailId = pref.getString("loginMail","");
         userEmail = loginEmailId.split("@");
-        Log.d(TAG,"useremail..."+userEmail);
         underProcess.setText("Welcome,'"+userEmail[0]+"'\n Your account is under process!");
     }
     @Override

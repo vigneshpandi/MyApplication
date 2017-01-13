@@ -69,13 +69,10 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private ArrayList<Message> mMessages;
         private GroupMessageEmployeeActivity.MessagesAdapter mAdapter;
         private ListView mListView;
-        private String mConvoId,isOnline;
         private GroupMessageDao.MessagesListener mListener;
-        private String randomValue;
-        private String fromMail, senderId, userName;
-    private String childappendid;
-    Message message;
-    String newMessage;
+        private String fromMail, senderId, userName,randomValue,mConvoId,isOnline,childappendid;
+        Message message;
+        String newMessage;
         private ImageView selectImage;
         private String notificationId;
         final private int SELECT_FILE = 1;
@@ -94,7 +91,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private FirebaseDatabase fireBaseDatabase;
     boolean wallpaperImage = false;
     private Toolbar toolbar;
-        private FirebaseDatabase firebaseDatabaseRef;
+    private FirebaseDatabase firebaseDatabaseRef;
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
     SharedPreferences pref1;
@@ -123,7 +120,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         notificationId =  pref.getString("notificationId", "");
         loginRoleValue = pref.getString("role","");
     }
-            //groupName =  getIntent().getStringExtra(EmployeeGroupsAdapter.groupName);
             mListView = (ListView)findViewById(R.id.message_list);
             selectImage = (ImageView) findViewById(R.id.select_image);
             mMessages = new ArrayList<>();
@@ -165,14 +161,12 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             }
 
         });
-        Log.d(TAG,"senderIdsenderIdsenderId"+randomValue);
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(randomValue);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 groupName = map.get("groupName");
-                Log.d(TAG,"groupNamegroupNamegroupNamegroupNamegroupName"+groupName);
                 getSupportActionBar().setTitle(groupName);
             }
 
@@ -183,7 +177,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
 
         });
         if (toolbar != null) {
-          // getSupportActionBar().setTitle(groupName);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -198,7 +191,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         prefs = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
         String backgroundImageValue =  prefs.getString("backgroundImage", "");
         if(backgroundImageValue!=null){
-            Log.d(TAG,"backgroundImageValue"+backgroundImageValue);
             StringToBitMap(backgroundImageValue);
         }
     }
@@ -226,11 +218,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 convertView = super.getView(position, convertView, parent);
                  message = getItem(position);
                 childappendid = message.getChildappendid();
-                Log.d(TAG,"child Mail..."+message.getMsender());
-
                 String[] valueuserName = message.getMsender().split("@");
                 userName = valueuserName[0];
-
                 TextView nameView = (TextView)convertView.findViewById(R.id.msg);
                 TextView userFirstAndLastName = (TextView) convertView.findViewById(R.id.user_name);
                 nameView.setText(message.getMtext());
@@ -245,26 +234,14 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
                 LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams)userFirstAndLastName.getLayoutParams();
-
-
-             //format of given date
                 String myFormat = "yyyy-MM-dd HH:mm:ss z";
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                 String formattedDate = df.format(c.getTime());
-                System.out.println("today's date = "+ formattedDate);
-
                 Calendar c1 = Calendar.getInstance();
                 c1.add(Calendar.DATE, -1);
                 String yest_date = df.format(c1.getTime());
-                System.out.println("Yesterday's date = "+ yest_date);
-
-
-
-
 
                 String msg_date = null;
                 Date date = null;
@@ -273,7 +250,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 String d1 = null;
                 String d2 = null;
                 try {
-                    // convert for date format showing
                     date = sdf.parse(message.getDateAndTime("dateandtime"));
                     sdf = new SimpleDateFormat("hh:mm a");
                    d1 = sdf.format(date);
@@ -303,14 +279,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
-                        Log.d(TAG,"inside...1");
-                      //  dateTime.setText(message.getDateAndTime("dateandtime"));
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
-                        Log.d(TAG,"inside...11");
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
@@ -320,13 +293,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         nameView.setVisibility(View.GONE);
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble2));
-                            Log.d(TAG,"inside...111");
                             dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.RIGHT;
                             layoutParams1.gravity = Gravity.RIGHT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
-                            Log.d(TAG,"inside...1111");
                             dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.RIGHT;
                             layoutParams1.gravity = Gravity.RIGHT;
@@ -337,7 +308,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     if(message.getMtext()!=null && !message.getMtext().matches("")){
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble1));
-                        Log.d(TAG,"inside...2");
                         userFirstAndLastName.setText(userName);
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
@@ -345,7 +315,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         layoutParams2.gravity = Gravity.LEFT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble1));
-                        Log.d(TAG,"inside...22");
                         userFirstAndLastName.setText(userName);
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.LEFT;
@@ -357,7 +326,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                         imageView.setVisibility(View.VISIBLE);
                         if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                             imageView.setBackground(getActivity().getResources().getDrawable(R.drawable.bubble1));
-                            Log.d(TAG,"inside...222");
                             userFirstAndLastName.setText(userName);
                             dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.LEFT;
@@ -365,7 +333,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                             layoutParams2.gravity = Gravity.LEFT;
                         }else {
                             imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble1));
-                            Log.d(TAG,"inside...2222");
                             userFirstAndLastName.setText(userName);
                             dateTime.setText(msg_date);
                             layoutParams.gravity = Gravity.LEFT;
@@ -393,7 +360,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     @Override
                     public boolean onLongClick(View v) {
                         message = getItem(position);
-                        Log.d(TAG,"lonngpress"+"longPress");
                         toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                         return true;
 
@@ -403,7 +369,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     @Override
                     public boolean onLongClick(View v) {
                         message = getItem(position);
-                        Log.d(TAG,"lonngpress....1"+"longPress.....1");
                         toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                         return false;
 
@@ -415,11 +380,9 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-Log.d("dsssssss","ssssppww");
         int eventAction = event.getAction();
         return true;
     }
-        // show the popup for capture the image
     @Override
     protected  void onStart(){
         super.onStart();
@@ -494,12 +457,9 @@ Log.d("dsssssss","ssssppww");
         }
         base64Profile = bitmapToBase64(thumbnail);
         if(wallpaperImage!=true){
-            Log.d(TAG,"not a wallpaper");
             saveMessages();
         }else if(wallpaperImage==true){
-            Log.d(TAG,"it is a wallpaper");
             BitmapDrawable myBackground = new BitmapDrawable(thumbnail);
-            Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
             editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
@@ -518,12 +478,9 @@ Log.d("dsssssss","ssssppww");
         }
         base64Profile = bitmapToBase64(bm);
         if(wallpaperImage!=true){
-            Log.d(TAG,"not a wallpaper");
             saveMessages();
         }else if(wallpaperImage==true){
-            Log.d(TAG,"it is a wallpaper");
             BitmapDrawable myBackground = new BitmapDrawable(bm);
-            Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
             editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
@@ -590,8 +547,6 @@ Log.d("dsssssss","ssssppww");
             }
         }
         if(id == R.id.delete){
-            Log.d(TAG,"mConvoId...."+senderId);
-            Log.d(TAG,"message...."+message);
             UserDao.deleteGroupChatMessage(message,randomValue);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
@@ -608,12 +563,10 @@ Log.d("dsssssss","ssssppww");
     }
 
     private void backPageEmp() {
-        Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
     }
 
     private void backPageAdmin() {
-        Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),AdminHomeActivity.class));
     }
     /**

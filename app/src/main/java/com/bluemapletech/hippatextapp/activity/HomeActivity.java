@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
         compBtn = (Button) findViewById(R.id.register_as_comp_button);
         empBtn = (Button) findViewById(R.id.register_as_emp_button);
 
-/*This listener called when ever the login button clicks*/
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +81,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-         /*This listener called when ever the company login button clicks*/
         compBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +91,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        /*This listener called when ever the employee login button clicks*/
         empBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +115,6 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
-            Log.d("sdsdsdsd","sdsdsdsdsd");
             this.moveTaskToBack(true);
             return true;
         }

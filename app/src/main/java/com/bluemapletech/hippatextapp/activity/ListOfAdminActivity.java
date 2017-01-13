@@ -44,7 +44,6 @@ public class ListOfAdminActivity extends AppCompatActivity {
     private String loggedINChatPin,isOnline;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
-    // private   List<User> userObj;
     List<User> userObj ;
     ImageView selection;
     String groupMail;
@@ -75,7 +74,6 @@ public class ListOfAdminActivity extends AppCompatActivity {
         loggedINEmail = loginMail;
         loggedInCompanyValue = companyName;
         Log.d("loggedInCoInCom",loggedInCompanyValue);
-        // checkUserExistence();
         fireBaseDatabase = FirebaseDatabase.getInstance();
         final User user = new User();
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("userDetails");
@@ -106,7 +104,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
         });
 
     }
-    public void checkUserExistence() {
+    /*public void checkUserExistence() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser logged = firebaseAuth.getCurrentUser();
@@ -124,7 +122,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
     private class PageAdminBaseAdapters extends BaseAdapter {
 
         List<User> userInfo = new ArrayList<User>();

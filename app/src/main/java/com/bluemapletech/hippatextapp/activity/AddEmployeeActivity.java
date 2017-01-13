@@ -62,13 +62,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private Uri downloadUrl;
     private EditText addEmpEmailId, addEmpEmployeeId;
     private Button addEmpBtn;
-    private String password;
-    private String senderID,isOnline;
-    private String passRandomValue;
-    private String loggedINCompany;
+    private String senderID,isOnline,password,passRandomValue,loggedINCompany,toEmail;
     GMailSender sender;
-
-    private String toEmail;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private FirebaseDatabase fireBaseDatabase;
@@ -88,7 +83,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
         random = new SecureRandom();
         password = new BigInteger(130, random).toString(32);
         String randomValue = password.substring(0, 8);
-        Log.d("randomValue",randomValue);
         passRandomValue = randomValue.toString();
         init();
     }
@@ -170,7 +164,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    //entryAuth();
                     saveImage();
                 }else{
                     progressDialog.dismiss();
@@ -183,7 +176,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
         User user = new User();
         final UserDao userDao = new UserDao();
         user.setUserName(addEmpEmailId.getText().toString().trim());
-        Log.d(TAG,"passRandomValue11.."+passRandomValue);
         String userPassword = passRandomValue;
         byte[] enCode = new byte[0];
 

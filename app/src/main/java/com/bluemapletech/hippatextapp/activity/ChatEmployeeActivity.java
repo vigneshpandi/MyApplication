@@ -326,21 +326,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     nameView.setVisibility(View.VISIBLE);
                     if (sdk > android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         nameView.setBackground(getResources().getDrawable(R.drawable.bubble2));
-                        Log.d(TAG,"inside...1");
-
-                        // dateTime.setText(message.getDateAndTime("dateandtime"));
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                        // layoutParams2.gravity = Gravity.RIGHT;
                     } else{
                         nameView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bubble2));
-                        Log.d(TAG,"inside...11");
-
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                        // layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }  else if(message.getImage()!=null && !message.getImage().matches("")){
                     imageView.setVisibility(View.VISIBLE);
@@ -352,7 +345,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                        //layoutParams2.gravity = Gravity.RIGHT;
                     } else {
                         imageView.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.bubble2));
                         Log.d(TAG,"inside...1111");
@@ -360,7 +352,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                         dateTime.setText(msg_date);
                         layoutParams.gravity = Gravity.RIGHT;
                         layoutParams1.gravity = Gravity.RIGHT;
-                        //layoutParams2.gravity = Gravity.RIGHT;
                     }
                 }
             }else if(!message.getMsender().equals(fromMail)){
@@ -565,15 +556,10 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         return val;
     }
-
     public void saveMessages (){
          newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
-        /*if(newMessage!=null || !newMessage.matches("")){
-            Log.d(TAG,"valueeee"+base64Profile);
-            base64Profile ="";
-        }*/
         msg.setMtext(newMessage);
         msg.setMsender(fromMail);
         msg.setToChatEmail(toMail);
@@ -631,9 +617,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             UserDao.deleteChatMessage(message,mConvoId);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
-           /* mMessages.clear();
-            mListener = UserDao.addMessagesListener(mConvoId, this);
-            mAdapter.notifyDataSetChanged();*/
         }
         if(id == R.id.chat_image_background){
             wallpaperimage = true;

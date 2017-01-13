@@ -47,7 +47,6 @@ public class ListOfRoots extends AppCompatActivity {
     String loginsenderId;
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
-    // private   List<User> userObj;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     ImageView selection;
@@ -99,8 +98,6 @@ public class ListOfRoots extends AppCompatActivity {
             getSupportActionBar().setTitle("Admin List");
         }
 
-
-        //checkUserExistence();
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         String loginMail =  pref.getString("loginMail", "");
         String chatPin =  pref.getString("chatPin", "");
@@ -149,7 +146,7 @@ public class ListOfRoots extends AppCompatActivity {
         });
 
     }
-    public void checkUserExistence() {
+    /*public void checkUserExistence() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
@@ -172,7 +169,7 @@ public class ListOfRoots extends AppCompatActivity {
             }
         });
     }
-
+*/
 
 
     @Override

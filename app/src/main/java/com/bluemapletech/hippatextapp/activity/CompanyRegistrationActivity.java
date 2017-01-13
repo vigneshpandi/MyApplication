@@ -69,27 +69,15 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private DatabaseReference databaseRef;
     private SecureRandom random;
     private ProgressDialog progressDialog;
-
     private EditText compEmailtxt, compPasswordtxt, companyName, compEinOrTinNo,providerName,providerNPIId;
     private Button compRegBtn;
-    private String password;
-    private String senderID;
+    private String password,senderID,toEmail,firstName,lastName;
     private StorageReference mStorage;
     private Uri uri;
     private StorageReference filePath;
     GMailSender sender;
-    private String toEmail;
     private User comInfos = new User();
     private Uri downloadUrl;
-    String firstName;
-    String lastName;
-
-    /*Mail*/
-   /* private String subject = "My App";
-    private String body*/
-
-
-
 
 
     @Override
@@ -399,36 +387,6 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         }
     }
 
-    /*class MyAsyncClass extends AsyncTask<String, String, String> {
-        String compEmail = compEmailtxt.getText().toString().trim();
-        String comPassword = compPasswordtxt.getText().toString().trim();
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.d(TAG,"mail method is called"+compEmail);
-            Log.d(TAG,"params"+params[0]);
-            try {
-                // Add subject, Body, your mail Id, and receiver mail Id.
-
-                sender.sendMail("My App", " HI welcome to TCT Text Application Password:"+comPassword, "hipaatext123@gmail.com", compEmail);
-            }
-
-            catch (Exception ex) {
-
-            }
-            return null;
-        }
-
-        *//*@Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            //Toast.makeText(getApplicationContext(), "Email send").show();
-        }*//*
-    }*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {

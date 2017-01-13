@@ -265,8 +265,6 @@ public class LoginActivity extends AppCompatActivity {
                             Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
                             redirect.putExtra(userLogiMailId, userName);
                             startActivity(redirect);
-                        /*Toast.makeText(getActivity(), "Sorry, under working!", Toast.LENGTH_LONG).show();
-                        Log.d("loginActivity", "under working");*/
                         }
                     } else if (status.matches("chatPin")) {
                         progressDialog.dismiss();
