@@ -291,7 +291,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
             }
 
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-            alertDialog.setTitle("Thank You Registering");
+            alertDialog.setTitle("Thank You For Registering");
             alertDialog.setMessage("You will receive an email once we verify the  details");
 
             alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

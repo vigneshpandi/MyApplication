@@ -130,7 +130,6 @@ public class AdminHomeActivity extends AppCompatActivity {
 
 
         if (id == R.id.log_out) {
-
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
@@ -171,11 +170,12 @@ public class AdminHomeActivity extends AppCompatActivity {
     {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -189,15 +189,16 @@ public class AdminHomeActivity extends AppCompatActivity {
     protected  void onResume(){
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

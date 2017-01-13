@@ -538,7 +538,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
        String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
         if(wallpaperimage==true){
@@ -679,7 +679,6 @@ public void noWallpaper(){
     editors.commit();
 }
     public void checkOnlineUser(){
-        Log.d("toMail",toMail);
         String reArrangeEmail = toMail.replace(".", "-");
         fireBaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
@@ -689,7 +688,6 @@ public void noWallpaper(){
                 onlineHash = new HashMap<String, String>();
                 String  onlineUser = (String) dataSnapshot.child("onlineUser").getValue();
                 onlineHash.put(onlineUser,onlineUser);
-                Log.d("onlineUsersss", "success");
                 checkStatus();
             }
 
@@ -708,18 +706,15 @@ public void noWallpaper(){
         String checkOnline = onlineHash.get(toMail);
         if (checkOnline!=null) {
             userStaus = "online";
-            Log.d("it is online", "success");
             getSupportActionBar().setSubtitle(userStaus);
         } else {
             userStaus = "";
-            Log.d("it is not online", "success");
             checklastUpdate();
         }
 
     }
 
     public void checklastUpdate(){
-        Log.d("toMailupdate",toMail);
         String reArrangeEmail = toMail.replace(".", "-");
         fireBaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
