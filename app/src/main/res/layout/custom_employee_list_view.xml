@@ -36,18 +36,6 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/layout_field_name"
-        android:gravity="left"
-        android:layout_alignTop="@+id/user_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textColor="#474747"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/layout_field_id"
         android:layout_alignBottom="@+id/user_image"
         android:layout_alignLeft="@+id/layout_field_name"
@@ -62,4 +50,18 @@
         android:layout_below="@+id/layout_field_name"
         android:layout_alignRight="@+id/user_image"
         android:layout_alignEnd="@+id/user_image" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_field_name"
+        android:gravity="left"
+        android:textColor="#474747"
+        android:textStyle="bold"
+        android:layout_above="@+id/layout_field_id"
+        android:layout_toRightOf="@+id/user_image"
+        android:layout_toEndOf="@+id/user_image"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp" />
 </RelativeLayout>

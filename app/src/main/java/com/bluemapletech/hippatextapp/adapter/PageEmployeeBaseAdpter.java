@@ -111,7 +111,9 @@ Log.d(TAG,"userDetailDtos"+userDetailDtos);
         }else if(info.getRole().matches("admin")){
             mViewHolder.fieldId.setText(info.getProviderNPIId());
         }
-        mViewHolder.fieldName.setText(info.getUserName());
+
+
+        mViewHolder.fieldName.setText(info.getFirstName());
         if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {
             Picasso.with(context).load(info.getProfilePjhoto()).fit().centerCrop().into(mViewHolder.userImage);
         }

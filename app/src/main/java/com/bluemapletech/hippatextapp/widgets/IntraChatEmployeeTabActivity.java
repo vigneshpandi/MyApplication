@@ -130,9 +130,17 @@ public class IntraChatEmployeeTabActivity extends Fragment {
                     user.setLastName(snapshot.child("lastName").getValue(String.class));
                     user.setTINorEIN(snapshot.child("companyCINNumber").getValue(String.class));
                     user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
-                    if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
+                   /* if(!user.getLastName().matches("") && !user.getFirstName().matches("")){
                         String[] valueuserName = user.getUserName().split("@");
                         user.setFirstName(valueuserName[0]);
+                    }*/
+                    if(user.getFirstName().matches("")){
+                        if(user.getLastName().matches("")){
+                            String[] valueuserName = user.getUserName().split("@");
+                            user.setFirstName(valueuserName[0]);
+                        }else {
+                            user.setFirstName(user.getLastName());
+                        }
                     }
                     if(loggedINCompany!=null && loggedINEmail!=null ) {
                         if (user.getAuth().matches("1") && loggedINCompany.matches(user.getCompanyName()) && !loggedINEmail.matches(user.getUserName())) {
