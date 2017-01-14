@@ -569,6 +569,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.delete_chat, menu);
         menu.findItem(R.id.delete).setVisible(false);
         return true;
@@ -606,7 +607,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         if (id == R.id.delete) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            // alert.setTitle("");
             alert.setMessage("Delete message?");
             alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {

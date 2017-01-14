@@ -552,7 +552,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }
         if(id == R.id.delete){
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-            // alert.setTitle("");
             alert.setMessage("Delete message?");
             alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
