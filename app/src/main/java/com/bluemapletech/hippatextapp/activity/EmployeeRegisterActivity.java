@@ -140,15 +140,29 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                     emailTxt.setError("Invalid Email");
                     valid = false;
                 }
-
-                if (empPasswordTxt.isEmpty() || empPasswordTxt.length() < 6 || empPasswordTxt.length() > 16) {
-                    passwordTxt.setError("Password between 6 - 16 number and character");
+                if (empEmailTxt.isEmpty()) {
+                    emailTxt.setError("Employee email address is required");
+                    valid = false;
+                }
+                if (empPasswordTxt.isEmpty()) {
+                    passwordTxt.setError("Employee password is required");
                     valid = false;
                 } else {
                     passwordTxt.setError(null);
                 }
-
+                if (empPasswordTxt.length() < 6 || empPasswordTxt.length() > 16) {
+                    passwordTxt.setError("Employee password between 6 - 16 number and character");
+                    valid = false;
+                } else {
+                    passwordTxt.setError(null);
+                }
                 if (empIdTxts.isEmpty()) {
+                    empIdTxt.setError("EmployeeId is invalid");
+                    valid = false;
+                } else {
+                    empIdTxt.setError(null);
+                }
+                if (empIdTxts.length()<2) {
                     empIdTxt.setError("EmployeeId is invalid");
                     valid = false;
                 } else {
@@ -156,6 +170,12 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 }
 
                 if (empFirstName.isEmpty()) {
+                    firstName.setError("Employee First Name is required");
+                    valid = false;
+                } else {
+                    firstName.setError(null);
+                }
+                if (empFirstName.length()<2) {
                     firstName.setError("Employee First Name is invalid");
                     valid = false;
                 } else {
@@ -163,6 +183,12 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 }
 
                 if (empLastName.isEmpty()) {
+                    lastName.setError("Employee Last Name is required");
+                    valid = false;
+                } else {
+                    firstName.setError(null);
+                }
+                if (empLastName.length()<2) {
                     lastName.setError("Employee Last Name is invalid");
                     valid = false;
                 } else {

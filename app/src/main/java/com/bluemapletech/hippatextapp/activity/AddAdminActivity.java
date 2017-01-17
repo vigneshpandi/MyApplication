@@ -144,7 +144,7 @@ public class AddAdminActivity extends AppCompatActivity {
                     adminProviderNPItxt.setError(null);
                 }
 
-                if(providerNpi.length()<4){
+                if(providerNpi.length()<=10 ||providerNpi.length()>=10){
                     adminProviderNPItxt.setError("Provider NPI Id is invalid");
                     valid = false;
                 }else{

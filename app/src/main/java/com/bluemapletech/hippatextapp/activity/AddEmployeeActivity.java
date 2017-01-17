@@ -115,8 +115,18 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     addEmpEmailId.setError("Invalid Email");
                     valid = false;
                 }
+                if(addEmailId.isEmpty()){
+                    addEmpEmailId.setError("Email address is required");
+                    valid = false;
+                }
+                if(addEmpId.isEmpty()){
+                    addEmpEmployeeId.setError("EMployee Id is required");
+                    valid = false;
+                }else{
+                    addEmpEmployeeId.setError(null);
+                }
 
-                if(addEmpId.isEmpty()||addEmpId.length()< 2){
+                if(addEmpId.length()< 2){
                     addEmpEmployeeId.setError("EMployee Id is invalid");
                     valid = false;
                 }else{

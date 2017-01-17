@@ -102,6 +102,10 @@ public class AddRootActivity extends AppCompatActivity {
                     addRootEmailId.setError("Invalid Email");
                     valid = false;
                 }
+                if(addEmailId.isEmpty()){
+                    addRootEmailId.setError("Email address is required");
+                    valid = false;
+                }
                 return valid;
             }
         });
