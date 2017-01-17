@@ -193,16 +193,26 @@ public class EditProfileActivity extends AppCompatActivity {
                     editEmail.setError("Invalid Email");
                     valid = false;
                 }
-
-                if (compFirstName.isEmpty() || compFirstName.length() < 2) {
-                    editFirstName.setError("Provider NPI Id is invalid");
+                if (compFirstName.isEmpty()) {
+                    editFirstName.setError("First name is required");
                     valid = false;
                 } else {
                     editFirstName.setError(null);
                 }
-
-                if (compLastName.isEmpty() || compLastName.length() < 2) {
-                    editLastName.setError("Provider Name is invalid");
+                if (compFirstName.length() < 2) {
+                    editFirstName.setError("First name is invalid");
+                    valid = false;
+                } else {
+                    editFirstName.setError(null);
+                }
+                if (compLastName.isEmpty()) {
+                    editLastName.setError("Last name is required");
+                    valid = false;
+                } else {
+                    editLastName.setError(null);
+                }
+                if (compLastName.length() < 2) {
+                    editLastName.setError("Last name is invalid");
                     valid = false;
                 } else {
                     editLastName.setError(null);
@@ -214,16 +224,26 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else {
                     editCompanyName.setError(null);
                 }
-
-                if (compEmployee.isEmpty() || compEmployee.length() < 2) {
-                    editEmployeeId.setError("Provider Name is invalid");
+                if (compEmployee.isEmpty()) {
+                    editEmployeeId.setError("Employee Id is required");
                     valid = false;
                 } else {
                     editEmployeeId.setError(null);
                 }
-
-                if (compDesignation.isEmpty() || compDesignation.length() < 2) {
-                    editDesignation.setError("Provider Name is invalid");
+                if (compEmployee.length() < 2) {
+                    editEmployeeId.setError("Employee Id is invalid");
+                    valid = false;
+                } else {
+                    editEmployeeId.setError(null);
+                }
+                if (compDesignation.isEmpty()) {
+                    editDesignation.setError("Designation is required");
+                    valid = false;
+                } else {
+                    editDesignation.setError(null);
+                }
+                if (compDesignation.length() < 2) {
+                    editDesignation.setError("Designation is invalid");
                     valid = false;
                 } else {
                     editDesignation.setError(null);
