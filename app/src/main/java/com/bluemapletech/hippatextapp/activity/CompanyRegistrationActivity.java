@@ -200,7 +200,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 }else{
                     providerNPIId.setError(null);
                 }
-                if(providerNpi.length()<=10 ||providerNpi.length()>=10){
+                if(providerNpi.length()<9){
                     providerNPIId.setError("Company provider NPI Id is invalid");
                     valid = false;
                 }else{
