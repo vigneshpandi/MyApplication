@@ -502,6 +502,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             fo = new FileOutputStream(destination);
             fo.write(bytes.toByteArray());
             fo.close();
+            fo.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -538,8 +539,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-
-
 
         }
         imageView.setImageBitmap(bm);

@@ -89,7 +89,8 @@ public class ViewGroupDetails extends AppCompatActivity {
     private SecureRandom random;
     Groups group = new Groups(); Map<String, String> maps = new HashMap<String, String>();
     List<Groups> groupObj = new ArrayList<Groups>(); List<Groups> groupObjs = new ArrayList<Groups>();
-    ImageView viewImage;ImageView backPageArrow; private ImageView displayImage;ImageView showImage;
+    ImageView viewImage;ImageView backPageArrow;
+     ImageView displayImage;ImageView showImage;
     Uri value, downloadUrl;
     private Toolbar toolbar;private Toolbar toolbars;
     private int l = 0;  private int k = 0;
@@ -321,7 +322,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 String name = randomValue+".jpg";
                                 myDir = new File(myDir, name);
                                 FileOutputStream out = new FileOutputStream(myDir);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, out);
                                 Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
                                 out.flush();
                                 out.close();
@@ -329,9 +330,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 // some action
                             }
                         }
-
-
-
                     }
                 });
             }
@@ -365,7 +363,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         assert thumbnail != null : "Image Could not be set!";
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
         FileOutputStream fo;
@@ -380,7 +378,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         displayImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
         value = data.getData();
-
+        saveImage();
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -436,7 +434,7 @@ public class ViewGroupDetails extends AppCompatActivity {
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 20, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }

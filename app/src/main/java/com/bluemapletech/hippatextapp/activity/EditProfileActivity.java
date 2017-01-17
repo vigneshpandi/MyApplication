@@ -96,7 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-           // getSupportActionBar().setTitle("Profile");
+            // getSupportActionBar().setTitle("Profile");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
@@ -330,7 +330,7 @@ public class EditProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_FILE) {
                 onSelectFromGalleryResult(data);
             } else if (requestCode == REQUEST_CAMERA)
-            onCaptureImageResult(data);
+                onCaptureImageResult(data);
         }
     }
 
@@ -376,7 +376,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userImage.setImageBitmap(thumbnail);
             base64Profile = bitmapToBase64(thumbnail);
             Log.v(TAG,"data extracs1= "+data.getExtras().get("data"));
-             value = getImageUri(getApplicationContext(), thumbnail);
+            value = getImageUri(getApplicationContext(), thumbnail);
             Log.d(TAG,"value == .."+value);
 
         } catch (IOException e) {
