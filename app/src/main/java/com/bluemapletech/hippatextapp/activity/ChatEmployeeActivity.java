@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -89,6 +90,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     EditText newMessageView;
     String newMessage;
     HashMap<String,String> onlineHash = new HashMap<String,String>();
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -246,20 +248,27 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             nameView.setText(message.getMtext());
             TextView userFirstAndLastName = (TextView) convertView.findViewById(R.id.user_name);
             TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
-            ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
+             imageView = (ImageView) convertView.findViewById(R.id.image);
             if(message.getImage()!=null && !message.getImage().matches("")) {
                 String images = message.getImage();
                 byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                imageView.setImageBitmap(decodedByte);
+                imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 250, 250, false));
             }
+           /* ViewTreeObserver vto = imageView.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                  float  finalHeight = imageView.getMeasuredHeight();
+                  float  finalWidth = imageView.getMeasuredWidth();
+                    System.out.println("height: " + finalHeight + " Width: " + finalWidth);
+                    return true;
+                }
+            });*/
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
             LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();
             LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams)userFirstAndLastName.getLayoutParams();
             int sdk = Build.VERSION.SDK_INT;
-
-
-
             //format of given date
             String myFormat = "yyyy-MM-dd HH:mm:ss z";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -533,6 +542,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
 
         }
+        imageView.setImageBitmap(bm);
 
     }
 

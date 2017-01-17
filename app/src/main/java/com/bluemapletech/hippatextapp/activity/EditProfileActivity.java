@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -57,10 +59,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.R.attr.data;
+import static android.R.attr.value;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = EditProfileActivity.class.getCanonicalName();
+    private static final String TAG = "aaa==="+EditProfileActivity.class.getCanonicalName();
     private EditText editFirstName, editLastName, editEmail, editCompanyName, editEmployeeId, editDesignation;
     private Button updateProfileBtn;
     private ImageView userImage;
@@ -93,7 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle("Profile");
+           // getSupportActionBar().setTitle("Profile");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
@@ -332,8 +335,9 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
-        try {
+      /*  try {
             Bitmap thumbnail = bm;
+            Log.d(TAG,"camera capture image.."+data);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             assert thumbnail != null : "Image Could not be set!";
             thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
@@ -345,17 +349,53 @@ public class EditProfileActivity extends AppCompatActivity {
             fo = new FileOutputStream(destination);
             fo.write(bytes.toByteArray());
             fo.close();
+            Log.d(TAG,"camera value..."+thumbnail);
             userImage.setImageBitmap(thumbnail);
             base64Profile = bitmapToBase64(thumbnail);
             value = data.getData();
+            Log.d(TAG,"value..value.."+value);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+        Log.v(TAG,"data extracs "+data.getExtras().get("data"));
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        assert thumbnail != null:"Image Could not be set!";
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        Log.d(TAG,"thumbmail.."+thumbnail);
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+            userImage.setImageBitmap(thumbnail);
+            base64Profile = bitmapToBase64(thumbnail);
+            Log.v(TAG,"data extracs1= "+data.getExtras().get("data"));
+             value = getImageUri(getApplicationContext(), thumbnail);
+            Log.d(TAG,"value == .."+value);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
-
+    //Get path from URI
+   /* public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }*/
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
     private void onSelectFromGalleryResult(Intent data) {
         if (data != null) {
             try {
@@ -373,6 +413,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveImage() {
+        Log.d(TAG,"valueee save time..."+value);
         if (value != null) {
             Log.d(TAG, "value" + value);
             StorageReference filePath = mStorage.child(reArrangeEmail);
@@ -381,6 +422,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                     profile = String.valueOf(downloadUrl);
+                    Log.d(TAG,"profile...profile"+profile);
                     saveProfile();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -390,6 +432,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             });
         } else if (value == null) {
+            Log.d(TAG,"value is empty..."+value);
             saveProfile();
         }
     }

@@ -90,6 +90,9 @@
         </receiver>
 
         <activity android:name=".activity.Inter_chat_admin_activity"></activity>
+
+        <service android:name=".utils.ExamplesService"
+            android:enabled="true"/>
     </application>
 
 </manifest>

@@ -6,17 +6,11 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-
     tools:context="com.bluemapletech.hippatextapp.activity.EditProfileActivity">
 
-    <android.support.v7.widget.Toolbar
+
+    <include
         android:id="@+id/toolbar_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        app:titleTextColor="@color/btn_text_color"
-        app:subtitleTextColor="@color/btn_text_color"
-        android:background="@color/colorPrimary"
         layout="@layout/toolbar_header" />
 
     <ScrollView

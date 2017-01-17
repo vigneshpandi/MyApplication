@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Old Chat Pin"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/new_chat_pin"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="New Chat Pin"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/confirm_chat_pin"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="Confirm Chat Pin"
-                android:inputType="text" />
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/reset_pin_btn"

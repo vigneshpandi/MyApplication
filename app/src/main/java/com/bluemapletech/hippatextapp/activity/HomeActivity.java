@@ -11,13 +11,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.bluemapletech.hippatextapp.R;
+import com.bluemapletech.hippatextapp.utils.ExamplesService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
-
+boolean dummy=false;
     private Button loginBtn, compBtn, empBtn;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -29,6 +30,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        startService(new Intent(HomeActivity.this, ExamplesService.class));
         Log.d(TAG,"homeControlle has been called");
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginRole =  pref.getString("role", "");
@@ -97,6 +100,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if(dummy)
+        stopService(new Intent(HomeActivity.this, ExamplesService.class));
+        super.onDestroy();
+    }
+
     private void onlineUser() {
         HashMap<String, Object> onlineUser = new HashMap<>();
         onlineUser.put("onlineUser",loginMail);
