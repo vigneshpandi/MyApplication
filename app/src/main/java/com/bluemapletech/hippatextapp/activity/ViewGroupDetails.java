@@ -137,10 +137,11 @@ public class ViewGroupDetails extends AppCompatActivity {
             editor.putString("groupNameValue", groupName);
             editor.commit();
         }
-        if (groupName == null) {
+        if (groupName == null || groupName.matches("")) {
             Log.d(TAG, "inside groupName is null");
             pref = getSharedPreferences("MyPref", MODE_PRIVATE);
             groupName = pref.getString("groupNameValue", "");
+            Log.d("sdsdsdsd","sdsdsdIJJ"+groupName);
             loggedINEmail = pref.getString("loginMail", "");
         }
 
@@ -162,7 +163,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                     String randomName = snapshot.child("randomName").getValue(String.class);
                     String admin = snapshot.child("admin").getValue(String.class);
 
-                    Log.d(TAG, "groupName" + groupName);
+                    Log.d(TAG, "groupName is" + groupName);
+
+                    if(groupName != null){
                     if (groupValues.matches(groupName)) {
                         group.setAdmin(admin);
                         group.setGroupEmailId(groupEmailId);
@@ -170,7 +173,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                         group.setRandomName(randomName);
                         group.setGroupName(groupValues);
                         Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(viewImage);
-                    }
+                    }}
                 }
                 separated = group.getGroupEmailId().split(";");
                 for (int i = 0; i < separated.length; i++) {
@@ -414,7 +417,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                 Log.d(TAG, "group.getGroupEmailId()....." + group.getGroupEmailId());
                 String[] valueuserName = group.getGroupEmailId().split(";");
                 for (int p = 0; p < valueuserName.length; p++) {
-                    Log.d("valueuserName", valueuserName[p]);
                     reArrangeEmailId = valueuserName[p].replace(".", "-");
                     fireBaseDatabase = FirebaseDatabase.getInstance();
                     DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupImage");
