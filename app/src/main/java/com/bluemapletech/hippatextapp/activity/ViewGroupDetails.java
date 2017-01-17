@@ -322,7 +322,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 String name = randomValue+".jpg";
                                 myDir = new File(myDir, name);
                                 FileOutputStream out = new FileOutputStream(myDir);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, out);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
                                 Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
                                 out.flush();
                                 out.close();
@@ -363,7 +363,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         assert thumbnail != null : "Image Could not be set!";
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
         FileOutputStream fo;
@@ -434,7 +434,7 @@ public class ViewGroupDetails extends AppCompatActivity {
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 20, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
