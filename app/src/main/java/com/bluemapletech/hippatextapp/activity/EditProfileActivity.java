@@ -102,6 +102,7 @@ public class EditProfileActivity extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginRole = pref.getString("role", "");
         loginAuth = pref.getString("auth", "");
+
         init();
     }
 
