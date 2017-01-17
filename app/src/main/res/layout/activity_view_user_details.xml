@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_create_user"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context="com.bluemapletech.hippatextapp.activity.ViewUserDetails">
 
-    <include
+    <!--<include
         android:id="@+id/toolbar_header"
+        layout="@layout/toolbar_header" />-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:titleTextColor="@color/btn_text_color"
+        app:subtitleTextColor="@color/btn_text_color"
+        android:background="@color/colorPrimary"
         layout="@layout/toolbar_header" />
     <ScrollView
         android:layout_width="match_parent"
@@ -27,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:gravity="center">
 
@@ -34,7 +45,6 @@
                     android:id="@+id/layout_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:text="provider Email Id:"
                     android:layout_gravity="center"
                     android:gravity="center"/>
@@ -52,15 +62,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
+                android:layout_marginRight="12dp"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/layout_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="9"
                     android:text="TIN/EIN Number:"
                     android:layout_gravity="center"
+                    android:layout_marginRight="3dp"
                     android:gravity="center"/>
 
                 <TextView
@@ -73,9 +84,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginLeft="6dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:layout_marginRight="23dp"
                 android:layout_gravity="center"
                 android:gravity="center">
 
@@ -84,7 +95,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Company Name:"
-                    android:ems="8"
                     android:layout_gravity="center"
                     android:gravity="center"/>
 
@@ -99,7 +109,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginRight="2dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
@@ -110,7 +120,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Provider NPI Id:"
-                    android:ems="8"
                     android:layout_gravity="center"
                     android:gravity="center"/>
 
@@ -125,7 +134,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginRight="2dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
@@ -136,7 +145,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Provider Name:"
-                    android:ems="8"
                     android:layout_gravity="center"
                     android:gravity="center"/>
 

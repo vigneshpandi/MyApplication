@@ -131,20 +131,38 @@ public class AddAdminActivity extends AppCompatActivity {
                     adminEmailTxt.setError("Invalid Email");
                     valid = false;
                 }
-
-                if(providerNpi.isEmpty()||providerNpi.length()<4){
-                    adminProviderNPItxt.setError("Provider NPI Id is invalid");
+                if(compEmailtxts.isEmpty()){
+                    adminEmailTxt.setError("Email address is required");
+                    valid = false;
+                }else{
+                    adminEmailTxt.setError(null);
+                }
+                if(providerNpi.isEmpty()){
+                    adminProviderNPItxt.setError("Provider NPI Id is required");
                     valid = false;
                 }else{
                     adminProviderNPItxt.setError(null);
                 }
 
-                if(providerNameText.isEmpty()||providerNameText.length()<2){
+                if(providerNpi.length()<4){
+                    adminProviderNPItxt.setError("Provider NPI Id is invalid");
+                    valid = false;
+                }else{
+                    adminProviderNPItxt.setError(null);
+                }
+                if(providerNameText.isEmpty()){
+                    adminProviderName.setError("Provider Name is required");
+                    valid = false;
+                }else{
+                    adminProviderName.setError(null);
+                }
+                if(providerNameText.length()<2){
                     adminProviderName.setError("Provider Name is invalid");
                     valid = false;
                 }else{
                     adminProviderName.setError(null);
                 }
+
                 return valid;
             }
         });

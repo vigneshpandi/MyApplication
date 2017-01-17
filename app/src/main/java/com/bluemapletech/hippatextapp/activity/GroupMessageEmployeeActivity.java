@@ -229,11 +229,17 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 nameView.setText(message.getMtext());
                 TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
                 ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
-                if(message.getImage()!=null && !message.getImage().matches("")) {
+               /* if(message.getImage()!=null && !message.getImage().matches("")) {
                     String images = message.getImage();
                     byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     imageView.setImageBitmap(decodedByte);
+                }*/
+                if(message.getImage()!=null && !message.getImage().matches("")) {
+                    String images = message.getImage();
+                    byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 250, 250, false));
                 }
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
                 LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams)dateTime.getLayoutParams();

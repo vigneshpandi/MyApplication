@@ -363,7 +363,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        /*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         assert thumbnail != null : "Image Could not be set!";
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
@@ -381,7 +381,36 @@ public class ViewGroupDetails extends AppCompatActivity {
         displayImage.setImageBitmap(thumbnail);
         base64Profile = bitmapToBase64(thumbnail);
         value = data.getData();
-        saveImage();
+        saveImage();*/
+        Log.v(TAG,"data extracs "+data.getExtras().get("data"));
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        assert thumbnail != null:"Image Could not be set!";
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+        FileOutputStream fo;
+        Log.d(TAG,"thumbmail.."+thumbnail);
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+            displayImage.setImageBitmap(thumbnail);
+            base64Profile = bitmapToBase64(thumbnail);
+            Log.v(TAG,"data extracs1= "+data.getExtras().get("data"));
+            value = getImageUri(getApplicationContext(), thumbnail);
+            Log.d(TAG,"value == .."+value);
+            saveImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
