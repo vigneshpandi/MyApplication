@@ -144,10 +144,17 @@ public class AddAdminActivity extends AppCompatActivity {
                     adminProviderNPItxt.setError(null);
                 }
 
-                if(providerNpi.length()<9){
+              /*  if(providerNpi.length() < 9 || !(providerNpi.length() > 10)){
                     adminProviderNPItxt.setError("Provider NPI Id is invalid");
                     valid = false;
                 }else{
+                    adminProviderNPItxt.setError(null);
+                }*/
+                if(providerNpi.length() != 10){
+                    adminProviderNPItxt.setError("Provider NPI Id is invalid");
+                    valid = false;
+                }else{
+                    Log.d(TAG,"provider error null");
                     adminProviderNPItxt.setError(null);
                 }
                 if(providerNameText.isEmpty()){
