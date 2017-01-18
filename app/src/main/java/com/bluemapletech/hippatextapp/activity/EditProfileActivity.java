@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -421,7 +422,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                userImage.setImageBitmap(bm);
+                userImage.setImageBitmap(getResizedBitmap(bm,20,20));
                 base64Profile = bitmapToBase64(bm);
                 value = data.getData();
             } catch (IOException e) {
@@ -546,7 +547,17 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         super.onResume();
     }
-
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+                matrix, false);
+        return resizedBitmap;
+    }
     public EditProfileActivity getActivity() {
         return this;
     }

@@ -290,6 +290,7 @@ public class UserDao {
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
+           Log.d(TAG,"messagechild has been removed");
 
         }
 
@@ -408,7 +409,7 @@ public class UserDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key= AIzaSyBWM1_H5KrB9EPGcf0iIK_8hh8kh1YqhAE");
+                conn.setRequestProperty("Authorization", "key=AIzaSyBWM1_H5KrB9EPGcf0iIK_8hh8kh1YqhAE");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
@@ -421,7 +422,6 @@ public class UserDao {
                 wr.flush();
                 wr.close();
                 int responsecode = conn.getResponseCode();
-
                 if(responsecode == 200) {
                     Log.d(TAG,"success"+conn.getResponseMessage());
                 }else{

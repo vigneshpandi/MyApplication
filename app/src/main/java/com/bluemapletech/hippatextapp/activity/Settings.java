@@ -89,18 +89,25 @@ public class Settings extends AppCompatActivity {
         TableRow hr5 = (TableRow) findViewById(R.id.hr5);
 
         if(role_Value.matches("root")){
-            profile.setVisibility(View.GONE);
+            profile.setVisibility(View.VISIBLE);
             chatPin.setVisibility(View.GONE);
             password.setVisibility(View.VISIBLE);
             deleteAcount.setVisibility(View.VISIBLE);
             notificationSetting.setVisibility(View.VISIBLE);
             showOnline.setVisibility(View.GONE);
-            hr.setVisibility(View.GONE);
+            hr.setVisibility(View.VISIBLE);
             hr1.setVisibility(View.GONE);
             hr2.setVisibility(View.VISIBLE);
             hr3.setVisibility(View.VISIBLE);
             hr4.setVisibility(View.VISIBLE);
             hr5.setVisibility(View.GONE);
+            profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent editProfile = new Intent(getActivity(), EditProfileActivity.class);
+                    startActivity(editProfile);
+                }
+            });
             password.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

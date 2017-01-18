@@ -30,7 +30,6 @@ boolean dummy=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         startService(new Intent(HomeActivity.this, ExamplesService.class));
         Log.d(TAG,"homeControlle has been called");
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
@@ -52,7 +51,7 @@ boolean dummy=false;
                onlineUser();
                 Intent employeeHome = new Intent(getActivity(), EmployeeHomeActivity.class);
                 startActivity(employeeHome);
-            }else if(loginRole.matches("role") && !loginAuth.matches("1") ) {
+            }else if(!loginAuth.matches("1") ) {
               onlineUser();
                 Intent redirect = new Intent(getActivity(), NotAcceptedUser.class);
                 redirect.putExtra(userLogiMailId, loginMail);

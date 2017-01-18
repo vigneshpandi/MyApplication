@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -253,7 +254,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 String images = message.getImage();
                 byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 250, 250, false));
+                imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 350, 350, false));
             }
            /* ViewTreeObserver vto = imageView.getViewTreeObserver();
             vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -541,8 +542,21 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             layout.setBackgroundDrawable(myBackground);
 
         }
-        imageView.setImageBitmap(bm);
+        imageView.setImageBitmap(getResizedBitmap(bm,20,20));
 
+    }
+
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+                matrix, false);
+        return resizedBitmap;
     }
 
     private String bitmapToBase64(Bitmap bitmap) {
@@ -623,7 +637,11 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     Log.d(TAG, "mConvoId...." + mConvoId);
                     UserDao.deleteChatMessage(message, mConvoId);
                     toolbar.getMenu().findItem(R.id.delete).setVisible(false);
-                    startActivity(getIntent());
+                   /* mListener = UserDao.addMessagesListener(mConvoId, getActivity());
+                    mMessages = new ArrayList<>();
+                    mAdapter = new MessagesAdapter(mMessages);
+                    mListView.setAdapter(mAdapter);*/
+                   startActivity(getIntent());
                 }
 
             });
@@ -796,7 +814,6 @@ public void noWallpaper(){
 
         });
     }
-
 
 
 
