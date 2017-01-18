@@ -38,9 +38,11 @@ public class ChangePassword extends AppCompatActivity {
     private EditText emailAddress;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    String email,loginRoleValue,loginAuthValue;
+    String email,loginRoleValue,loginAuthValue,loginMail;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
+    SharedPreferences pref3;
+    SharedPreferences.Editor editor3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +50,11 @@ public class ChangePassword extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
         Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+        pref3 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =  pref3.getString("loginMail", "");
         changePassword = (Button) findViewById(R.id.send_password);
         emailAddress = (EditText) findViewById(R.id.user_email);
-        emailAddress.setText(logged.getEmail());
+        emailAddress.setText(loginMail);
         roleValue = getIntent().getStringExtra(Settings.roleValues);
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
@@ -127,11 +131,13 @@ public class ChangePassword extends AppCompatActivity {
     {
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref1.getString("isOnline", "");
+        loginMail =  pref1.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+           // String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -145,12 +151,14 @@ public class ChangePassword extends AppCompatActivity {
     protected  void onResume(){
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref1.getString("isOnline", "");
+        loginMail =  pref1.getString("loginMail", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+           // String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             onlineReenter.put("onlineUser", logged.getEmail());
