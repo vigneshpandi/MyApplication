@@ -6,8 +6,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:context="com.bluemapletech.hippatextapp.activity.CompanyRegistrationActivity">
 
     <android.support.v7.widget.Toolbar
@@ -80,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="Provider Name"
-                android:inputType="text" />
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                android:inputType="textPersonName" />
             <Button
                 android:id="@+id/comp_register_btn"
                 android:layout_width="match_parent"

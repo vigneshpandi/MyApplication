@@ -169,6 +169,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         if (text.equals(oldChatPin.getText().toString()) && text.matches(oldChatPin.getText().toString())) {
             Log.d(TAG, "Old chat pin has been called!");
             validate();
+            if(oldChatPin.length() ==0 || newChatPin.length()==0|| confirmChatPin.length()==0){
+                return false;
+            }
             oldChatPin.setError(null);
             return true;
         } else {

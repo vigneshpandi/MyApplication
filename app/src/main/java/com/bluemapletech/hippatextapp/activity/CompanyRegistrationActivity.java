@@ -157,15 +157,14 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 if(compEmailtxts.isEmpty()){
                     compEmailtxt.setError("Company email address is required");
                     valid = false;
+                }else{
+                    compEmailtxt.setError(null);
                 }
                 if(compPasswordtxts.isEmpty()){
                     compPasswordtxt.setError("Company password is required");
                     valid = false;
-                }else{
-                    compPasswordtxt.setError(null);
-                }
-                if(compPasswordtxts.length()< 6|| compPasswordtxts.length()> 16){
-                    compPasswordtxt.setError("Company password between 6 - 16 number and character");
+                }else if(compPasswordtxts.length()< 6|| compPasswordtxts.length()> 16){
+                    compPasswordtxt.setError("Password between 6 - 16 number and character");
                     valid = false;
                 }else{
                     compPasswordtxt.setError(null);
@@ -173,10 +172,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 if(companyNames.isEmpty()){
                     companyName.setError("Company Name is required");
                     valid = false;
-                }else{
-                    companyName.setError(null);
-                }
-                if(companyNames.length() < 2){
+                }else if(companyNames.length() < 2){
                     companyName.setError("Company Name is invalid");
                     valid = false;
                 }else{
@@ -185,36 +181,26 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 if(compEinOrTinNos.isEmpty()){
                     compEinOrTinNo.setError("Company EIN/TIN No is required");
                     valid = false;
-                }else{
-                    compEinOrTinNo.setError(null);
-                }
-                if(compEinOrTinNos.length() < 2){
+                }else if(compEinOrTinNos.length() < 2){
                     compEinOrTinNo.setError("Company EIN/TIN No is invalid");
                     valid = false;
                 }else{
                     compEinOrTinNo.setError(null);
                 }
                 if(providerNpi.isEmpty()){
-                    providerNPIId.setError("Company provider NPI Id is required");
+                    providerNPIId.setError("Provider NPI Id is required");
+                    valid = false;
+                }else if(providerNpi.length() != 10){
+                    providerNPIId.setError("Provider NPI Id is invalid");
                     valid = false;
                 }else{
-                    providerNPIId.setError(null);
-                }
-                if(providerNpi.length() !=10){
-                    providerNPIId.setError("Company provider NPI Id is invalid");
-                    valid = false;
-                }else{
-                    Log.d(TAG,"provider error null");
                     providerNPIId.setError(null);
                 }
                 if(providerNameText.isEmpty()){
-                    providerName.setError("Company provider Name is required");
+                    providerName.setError("Provider Name is required");
                     valid = false;
-                }else{
-                    providerName.setError(null);
-                }
-                if(providerNameText.length()<2){
-                    providerName.setError("Company provider Name is invalid");
+                }else if(providerNameText.length()<2 || providerNameText.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
+                    providerName.setError("Provider Name is invalid");
                     valid = false;
                 }else{
                     providerName.setError(null);

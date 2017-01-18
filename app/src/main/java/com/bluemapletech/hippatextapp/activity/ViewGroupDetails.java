@@ -423,12 +423,12 @@ public class ViewGroupDetails extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        displayImage.setImageBitmap(getResizedBitmap(bm,20,20));
+        displayImage.setImageBitmap(bm);
         base64Profile = bitmapToBase64(bm);
         value = data.getData();
         saveImage();
     }
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+   /* public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -438,7 +438,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
                 matrix, false);
         return resizedBitmap;
-    }
+    }*/
     private void saveImage() {
         final EmployeeDao empDao = new EmployeeDao();
         random = new SecureRandom();

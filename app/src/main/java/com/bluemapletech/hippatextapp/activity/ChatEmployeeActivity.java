@@ -542,12 +542,12 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             layout.setBackgroundDrawable(myBackground);
 
         }
-        imageView.setImageBitmap(getResizedBitmap(bm,20,20));
+        imageView.setImageBitmap(bm);
 
     }
 
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+    /*public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -557,7 +557,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
                 matrix, false);
         return resizedBitmap;
-    }
+    }*/
 
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

@@ -38,21 +38,24 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <EditText
-                android:id="@+id/emp_first_name"
+                android:id="@+id/emp_first_name1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/top_margin"
                 android:hint="First Name"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                android:inputType="text" />
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                android:inputType="textPersonName" />
+
+
             <EditText
-                android:id="@+id/emp_last_name"
+                android:id="@+id/emp_last_name1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Last Name"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-                android:inputType="text" />
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+                android:inputType="textPersonName"/>
+
             <EditText
                 android:id="@+id/emp_email_address"
                 android:layout_width="match_parent"

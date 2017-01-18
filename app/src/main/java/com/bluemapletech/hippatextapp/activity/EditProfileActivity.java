@@ -422,7 +422,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                userImage.setImageBitmap(getResizedBitmap(bm,20,20));
+                userImage.setImageBitmap(bm);
                 base64Profile = bitmapToBase64(bm);
                 value = data.getData();
             } catch (IOException e) {
@@ -547,7 +547,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         super.onResume();
     }
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+    /*public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -557,7 +557,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
                 matrix, false);
         return resizedBitmap;
-    }
+    }*/
     public EditProfileActivity getActivity() {
         return this;
     }

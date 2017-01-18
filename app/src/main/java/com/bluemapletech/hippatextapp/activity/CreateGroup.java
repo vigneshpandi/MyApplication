@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -218,7 +219,15 @@ public class CreateGroup extends AppCompatActivity {
                         progressDialog.show();
                         progressDialog.setCanceledOnTouchOutside(false);
                         groupName = input.getText().toString();
-                        saveImage();
+                        Log.d(TAG,"gropName outside is"+groupName);
+                        if(groupName.length() != 0){
+                            Log.d(TAG,"gropName length is"+groupName);
+                            saveImage();
+                        }else {
+                            Log.d(TAG,"group name is empty");
+                            Toast.makeText(getActivity(),"Group name is empty!",Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
 
                     }
                 });

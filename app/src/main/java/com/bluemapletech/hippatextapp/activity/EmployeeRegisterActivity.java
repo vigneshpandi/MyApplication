@@ -87,10 +87,10 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
 
     public void init() {
         Log.d(TAG, "Init method has been called!");
-        firstName = (EditText) findViewById(R.id.emp_first_name);
-        firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        lastName = (EditText) findViewById(R.id.emp_last_name);
-        lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        firstName = (EditText) findViewById(R.id.emp_first_name1);
+        //firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        lastName = (EditText) findViewById(R.id.emp_last_name1);
+        //lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         emailTxt = (EditText) findViewById(R.id.emp_email_address);
         passwordTxt = (EditText) findViewById(R.id.emp_password);
         empIdTxt = (EditText) findViewById(R.id.emp_employee_id);
@@ -147,10 +147,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (empPasswordTxt.isEmpty()) {
                     passwordTxt.setError("Employee password is required");
                     valid = false;
-                } else {
-                    passwordTxt.setError(null);
-                }
-                if (empPasswordTxt.length() < 6 || empPasswordTxt.length() > 16) {
+                } else if (empPasswordTxt.length() < 6 || empPasswordTxt.length() > 16) {
                     passwordTxt.setError("Employee password between 6 - 16 number and character");
                     valid = false;
                 } else {
@@ -159,40 +156,31 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if (empIdTxts.isEmpty()) {
                     empIdTxt.setError("EmployeeId is invalid");
                     valid = false;
-                } else {
-                    empIdTxt.setError(null);
-                }
-                if (empIdTxts.length()<2) {
+                } else if (empIdTxts.length()<2) {
                     empIdTxt.setError("EmployeeId is invalid");
                     valid = false;
                 } else {
                     empIdTxt.setError(null);
                 }
 
-                if (empFirstName.isEmpty()) {
+                if(empFirstName.isEmpty()){
                     firstName.setError("Employee First Name is required");
                     valid = false;
-                } else {
-                    firstName.setError(null);
-                }
-                if (empFirstName.length()<2) {
+                }else if(empFirstName.length() < 2 || empFirstName.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
                     firstName.setError("Employee First Name is invalid");
                     valid = false;
-                } else {
+                }else{
                     firstName.setError(null);
                 }
 
-                if (empLastName.isEmpty()) {
+                if(empLastName.isEmpty()){
                     lastName.setError("Employee Last Name is required");
                     valid = false;
-                } else {
-                    firstName.setError(null);
-                }
-                if (empLastName.length()<2) {
+                }else if(empLastName.length() < 2 || empLastName.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
                     lastName.setError("Employee Last Name is invalid");
                     valid = false;
-                } else {
-                    firstName.setError(null);
+                }else{
+                    lastName.setError(null);
                 }
                 String selectedItem = null;
                 if(spinner != null && spinner.getSelectedItem() !=null ) {
