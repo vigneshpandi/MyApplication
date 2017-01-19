@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,19 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
+
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.GMailSender;
@@ -51,8 +40,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -98,7 +95,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     public void init() {
         Log.d(TAG, "Init method has been called!");
         compEmailtxt = (EditText) findViewById(R.id.comp_email_address);
-        toEmail = compEmailtxt.getText().toString();
+       // toEmail = compEmailtxt.getText().toString();
         compPasswordtxt = (EditText) findViewById(R.id.comp_password);
         companyName = (EditText) findViewById(R.id.company_name);
         companyName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -150,15 +147,14 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 String providerNpi = providerNPIId.getText().toString().trim();
                 String providerNameText = providerName.getText().toString().trim();
                 boolean valid = true;
-                if(!isValidEmail(compEmailtxts)){
+                if (!isValidEmail(compEmailtxts)) {
+                    Log.d(TAG,"eneter invalid email");
                     compEmailtxt.setError("Invalid Email");
                     valid = false;
                 }
                 if(compEmailtxts.isEmpty()){
                     compEmailtxt.setError("Company email address is required");
                     valid = false;
-                }else{
-                    compEmailtxt.setError(null);
                 }
                 if(compPasswordtxts.isEmpty()){
                     compPasswordtxt.setError("Company password is required");
@@ -211,11 +207,12 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     }
 
     private boolean isValidEmail(String compEmailtxts) {
+        Log.d(TAG,"eneter invalid email1");
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(compEmailtxts);
-        return  matcher.matches();
+        return matcher.matches();
     }
 
     public void checkUserExistence() {

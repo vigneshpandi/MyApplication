@@ -84,7 +84,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String comNames, emailAddress, firstName, designation, lastName, userId, auth, chatPin, companyCin, password, profile;
     private String providerNPI, providerName, notification, role, senderId, status, createDate, updateDate;
     private String compFirstName, compLastName, compEmail, compCompany, compEmployee, compDesignation;
-    private String loginRole, loginAuth,isOnline;
+    private String loginRole, loginAuth,isOnline,loginMail;
     Bitmap bm = null;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
@@ -103,6 +103,8 @@ public class EditProfileActivity extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginRole = pref.getString("role", "");
         loginAuth = pref.getString("auth", "");
+        loginMail = pref.getString("loginMail","");
+
 
         init();
     }
@@ -122,9 +124,9 @@ public class EditProfileActivity extends AppCompatActivity {
         updateProfileBtn = (Button) findViewById(R.id.update_profile);
         userImage = (ImageView) findViewById(R.id.user_image);
         Log.d(TAG, "logged....." + logged);
-        if (logged != null) {
-            Log.d("logged", logged.toString());
-            reArrangeEmail = logged.getEmail().replace(".", "-");
+        if (loginMail != null) {
+            Log.d("logged", loginMail.toString());
+            reArrangeEmail = loginMail.replace(".", "-");;
         }
         databaseRef = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.addValueEventListener(new ValueEventListener() {
@@ -142,6 +144,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 companyCin = map.get("companyCINNumber");
                 password = map.get("password");
                 profile = map.get("profilePhoto");
+                Log.d(TAG,"profile..."+profile);
                 providerNPI = map.get("providerNPIId");
                 providerName = map.get("providerName");
                 notification = map.get("pushNotificationId");
@@ -190,10 +193,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 compEmployee = editEmployeeId.getText().toString().trim();
                 compDesignation = editDesignation.getText().toString().trim();
                 boolean valid = true;
-                if (!isValidEmail(compEmail)) {
-                    editEmail.setError("Invalid Email");
-                    valid = false;
-                }
+
                 if (compFirstName.isEmpty()) {
                     editFirstName.setError("First name is required");
                     valid = false;
@@ -219,12 +219,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     editLastName.setError(null);
                 }
 
-                if (compCompany.isEmpty() || compCompany.length() < 2) {
-                    editCompanyName.setError("Provider Name is invalid");
-                    valid = false;
-                } else {
-                    editCompanyName.setError(null);
-                }
                 if (compEmployee.isEmpty()) {
                     editEmployeeId.setError("Employee Id is required");
                     valid = false;
@@ -256,13 +250,13 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
-    private boolean isValidEmail(String compEmailtxts) {
+    /*private boolean isValidEmail(String compEmailtxts) {
         String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(compEmailtxts);
         return matcher.matches();
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -493,12 +487,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }else  if(loginRole.matches("root") && auth.matches("1")) {
                 Intent intent = new Intent(getActivity(), RootHomeActivity.class);
                 startActivity(intent);
-            }else if(!auth.matches("1")){
+            }else if(!auth.matches("1") && (loginRole.matches("root")|| loginRole.matches("admin") || loginRole.matches("user"))){
                 Intent intent = new Intent(getActivity(), NotAcceptedUser.class);
                 startActivity(intent);
             }
         } else {
-            Toast.makeText(getActivity(), "profile not successfuly updated!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "profile not successfully updated!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
             startActivity(intent);
         }
@@ -517,11 +511,13 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref1.getString("isOnline", "");
+        loginMail = pref1.getString("loginMail","");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+           // String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -534,12 +530,14 @@ public class EditProfileActivity extends AppCompatActivity {
     protected  void onResume(){
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref1.getString("isOnline", "");
+        loginMail = pref1.getString("loginMail","");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+           // String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             onlineReenter.put("onlineUser", logged.getEmail());

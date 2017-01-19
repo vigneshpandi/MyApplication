@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -53,6 +54,7 @@ public class AddRootActivity extends AppCompatActivity {
     private Uri downloadUrl;
     private EditText addRootEmailId, addRootPassword;
     private Button addRootBtn;
+    String addEmailId;
     private String senderID,isOnline,password,passRandomValue;
     private User empInfos = new User();
     private StorageReference mStorage;
@@ -65,6 +67,7 @@ public class AddRootActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_root);
         init();
+        mStorage = FirebaseStorage.getInstance().getReference();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -96,7 +99,7 @@ public class AddRootActivity extends AppCompatActivity {
                 }
             }
             private boolean validate() {
-                String addEmailId = addRootEmailId.getText().toString().trim();
+                addEmailId = addRootEmailId.getText().toString().trim();
                 boolean valid = true;
                 if(!isValidEmail(addEmailId)){
                     addRootEmailId.setError("Invalid Email");
@@ -126,7 +129,7 @@ public class AddRootActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    entryAuth();
+                    saveImage();
                 } else {
                     // Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
                     Log.d("already exist","already exist");
@@ -168,7 +171,7 @@ public class AddRootActivity extends AppCompatActivity {
         user.setSenderId(randomValue);
         user.setProviderName("");
         user.setProviderNPIId("");
-        user.setProfilePjhoto("");
+        user.setProfilePjhoto(String.valueOf(downloadUrl));
         Calendar c = Calendar.getInstance();
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -202,20 +205,23 @@ public class AddRootActivity extends AppCompatActivity {
         }
     }
     private void saveImage() {
-        final  String reArrangeEmailId = addRootEmailId.getText().toString().replace(".", "-");
+        final  String reArrangeEmailId = addEmailId.replace(".", "-");
+        Log.d(TAG,"reArrangeEmailId...."+reArrangeEmailId);
         Uri uri = Uri.parse("android.resource://com.bluemapletech.hippatextapp/" + R.drawable.user);
         StorageReference filePath = mStorage.child(reArrangeEmailId);
+        Log.d(TAG,"filePath.."+filePath.toString());
         filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                Log.d(TAG,"success..");
                 Log.d(TAG,"downloadUrl"+downloadUrl);
                 entryAuth();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Log.d(TAG,"failure..");
             }
         });
     }

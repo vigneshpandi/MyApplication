@@ -33,28 +33,6 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="Chat"
-        android:background="@color/accept_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:id="@+id/chat_btn"
-        android:textColor="@color/btn_text_color"
-        android:layout_below="@+id/reject_btn"
-        android:layout_alignLeft="@+id/reject_btn"
-        android:layout_alignStart="@+id/reject_btn"
-        android:layout_marginBottom="10dp"/>
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/root_name"
-        android:gravity="left"
-        android:layout_below="@+id/reject_btn"
-        android:layout_alignLeft="@+id/root_mail"
-        android:layout_alignStart="@+id/root_mail" />
-
-    <Button
         android:text="Reject"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
@@ -64,4 +42,27 @@
         android:layout_alignTop="@+id/root_mail"
         android:layout_alignLeft="@+id/accept_root"
         android:layout_alignStart="@+id/accept_root" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/root_name"
+        android:gravity="left"
+        android:layout_alignTop="@+id/chat_btn"
+        android:layout_alignLeft="@+id/root_mail"
+        android:layout_alignStart="@+id/root_mail" />
+
+    <Button
+        android:text="Chat"
+        android:background="@color/accept_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/chat_btn"
+        android:textColor="@color/btn_text_color"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/reject_btn"
+        android:layout_alignLeft="@+id/reject_btn"
+        android:layout_alignStart="@+id/reject_btn"
+        android:layout_marginBottom="10dp"/>
 </RelativeLayout>

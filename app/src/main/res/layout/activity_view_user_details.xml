@@ -20,14 +20,15 @@
         app:subtitleTextColor="@color/btn_text_color"
         android:background="@color/colorPrimary"
         layout="@layout/toolbar_header" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_marginTop="30dp"
             android:orientation="vertical">
 
@@ -36,124 +37,100 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/layout_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="provider Email Id:"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
+                    android:text="provider Email Id  :"/>
 
                 <TextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:layout_marginLeft="4dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="12dp"
-                android:gravity="center">
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/layout_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TIN/EIN Number:"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:gravity="center"/>
+                    android:text="TIN/EIN Number  :"/>
 
                 <TextView
                     android:id="@+id/employee_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"/>
+                    android:text="TextView"
+                    android:layout_marginLeft="4dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="23dp"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/layout_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Company Name:"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
+                    android:text="Company Name   :"/>
 
                 <TextView
                     android:id="@+id/comp_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="4dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginRight="2dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/provider_npi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Provider NPI Id:"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
+                    android:text="Provider NPI Id    :"/>
 
                 <TextView
                     android:id="@+id/provider_npi_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:layout_marginLeft="2dp"/>
+                    android:layout_marginLeft="4dp"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginRight="2dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:layout_marginBottom="10dp">
 
                 <TextView
                     android:id="@+id/provider_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Provider Name:"
-                    android:layout_gravity="center"
-                    android:gravity="center"/>
+                    android:text="Provider Name    :"/>
 
                 <TextView
                     android:id="@+id/provider_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:layout_marginLeft="3dp"/>
+                    android:layout_marginLeft="4dp"/>
 
             </LinearLayout>
 

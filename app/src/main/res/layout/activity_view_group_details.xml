@@ -41,6 +41,7 @@ android:orientation="vertical"
        android:layout_marginLeft="28dp"
        android:layout_marginStart="35dp"
        android:layout_marginTop="220dp"
+       android:textColor="#ffffff"
        android:id="@+id/group_name" />
 
    <ImageView
