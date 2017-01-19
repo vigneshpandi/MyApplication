@@ -114,7 +114,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 } else{
                     Log.d(TAG, "Company registered successfully!");
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setTitle("Conform your Email Address");
+                    dialog.setTitle("Confirm your Email Address");
                     // Setting Icon to Dialog
                     dialog.setIcon(R.mipmap.ic_launcher);
                     dialog.setMessage("Are you sure do you want to use this email address " + compEmailtxt.getText());

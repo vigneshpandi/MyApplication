@@ -192,6 +192,8 @@ public class LoginActivity extends AppCompatActivity {
                     String Password = map.get("password");
                     isOnlineChecking = map.get("showOnline");
                     loginsenderId = map.get("senderId");
+                    String firstName = map.get("firstName");
+                    String lastName = map.get("lastName");
                     String text = null;
                     if (Password != null && !Password.matches("")) {
                         byte[] dataPass = Base64.decode(userChatPin, Base64.NO_WRAP);
@@ -233,6 +235,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("auth", auth);
                     editor.putString("isOnline", isOnlineChecking);
                     editor.putString("senderId", loginsenderId);
+                    editor.putString("firstName",firstName);
+                    editor.putString("lastName",lastName);
                     editor.commit();
 
                     Log.d(TAG, "Logged in user information's:");

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,8 +31,9 @@ public class NotAcceptedUser extends AppCompatActivity {
     public static final String NotAcceptUser = "NotAcceptUser";
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    String loginroleValue;
-    String roleVal;
+    String loginroleValue,firstName,lastName;
+    String roleVal,loginAuth;
+    String name = "";
     private String loginMail,underProcess,isOnline,loginEmailId;
     private String[] userEmail;
     private FirebaseAuth firebaseAuth;
@@ -51,8 +53,36 @@ public class NotAcceptedUser extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginroleValue =  pref.getString("role", "");
         loginEmailId = pref.getString("loginMail","");
-        userEmail = loginEmailId.split("@");
-        underProcess.setText("Welcome,'"+userEmail[0]+"'\n Your account is under process!");
+        firstName = pref.getString("firstName","");
+        lastName = pref.getString("lastName","");
+        loginAuth = pref.getString("auth","");
+       // userEmail = loginEmailId.split("@");
+        if(firstName.matches("")){
+            if(lastName.matches("")){
+                String[] valueuserName = loginEmailId.split("@");
+                name = valueuserName[0];
+                Log.d(TAG,"firstname mail value.."+name);
+                Log.d(TAG,"mail value.."+valueuserName[0]);
+            }else {
+                name = lastName;
+                Log.d(TAG,"first name is last.."+name);
+            }
+        }else{
+           name = firstName;
+            Log.d(TAG,"first name is not empty.."+firstName);
+            //companyName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        }
+        Log.d(TAG,"name..."+name);
+        if(loginAuth.matches("0")){
+            underProcess.setText("Welcome, " +name+".\n Your account is being verified, you will receive an email after processing is complete.");
+        }
+        if(loginAuth.matches("2")){
+            underProcess.setText("Welcome, " +name+".\n Your account is put to pending, you will receive an email after processing is complete.");
+        }
+        if(loginAuth.matches("3")){
+            underProcess.setText("Welcome, " +name+".\n Your account is being rejected, you will receive an email after processing is complete.");
+        }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
