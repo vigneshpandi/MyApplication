@@ -73,7 +73,7 @@ android:orientation="vertical"
        android:layout_alignParentTop="true" />
         <TextView
             android:text="Exit group"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textColor="#F44336"
             android:layout_toRightOf="@+id/exit_img"
             android:layout_width="wrap_content"
