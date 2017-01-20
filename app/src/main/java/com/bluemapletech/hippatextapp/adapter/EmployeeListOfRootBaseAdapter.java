@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +26,6 @@ import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.bluemapletech.hippatextapp.utils.MailSender;
 
-import org.w3c.dom.Text;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +131,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());
                                 context.startActivity(intent);
                             } else {
-                                Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -179,7 +175,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                     intent.putExtra(lastName, userInfo.get(position).getLastName());
                                     context.startActivity(intent);
                                 } else {
-                                    Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -212,7 +208,7 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                                     intent.putExtra(lastName, userInfo.get(position).getLastName());
                                     context.startActivity(intent);
                                 } else {
-                                    Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

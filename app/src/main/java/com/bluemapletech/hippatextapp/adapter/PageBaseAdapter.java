@@ -69,7 +69,7 @@ public class PageBaseAdapter extends BaseAdapter {
         }
 
         final User info = getItem(position);
-        mViewHolder.fieldId.setText(info.getTINorEIN());
+        mViewHolder.fieldId.setText(info.getUserName());
         mViewHolder.fieldName.setText(info.getCompanyName());
 
         convertView.findViewById(R.id.accept_btn).setOnClickListener(new View.OnClickListener() {

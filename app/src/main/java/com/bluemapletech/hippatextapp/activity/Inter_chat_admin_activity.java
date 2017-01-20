@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -19,15 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.adapter.EmployeeListOfRootBaseAdapter;
-import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
-import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,9 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -219,7 +212,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
                                 intent.putExtra(role,userInfo.get(position).getRole());
                                 context.startActivity(intent);
                             } else {
-                                Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

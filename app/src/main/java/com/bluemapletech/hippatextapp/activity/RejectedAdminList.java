@@ -204,7 +204,7 @@ public class RejectedAdminList extends AppCompatActivity {
                                 intent.putExtra(lastName, userInfo.get(position).getLastName());
                                 context.startActivity(intent);
                             } else {
-                                Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

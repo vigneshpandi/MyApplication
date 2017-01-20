@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,24 +20,16 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity;
 import com.bluemapletech.hippatextapp.activity.ViewUserDetailTabActivity;
-import com.bluemapletech.hippatextapp.activity.ViewUserDetails;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Win7v5 on 10/24/2016.
@@ -160,7 +151,7 @@ convertView.findViewById(R.id.layout_field_id).setOnClickListener(new View.OnCli
                             intent.putExtra(role,userInfo.get(position).getRole());
                             context.startActivity(intent);
                         } else {
-                            Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

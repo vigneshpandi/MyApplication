@@ -4,18 +4,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.adapter.PageAdminBaseAdapter;
-import com.bluemapletech.hippatextapp.adapter.PageBaseAdapter;
 import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +31,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,7 +204,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                                     intent.putExtra(lastName, user1.getLastName());
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

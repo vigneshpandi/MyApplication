@@ -264,7 +264,7 @@ public class ViewUserDetails extends AppCompatActivity {
                                 intent.putExtra(lastName, user1.getLastName());
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Sorry! Chat pin does not match", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -407,7 +407,7 @@ public class ViewUserDetails extends AppCompatActivity {
                                 intent.putExtra(lastName, user1.getLastName());
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getActivity(), "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

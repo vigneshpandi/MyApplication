@@ -7,20 +7,17 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.activity.GroupMessageEmployeeActivity;
 import com.bluemapletech.hippatextapp.model.Groups;
-import com.squareup.picasso.Picasso;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -112,7 +109,7 @@ public class AdminGroupBaseAdapter extends BaseAdapter {
                             intent.putExtra(groupName,groupInfo.get(position).getGroupName());
                             context.startActivity(intent);
                         }else{
-                            Toast.makeText(context, "Chat pin is not match!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, " Sorry! Chat pin does not match!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
