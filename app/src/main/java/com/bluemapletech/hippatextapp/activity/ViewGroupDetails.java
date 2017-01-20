@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +76,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import static android.R.attr.bitmap;
 import static android.R.attr.value;
@@ -103,7 +105,9 @@ public class ViewGroupDetails extends AppCompatActivity {
     SharedPreferences pref;SharedPreferences.Editor editor;FirebaseUser logged;
     final private int SELECT_FILE = 1;final private int REQUEST_CAMERA = 2;
 
-
+    String loginMail,login_role;
+    SharedPreferences prefLogin;
+    SharedPreferences.Editor editorLogin;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
     String isOnline;
@@ -116,6 +120,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
         firebaseAuth = FirebaseAuth.getInstance();
         logged = firebaseAuth.getCurrentUser();
+        RelativeLayout exit=(RelativeLayout)findViewById(R.id.rel_lay_exit);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("");
@@ -126,6 +131,10 @@ public class ViewGroupDetails extends AppCompatActivity {
         /*
           values comes  from GroupMessageEmployeeActivity
          */
+        prefLogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   prefLogin.getString("loginMail","");
+        login_role = prefLogin.getString("role","");
+
         groupName = getIntent().getStringExtra(GroupMessageEmployeeActivity.groupNames);
 
         /*
@@ -139,10 +148,8 @@ public class ViewGroupDetails extends AppCompatActivity {
             editor.commit();
         }
         if (groupName == null || groupName.matches("")) {
-            Log.d(TAG, "inside groupName is null");
             pref = getSharedPreferences("MyPref", MODE_PRIVATE);
             groupName = pref.getString("groupNameValue", "");
-            Log.d("sdsdsdsd","sdsdsdIJJ"+groupName);
             loggedINEmail = pref.getString("loginMail", "");
         }
 
@@ -164,9 +171,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                     String groupEmailId = snapshot.child("groupEmailId").getValue(String.class);
                     String randomName = snapshot.child("randomName").getValue(String.class);
                     String admin = snapshot.child("admin").getValue(String.class);
-
-                    Log.d(TAG, "groupName is" + groupName);
-
                     if(groupName != null){
                         if (groupValues.matches(groupName)) {
                             group.setAdmin(admin);
@@ -188,6 +192,26 @@ public class ViewGroupDetails extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogs = new AlertDialog.Builder(ViewGroupDetails.this);
+                alertDialogs.setMessage("Exit group?");
+                alertDialogs.setPositiveButton("CANCEL",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                alertDialogs.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG,"exit from the group"+group.toString());
+                     exitGroup(group);
+                    }
+                });
+                alertDialogs.show();
             }
         });
         groupNameEdit.setOnClickListener(new View.OnClickListener() {
@@ -526,16 +550,19 @@ public class ViewGroupDetails extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-                groupValue.setStatus(map.get("status"));
-                groupValue.setRandomName(map.get("randomName"));
-                groupValue.setGroupName(map.get("groupName"));
-                groupValue.setGroupImage(map.get("groupImage"));
-                groupValue.setGroupEmailId(map.get("groupEmailId"));
-                groupValue.setAdmin(map.get("admin"));
-                groupObj.add(groupValue);
-                if (getActivity() != null) {
-                    iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, logged.getEmail()));
+                if(map!=null){
+                    groupValue.setStatus(map.get("status"));
+                    groupValue.setRandomName(map.get("randomName"));
+                    groupValue.setGroupName(map.get("groupName"));
+                    groupValue.setGroupImage(map.get("groupImage"));
+                    groupValue.setGroupEmailId(map.get("groupEmailId"));
+                    groupValue.setAdmin(map.get("admin"));
+                    groupObj.add(groupValue);
+                    if (getActivity() != null) {
+                        iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, logged.getEmail()));
+                    }
                 }
+
             }
 
             @Override
@@ -689,9 +716,43 @@ public class ViewGroupDetails extends AppCompatActivity {
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
+
+    public void exitGroup(Groups group){
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        String reArrangeEmail = loginMail.replace(".", "-");
+        String[] groupUsers = group.getGroupEmailId().split(";");
+        String newGroup = null;
+        for (int s = 0; s < groupUsers.length; s++) {
+            if(!loginMail.matches(groupUsers[s])) {
+                if(newGroup == null){
+                    newGroup =  groupUsers[s];
+                } else {
+                    newGroup =  newGroup +";"+groupUsers[s];
+                }
+                reArrangeEmailId = groupUsers[s].replace(".", "-");
+                fireBaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupEmailId");
+                dataReference.setValue(newGroup);
+            }
+        }
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        reArrangeEmail =  loginMail.replace(".","-");
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(group.getRandomName());
+        dataReferences.removeValue();
+        if(login_role.matches("root")){
+            Intent redirect = new Intent(getActivity(), RootHomeActivity.class);
+            startActivity(redirect);
+        }else if(login_role.matches("admin")){
+            Intent redirect = new Intent(getActivity(), AdminHomeActivity.class); startActivity(redirect);
+        }else if (login_role.matches("user")){
+            Intent redirect = new Intent(getActivity(), EmployeeHomeActivity.class); startActivity(redirect);
+        }
+
+
+    }
+
     public ViewGroupDetails getActivity() {
         return this;
     }
-
 
 }

@@ -6,7 +6,8 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails">
+    tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails"
+    android:weightSum="1">
 <!--    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_header"
         android:layout_width="match_parent"
@@ -59,6 +60,23 @@ android:orientation="vertical"
    <ListView
        android:id="@+id/group_user"
        android:layout_width="fill_parent"
-       android:layout_height="match_parent"></ListView>
+       android:layout_height="173dp"
+       android:layout_weight="0.67"></ListView>
 
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="30dp"
+        android:id="@+id/rel_lay_exit">
+   <ImageView
+       android:layout_width="80dp"
+       android:layout_height="match_parent"
+       android:src="@drawable/exit"
+       android:id="@+id/exit_img"
+       android:layout_alignParentTop="true" />
+        <TextView
+            android:text="Exit group"
+            android:textSize="20dp"
+            android:textColor="#F44336"
+            android:layout_toRightOf="@+id/exit_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+</RelativeLayout>
 </LinearLayout>

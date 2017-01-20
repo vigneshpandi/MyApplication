@@ -170,8 +170,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
-                groupName = map.get("groupName");
-                getSupportActionBar().setTitle(groupName);
+                if(map != null){
+                    groupName = map.get("groupName");
+                    getSupportActionBar().setTitle(groupName);
+                }
+
             }
 
             @Override
