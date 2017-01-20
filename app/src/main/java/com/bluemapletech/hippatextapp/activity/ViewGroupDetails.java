@@ -91,7 +91,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     Groups group = new Groups(); Map<String, String> maps = new HashMap<String, String>();
     List<Groups> groupObj = new ArrayList<Groups>(); List<Groups> groupObjs = new ArrayList<Groups>();
     ImageView viewImage;ImageView backPageArrow;
-     ImageView displayImage;ImageView showImage;
+    ImageView displayImage;ImageView showImage;
     Uri value, downloadUrl;
     private Toolbar toolbar;private Toolbar toolbars;
     private int l = 0;  private int k = 0;
@@ -158,6 +158,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                groupObj = new ArrayList<Groups>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     groupValues = snapshot.child("groupName").getValue(String.class);
                     String groupEmailId = snapshot.child("groupEmailId").getValue(String.class);
@@ -167,14 +168,14 @@ public class ViewGroupDetails extends AppCompatActivity {
                     Log.d(TAG, "groupName is" + groupName);
 
                     if(groupName != null){
-                    if (groupValues.matches(groupName)) {
-                        group.setAdmin(admin);
-                        group.setGroupEmailId(groupEmailId);
-                        group.setGroupImage(snapshot.child("groupImage").getValue(String.class));
-                        group.setRandomName(randomName);
-                        group.setGroupName(groupValues);
-                        Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(viewImage);
-                    }}
+                        if (groupValues.matches(groupName)) {
+                            group.setAdmin(admin);
+                            group.setGroupEmailId(groupEmailId);
+                            group.setGroupImage(snapshot.child("groupImage").getValue(String.class));
+                            group.setRandomName(randomName);
+                            group.setGroupName(groupValues);
+                            Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(viewImage);
+                        }}
                 }
                 separated = group.getGroupEmailId().split(";");
                 for (int i = 0; i < separated.length; i++) {
@@ -311,9 +312,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 saveProfileImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d(TAG,"save group profile1");
                         Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
-                        Log.d(TAG,"save group profile2");
                         if (bitmap != null) {
                             try {
                                 String root = Environment.getExternalStorageDirectory().toString();
@@ -336,7 +335,27 @@ public class ViewGroupDetails extends AppCompatActivity {
                         }
                     }
                 });
+
+                // dialog box back key button
+                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                    @Override
+                    public boolean onKey(DialogInterface arg0, int keyCode,
+                                         KeyEvent event) {
+                        // TODO Auto-generated method stub
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            groupName = getIntent().getStringExtra(SelectUser.groupNames);
+                            Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
+                            startActivity(intent);
+                        }
+                        return true;
+                    }
+                });
+
+
+
             }
+
         });
     }
 
@@ -364,26 +383,6 @@ public class ViewGroupDetails extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
-        /*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        assert thumbnail != null : "Image Could not be set!";
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        displayImage.setImageBitmap(thumbnail);
-        base64Profile = bitmapToBase64(thumbnail);
-        value = data.getData();
-        saveImage();*/
-        Log.v(TAG,"data extracs "+data.getExtras().get("data"));
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         assert thumbnail != null:"Image Could not be set!";
@@ -391,7 +390,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
         FileOutputStream fo;
-        Log.d(TAG,"thumbmail.."+thumbnail);
         try {
             destination.createNewFile();
             fo = new FileOutputStream(destination);
@@ -399,9 +397,7 @@ public class ViewGroupDetails extends AppCompatActivity {
             fo.close();
             displayImage.setImageBitmap(thumbnail);
             base64Profile = bitmapToBase64(thumbnail);
-            Log.v(TAG,"data extracs1= "+data.getExtras().get("data"));
             value = getImageUri(getApplicationContext(), thumbnail);
-            Log.d(TAG,"value == .."+value);
             saveImage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -423,38 +419,23 @@ public class ViewGroupDetails extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        displayImage.setImageBitmap(bm);
-        base64Profile = bitmapToBase64(bm);
+        displayImage.setImageBitmap(getResizedBitmap(bm,500));
+        base64Profile = bitmapToBase64(getResizedBitmap(bm,500));
         value = data.getData();
         saveImage();
     }
-   /* public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-                matrix, false);
-        return resizedBitmap;
-    }*/
+
     private void saveImage() {
         final EmployeeDao empDao = new EmployeeDao();
         random = new SecureRandom();
         senderID = new BigInteger(130, random).toString(32);
         String randomValue = senderID.substring(0, 7);
-        Log.d("randomValue", randomValue);
         mStorage = FirebaseStorage.getInstance().getReference();
-        Log.d(TAG, "R.drawable.groupimage..." + R.drawable.groupimage + group.getRandomName());
         StorageReference filePath = mStorage.child(groupName + senderID);
-        Log.d(TAG, "value...value.." + value);
         filePath.putFile(value).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                Log.d(TAG, "downloadUrl " + downloadUrl);
-                Log.d(TAG, "group.getGroupEmailId()....." + group.getGroupEmailId());
                 String[] valueuserName = group.getGroupEmailId().split(";");
                 for (int p = 0; p < valueuserName.length; p++) {
                     reArrangeEmailId = valueuserName[p].replace(".", "-");
@@ -462,7 +443,6 @@ public class ViewGroupDetails extends AppCompatActivity {
                     DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupImage");
                     String valuesd = String.valueOf(downloadUrl);
                     dataReference.setValue(valuesd);
-
                 }
 
             }
@@ -492,7 +472,6 @@ public class ViewGroupDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.add_admin_group_menu) {
-            Log.d(TAG, "groupDetails" + group);
             Intent intent = new Intent(getActivity(), SelectUser.class);
             Bundle b = new Bundle();
             b.putSerializable("groupDetails", group);
@@ -695,6 +674,20 @@ public class ViewGroupDetails extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
+    }
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
     public ViewGroupDetails getActivity() {
         return this;

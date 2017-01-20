@@ -15,6 +15,7 @@
         android:layout_alignLeft="@+id/accept_btn"
         android:layout_alignStart="@+id/accept_btn"
         android:layout_marginTop="7dp"
+        android:textAppearance="@style/appFont"
         android:layout_marginBottom="10dp"/>
 
     <TextView
@@ -52,6 +53,7 @@
         android:textColor="@color/btn_text_color"
         android:layout_marginRight="19dp"
         android:layout_marginEnd="19dp"
+        android:textAppearance="@style/appFont"
         android:layout_alignBottom="@+id/layout_field_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

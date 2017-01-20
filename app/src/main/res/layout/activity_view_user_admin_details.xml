@@ -127,6 +127,7 @@
             android:text="Chat"
             android:background="#34bf49"
             android:textColor="#ffffff"
+            android:textAppearance="@style/appFont"
             android:layout_marginBottom="10dp"/>
 
 

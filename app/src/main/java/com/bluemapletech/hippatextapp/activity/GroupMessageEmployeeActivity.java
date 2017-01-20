@@ -79,7 +79,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         final private int REQUEST_CAMERA = 2;
         private String base64Profile;
         private  String reArrangeEmail;
-        private String role,login_role;
+        private String role,login_role,logn_senderId;
         private FirebaseAuth firebaseAuthRef;
         private String groupName,loginRoleValue;
     private  LinearLayout layout;
@@ -104,6 +104,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             setContentView(R.layout.activity_group_message_employee);
             prefss = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
             login_role =  prefss.getString("role", "");
+            logn_senderId = prefss.getString("senderId","");
             layout = (LinearLayout) findViewById(R.id.activity_group_chat_employee);
             fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
@@ -139,8 +140,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             String[] ids = {fromMails};
             Arrays.sort(ids);
             mConvoId = ids[0];
-            Log.d("mConvoId",mConvoId);
-            mListener = GroupMessageDao.addMessagesListener(randomValue, this);
+            mListener = GroupMessageDao.addMessagesListener(randomValue,logn_senderId, this);
             init();
 
         }
@@ -272,11 +272,9 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     e.printStackTrace();
                 }
                 if(formattedDate.matches(d2)){
-                    Log.d(TAG,"today"+"today");
                     msg_date = "Today";
 
                 }else if(yest_date.matches(d2)){
-                    Log.d(TAG,"yesterday"+"yesterday");
                     msg_date = "Yesterday";
                 }else{
                     msg_date = val;
@@ -399,6 +397,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wallpaperImage = true;
                 chooseImage();
             }
         });
@@ -486,7 +485,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 e.printStackTrace();
             }
         }
-        base64Profile = bitmapToBase64(bm);
+        base64Profile = bitmapToBase64(getResizedBitmap(bm,500));
         if(wallpaperImage!=true){
             saveMessages();
         }else if(wallpaperImage==true){
@@ -561,11 +560,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             alert.setMessage("Delete message?");
             alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
+                    message.setLoginSenderId(logn_senderId);
             UserDao.deleteGroupChatMessage(message,randomValue);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
             startActivity(getIntent());
                 }
-
             });
             alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
@@ -660,6 +659,21 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
     public GroupMessageEmployeeActivity getActivity() {
         return this;

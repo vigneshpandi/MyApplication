@@ -67,7 +67,8 @@
                 android:background="@color/btn_color"
                 android:text="Add Admin"
                 android:textAppearance="@style/appFont"
-                android:textColor="@color/btn_text_color" />
+                android:textColor="@color/btn_text_color"
+                />
 
 
 

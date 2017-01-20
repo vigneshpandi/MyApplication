@@ -36,7 +36,7 @@ public class GroupMessageDao {
     private static final FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
     private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
 
-    private static String convIds;
+    private static String convIds,loginSenderId;
     private FirebaseDatabase firebaseDatabaseRef;
     private static final String TAG = GroupMessageDao.class.getCanonicalName();
     DatabaseReference databaseRef;
@@ -65,6 +65,7 @@ public class GroupMessageDao {
         msg.put("tochatemail",message.getToChatEmail());
         msg.put("image",message.getImage());
         msg.put("dateandtime",dateValue);
+        msg.put("isDeletedBy","");
         msg.put("senderId",message.getSenderId());
         DatabaseReference value = sRef.child("groupmessage").child("message").child(message.getRandomValue()).child("message").push();
         String urlValue = value.toString();
@@ -90,9 +91,10 @@ public class GroupMessageDao {
             });
         }
     }
-    public static GroupMessageDao.MessagesListener addMessagesListener(String convoId, final GroupMessageDao.MessagesCallbacks callbacks){
+    public static GroupMessageDao.MessagesListener addMessagesListener(String convoId,String login_sender_id, final GroupMessageDao.MessagesCallbacks callbacks){
         GroupMessageDao.MessagesListener listener = new GroupMessageDao.MessagesListener(callbacks);
         sRef.child("groupmessage").child("message").child(convoId).child("message").addChildEventListener(listener);
+        loginSenderId = login_sender_id;
         return listener;
     }
 
@@ -110,24 +112,32 @@ public class GroupMessageDao {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Map<String,String> msg = (Map)dataSnapshot.getValue();
-            Message message = new Message();
-            message.setMsender(msg.get("email"));
-            message.setSenderId(msg.get("senderId"));
-            String srt = msg.get("text");
-            message.setImage(msg.get("image"));
-            message.setChildappendid(msg.get("childByAppendId"));
-            byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
-            String text = null;
-            try {
-                text = new String(data1, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            String del_user = msg.get("isDeletedBy");
+            HashMap<String, String> hm = new HashMap<String, String>();
+            String del[] = del_user.split(";");
+            for(int i=0;i< del.length;i++){
+                hm.put(del[i],del[i]);
             }
+            if(hm.get(loginSenderId) == null) {
+                Message message = new Message();
+                message.setMsender(msg.get("email"));
+                message.setSenderId(msg.get("senderId"));
+                String srt = msg.get("text");
+                message.setImage(msg.get("image"));
+                message.setChildappendid(msg.get("childByAppendId"));
+                byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
+                String text = null;
+                try {
+                    text = new String(data1, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
 
-            message.setMtext(text);
-            message.setDateAndTime(msg.get("dateandtime"));
-            if(callbacks != null){
-                callbacks.onMessageAdded(message);
+                message.setMtext(text);
+                message.setDateAndTime(msg.get("dateandtime"));
+                if (callbacks != null) {
+                    callbacks.onMessageAdded(message);
+                }
             }
         }
 

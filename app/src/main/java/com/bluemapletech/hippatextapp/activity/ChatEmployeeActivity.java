@@ -87,9 +87,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
     boolean wallpaperimage = false;
-    private String roleValue;
+    private String roleValue,logn_senderId;
     EditText newMessageView;
-    String newMessage;
+    String newMessage = null;
     HashMap<String,String> onlineHash = new HashMap<String,String>();
     ImageView imageView;
     @Override
@@ -128,6 +128,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         roleValue =  pref.getString("role", "");
         loginRole = pref.getString("role","");
         loginAuth = pref.getString("auth","");
+        logn_senderId = pref.getString("senderId","");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             String[] chatName = toMail.split("@");
@@ -142,7 +143,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         String[] ids = {toMails,"+", fromMails};
         Arrays.sort(ids);
         mConvoId = ids[1]+ids[0]+ids[2];
-        mListener = UserDao.addMessagesListener(mConvoId, this);
+        mListener = UserDao.addMessagesListener(mConvoId,logn_senderId, this);
 
 
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
@@ -174,14 +175,12 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"destroygggg");
         UserDao.stop(mListener);
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG,"stoppp");
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
@@ -226,6 +225,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wallpaperimage = false;
                 chooseImage();
             }
         });
@@ -244,17 +244,16 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             convertView = super.getView(position, convertView, parent);
             message = getItem(position);
             childappendid = message.getChildappendid();
-            Log.d(TAG,"childappendid..."+childappendid);
             TextView nameView = (TextView)convertView.findViewById(R.id.msg);
             nameView.setText(message.getMtext());
             TextView userFirstAndLastName = (TextView) convertView.findViewById(R.id.user_name);
             TextView dateTime = (TextView) convertView.findViewById(R.id.date_time);
-             imageView = (ImageView) convertView.findViewById(R.id.image);
+            imageView = (ImageView) convertView.findViewById(R.id.image);
             if(message.getImage()!=null && !message.getImage().matches("")) {
                 String images = message.getImage();
                 byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 350, 350, false));
+                imageView.setImageBitmap(Bitmap.createScaledBitmap(decodedByte, 250, 250, false));
             }
            /* ViewTreeObserver vto = imageView.getViewTreeObserver();
             vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -442,8 +441,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-
-
     public void chooseImage (){
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
@@ -531,7 +528,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 e.printStackTrace();
             }
         }
-        base64Profile = bitmapToBase64(bm);
+        base64Profile = bitmapToBase64(getResizedBitmap(bm,500));
+
         if(wallpaperimage!=true){
             Log.d(TAG,"not a wallpaper");
             saveMessages();
@@ -540,14 +538,25 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
-
         }
-        imageView.setImageBitmap(bm);
+        //imageView.setImageBitmap(bm);
+    }
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
 
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-
-    /*public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+   /* public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -557,13 +566,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
                 matrix, false);
         return resizedBitmap;
-    }*/
-
+    }
+*/
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-       String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
         if(wallpaperimage==true){
             editors = prefs.edit();
             editors.putString("backgroundImage", val);
@@ -572,22 +581,26 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         return val;
     }
     public void saveMessages (){
-         newMessage = newMessageView.getText().toString();
+        newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
-        Message msg = new Message();
-        msg.setMtext(newMessage);
-        msg.setMsender(fromMail);
-        msg.setToChatEmail(toMail);
-        msg.setSenderId(senderId);
-        msg.setPushNotificationId(notificationId);
-        if(base64Profile!=null && newMessage != null) {
-            msg.setImage(base64Profile);
-            newMessage = "";
-        }else{
-            msg.setImage("");
+            Message msg = new Message();
+            msg.setMtext(newMessage);
+            msg.setMsender(fromMail);
+            msg.setToChatEmail(toMail);
+            msg.setSenderId(senderId);
+            msg.setPushNotificationId(notificationId);
+            if (base64Profile != null && newMessage != null) {
+                msg.setImage(base64Profile);
+                newMessage = "";
+            } else {
+                msg.setImage("");
+            }
+        if(!msg.getMtext().matches("") || !msg.getImage().matches("")){
+            UserDao.saveMessage(msg, mConvoId);
         }
-        UserDao.saveMessage(msg, mConvoId);
-        base64Profile ="";
+
+            base64Profile = "";
+
     }
 
     @Override
@@ -633,15 +646,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             alert.setMessage("Delete message?");
             alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-
-                    Log.d(TAG, "mConvoId...." + mConvoId);
+                    message.setLoginSenderId(logn_senderId);
                     UserDao.deleteChatMessage(message, mConvoId);
                     toolbar.getMenu().findItem(R.id.delete).setVisible(false);
                    /* mListener = UserDao.addMessagesListener(mConvoId, getActivity());
                     mMessages = new ArrayList<>();
                     mAdapter = new MessagesAdapter(mMessages);
                     mListView.setAdapter(mAdapter);*/
-                   startActivity(getIntent());
+                    startActivity(getIntent());
                 }
 
             });
@@ -698,13 +710,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-public void noWallpaper(){
-    layout.setBackgroundResource(0);
-    SharedPreferences preferencess = getSharedPreferences("myBackgroundImage", 0);
-    SharedPreferences.Editor editors = preferencess.edit();
-    editors.clear();
-    editors.commit();
-}
+    public void noWallpaper(){
+        layout.setBackgroundResource(0);
+        SharedPreferences preferencess = getSharedPreferences("myBackgroundImage", 0);
+        SharedPreferences.Editor editors = preferencess.edit();
+        editors.clear();
+        editors.commit();
+    }
     public void checkOnlineUser(){
         String reArrangeEmail = toMail.replace(".", "-");
         fireBaseDatabase = FirebaseDatabase.getInstance();

@@ -39,11 +39,12 @@ import java.util.Map;
 public class UserDao {
     private static final FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
     private static final DatabaseReference sRef = mfireBaseDatabase.getReference();
-
-    private static String convIds;
+   private static  String del_Id,all_del_user;
+    private static String convIds,loginSenderId;
     private static FirebaseDatabase firebaseDatabaseRef;
     private static DatabaseReference databaseRef;
     private static final String TAG = UserDao.class.getCanonicalName();
+    HashMap<String, String> hm = new HashMap<String, String>();
     public boolean createEmployee(User user){
         boolean success = false;
         Log.d(TAG, "Create employee dao method has been called!");
@@ -159,6 +160,7 @@ public class UserDao {
 
 
     public static void saveMessage(Message message, String convoId){
+        Log.d(TAG,"messageee"+message.toString());
         boolean success = false;
         String  TextMessage = message.getMtext();
         byte[] data = new byte[0];
@@ -187,6 +189,7 @@ public class UserDao {
         msg.put("dateandtime",dateValue);
         msg.put("senderId",message.getSenderId());
         msg.put("image",message.getImage());
+        msg.put("isDeletedBy","");
         DatabaseReference value = sRef.child("messages").child(convIds).child("chat").push();
         String urlValue = value.toString();
         String[] re = urlValue.split("/");
@@ -196,8 +199,9 @@ public class UserDao {
         runner.execute(message.getPushNotificationId(),message.getMtext());
     }
 
-    public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
+    public static MessagesListener addMessagesListener(String convoId,String login_sender_id, final MessagesCallbacks callbacks){
         MessagesListener listener = new MessagesListener(callbacks);
+        loginSenderId = login_sender_id;
         sRef.child("messages").child(convoId).child("chat").addChildEventListener(listener);
         return listener;
     }
@@ -229,20 +233,77 @@ public class UserDao {
         return true;
     }
 
-    public static void deleteChatMessage(Message message, String mConvoId) {
-        String childappendid =  message.getChildappendid();
+    public static void deleteChatMessage(final Message message, final String mConvoId) {
+       final  String childappendid =  message.getChildappendid();
+        Log.d(TAG,"childappendid"+childappendid);
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendid);
-        databaseRef.removeValue();
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> mapDel = (Map) dataSnapshot.getValue();
+                del_Id = (mapDel.get("isDeletedBy"));
+
+               /* del_Msg(message,mConvoId);*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+        if(del_Id!=null){
+            del_Id = del_Id +";"+ message.getLoginSenderId();
+        }else {
+            del_Id =  message.getLoginSenderId();
+        }
+        Log.d(TAG,"all_del_user inside "+del_Id);
+        del_Msg(message,mConvoId);
         return;
     }
+
+    private static void del_Msg(Message message, String mConvoId) {
+        Log.d(TAG,"static values method");
+        final  String childappendids =  message.getChildappendid();
+        databaseRef = firebaseDatabaseRef.getReference().child("messages").child(mConvoId).child("chat").child(childappendids).child("isDeletedBy");
+        databaseRef.setValue(del_Id);
+    }
+
 
     public static void deleteGroupChatMessage(Message message, String mConvoId) {
         String childappendid =  message.getChildappendid();
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child(mConvoId).child("message").child(childappendid);
-        databaseRef.removeValue();
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> mapDel = (Map) dataSnapshot.getValue();
+                del_Id = (mapDel.get("isDeletedBy"));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+        if(del_Id!=null){
+            del_Id = del_Id +";"+ message.getLoginSenderId();
+        }else {
+            del_Id =  message.getLoginSenderId();
+        }
+        Log.d(TAG,"all_del_user inside "+del_Id);
+        del_Gr_Msg(message,mConvoId);
         return;
+    }
+
+
+    private static void del_Gr_Msg(Message message, String mConvoId) {
+        Log.d(TAG,"static values method");
+        final  String childappendids =  message.getChildappendid();
+        databaseRef = firebaseDatabaseRef.getReference().child("groupmessage").child("message").child(mConvoId).child("message").child(childappendids).child("isDeletedBy");
+        databaseRef.setValue(del_Id);
     }
 
     public boolean isOnline(User user) {
@@ -263,24 +324,36 @@ public class UserDao {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Map<String,String> msg = (Map)dataSnapshot.getValue();
-            Message message = new Message();
-            message.setMsender(msg.get("email"));
-            String srt = msg.get("text");
-            message.setImage(msg.get("image"));
-            message.setChildappendid(msg.get("childappendid"));
-            byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
-            String text = null;
-            try {
-                text = new String(data1, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            HashMap<String, String> hm = new HashMap<String, String>();
+            String del_user = msg.get("isDeletedBy");
+            String sender_Id = msg.get("senderId");
+            String del[] = del_user.split(";");
+            for(int i=0;i< del.length;i++){
+                hm.put(del[i],del[i]);
+            }
+            if(hm.get(loginSenderId) == null){
+                Message message = new Message();
+                message.setMsender(msg.get("email"));
+                String srt = msg.get("text");
+                message.setImage(msg.get("image"));
+                message.setChildappendid(msg.get("childappendid"));
+                message.setSenderId(msg.get("senderId"));
+                byte[] data1 = Base64.decode(srt, Base64.NO_WRAP);
+                String text = null;
+                try {
+                    text = new String(data1, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                message.setMtext(text);
+                message.setDateAndTime(msg.get("dateandtime"));
+                if(callbacks != null){
+                    callbacks.onMessageAdded(message);
+                }
             }
 
-            message.setMtext(text);
-            message.setDateAndTime(msg.get("dateandtime"));
-            if(callbacks != null){
-                callbacks.onMessageAdded(message);
-            }
+
         }
 
         @Override
@@ -290,7 +363,7 @@ public class UserDao {
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
-           Log.d(TAG,"messagechild has been removed");
+
 
         }
 

@@ -134,6 +134,10 @@ public class CreateGroup extends AppCompatActivity {
                 iv.getChildAt(listPosition).setSelected(true);
             }
         });
+
+
+
+
     }
 
 
@@ -328,7 +332,7 @@ public class CreateGroup extends AppCompatActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-
+Log.d("sdsdsdsd","sdsdkdhskdhksjd11"+position);
             MyViewHolder mViewHolder  = null;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.employee_group_items, parent, false);

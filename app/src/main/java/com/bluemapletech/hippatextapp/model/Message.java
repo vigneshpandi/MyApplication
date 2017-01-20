@@ -19,7 +19,7 @@ public class Message {
     private String childappendid;
     private String dateAndTime;
     private String userName;
-
+    private String loginSenderId;
     public String getMtext() {
         return mtext;
     }
@@ -100,6 +100,18 @@ public class Message {
         this.userName = userName;
     }
 
+    public String getDateAndTime() {
+        return dateAndTime;
+    }
+
+    public String getLoginSenderId() {
+        return loginSenderId;
+    }
+
+    public void setLoginSenderId(String loginSenderId) {
+        this.loginSenderId = loginSenderId;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -113,6 +125,7 @@ public class Message {
                 ", childappendid='" + childappendid + '\'' +
                 ", dateAndTime='" + dateAndTime + '\'' +
                 ", userName='" + userName + '\'' +
+                ", loginSenderId='" + loginSenderId + '\'' +
                 '}';
     }
 }

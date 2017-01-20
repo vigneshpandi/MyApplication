@@ -126,7 +126,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Log.d(TAG, "logged....." + logged);
         if (loginMail != null) {
             Log.d("logged", loginMail.toString());
-            reArrangeEmail = loginMail.replace(".", "-");;
+            reArrangeEmail = loginMail.replace(".", "-");
         }
         databaseRef = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.addValueEventListener(new ValueEventListener() {
@@ -416,8 +416,8 @@ public class EditProfileActivity extends AppCompatActivity {
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                userImage.setImageBitmap(bm);
-                base64Profile = bitmapToBase64(bm);
+                userImage.setImageBitmap(getResizedBitmap(bm,500));
+                base64Profile = bitmapToBase64(getResizedBitmap(bm,500));
                 value = data.getData();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -545,7 +545,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         super.onResume();
     }
-    /*public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+   /* public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -556,6 +556,23 @@ public class EditProfileActivity extends AppCompatActivity {
                 matrix, false);
         return resizedBitmap;
     }*/
+
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public EditProfileActivity getActivity() {
         return this;
     }

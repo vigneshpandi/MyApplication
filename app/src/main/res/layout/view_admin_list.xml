@@ -38,6 +38,7 @@
         android:id="@+id/reject_btn"
         android:background="@color/cancel_btn"
         android:textColor="#ffffff"
+        android:textAppearance="@style/appFont"
         android:layout_alignTop="@+id/root_mail"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
