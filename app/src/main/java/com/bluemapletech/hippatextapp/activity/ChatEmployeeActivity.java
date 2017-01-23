@@ -79,7 +79,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     private static final String TAG = ChatEmployeeActivity.class.getCanonicalName();
     Message message;
 
-
+    private int delPosition;
     private Toolbar toolbar;
     private  LinearLayout layout;
     SharedPreferences pref;
@@ -420,7 +420,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public boolean onLongClick(View v) {
                     message = getItem(position);
-                    Log.d(TAG,"lonngpress"+"longPress");
+                    delPosition = position;
                     toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                     return true;
 
@@ -430,10 +430,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public boolean onLongClick(View v) {
                     message = getItem(position);
-                    Log.d(TAG,"lonngpress....1"+"longPress.....1");
+                    delPosition = position;
                     toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                     return false;
-
                 }
             });
             return convertView;
@@ -651,11 +650,13 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                     message.setLoginSenderId(logn_senderId);
                     UserDao.deleteChatMessage(message, mConvoId);
                     toolbar.getMenu().findItem(R.id.delete).setVisible(false);
-                   /* mListener = UserDao.addMessagesListener(mConvoId, getActivity());
-                    mMessages = new ArrayList<>();
+                    mMessages.remove(delPosition);
+                    mAdapter = new MessagesAdapter(mMessages);
+                    mListView.setAdapter(mAdapter);
+                   /* mMessages = new ArrayList<>();
                     mAdapter = new MessagesAdapter(mMessages);
                     mListView.setAdapter(mAdapter);*/
-                    startActivity(getIntent());
+                    //startActivity(getIntent());
                 }
 
             });

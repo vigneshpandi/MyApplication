@@ -131,12 +131,9 @@ public class CreateGroup extends AppCompatActivity {
                     hm.remove(userObj.get(position).getUserName());
                     iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.INVISIBLE);
                 }
-                iv.getChildAt(listPosition).setSelected(true);
+               iv.getChildAt(listPosition).setSelected(true);
             }
         });
-
-
-
 
     }
 
@@ -332,7 +329,6 @@ public class CreateGroup extends AppCompatActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-Log.d("sdsdsdsd","sdsdkdhskdhksjd11"+position);
             MyViewHolder mViewHolder  = null;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.employee_group_items, parent, false);
@@ -342,11 +338,17 @@ Log.d("sdsdsdsd","sdsdkdhskdhksjd11"+position);
             } else {
                 mViewHolder = (EmployeeCreateGroupBaseAdapter.MyViewHolder) convertView.getTag();
             }
+            final User info = getItem(position);
+            Set<String> keys1 = hm.keySet();
+        if(hm.get(info.getUserName()) != null){
+             View ticks = convertView.findViewById(R.id.tickIcon);
+            ticks.setVisibility(View.VISIBLE);
+        }else{
             View ticks = convertView.findViewById(R.id.tickIcon);
             ticks.setVisibility(View.INVISIBLE);
+        }
 
 
-            final User info = getItem(position);
             mViewHolder.fieldName.setText(info.getUserName());
             final View finalConvertView = convertView;
             selection = (ImageView)convertView.findViewById(R.id.tickIcon);

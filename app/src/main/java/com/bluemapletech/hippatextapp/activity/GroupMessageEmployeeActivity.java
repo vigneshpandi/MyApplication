@@ -82,6 +82,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         private String role,login_role,logn_senderId;
         private FirebaseAuth firebaseAuthRef;
         private String groupName,loginRoleValue;
+    private int delPosition;
     private  LinearLayout layout;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -373,6 +374,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     @Override
                     public boolean onLongClick(View v) {
                         message = getItem(position);
+                        delPosition = position;
                         toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                         return true;
 
@@ -382,6 +384,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     @Override
                     public boolean onLongClick(View v) {
                         message = getItem(position);
+                        delPosition = position;
                         toolbar.getMenu().findItem(R.id.delete).setVisible(true);
                         return false;
 
@@ -568,7 +571,10 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     message.setLoginSenderId(logn_senderId);
             UserDao.deleteGroupChatMessage(message,randomValue);
             toolbar.getMenu().findItem(R.id.delete).setVisible(false);
-            startActivity(getIntent());
+                    mMessages.remove(delPosition);
+                    mAdapter = new MessagesAdapter(mMessages);
+                    mListView.setAdapter(mAdapter);
+            //startActivity(getIntent());
                 }
             });
             alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
