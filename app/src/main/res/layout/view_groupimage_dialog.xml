@@ -27,17 +27,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_save"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="35dp"
-            android:id="@+id/save" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="?attr/actionModeCloseDrawable"
+            android:src="@drawable/backarrow"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -48,7 +38,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_gallery"
+            android:src="@drawable/gallery"
             android:layout_alignTop="@+id/backarrow"
             android:layout_toLeftOf="@+id/save"
             android:layout_toStartOf="@+id/save"
@@ -56,6 +46,17 @@
             android:layout_marginEnd="14dp"
             android:layout_marginTop="13dp"
             android:id="@+id/gallery_camera" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/save"
+            android:layout_marginRight="33dp"
+            android:id="@+id/save"
+            android:layout_alignTop="@+id/gallery_camera"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="33dp" />
     </RelativeLayout>
 
     <ImageView  android:layout_width="fill_parent"
