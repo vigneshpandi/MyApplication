@@ -6,7 +6,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.bluemapletech.hippatextapp.activity.ChatEmployeeActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_header"
         android:layout_width="match_parent"
@@ -55,7 +58,7 @@
 
             <EditText
                 android:id="@+id/new_message"
-                android:layout_width="255dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="50dp"
                 android:layout_weight="100"
@@ -70,6 +73,7 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/new_message"
+                android:layout_alignRight="@+id/new_message"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/send_selected" />
         </RelativeLayout>

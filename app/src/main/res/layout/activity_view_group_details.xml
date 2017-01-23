@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_view_group_details"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_view_group_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails"
     android:weightSum="1">
-<!--    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleTextColor="@color/btn_text_color"
-        android:background="@color/colorPrimary"
-        layout="@layout/toolbar_header"/>-->
-   <include
+    <!--    <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextColor="@color/btn_text_color"
+            android:background="@color/colorPrimary"
+            layout="@layout/toolbar_header"/>-->
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_header_menu"
         android:background="@color/colorPrimary"
         layout="@layout/toolbar_add_user_menu" />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-      <ImageView
-       android:id="@+id/view_group_image"
-        android:layout_height="300dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/view_group_image"
+            android:layout_height="300dp"
+            android:layout_width="fill_parent"
+            android:src="@drawable/groupimage"
+            android:layout_marginTop="-30dp"
+            />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="28dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="220dp"
+            android:textColor="#ffffff"
+            android:id="@+id/group_name" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            android:layout_alignTop="@+id/group_name"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/groupNameEdit" />
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/group_user"
         android:layout_width="fill_parent"
-        android:src="@drawable/groupimage"
-       android:layout_marginTop="-30dp"
-       />
-
-   <TextView
-       android:text="TextView"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentStart="true"
-       android:layout_marginLeft="28dp"
-       android:layout_marginStart="35dp"
-       android:layout_marginTop="220dp"
-       android:textColor="#ffffff"
-       android:id="@+id/group_name" />
-
-   <ImageView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       app:srcCompat="@android:drawable/ic_menu_edit"
-       android:layout_alignTop="@+id/group_name"
-       android:layout_alignParentRight="true"
-       android:layout_alignParentEnd="true"
-       android:layout_marginRight="15dp"
-       android:layout_marginEnd="23dp"
-       android:layout_marginBottom="20dp"
-       android:id="@+id/groupNameEdit" />
-</RelativeLayout>
-   <ListView
-       android:id="@+id/group_user"
-       android:layout_width="fill_parent"
-       android:layout_height="173dp"
-       android:layout_weight="0.67"></ListView>
+        android:layout_height="173dp"
+        android:layout_weight="0.67"></ListView>
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="30dp"
         android:id="@+id/rel_lay_exit">
-   <ImageView
-       android:layout_width="80dp"
-       android:layout_height="match_parent"
-       android:src="@drawable/exit"
-       android:id="@+id/exit_img"
-       android:layout_alignParentTop="true" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/exit"
+            android:id="@+id/exit_img"
+            android:layout_alignParentTop="true" />
         <TextView
             android:text="Exit group"
             android:textSize="18dp"
@@ -78,5 +78,5 @@ android:orientation="vertical"
             android:layout_toRightOf="@+id/exit_img"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
-</RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>
