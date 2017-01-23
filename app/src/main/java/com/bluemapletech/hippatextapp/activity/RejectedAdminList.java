@@ -68,6 +68,8 @@ public class RejectedAdminList extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Admin List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Admin List");
         }
         checkUserExistence();
 
@@ -99,6 +101,8 @@ public class RejectedAdminList extends AppCompatActivity {
                         if(user.getRole().matches("admin")){
                             Log.d(TAG,"admin list...");
                             getSupportActionBar().setTitle("Admin List");
+                            TextView header = (TextView) findViewById(R.id.header);
+                            header.setText("Admin List");
                         }
                     }
                     UserDetailDto userDto = new UserDetailDto();

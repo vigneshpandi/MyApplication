@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
@@ -85,6 +86,8 @@ public class AddAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_admin);
         mStorage = FirebaseStorage.getInstance().getReference();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Add Admin");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Add Admin");

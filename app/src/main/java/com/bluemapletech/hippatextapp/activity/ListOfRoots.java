@@ -3,25 +3,17 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.EmployeeListOfRootBaseAdapter;
-import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.model.UserDetailDto;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class ListOfRoots extends AppCompatActivity {
     private static final String TAG = ListOfRoots.class.getCanonicalName();
@@ -69,6 +60,8 @@ public class ListOfRoots extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Root List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Root List");
         }
         rootValue = getIntent().getStringExtra(RootHomeActivity.rootValue);
         role = getIntent().getStringExtra(RootHomeActivity.role);

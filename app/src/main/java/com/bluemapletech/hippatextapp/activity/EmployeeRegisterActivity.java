@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -75,6 +74,8 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Employee Registration");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

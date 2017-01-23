@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,19 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.EmployeeDao;
@@ -49,6 +40,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class CreateGroup extends AppCompatActivity {
 
@@ -79,6 +77,8 @@ public class CreateGroup extends AppCompatActivity {
         setContentView(R.layout.activity_create_group);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Select Member");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Select Member");

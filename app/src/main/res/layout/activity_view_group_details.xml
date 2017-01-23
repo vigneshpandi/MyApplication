@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_header_menu"
         android:background="@color/colorPrimary"
-        layout="@layout/toolbar_add_user_menu" />
+        layout="@layout/toolbar_header"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -67,6 +67,8 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Employee List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Employee List");
         }
         checkUserExistence();
         fireBaseDatabase = FirebaseDatabase.getInstance();

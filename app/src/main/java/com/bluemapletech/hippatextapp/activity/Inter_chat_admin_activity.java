@@ -69,6 +69,8 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Inter Chat List");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Inter Chat List");
         }
 
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

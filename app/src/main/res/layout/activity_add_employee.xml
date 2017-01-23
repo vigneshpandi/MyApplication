@@ -10,22 +10,10 @@
     android:focusableInTouchMode="true"
     tools:context="com.bluemapletech.hippatextapp.activity.AddEmployeeActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <include
+        layout="@layout/toolbar_header"
+        android:id="@+id/toolbar_header"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            app:titleTextColor="@color/btn_text_color"
-            app:subtitleTextColor="@color/btn_text_color"
-            android:background="@color/colorPrimary"
-            layout="@layout/toolbar_header" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

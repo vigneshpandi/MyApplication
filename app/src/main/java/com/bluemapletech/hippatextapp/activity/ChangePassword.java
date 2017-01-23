@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
@@ -58,6 +59,8 @@ public class ChangePassword extends AppCompatActivity {
         roleValue = getIntent().getStringExtra(Settings.roleValues);
         init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Change Password");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Change Password");

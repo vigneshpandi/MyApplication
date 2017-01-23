@@ -173,6 +173,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 if(map != null){
                     groupName = map.get("groupName");
                     getSupportActionBar().setTitle(groupName);
+                    TextView header = (TextView) findViewById(R.id.header);
+                    header.setText(groupName);
                 }
 
             }

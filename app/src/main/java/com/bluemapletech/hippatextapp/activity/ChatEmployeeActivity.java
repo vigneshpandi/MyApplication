@@ -134,6 +134,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             String[] chatName = toMail.split("@");
             getSupportActionBar().setTitle(chatName[0]);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText(chatName[0]);
         }
         ImageView sendMessage = (ImageView) findViewById(R.id.send_message);
 

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.bluemapletech.hippatextapp.activity.CreateGroup">
 
-    <android.support.v7.widget.Toolbar
+   <!-- <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,10 @@
         app:titleTextColor="@color/btn_text_color"
         app:subtitleTextColor="@color/btn_text_color"
         android:background="@color/colorPrimary"
-        layout="@layout/toolbar_header" />
+        layout="@layout/toolbar_header" />-->
+    <include
+        layout="@layout/toolbar_header"
+        android:id="@+id/toolbar_header"/>
     <ListView
         android:id="@+id/all_employee"
         android:layout_width="match_parent"

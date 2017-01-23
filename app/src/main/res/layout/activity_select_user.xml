@@ -7,13 +7,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.bluemapletech.hippatextapp.activity.SelectUser">
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_header_menu"
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/btn_text_color"
-        layout="@layout/toolbar_add_user_menu" />
+        layout="@layout/toolbar_add_user_menu" />-->
+    <include
+        layout="@layout/toolbar_header"
+        android:id="@+id/toolbar_header"/>
     <ListView
         android:id="@+id/all_user"
         android:layout_width="match_parent"

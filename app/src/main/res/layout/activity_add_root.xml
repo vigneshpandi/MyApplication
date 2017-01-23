@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="com.bluemapletech.hippatextapp.activity.AddRootActivity">
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,7 +23,10 @@
             app:subtitleTextColor="@color/btn_text_color"
             android:background="@color/colorPrimary"
             layout="@layout/toolbar_header" />
-    </LinearLayout>
+    </LinearLayout>-->
+    <include
+        layout="@layout/toolbar_header"
+        android:id="@+id/toolbar_header"/>
 
     <LinearLayout
         android:layout_width="match_parent"

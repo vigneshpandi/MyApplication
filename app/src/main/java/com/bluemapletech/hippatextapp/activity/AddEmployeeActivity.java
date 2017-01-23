@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.StrictMode;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -17,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
@@ -74,6 +73,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_employee);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Add Employee");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Add Employee");

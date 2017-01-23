@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
@@ -82,7 +83,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_registration);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
-
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Company Registration");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Company Registration");

@@ -7,19 +7,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -41,11 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
-import com.bluemapletech.hippatextapp.adapter.EmployeeGroupsAdapter;
 import com.bluemapletech.hippatextapp.dao.EmployeeDao;
-import com.bluemapletech.hippatextapp.dao.UserDao;
 import com.bluemapletech.hippatextapp.model.Groups;
-import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.Utility;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,22 +57,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.math.BigInteger;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.value;
-import static com.bluemapletech.hippatextapp.R.layout.view_groupimage_dialog;
 
 public class ViewGroupDetails extends AppCompatActivity {
     private static final String TAG = ViewGroupDetails.class.getCanonicalName();
@@ -118,6 +100,8 @@ public class ViewGroupDetails extends AppCompatActivity {
         setContentView(R.layout.activity_view_group_details);
         iv = (ListView) findViewById(R.id.group_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("");
         firebaseAuth = FirebaseAuth.getInstance();
         logged = firebaseAuth.getCurrentUser();
         RelativeLayout exit=(RelativeLayout)findViewById(R.id.rel_lay_exit);
@@ -285,6 +269,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 Dialog dialog = new Dialog(ViewGroupDetails.this, android.R.style.Widget_ProgressBar_Small_Inverse);
                 dialog.setContentView(R.layout.view_groupimage_dialog);
                 Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+
                 ImageView backPageArrow = (ImageView) dialog.findViewById(R.id.backarrow);
                 ImageView takePhoto = (ImageView) dialog.findViewById(R.id.gallery_camera);
                 displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
@@ -293,6 +278,8 @@ public class ViewGroupDetails extends AppCompatActivity {
                     setSupportActionBar(toolbar);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     dialog.show();
+                    TextView header = (TextView) findViewById(R.id.header);
+                    header.setText("");
                 }
                 //dialog.addContentView();
                 Log.d(TAG, "randomNameLogin" + group.getRandomName());

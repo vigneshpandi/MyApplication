@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.bluemapletech.hippatextapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,8 @@ public class TermsCondition extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Terms And Condition");
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Terms And Condition");
 
         }
         init();
