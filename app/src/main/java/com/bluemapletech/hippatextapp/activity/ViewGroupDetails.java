@@ -252,7 +252,6 @@ public class ViewGroupDetails extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 listPosition = position;
-                Log.d(TAG,"adminAddedPermisson...."+adminAddedPermisson);
                 if(adminAddedPermisson) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setMessage("Make group admin");

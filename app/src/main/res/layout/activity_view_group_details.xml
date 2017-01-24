@@ -6,7 +6,8 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails"
+    android:descendantFocusability="blocksDescendants"
+    tools:context="com.bluemapletech.hippatextapp.activity.ViewGroupDetails"
     android:weightSum="1">
 <!--    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_header"
