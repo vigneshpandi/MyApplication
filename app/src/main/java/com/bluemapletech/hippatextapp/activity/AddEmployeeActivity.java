@@ -102,7 +102,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     Toast.makeText(getActivity(), "Add Root failed!", Toast.LENGTH_LONG).show();
                 } else {
                     progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Processing Add Root...");
+                    progressDialog.setMessage("Processing Add Employee...");
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
                     checkUserExistence();

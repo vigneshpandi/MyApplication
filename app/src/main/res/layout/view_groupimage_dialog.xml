@@ -61,6 +61,7 @@
 
     <ImageView  android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/view_group_img">
+        android:id="@+id/view_group_img"
+        android:src="@drawable/loadingimg">
     </ImageView>
 </LinearLayout>

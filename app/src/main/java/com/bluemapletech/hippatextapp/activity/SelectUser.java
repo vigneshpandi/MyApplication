@@ -58,7 +58,7 @@ public class SelectUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_user);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         Bundle bundle =  getIntent().getExtras();
         groupVal = (Groups) bundle.getSerializable("groupDetails");
         if (toolbar != null) {

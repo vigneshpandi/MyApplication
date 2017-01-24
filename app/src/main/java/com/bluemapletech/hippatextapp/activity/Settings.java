@@ -1,20 +1,17 @@
 package com.bluemapletech.hippatextapp.activity;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -49,8 +46,8 @@ public class Settings extends AppCompatActivity {
     private static final String OP_POST_NOTIFICATION = "OP_POST_NOTIFICATION";
     private FirebaseDatabase firebaseDatabaseRef;
     public static final String roleValues = "roleValues";
-    private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"," Show Online"};
-    private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
+    //private String[] lv_arr = {"Profile","Change Secure Chat Pin","Change Password","Delete An Acount","Notification Settings"," Show Online"};
+    //private String[] iv_arr_root = {"Change Password","Delete An Acount","Notification Settings"};
     private String login_mail;
     Switch showOnline;
     SharedPreferences pref1;
@@ -89,23 +86,30 @@ public class Settings extends AppCompatActivity {
         TableRow hr5 = (TableRow) findViewById(R.id.hr5);
 
         if(role_Value.matches("root")){
-            profile.setVisibility(View.VISIBLE);
-            chatPin.setVisibility(View.GONE);
+            profile.setVisibility(View.GONE);
+            chatPin.setVisibility(View.VISIBLE);
             password.setVisibility(View.VISIBLE);
             deleteAcount.setVisibility(View.VISIBLE);
             notificationSetting.setVisibility(View.VISIBLE);
             showOnline.setVisibility(View.GONE);
-            hr.setVisibility(View.VISIBLE);
-            hr1.setVisibility(View.GONE);
+            hr.setVisibility(View.GONE);
+            hr1.setVisibility(View.VISIBLE);
             hr2.setVisibility(View.VISIBLE);
             hr3.setVisibility(View.VISIBLE);
             hr4.setVisibility(View.VISIBLE);
             hr5.setVisibility(View.GONE);
-            profile.setOnClickListener(new View.OnClickListener() {
+            /*profile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent editProfile = new Intent(getActivity(), EditProfileActivity.class);
                     startActivity(editProfile);
+                }
+            });*/
+            chatPin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent redirect = new Intent(getActivity(), ChangeSecureChatPinActivity.class);
+                    startActivity(redirect);
                 }
             });
             password.setOnClickListener(new View.OnClickListener() {
