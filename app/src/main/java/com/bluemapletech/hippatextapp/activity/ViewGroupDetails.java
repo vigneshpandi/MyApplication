@@ -216,6 +216,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 editGroupName = input.getText().toString();
+                                if(editGroupName.length() !=0){
                                 for (int m = 0; m < groupObj.size(); m++) {
                                     String us_mail = groupObj.get(m).getUserMail();
                                     reArrangeEmails = us_mail.replace(".", "-");
@@ -231,6 +232,10 @@ public class ViewGroupDetails extends AppCompatActivity {
                                 editor = pref.edit();
                                 editor.putString("groupNameValue", editGroupName);
                                 editor.commit();
+                            }else{
+                                   Log.d(TAG,"dialog close");
+                                    dialog.cancel();
+                                }
                             }
                         });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -247,6 +252,7 @@ public class ViewGroupDetails extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 listPosition = position;
+                Log.d(TAG,"adminAddedPermisson...."+adminAddedPermisson);
                 if(adminAddedPermisson) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setMessage("Make group admin");
