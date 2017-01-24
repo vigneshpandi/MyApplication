@@ -419,6 +419,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
             convertView.findViewById(R.id.image).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+
                     message = getItem(position);
                     delPosition = position;
                     toolbar.getMenu().findItem(R.id.delete).setVisible(true);
@@ -426,9 +427,11 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
                 }
             });
+            final View finalConvertView = convertView;
             convertView.findViewById(R.id.msg).setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                  // finalConvertView.setSelected(true);
                     message = getItem(position);
                     delPosition = position;
                     toolbar.getMenu().findItem(R.id.delete).setVisible(true);
@@ -507,15 +510,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         base64Profile = bitmapToBase64(thumbnail);
         if(wallpaperimage!=true){
-            Log.d(TAG,"not a wallpaper");
             saveMessages();
         }else if(wallpaperimage==true){
-            Log.d(TAG,"it is a wallpaper");
             BitmapDrawable myBackground = new BitmapDrawable(thumbnail);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
             editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
+            base64Profile = "";
             editors.apply();
         }
     }
@@ -531,14 +533,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         }
         base64Profile = bitmapToBase64(getResizedBitmap(bm,500));
 
+
         if(wallpaperimage!=true){
-            Log.d(TAG,"not a wallpaper");
             saveMessages();
         }else if(wallpaperimage==true){
-            Log.d(TAG,"it is a wallpaper");
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             Log.d(TAG,"myBackground"+myBackground);
             layout.setBackgroundDrawable(myBackground);
+            base64Profile = "";
         }
         //imageView.setImageBitmap(bm);
     }
@@ -574,6 +576,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         bitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        Log.d(TAG,"wallpaperimage"+wallpaperimage);
         if(wallpaperimage==true){
             editors = prefs.edit();
             editors.putString("backgroundImage", val);

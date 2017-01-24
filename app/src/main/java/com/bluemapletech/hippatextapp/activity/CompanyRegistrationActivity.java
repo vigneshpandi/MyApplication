@@ -77,7 +77,6 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     private User comInfos = new User();
     private Uri downloadUrl;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

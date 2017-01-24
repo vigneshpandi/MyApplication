@@ -480,6 +480,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             layout.setBackgroundDrawable(myBackground);
             editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
+            base64Profile = "";
             editors.apply();
         }
     }
@@ -501,6 +502,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             layout.setBackgroundDrawable(myBackground);
             editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
+            base64Profile = "";
             editors.apply();
         }
     }

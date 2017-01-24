@@ -127,6 +127,7 @@ public class ViewGroupDetails extends AppCompatActivity {
           values comes from SelectUser
          */
         groupName = getIntent().getStringExtra(SelectUser.groupNames);
+
         if (groupName != null) {
             pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
             editor = pref.edit();
@@ -151,7 +152,6 @@ public class ViewGroupDetails extends AppCompatActivity {
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                groupObj = new ArrayList<Groups>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     groupValues = snapshot.child("groupName").getValue(String.class);
                     String groupEmailId = snapshot.child("groupEmailId").getValue(String.class);
@@ -167,6 +167,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                             Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(viewImage);
                         }}
                 }
+                Log.d(TAG,"groupName change imaage"+groupName);
                 separated = group.getGroupEmailId().split(";");
                 for (int i = 0; i < separated.length; i++) {
                     //get userProfile for   user  profile Image
@@ -224,8 +225,12 @@ public class ViewGroupDetails extends AppCompatActivity {
                                     TextView name = (TextView) findViewById(R.id.group_name);
                                     Log.d(TAG, "groupValioo" + editGroupName);
                                     name.setText(editGroupName);
-
                                 }
+                                //apply for the edit group name
+                                pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                                editor = pref.edit();
+                                editor.putString("groupNameValue", editGroupName);
+                                editor.commit();
                             }
                         });
                 alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -528,9 +533,9 @@ public class ViewGroupDetails extends AppCompatActivity {
 
     private void getGroupUser(String userMail, String randomValue) {
         userMailId = userMail;
+        groupObj = new ArrayList<Groups>();
         final Groups groupValue = new Groups();
         groupValue.setUserMail(userMail);
-
         groupValue.setUserImage(groupObjs.get(k).getUserImage());
         k++;
         reArrangeEmails = userMail.replace(".", "-");
@@ -538,6 +543,7 @@ public class ViewGroupDetails extends AppCompatActivity {
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG,"value has been"+dataSnapshot);
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 if(map!=null){
                     groupValue.setStatus(map.get("status"));
