@@ -595,7 +595,6 @@ int adminCount = 0;
                 groupInformation.setUserImage(map.get("profilePhoto"));
                 groupObjs.add(groupInformation);
                 getGroupUser(userMail, group.getRandomName());
-
             }
 
             @Override

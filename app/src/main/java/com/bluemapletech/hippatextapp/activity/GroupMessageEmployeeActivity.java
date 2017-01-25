@@ -176,6 +176,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     getSupportActionBar().setTitle(groupName);
                     TextView header = (TextView) findViewById(R.id.header);
                     header.setText(groupName);
+                }else{
+                    Log.d(TAG,"remove user within the group");
                 }
 
             }
