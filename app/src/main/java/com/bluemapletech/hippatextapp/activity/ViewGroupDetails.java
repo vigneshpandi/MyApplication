@@ -251,25 +251,51 @@ public class ViewGroupDetails extends AppCompatActivity {
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                Log.d(TAG,"clicking the details");
                 listPosition = position;
                 if(adminAddedPermisson) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setMessage("Make group admin");
-                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            EmployeeDao empDao = new EmployeeDao();
-                            boolean success = empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(), groupObj.get(listPosition).getUserMail());
-                            groupObj.remove(position);
-                        }
-                    });
-                    // Setting Negative "NO" Button
-                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    // Showing Alert Message
-                    dialog.show();
+                    if(groupObj.get(listPosition).getStatus().matches("admin") && !groupObj.get(listPosition).getUserMail().matches(loginMail)){
+                        final CharSequence[] items = { "View", "Remove",
+                                "Cancel" };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+                                boolean result= Utility.checkPermission(ViewGroupDetails.this);
+                                if (items[item].equals("View")) {
+                                   // viewUserDetails();
+                                } else if (items[item].equals("Remove")) {
+                                    removeGroup(group,groupObj.get(listPosition).getUserMail());
+                                } else if (items[item].equals("Cancel")) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        builder.show();
+                    }else if(groupObj.get(listPosition).getStatus().matches("user") && !groupObj.get(listPosition).getUserMail().matches(loginMail)){
+                        final CharSequence[] items = { "Make group admin", "View","Remove",
+                                "Cancel" };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int item) {
+                                boolean result= Utility.checkPermission(ViewGroupDetails.this);
+                                if (items[item].equals("Make group admin")) {
+                                    if(result)
+                                        makeGroupAdmin();
+                                } else if (items[item].equals("View")) {
+                                   // viewUserDetails();
+                                } else if (items[item].equals("Remove")) {
+                                   // removeGroup(group,groupObj.get(listPosition).getUserMail());
+                                }else if (items[item].equals("Cancel")) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+
+
                 }
             }
         });
@@ -380,6 +406,44 @@ public class ViewGroupDetails extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void makeGroupAdmin(){
+        EmployeeDao empDao = new EmployeeDao();
+        boolean success = empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(), groupObj.get(listPosition).getUserMail());
+        groupObj.remove(listPosition);
+    }
+    public void removeGroup(Groups group,String userMail){
+        Log.d(TAG,"groupDetails"+group.toString());
+        Log.d(TAG,"userMail"+userMail);
+        fireBaseDatabase = FirebaseDatabase.getInstance();
+        String[] groupUsers = group.getGroupEmailId().split(";");
+        String newGroup = null;
+        for (int s = 0; s < groupUsers.length; s++) {
+            if(!userMail.matches(groupUsers[s])) {
+                if(newGroup == null){
+                    newGroup =  groupUsers[s];
+                } else {
+                    newGroup =  newGroup +";"+groupUsers[s];
+                }
+            }
+        }
+
+        for(int g = 0; g < groupUsers.length; g++) {
+            reArrangeEmailId = groupUsers[g].replace(".", "-");
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("groupEmailId");
+            dataReference.setValue(newGroup);
+        }
+
+        FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+        reArrangeEmail =  userMail.replace(".","-");
+        DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(group.getRandomName());
+        dataReferences.removeValue();
+    }
+
+    public void  viewUserDetails(){
+
     }
 
     private void cameraIntent() {
@@ -635,7 +699,7 @@ public class ViewGroupDetails extends AppCompatActivity {
             }
             String[] valueuserName = info.getUserMail().split("@");
             mViewHolder.fieldName.setText(valueuserName[0]);
-            mViewHolder.btnName.setText("admin");
+            mViewHolder.btnName.setText("Admin");
             if (info.getStatus().matches("admin")) {
                 View btn = convertView.findViewById(R.id.btn_admin_view);
                 btn.setVisibility(View.VISIBLE);
