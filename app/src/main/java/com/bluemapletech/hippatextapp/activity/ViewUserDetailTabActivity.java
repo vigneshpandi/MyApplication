@@ -3,25 +3,17 @@ package com.bluemapletech.hippatextapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.PageEmployeeBaseAdpter;
-import com.bluemapletech.hippatextapp.dao.CompanyDao;
 import com.bluemapletech.hippatextapp.model.User;
-import com.bluemapletech.hippatextapp.widgets.InterChatEmployeeTabActivity;
-import com.bluemapletech.hippatextapp.widgets.IntraChatEmployeeTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,9 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ViewUserDetailTabActivity extends AppCompatActivity {
@@ -43,7 +33,7 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     User user1 = new User();
     SharedPreferences preflogin;
     SharedPreferences.Editor editorlogin;
-    String isOnline;
+    String isOnline,returnGroup;
     private FirebaseDatabase fireBaseDatabase; private FirebaseAuth firebaseAuth;
     String logi_role_value,reArrangeEmail,userAuths,userEmails,userId;
     private TextView userEmail,compName,empId,providerNPI,providerName,providerNpiLabel,providerNameLabel;
@@ -70,6 +60,9 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         if(userEmails==null || userEmails.matches("")){
             userEmails = getIntent().getStringExtra(Inter_chat_admin_activity.userEmails);
         }
+        Bundle bundle = getIntent().getExtras();
+        String userEmails= bundle.getString("userEmail");
+        returnGroup = bundle.getString("return");
 
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
@@ -139,10 +132,21 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                backPage();
+                if(returnGroup != null){
+                    backGroupPage();
+                }
+                if(returnGroup == null || returnGroup == "") {
+                    backPage();
+                }
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void backGroupPage() {
+        Log.d(TAG,"exit...");
+        startActivity(new Intent(getActivity(), ViewGroupDetails.class));
     }
 
     private void backPage() {

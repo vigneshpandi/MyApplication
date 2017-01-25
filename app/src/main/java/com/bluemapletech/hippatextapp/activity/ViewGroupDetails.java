@@ -263,7 +263,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int item) {
                                 boolean result= Utility.checkPermission(ViewGroupDetails.this);
                                 if (items[item].equals("View")) {
-                                   // viewUserDetails();
+                                    viewUserDetails();
                                 } else if (items[item].equals("Remove")) {
                                     removeGroup(group,groupObj.get(listPosition).getUserMail());
                                 } else if (items[item].equals("Cancel")) {
@@ -443,6 +443,12 @@ public class ViewGroupDetails extends AppCompatActivity {
     }
 
     public void  viewUserDetails(){
+        Log.d(TAG,"viewuser detail.."+groupObj.get(listPosition).getUserMail());
+        String value = "back";
+        Intent userDetails = new Intent(getActivity(),ViewUserDetailTabActivity.class);
+        userDetails.putExtra("userEmail",groupObj.get(listPosition).getUserMail());
+        userDetails.putExtra("return",value);
+        startActivity(userDetails);
 
     }
 
