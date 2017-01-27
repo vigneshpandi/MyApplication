@@ -1,10 +1,10 @@
 package com.bluemapletech.hippatextapp.dao;
 
-import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.Message;
+import com.bluemapletech.hippatextapp.utils.PushNotification;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,14 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -80,8 +73,13 @@ public class GroupMessageDao {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                    String notificationId = dataSnapshot.child("pushNotificationId").getValue(String.class);
-                    AsyncTaskRunnerss runner = new AsyncTaskRunnerss();
-                    runner.execute(notificationId,TextMessage);
+                    try {
+                        PushNotification runners = new PushNotification();
+                        runners.execute("TCTText",TextMessage,notificationId);
+
+                    } catch (Exception ex) {
+                        Log.d("error","Exception error...");
+                    }
                 }
 
                 @Override
@@ -168,7 +166,7 @@ public class GroupMessageDao {
     public interface MessagesCallbacks{
         void onMessageAdded(Message message);
     }
-    private static  class AsyncTaskRunnerss extends AsyncTask<String, String, String> {
+   /* private static  class AsyncTaskRunnerss extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
             Object json = null;
@@ -178,7 +176,7 @@ public class GroupMessageDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key=AIzaSyAmybMdxj4hzhchdWTzaydHB4RzH0CObjk");
+                conn.setRequestProperty("Authorization", "key=AIzaSyAuVyl2BdhVZIw1sjplD41sY8utywdz8_k");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
@@ -210,6 +208,6 @@ public class GroupMessageDao {
         protected void onPostExecute(String result) {
 
         }
-    }
+    }*/
 
 }

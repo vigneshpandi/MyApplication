@@ -1,13 +1,12 @@
 package com.bluemapletech.hippatextapp.dao;
 
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
 import com.bluemapletech.hippatextapp.model.Message;
 import com.bluemapletech.hippatextapp.model.User;
 import com.bluemapletech.hippatextapp.utils.MailSender;
+import com.bluemapletech.hippatextapp.utils.PushNotification;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -16,14 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -195,8 +187,13 @@ public class UserDao {
         String[] re = urlValue.split("/");
         msg.put("childappendid",re[6]);
         Task<Void> result =  value.setValue(msg);
-        AsyncTaskRunners runner = new AsyncTaskRunners();
-        runner.execute(message.getPushNotificationId(),message.getMtext());
+        try {
+            PushNotification runners = new PushNotification();
+            runners.execute("TCTText",message.getMtext(),message.getPushNotificationId());
+
+        } catch (Exception ex) {
+            Log.d("error","Exception error...");
+        }
     }
 
     public static MessagesListener addMessagesListener(String convoId,String login_sender_id, final MessagesCallbacks callbacks){
@@ -474,7 +471,7 @@ public class UserDao {
         return true;
     }
 
-    private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
+   /* private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... params) {
             Object json = null;
@@ -484,7 +481,7 @@ public class UserDao {
                 HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("Authorization", "key=AIzaSyBWM1_H5KrB9EPGcf0iIK_8hh8kh1YqhAE");
+                conn.setRequestProperty("Authorization", "key=AIzaSyAuVyl2BdhVZIw1sjplD41sY8utywdz8_k");
                 JSONObject root = new JSONObject();
                 root.put("title","TCTText");
                 root.put("body",params[1]);
@@ -515,7 +512,7 @@ public class UserDao {
         protected void onPostExecute(String result) {
 
         }
-    }
+    }*/
 
     public UserDao getActivity() {
         return this;
