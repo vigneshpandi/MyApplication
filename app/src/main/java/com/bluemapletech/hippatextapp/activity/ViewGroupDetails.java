@@ -80,6 +80,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     Uri value, downloadUrl;
     private Toolbar toolbar;private Toolbar toolbars;
     private int l = 0;  private int k = 0;
+    boolean notAllowUser = true;
     private Bitmap bm;
     public int listPosition;
     Groups groupInformation;
@@ -184,66 +185,74 @@ int adminCount = 0;
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogs = new AlertDialog.Builder(ViewGroupDetails.this);
-                alertDialogs.setMessage("Exit group?");
-                alertDialogs.setPositiveButton("CANCEL",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                alertDialogs.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG,"exit from the group"+group.toString());
-                     exitGroup(group);
-                    }
-                });
-                alertDialogs.show();
+                if(notAllowUser) {
+                    AlertDialog.Builder alertDialogs = new AlertDialog.Builder(ViewGroupDetails.this);
+                    alertDialogs.setMessage("Exit group?");
+                    alertDialogs.setPositiveButton("CANCEL",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    alertDialogs.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "exit from the group" + group.toString());
+                            exitGroup(group);
+                        }
+                    });
+                    alertDialogs.show();
+                }else{
+                    showErrorMsg();
+                }
             }
         });
         groupNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(ViewGroupDetails.this);
-                alertDialog.setMessage("Enter your group name");
-                final EditText input = new EditText(ViewGroupDetails.this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                input.setLayoutParams(lp);
-                alertDialog.setView(input);
-                alertDialog.setPositiveButton("YES",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                editGroupName = input.getText().toString();
-                                if(editGroupName.length() !=0){
-                                for (int m = 0; m < groupObj.size(); m++) {
-                                    String us_mail = groupObj.get(m).getUserMail();
-                                    reArrangeEmails = us_mail.replace(".", "-");
-                                    String r_value = groupObj.get(m).getRandomName();
-                                    DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(r_value).child("groupName");
-                                    dataReferences.setValue(editGroupName);
-                                    TextView name = (TextView) findViewById(R.id.group_name);
-                                    Log.d(TAG, "groupValioo" + editGroupName);
-                                    name.setText(editGroupName);
+                if(notAllowUser) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(ViewGroupDetails.this);
+                    alertDialog.setMessage("Enter your group name");
+                    final EditText input = new EditText(ViewGroupDetails.this);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    alertDialog.setView(input);
+                    alertDialog.setPositiveButton("YES",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    editGroupName = input.getText().toString();
+                                    if (editGroupName.length() != 0) {
+                                        for (int m = 0; m < groupObj.size(); m++) {
+                                            String us_mail = groupObj.get(m).getUserMail();
+                                            reArrangeEmails = us_mail.replace(".", "-");
+                                            String r_value = groupObj.get(m).getRandomName();
+                                            DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(r_value).child("groupName");
+                                            dataReferences.setValue(editGroupName);
+                                            TextView name = (TextView) findViewById(R.id.group_name);
+                                            Log.d(TAG, "groupValioo" + editGroupName);
+                                            name.setText(editGroupName);
+                                        }
+                                        //apply for the edit group name
+                                        pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                                        editor = pref.edit();
+                                        editor.putString("groupNameValue", editGroupName);
+                                        editor.commit();
+                                    } else {
+                                        Log.d(TAG, "dialog close");
+                                        dialog.cancel();
+                                    }
                                 }
-                                //apply for the edit group name
-                                pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                                editor = pref.edit();
-                                editor.putString("groupNameValue", editGroupName);
-                                editor.commit();
-                            }else{
-                                   Log.d(TAG,"dialog close");
-                                    dialog.cancel();
-                                }
-                            }
-                        });
-                alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alertDialog.show();
+                            });
+                    alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }else{
+                    showErrorMsg();
+                }
             }
         });
 
@@ -251,51 +260,55 @@ int adminCount = 0;
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Log.d(TAG,"clicking the details");
-                listPosition = position;
-                if(adminAddedPermisson) {
-                    if(groupObj.get(listPosition).getStatus().matches("admin") && !groupObj.get(listPosition).getUserMail().matches(loginMail)){
-                        final CharSequence[] items = { "View", "Remove",
-                                "Cancel" };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
-                        builder.setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int item) {
-                                boolean result= Utility.checkPermission(ViewGroupDetails.this);
-                                if (items[item].equals("View")) {
-                                    viewUserDetails();
-                                } else if (items[item].equals("Remove")) {
-                                    removeGroup(group,groupObj.get(listPosition).getUserMail());
-                                } else if (items[item].equals("Cancel")) {
-                                    dialog.dismiss();
+                if(notAllowUser) {
+                    Log.d(TAG, "clicking the details");
+                    listPosition = position;
+                    if (adminAddedPermisson) {
+                        if (groupObj.get(listPosition).getStatus().matches("admin") && !groupObj.get(listPosition).getUserMail().matches(loginMail)) {
+                            final CharSequence[] items = {"View", "Remove",
+                                    "Cancel"};
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                            builder.setItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    boolean result = Utility.checkPermission(ViewGroupDetails.this);
+                                    if (items[item].equals("View")) {
+                                        viewUserDetails();
+                                    } else if (items[item].equals("Remove")) {
+                                        removeGroup(group, groupObj.get(listPosition).getUserMail());
+                                    } else if (items[item].equals("Cancel")) {
+                                        dialog.dismiss();
+                                    }
                                 }
-                            }
-                        });
-                        builder.show();
-                    }else if(groupObj.get(listPosition).getStatus().matches("user") && !groupObj.get(listPosition).getUserMail().matches(loginMail)){
-                        final CharSequence[] items = { "Make group admin", "View","Remove",
-                                "Cancel" };
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
-                        builder.setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int item) {
-                                boolean result= Utility.checkPermission(ViewGroupDetails.this);
-                                if (items[item].equals("Make group admin")) {
-                                    if(result)
-                                        makeGroupAdmin();
-                                } else if (items[item].equals("View")) {
-                                   // viewUserDetails();
-                                } else if (items[item].equals("Remove")) {
-                                   removeGroup(group,groupObj.get(listPosition).getUserMail());
-                                }else if (items[item].equals("Cancel")) {
-                                    dialog.dismiss();
+                            });
+                            builder.show();
+                        } else if (groupObj.get(listPosition).getStatus().matches("user") && !groupObj.get(listPosition).getUserMail().matches(loginMail)) {
+                            final CharSequence[] items = {"Make group admin", "View", "Remove",
+                                    "Cancel"};
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                            builder.setItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    boolean result = Utility.checkPermission(ViewGroupDetails.this);
+                                    if (items[item].equals("Make group admin")) {
+                                        if (result)
+                                            makeGroupAdmin();
+                                    } else if (items[item].equals("View")) {
+                                        // viewUserDetails();
+                                    } else if (items[item].equals("Remove")) {
+                                        removeGroup(group, groupObj.get(listPosition).getUserMail());
+                                    } else if (items[item].equals("Cancel")) {
+                                        dialog.dismiss();
+                                    }
                                 }
-                            }
-                        });
-                        builder.show();
+                            });
+                            builder.show();
+                        }
+
+
                     }
-
-
+                }else{
+                    showErrorMsg();
                 }
             }
         });
@@ -304,104 +317,107 @@ int adminCount = 0;
 
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(ViewGroupDetails.this, android.R.style.Widget_ProgressBar_Small_Inverse);
-                dialog.setContentView(R.layout.view_groupimage_dialog);
-                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+                if(notAllowUser) {
+                    Dialog dialog = new Dialog(ViewGroupDetails.this, android.R.style.Widget_ProgressBar_Small_Inverse);
+                    dialog.setContentView(R.layout.view_groupimage_dialog);
+                    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
 
-                ImageView backPageArrow = (ImageView) dialog.findViewById(R.id.backarrow);
-                ImageView takePhoto = (ImageView) dialog.findViewById(R.id.gallery_camera);
-                displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
-                ImageView saveProfileImage = (ImageView) dialog.findViewById(R.id.save);
-                if (toolbar != null) {
-                    setSupportActionBar(toolbar);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    ImageView backPageArrow = (ImageView) dialog.findViewById(R.id.backarrow);
+                    ImageView takePhoto = (ImageView) dialog.findViewById(R.id.gallery_camera);
+                    displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
+                    ImageView saveProfileImage = (ImageView) dialog.findViewById(R.id.save);
+                    if (toolbar != null) {
+                        setSupportActionBar(toolbar);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                        dialog.show();
+                        TextView header = (TextView) findViewById(R.id.header);
+                        header.setText("");
+                    }
+                    //dialog.addContentView();
+                    Log.d(TAG, "randomNameLogin" + group.getRandomName());
+                    //showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
+                    Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(displayImage);
                     dialog.show();
-                    TextView header = (TextView) findViewById(R.id.header);
-                    header.setText("");
-                }
-                //dialog.addContentView();
-                Log.d(TAG, "randomNameLogin" + group.getRandomName());
-                //showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
-                Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(displayImage);
-                dialog.show();
-                backPageArrow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        groupName = getIntent().getStringExtra(SelectUser.groupNames);
-                        Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
-                        startActivity(intent);
-
-                    }
-                });
-                takePhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                                "Cancel"};
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
-                        builder.setTitle("Add Photo!");
-                        builder.setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int item) {
-                                boolean result = Utility.checkPermission(ViewGroupDetails.this);
-                                if (items[item].equals("Take Photo")) {
-                                    if (result)
-                                        cameraIntent();
-                                } else if (items[item].equals("Choose from Library")) {
-                                    if (result)
-                                        galleryIntent();
-                                } else if (items[item].equals("Cancel")) {
-                                    dialog.dismiss();
-                                }
-                            }
-                        });
-                        builder.show();
-                    }
-                });
-                saveProfileImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
-                        if (bitmap != null) {
-                            try {
-                                String root = Environment.getExternalStorageDirectory().toString();
-                                File myDir = new File(root + "/HippaText");
-                                if (!myDir.exists()) {
-                                    myDir.mkdirs();
-                                }
-                                String ran_img_name  = new BigInteger(130, random).toString(32);
-                                String randomValue = ran_img_name.substring(0, 7);
-                                String name = randomValue+".jpg";
-                                myDir = new File(myDir, name);
-                                FileOutputStream out = new FileOutputStream(myDir);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                                Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
-                                out.flush();
-                                out.close();
-                            } catch (Exception e) {
-                                // some action
-                            }
-                        }
-                    }
-                });
-
-                // dialog box back key button
-                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
-
-                    @Override
-                    public boolean onKey(DialogInterface arg0, int keyCode,
-                                         KeyEvent event) {
-                        // TODO Auto-generated method stub
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    backPageArrow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             groupName = getIntent().getStringExtra(SelectUser.groupNames);
                             Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
                             startActivity(intent);
+
                         }
-                        return true;
-                    }
-                });
+                    });
+                    takePhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final CharSequence[] items = {"Take Photo", "Choose from Library",
+                                    "Cancel"};
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                            builder.setTitle("Add Photo!");
+                            builder.setItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int item) {
+                                    boolean result = Utility.checkPermission(ViewGroupDetails.this);
+                                    if (items[item].equals("Take Photo")) {
+                                        if (result)
+                                            cameraIntent();
+                                    } else if (items[item].equals("Choose from Library")) {
+                                        if (result)
+                                            galleryIntent();
+                                    } else if (items[item].equals("Cancel")) {
+                                        dialog.dismiss();
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                    saveProfileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
+                            if (bitmap != null) {
+                                try {
+                                    String root = Environment.getExternalStorageDirectory().toString();
+                                    File myDir = new File(root + "/HippaText");
+                                    if (!myDir.exists()) {
+                                        myDir.mkdirs();
+                                    }
+                                    String ran_img_name = new BigInteger(130, random).toString(32);
+                                    String randomValue = ran_img_name.substring(0, 7);
+                                    String name = randomValue + ".jpg";
+                                    myDir = new File(myDir, name);
+                                    FileOutputStream out = new FileOutputStream(myDir);
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                    Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
+                                    out.flush();
+                                    out.close();
+                                } catch (Exception e) {
+                                    // some action
+                                }
+                            }
+                        }
+                    });
 
+                    // dialog box back key button
+                    dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
+                        @Override
+                        public boolean onKey(DialogInterface arg0, int keyCode,
+                                             KeyEvent event) {
+                            // TODO Auto-generated method stub
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                groupName = getIntent().getStringExtra(SelectUser.groupNames);
+                                Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
+                                startActivity(intent);
+                            }
+                            return true;
+                        }
+                    });
+
+                }else{
+                    showErrorMsg();
+                }
 
             }
 
@@ -565,14 +581,17 @@ int adminCount = 0;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.add_admin_group_menu) {
-            Intent intent = new Intent(getActivity(), SelectUser.class);
-            Bundle b = new Bundle();
-            b.putSerializable("groupDetails", group);
-            intent.putExtras(b);
-            startActivity(intent);
+        if(notAllowUser) {
+            if (id == R.id.add_admin_group_menu) {
+                Intent intent = new Intent(getActivity(), SelectUser.class);
+                Bundle b = new Bundle();
+                b.putSerializable("groupDetails", group);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        }else{
+            showErrorMsg();
         }
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 backPage();
@@ -645,6 +664,9 @@ int adminCount = 0;
                     if (getActivity() != null) {
                         iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, logged.getEmail()));
                     }
+                }else {
+                    Log.d(TAG,"remove user within the group");
+                    notAllowUser = false;
                 }
 
             }
@@ -767,7 +789,35 @@ int adminCount = 0;
         //Do whatever you want to do when the application stops.
     }
 
+    public void showErrorMsg(){
+        Log.d(TAG,"showError");
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Error");
+        alert.setMessage("You can't send message to this group because you're no longer a participant.");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //dialog.cancel();
+                if(login_role.matches("admin")){
+                    Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+                    startActivity(intent);
+                } else if(login_role.matches("user")){
+                    Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
+                    startActivity(intent);
+                }else if(login_role.matches("root")){
+                    Intent intent = new Intent(getActivity(), RootHomeActivity.class);
+                    startActivity(intent);
+                }
 
+            }
+        });
+    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            dialog.cancel();
+        }
+    });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
+    }
     @Override
     protected  void onResume(){
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

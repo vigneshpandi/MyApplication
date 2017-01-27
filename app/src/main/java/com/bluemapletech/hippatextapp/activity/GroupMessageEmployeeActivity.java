@@ -90,11 +90,14 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     SharedPreferences.Editor editorss;
     SharedPreferences prefs;
     SharedPreferences.Editor editors;
+    boolean notAllowUser = true;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     boolean wallpaperImage = false;
     private Toolbar toolbar;
     private FirebaseDatabase firebaseDatabaseRef;
+    private TextView newMessages,rm_gr_user;
+    private ImageView selectImages,sendMessage;
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
     SharedPreferences pref1;
@@ -103,6 +106,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_group_message_employee);
+
+            sendMessage = (ImageView)findViewById(R.id.send_message);
+            /*selectImages = (ImageView) findViewById(R.id.select_image);
+            newMessages = (TextView) findViewById(R.id.new_message);
+            rm_gr_user = (TextView) findViewById(R.id.rm_gr_user);
+            rm_gr_user.setVisibility(View.GONE);*/
+
             prefss = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
             login_role =  prefss.getString("role", "");
             logn_senderId = prefss.getString("senderId","");
@@ -134,7 +144,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             toolbar = (Toolbar) findViewById(R.id.toolbar_header);
                 setSupportActionBar(toolbar);
 
-            ImageView sendMessage = (ImageView)findViewById(R.id.send_message);
+
 
             sendMessage.setOnClickListener(this);
             String fromMails = fromMail.replace(".", "-");
@@ -178,6 +188,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     header.setText(groupName);
                 }else{
                     Log.d(TAG,"remove user within the group");
+                    notAllowUser = false;
+                    /*sendMessage.setVisibility(View.GONE);
+                    selectImages.setVisibility(View.GONE);
+                    newMessages.setVisibility(View.GONE);
+                    rm_gr_user.setVisibility(View.VISIBLE);*/
                 }
 
             }
@@ -195,9 +210,14 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
-                intent.putExtra(groupNames,groupName);
-                startActivity(intent);
+                if(notAllowUser){
+                    Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
+                    intent.putExtra(groupNames,groupName);
+                    startActivity(intent);
+                }else{
+                    showErrorMsg();
+                }
+
             }
         });
         prefs = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
@@ -208,7 +228,12 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     }
 
     public void onClick(View v) {
+        if(notAllowUser){
             saveMessages();
+        }else{
+            showErrorMsg();
+        }
+
         }
 
         @Override
@@ -375,9 +400,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 convertView.findViewById(R.id.image).setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        message = getItem(position);
-                        delPosition = position;
-                        toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        if(notAllowUser){
+                            message = getItem(position);
+                            delPosition = position;
+                            toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        }else{
+                            showErrorMsg();
+                        }
                         return true;
 
                     }
@@ -385,9 +414,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 convertView.findViewById(R.id.msg).setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        message = getItem(position);
-                        delPosition = position;
-                        toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        if(notAllowUser){
+                            message = getItem(position);
+                            delPosition = position;
+                            toolbar.getMenu().findItem(R.id.delete).setVisible(true);
+                        }else{
+                            showErrorMsg();
+                        }
                         return false;
 
                     }
@@ -408,7 +441,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             @Override
             public void onClick(View v) {
                 wallpaperImage = true;
-                chooseImage();
+                if(notAllowUser){
+                    chooseImage();
+                }else{
+                    showErrorMsg();
+                }
             }
         });
 
@@ -675,7 +712,34 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }
         return super.onKeyDown(keyCode, event);
     }
-
+public void showErrorMsg(){
+    Log.d(TAG,"showError");
+    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+    alert.setTitle("Error");
+    alert.setMessage("You can't send message to this group because you're no longer a participant.");
+    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            //dialog.cancel();
+            if(login_role.matches("admin")){
+                Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+                startActivity(intent);
+            } else if(login_role.matches("user")){
+                Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
+                startActivity(intent);
+            }else if(login_role.matches("root")){
+                Intent intent = new Intent(getActivity(), RootHomeActivity.class);
+                startActivity(intent);
+            }
+        }
+    });
+    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            dialog.cancel();
+        }
+    });
+    AlertDialog alertDialog = alert.create();
+    alertDialog.show();
+}
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
         int height = image.getHeight();
