@@ -205,6 +205,14 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(role.equals("root")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageRoot();
+
+                    return true;
+            }
+        }
         if(role.equals("admin")&& !login_auth.matches("1")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
@@ -235,6 +243,11 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void backPageRoot() {
+        Log.d(TAG,"back page..");
+        startActivity(new Intent(getActivity(),RootHomeActivity.class));
     }
 
     private void backPageEmp() {

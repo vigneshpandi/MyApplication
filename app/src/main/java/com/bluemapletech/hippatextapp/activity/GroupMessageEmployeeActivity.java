@@ -95,8 +95,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     boolean wallpaperImage = false;
     private Toolbar toolbar;
     private FirebaseDatabase firebaseDatabaseRef;
-    private TextView newMessages,rm_gr_user;
-    private ImageView selectImages,sendMessage;
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
     SharedPreferences pref1;
@@ -105,13 +103,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_group_message_employee);
-
-            sendMessage = (ImageView)findViewById(R.id.send_message);
-            selectImages = (ImageView) findViewById(R.id.select_image);
-            newMessages = (TextView) findViewById(R.id.new_message);
-            rm_gr_user = (TextView) findViewById(R.id.rm_gr_user);
-            rm_gr_user.setVisibility(View.GONE);
-
             prefss = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
             login_role =  prefss.getString("role", "");
             logn_senderId = prefss.getString("senderId","");
@@ -143,7 +134,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             toolbar = (Toolbar) findViewById(R.id.toolbar_header);
                 setSupportActionBar(toolbar);
 
-
+            ImageView sendMessage = (ImageView)findViewById(R.id.send_message);
 
             sendMessage.setOnClickListener(this);
             String fromMails = fromMail.replace(".", "-");
@@ -187,10 +178,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                     header.setText(groupName);
                 }else{
                     Log.d(TAG,"remove user within the group");
-                    sendMessage.setVisibility(View.GONE);
-                    selectImages.setVisibility(View.GONE);
-                    newMessages.setVisibility(View.GONE);
-                    rm_gr_user.setVisibility(View.VISIBLE);
                 }
 
             }

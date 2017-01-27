@@ -106,7 +106,7 @@ public class PendingBaseAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (userInfo.get(position).getAuth().matches("2")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setMessage("Do you want to reject"+"'"+ info.getCompanyName() +"'"+"company1");
+                    alert.setMessage("Do you want to reject '"+ info.getCompanyName() +"' company");
                     alert.setCancelable(false);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -122,7 +122,7 @@ public class PendingBaseAdapter extends BaseAdapter {
                     alertDialog.show();
                 } else if (userInfo.get(position).getAuth().matches("1")) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                    alert.setMessage("Do you want to reject"+"'"+ info.getCompanyName() +"'"+"company11");
+                    alert.setMessage("Do you want to reject"+"'"+ info.getCompanyName() +"'"+"company");
                     alert.setCancelable(false);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {

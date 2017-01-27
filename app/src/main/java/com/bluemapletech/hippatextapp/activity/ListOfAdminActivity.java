@@ -1,9 +1,11 @@
 package com.bluemapletech.hippatextapp.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -170,7 +172,21 @@ public class ListOfAdminActivity extends AppCompatActivity {
             convertView.findViewById(R.id.reject_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteUser(userInfo.get(position).getUserName());
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    // alert.setTitle("");
+                    alert.setMessage("Do you want to reject '"+userInfo.get(position).getUserName()+"'!");
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteUser(userInfo.get(position).getUserName());
+                        }
+                    });
+                    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
 
                 }
             });

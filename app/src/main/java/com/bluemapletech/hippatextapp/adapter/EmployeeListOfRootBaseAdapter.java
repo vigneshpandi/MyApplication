@@ -101,7 +101,21 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                 public void onClick(View v) {
                      if (userInfo.get(position).getAuth().matches("3")) {
                          Log.d(TAG,"deleted accepted company");
-                        acceptUser(userInfo.get(position).getUserName());
+                         AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                         // alert.setTitle("");
+                         alert.setMessage("Do you want to accept '"+userInfo.get(position).getUserName()+"'!");
+                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int whichButton) {
+                                 acceptUser(userInfo.get(position).getUserName());
+                             }
+                         });
+                         alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int whichButton) {
+                                 dialog.cancel();
+                             }
+                         });
+                         AlertDialog alertDialog = alert.create();
+                         alertDialog.show();
                     }
 
                 }
@@ -151,7 +165,21 @@ public class EmployeeListOfRootBaseAdapter   extends BaseAdapter {
                 public void onClick(View v) {
                     if (userInfo.get(position).getAuth().matches("1") && !not_acp_user.matches("notAcceptUser")) {
                         Log.d(TAG,"deleted reject company");
-                        deleteUser(userInfo.get(position).getUserName());
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                        // alert.setTitle("");
+                        alert.setMessage("Do you want to reject '"+userInfo.get(position).getUserName()+"'!");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                deleteUser(userInfo.get(position).getUserName());
+                            }
+                        });
+                        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.show();
                     }
 
                     if(!not_acp_user.matches("notAcceptUser") && role_user_val.matches("admin")){

@@ -39,6 +39,8 @@
         android:id="@+id/user_id"
         android:layout_below="@+id/chat_btn"
         android:layout_alignLeft="@+id/layout_field_name"
-        android:layout_alignStart="@+id/layout_field_name" />
+        android:layout_alignStart="@+id/layout_field_name"
+        android:singleLine = "true"
+        android:ellipsize = "end"/>
 
 </RelativeLayout>
