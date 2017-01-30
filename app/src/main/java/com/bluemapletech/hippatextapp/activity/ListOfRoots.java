@@ -85,10 +85,14 @@ public class ListOfRoots extends AppCompatActivity {
         if(role.matches("admin")&& rootValue.matches("3")){
             Log.d(TAG,"admin list..");
             getSupportActionBar().setTitle("Admin List");
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Admin List");
         }
         if(role.matches("admin")&& rootValue.matches("1")){
             Log.d(TAG,"admin list..");
             getSupportActionBar().setTitle("Admin List");
+            TextView header = (TextView) findViewById(R.id.header);
+            header.setText("Admin List");
         }
 
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

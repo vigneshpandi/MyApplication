@@ -102,7 +102,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
         companyName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         compEinOrTinNo = (EditText) findViewById(R.id.comp_tin_or_ein_no);
         compRegBtn = (Button) findViewById(R.id.comp_register_btn);
-        providerName = (EditText) findViewById(R.id.provider_name);
+        providerName = (EditText) findViewById(R.id.provider_name1);
         providerNPIId = (EditText) findViewById(R.id.provider_npi_id);
         compRegBtn.setOnClickListener(new View.OnClickListener() {
             @Override
