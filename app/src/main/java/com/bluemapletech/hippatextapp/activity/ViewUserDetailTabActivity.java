@@ -60,10 +60,11 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         if(userEmails==null || userEmails.matches("")){
             userEmails = getIntent().getStringExtra(Inter_chat_admin_activity.userEmails);
         }
-        Bundle bundle = getIntent().getExtras();
-        String userEmails= bundle.getString("userEmail");
-        returnGroup = bundle.getString("return");
-
+        if(userEmails==null || userEmails.matches("")) {
+            Bundle bundle = getIntent().getExtras();
+            String userEmails = bundle.getString("userEmail");
+            returnGroup = bundle.getString("return");
+        }
         userEmail = (TextView) findViewById(R.id.user_email);
         compName = (TextView) findViewById(R.id.comp_name);
         empId = (TextView) findViewById(R.id.employee_id);

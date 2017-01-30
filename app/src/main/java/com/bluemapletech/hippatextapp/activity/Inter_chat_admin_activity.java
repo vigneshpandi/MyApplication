@@ -102,6 +102,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setSenderId(snapshot.child("senderId").getValue(String.class));
+                    user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setProviderNPIId(snapshot.child("providerNPIId").getValue(String.class));
@@ -177,6 +178,8 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
                 mViewHolder.fieldId.setText(info.getEmpId());
             }else if(info.getRole().matches("admin")){
                 mViewHolder.fieldId.setText(info.getProviderNPIId());
+            } else if(info.getRole().matches("root")){
+                mViewHolder.fieldId.setText("");
             }
             mViewHolder.fieldName.setText(info.getUserName());
 

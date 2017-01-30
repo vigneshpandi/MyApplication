@@ -50,9 +50,12 @@ public class SelectUser extends AppCompatActivity {
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
     String isOnline;
+    int p=0;
     Groups groupVal;
     private ArrayList<String> data = new ArrayList<>();
     List<User> userObj = new ArrayList<User>();
+  //  List<User> groupUserObj = new ArrayList<User>();
+    String groupPushNotificationId,loginMail;
     private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,9 @@ public class SelectUser extends AppCompatActivity {
         setContentView(R.layout.activity_select_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         Bundle bundle =  getIntent().getExtras();
+        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =  pref1.getString("loginMail", "");
+
         groupVal = (Groups) bundle.getSerializable("groupDetails");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -90,15 +96,24 @@ public class SelectUser extends AppCompatActivity {
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
+                    user.setPushNotificationId(snapshot.child("profilePhoto").getValue(String.class));
+                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
                     Log.d(TAG,"groupValues name "+ groupVal.getGroupEmailId());
                     String Value  = groupVal.getGroupEmailId();
                     String[] separated = groupVal.getGroupEmailId().split(";");
-                    if (!user.getRole().matches("root") && user.getAuth().matches("1") && !logged.getEmail().matches(user.getUserName())) {
+                    if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loginMail.matches(user.getUserName())) {
                         Log.d(TAG,"separated" + separated.length);
                         int check = 0;
                         for(int j=0; j<separated.length;j++){
                             if(user.getUserName().matches(separated[j])){
                                 check = 1;
+                                if(p == 0){
+                                    p++;
+                                    groupPushNotificationId = user.getPushNotificationId();
+                                } else if(p < 0){
+                                    groupPushNotificationId = groupPushNotificationId +";"+ user.getPushNotificationId();
+                                }
+
                             }
                         }
                         if(check==0) {
@@ -132,7 +147,7 @@ public class SelectUser extends AppCompatActivity {
                         progressDialog.show();
                         progressDialog.setCanceledOnTouchOutside(false);
                         EmployeeDao empDao = new EmployeeDao();
-                        boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal);
+                        boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal,groupPushNotificationId,userObj.get(listPosition).getPushNotificationId(),loginMail);
                         if(success){
                             progressDialog.dismiss();
                             Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
@@ -157,6 +172,7 @@ public class SelectUser extends AppCompatActivity {
     private class EmployeeUserBaseAdapter extends BaseAdapter {
 
         List<User> userInfo = new ArrayList<User>();
+        List<User> groupUserInfo = new ArrayList<User>();
         LayoutInflater inflater;
         Context context;
         private String loginMail;

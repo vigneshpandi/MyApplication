@@ -63,9 +63,11 @@ public class CreateGroup extends AppCompatActivity {
     List<User> userObj = new ArrayList<User>();
     ImageView selection;
     private HashMap<String, String> hm = new HashMap<String, String>();
+    private HashMap<String, String>  groupNotificationId = new HashMap<String, String>();
     public int listPosition;
     private String groupName = "";
     private String storeMail,groupMail;
+    private String storePushNotiId,groupPushNotiId;
     private SecureRandom random;
     private String senderID,roleValue,isOnline;
     private ProgressDialog progressDialog;
@@ -106,6 +108,7 @@ public class CreateGroup extends AppCompatActivity {
                     user.setAuth(snapshot.child("auth").getValue(String.class));
                     user.setUserName(snapshot.child("emailAddress").getValue(String.class));
                     user.setProfilePjhoto(snapshot.child("profilePhoto").getValue(String.class));
+                    user.setPushNotificationId(snapshot.child("pushNotificationId").getValue(String.class));
                     if (!user.getRole().matches("root") && user.getAuth().matches("1") && !loggedINEmail.matches(user.getUserName())) {
                         userObj.add(user);
                     }
@@ -127,8 +130,10 @@ public class CreateGroup extends AppCompatActivity {
                 if (iv.getChildAt(listPosition).findViewById(R.id.tickIcon).getVisibility() == View.INVISIBLE){
                     iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.VISIBLE);
                     hm.put(userObj.get(position).getUserName(),userObj.get(position).getUserName());
+                    groupNotificationId.put(userObj.get(position).getPushNotificationId(),userObj.get(position).getPushNotificationId());
                 }else{
                     hm.remove(userObj.get(position).getUserName());
+                    groupNotificationId.remove(userObj.get(position).getPushNotificationId());
                     iv.getChildAt(listPosition).findViewById(R.id.tickIcon).setVisibility(View.INVISIBLE);
                 }
                iv.getChildAt(listPosition).setSelected(true);
@@ -193,6 +198,7 @@ public class CreateGroup extends AppCompatActivity {
             Log.d("menu selected","menu group create selected");
             Log.d("loggedINEmail",loggedINEmail);
             Set<String> keys = hm.keySet();
+            Set<String>  groupNotKey = groupNotificationId.keySet();
             int i=0;
             for(String key: keys){
                 storeMail = hm.get(key);
@@ -204,6 +210,20 @@ public class CreateGroup extends AppCompatActivity {
                 }
 
             }
+            int j =0;
+            for(String key: groupNotKey){
+                storePushNotiId = groupNotificationId.get(key);
+                if(j==0){
+                    j++;
+                    groupPushNotiId = storePushNotiId;
+                }else if(j>0){
+                    groupPushNotiId = groupPushNotiId +";"+storePushNotiId;
+                }
+
+            }
+
+
+
             if(i>0) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Group Name");
@@ -264,7 +284,7 @@ public class CreateGroup extends AppCompatActivity {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                 Log.d(TAG,"downloadUrl " + downloadUrl);
                 Log.d(TAG,"uservalie"+loggedINEmail + groupMail + groupName + downloadUrl);
-                boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl);
+                boolean success = empDao.createGroup(loggedINEmail, groupMail, groupName , downloadUrl,groupPushNotiId);
                 if(roleValue.matches("admin")){
                     Log.d(TAG, "admin has been called!");
                     progressDialog.dismiss();

@@ -294,7 +294,7 @@ int adminCount = 0;
                                         if (result)
                                             makeGroupAdmin();
                                     } else if (items[item].equals("View")) {
-                                        // viewUserDetails();
+                                         viewUserDetails();
                                     } else if (items[item].equals("Remove")) {
                                         removeGroup(group, groupObj.get(listPosition).getUserMail());
                                     } else if (items[item].equals("Cancel")) {
@@ -666,7 +666,15 @@ int adminCount = 0;
                     }
                 }else {
                     Log.d(TAG,"remove user within the group");
-                    notAllowUser = false;
+                    String[] groupUserNameSeprate = groupObj.get(0).getGroupEmailId().split(";");
+                    HashMap<String,String>  findUser = new HashMap<String, String>();
+                    for(int d =0; d<groupUserNameSeprate.length; d++ ){
+                        findUser.put(groupUserNameSeprate[d],groupUserNameSeprate[d]);
+                    }
+                    if(findUser.get(loginMail)==null){
+                        notAllowUser = false;
+                    }
+
                 }
 
             }
@@ -746,7 +754,7 @@ int adminCount = 0;
                 btn.setVisibility(View.VISIBLE);
             }
             if (info.getUserImage() != null) {
-                //  Picasso.with(context).load(info.getUserImage()).fit().centerCrop().into(mViewHolder.userImage);
+                  Picasso.with(context).load(info.getUserImage()).fit().centerCrop().into(mViewHolder.userImage);
             }
             return convertView;
         }

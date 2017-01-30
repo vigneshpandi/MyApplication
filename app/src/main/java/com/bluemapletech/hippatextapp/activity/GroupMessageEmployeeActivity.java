@@ -144,8 +144,6 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             toolbar = (Toolbar) findViewById(R.id.toolbar_header);
                 setSupportActionBar(toolbar);
 
-
-
             sendMessage.setOnClickListener(this);
             String fromMails = fromMail.replace(".", "-");
             String[] ids = {fromMails};
@@ -440,8 +438,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wallpaperImage = true;
                 if(notAllowUser){
+                    wallpaperImage = false;
                     chooseImage();
                 }else{
                     showErrorMsg();
