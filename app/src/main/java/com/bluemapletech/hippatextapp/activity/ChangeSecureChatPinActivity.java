@@ -56,8 +56,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     private String text,login_auth;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    SharedPreferences pref1;
-    SharedPreferences.Editor editor1;
+    private String loginMail; // loginDetail string declare
+    /*SharedPreferences pref1;
+    SharedPreferences.Editor editor1;*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,13 +67,18 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         TextView header = (TextView) findViewById(R.id.header);
         header.setText("Change Secure Chat Pin");
+        //login user details
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        login_auth =  pref.getString("auth", "");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Change Secure Chat Pin");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        login_auth =  pref.getString("auth", "");
+
         init();
         resetPinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,13 +276,9 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -288,17 +290,13 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

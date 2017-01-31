@@ -46,6 +46,7 @@ public class AdminHomeActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,11 @@ public class AdminHomeActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager());
+
+
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
 
         // Creating tabs
         viewPagerAdapter.addFragments(new AcceptedAdminTabActivity(),"Accepted");
@@ -138,9 +144,6 @@ public class AdminHomeActivity extends AppCompatActivity {
             String myFormat = "yyyy-MM-dd HH:mm:ss Z";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             String dateValue = sdf.format(c.getTime());
-            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-            loginMail =  pref.getString("loginMail", "");
-            isOnline =  pref.getString("isOnline", "");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
@@ -167,13 +170,8 @@ public class AdminHomeActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
@@ -186,14 +184,10 @@ public class AdminHomeActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
+
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);

@@ -42,7 +42,7 @@ public class SecurePin extends AppCompatActivity {
     private EditText chatPin, conformChatPin;
     private Button loginSecureBtn;
     private String auth;
-    private String role;
+    private String role,loginMail;
     private String securePin,isOnline;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
@@ -57,6 +57,10 @@ public class SecurePin extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        //user login information
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
 
         init();
         loginSecureBtn.setOnClickListener(new View.OnClickListener() {
@@ -274,13 +278,10 @@ public class SecurePin extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
+
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -291,17 +292,13 @@ public class SecurePin extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

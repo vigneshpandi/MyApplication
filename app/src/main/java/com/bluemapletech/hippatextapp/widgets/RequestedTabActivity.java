@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,14 +28,18 @@ import java.util.List;
 
 public class RequestedTabActivity extends Fragment {
     private static final String TAG = PendingTabActivity.class.getCanonicalName();
-
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
     private ListView listview;
-
+private String loginMail;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.pending_tab_frament, container, false);
 
         listview = (ListView) rootView.findViewById(R.id.pending_tab_fragment);
+//login user details
+        preflogin = this.getActivity().getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   preflogin.getString("loginMail","");
 
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
 

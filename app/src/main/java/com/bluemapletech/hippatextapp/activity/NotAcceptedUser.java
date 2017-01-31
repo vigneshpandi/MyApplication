@@ -53,9 +53,11 @@ public class NotAcceptedUser extends AppCompatActivity {
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginroleValue =  pref.getString("role", "");
         loginEmailId = pref.getString("loginMail","");
+        loginMail = loginEmailId;
         firstName = pref.getString("firstName","");
         lastName = pref.getString("lastName","");
         loginAuth = pref.getString("auth","");
+        isOnline =  pref.getString("isOnline", "");
        // userEmail = loginEmailId.split("@");
         if(firstName.matches("")){
             if(lastName.matches("")){
@@ -137,9 +139,6 @@ public class NotAcceptedUser extends AppCompatActivity {
             String myFormat = "yyyy-MM-dd HH:mm:ss Z";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             String dateValue = sdf.format(c.getTime());
-            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-            loginMail =  pref.getString("loginMail", "");
-
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
@@ -177,13 +176,8 @@ public class NotAcceptedUser extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
@@ -196,14 +190,9 @@ public class NotAcceptedUser extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);

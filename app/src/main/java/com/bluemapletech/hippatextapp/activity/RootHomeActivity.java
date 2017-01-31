@@ -66,6 +66,9 @@ public class RootHomeActivity extends AppCompatActivity {
         viewPagerAdapter.addFragments(new RequestedTabActivity(),"Requested");
         viewPagerAdapter.addFragments(new PendingTabActivity(),"Pending");
 
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -95,8 +98,6 @@ public class RootHomeActivity extends AppCompatActivity {
             String myFormat = "yyyy-MM-dd HH:mm:ss Z";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             String dateValue = sdf.format(c.getTime());
-            pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-            loginMail =  pref.getString("loginMail", "");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             String reArrangeEmail = loginMail.replace(".", "-");
             DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail).child("updatedDate");
@@ -172,14 +173,9 @@ public class RootHomeActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -191,14 +187,9 @@ public class RootHomeActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
-        loginMail =  pref.getString("loginMail", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);

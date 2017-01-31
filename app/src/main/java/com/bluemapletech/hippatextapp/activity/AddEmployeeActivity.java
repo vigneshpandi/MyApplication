@@ -67,6 +67,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private FirebaseDatabase fireBaseDatabase;
     private FirebaseAuth firebaseAuth;
+    private String loginMail; // loginDetail string declare
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +76,12 @@ public class AddEmployeeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         TextView header = (TextView) findViewById(R.id.header);
         header.setText("Add Employee");
+        //login details
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
+
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Add Employee");
@@ -287,13 +294,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -305,17 +308,13 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

@@ -1,6 +1,8 @@
 package com.bluemapletech.hippatextapp.widgets;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,24 +35,29 @@ import java.util.List;
 
 public class GroupChatEmployeeTabActivity extends Fragment {
     private ListView listview;
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
     ArrayList empList = new ArrayList();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
-    private String loggedINsenderId;
+    private String loggedINsenderId,loginMail;
     private static final String TAG = GroupChatEmployeeTabActivity.class.getCanonicalName();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
+        //login user details
+        preflogin = this.getActivity().getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   preflogin.getString("loginMail","");
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
         checkUserDetails();
         final Groups group = new Groups();
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+       /* firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();*/
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -83,9 +90,7 @@ public class GroupChatEmployeeTabActivity extends Fragment {
     }
     public void checkUserDetails() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override

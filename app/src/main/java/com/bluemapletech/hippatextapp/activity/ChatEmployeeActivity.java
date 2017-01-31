@@ -92,6 +92,7 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     String newMessage = null;
     HashMap<String,String> onlineHash = new HashMap<String,String>();
     ImageView imageView;
+    private String loginMail; // loginDetail string declare
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,11 +125,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
                 break;
             }
         }
+        //login userDetails
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         roleValue =  pref.getString("role", "");
         loginRole = pref.getString("role","");
         loginAuth = pref.getString("auth","");
         logn_senderId = pref.getString("senderId","");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             String[] chatName = toMail.split("@");
@@ -148,8 +152,8 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
         mListener = UserDao.addMessagesListener(mConvoId,logn_senderId, this);
 
 
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
+
+
         if(isOnline.matches("true")) {
             checkOnlineUser();
         }
@@ -183,13 +187,9 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onPause()
     {
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -201,17 +201,14 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected  void onResume(){
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
+
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
@@ -219,8 +216,6 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected  void onStart(){
         super.onStart();
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref.getString("isOnline", "");
         if(isOnline.matches("true")) {
             checkOnlineUser();
         }

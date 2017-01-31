@@ -44,6 +44,7 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
     private ListView iv;
     private ArrayList<String> data = new ArrayList<>();
     SharedPreferences pref;
+    String loginMail;
     SharedPreferences.Editor editor;
     private String rootValue,loginRole,loginAuth,not_acp_user;
     private String loginCompanyName,isOnline,loginsenderId;
@@ -72,12 +73,13 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
             TextView header = (TextView) findViewById(R.id.header);
             header.setText("Inter Chat List");
         }
-
+//login user details
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        String loginMail =  pref.getString("loginMail", "");
+        loginMail =  pref.getString("loginMail", "");
         String chatPin =  pref.getString("chatPin", "");
         loginRole = pref.getString("role","");
         loginAuth = pref.getString("auth","");
+        isOnline =  pref.getString("isOnline", "");
         loginCompanyName = pref.getString("loginCompanyName","");
         loginsenderId = pref.getString("senderId","");
         loggedINEmail = loginMail;
@@ -270,13 +272,9 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -288,17 +286,13 @@ public class Inter_chat_admin_activity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

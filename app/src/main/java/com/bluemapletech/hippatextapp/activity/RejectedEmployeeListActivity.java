@@ -46,7 +46,7 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
-    String isOnline;
+    String isOnline,loginsenderId,loginChatPin,loginMail;
     public static final String toEmail = "toEmail";
     public static final String fromEmail = "fromEmail";
     public static final String sendId = "sendId";
@@ -60,7 +60,11 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejected_employee_list);
-
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginsenderId = pref.getString("senderId","");
+        loginChatPin =   pref.getString("chatPin", "");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
@@ -98,9 +102,8 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
                         userObj.add(user);
                     }
                     UserDetailDto userDto = new UserDetailDto();
-                    pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-                    userDto.setLoggedINChatPin(pref.getString("chatPin", ""));
-                    userDto.setLoginSenderId(pref.getString("senderId", ""));
+                    userDto.setLoggedINChatPin(loginChatPin);
+                    userDto.setLoginSenderId(loginsenderId);
                     iv.setAdapter(new RejectedEmployeeListActivity.PageAdminBaseAdaptersEmployee(getActivity(), userObj,loggedINEmail,userDto));
                 }
             }
@@ -251,13 +254,9 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -269,17 +268,13 @@ public class RejectedEmployeeListActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

@@ -40,19 +40,19 @@ public class ChangePassword extends AppCompatActivity {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     String email,loginRoleValue,loginAuthValue,loginMail;
-    SharedPreferences pref1;
-    SharedPreferences.Editor editor1;
-    SharedPreferences pref3;
-    SharedPreferences.Editor editor3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "Logged in user information's: " + logged.getEmail());
-        pref3 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        loginMail =  pref3.getString("loginMail", "");
+
+
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =  pref.getString("loginMail", "");
+        loginRoleValue =  pref.getString("role", "");
+        loginAuthValue = pref.getString("auth","");
+        isOnline =  pref.getString("isOnline", "");
+
         changePassword = (Button) findViewById(R.id.send_password);
         emailAddress = (EditText) findViewById(R.id.user_email);
         emailAddress.setText(loginMail);
@@ -66,9 +66,7 @@ public class ChangePassword extends AppCompatActivity {
             getSupportActionBar().setTitle("Change Password");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        loginRoleValue =  pref.getString("role", "");
-        loginAuthValue = pref.getString("auth","");
+
     }
 
     public void init(){
@@ -132,14 +130,8 @@ public class ChangePassword extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
-        loginMail =  pref1.getString("loginMail", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-           // String reArrangeEmail = logged.getEmail().replace(".", "-");
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
@@ -152,19 +144,13 @@ public class ChangePassword extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
-        loginMail =  pref1.getString("loginMail", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-           // String reArrangeEmail = logged.getEmail().replace(".", "-");
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

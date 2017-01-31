@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,13 +32,18 @@ import java.util.List;
 public class RequestedAdminTabActivity extends Fragment {
     private ListView listview;
     ArrayList empList = new ArrayList();
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedINCompany,loginsenderId;
+    private String loggedINCompany,loginsenderId,loginMail;
     private static final String TAG = RequestedAdminTabActivity.class.getCanonicalName();
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
+//login user details
+        preflogin = this.getActivity().getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   preflogin.getString("loginMail","");
 
     listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
 
@@ -81,9 +88,7 @@ public class RequestedAdminTabActivity extends Fragment {
 
     public void checkCompanyExistence() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override

@@ -1,6 +1,8 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,9 +42,11 @@ public class InterChatEmployeeTabActivity extends Fragment {
     private String loggedINCompany;
     private String loggedINEmail;
     private String loggedINChatPin;
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
     private String userFirstName;
     private String userLastName,loginsenderId;
-    private String fName, lName, userEmailName;
+    private String fName, lName, userEmailName,loginMail;
     public static final String userEmails = "userEmails";
     HashMap<String, String> onlineHash = new HashMap<String, String>();
     List<User> userObj;
@@ -51,6 +55,10 @@ public class InterChatEmployeeTabActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.accepted_admin_tab_fragment, container, false);
+
+        //login user details
+        preflogin = this.getActivity().getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   preflogin.getString("loginMail","");
 
         listview = (ListView) rootView.findViewById(R.id.accepted_admin_tab_fragment);
 
@@ -73,9 +81,9 @@ public class InterChatEmployeeTabActivity extends Fragment {
 
     public void checkCompanyExistence() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+       /* firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();*/
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override

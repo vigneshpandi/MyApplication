@@ -98,6 +98,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private FirebaseDatabase firebaseDatabaseRef;
     private TextView newMessages,rm_gr_user;
     private ImageView selectImages,sendMessage;
+    private String loginMail; // loginDetail string declare
     public static final String groupNames = "groupNames";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
     SharedPreferences pref1;
@@ -113,9 +114,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
             rm_gr_user = (TextView) findViewById(R.id.rm_gr_user);
             rm_gr_user.setVisibility(View.GONE);*/
 
+            //login user details
             prefss = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
             login_role =  prefss.getString("role", "");
             logn_senderId = prefss.getString("senderId","");
+            isOnline =  prefss.getString("isOnline", "");
+            loginMail =  prefss.getString("loginMail", "");
+
             layout = (LinearLayout) findViewById(R.id.activity_group_chat_employee);
             fromMail = getIntent().getStringExtra(EmployeeGroupsAdapter.fromMail);
             senderId = getIntent().getStringExtra(EmployeeGroupsAdapter.senderId);
@@ -661,13 +666,9 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -679,17 +680,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

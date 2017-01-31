@@ -32,11 +32,13 @@ boolean dummy=false;
         setContentView(R.layout.activity_home);
         startService(new Intent(HomeActivity.this, ExamplesService.class));
         Log.d(TAG,"homeControlle has been called");
+        //login user details
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginRole =  pref.getString("role", "");
         loginKey = pref.getString("loginKey","");
         loginAuth = pref.getString("auth","");
         loginMail = pref.getString("loginMail","");
+
         if(!loginKey.matches("") && !loginRole.matches("")){
             Log.d("login","BeforeLoginKeyCalled"+loginKey);
             if(loginRole.matches("root") && loginAuth.matches("1") && !loginMail.matches("")) {

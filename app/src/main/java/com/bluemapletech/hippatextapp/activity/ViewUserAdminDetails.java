@@ -41,7 +41,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
     String userId,loginsenderId,reArrangeEmail,userAuths,userEmails;
     String adminMailId = null;
     HashMap<String,String> isUserChecking = new HashMap<String, String>();
-    String role,roleValue,loginChatPin;
+    String role,roleValue,loginChatPin,loginMail;
     private ListView iv;
     private FirebaseAuth firebaseAuth;
     List<User> userObj;
@@ -71,6 +71,9 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         roleValue =  pref.getString("role", "");
         loginChatPin= pref.getString("chatPin", "");
         loginsenderId = pref.getString("senderId","");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =   pref.getString("loginMail","");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -192,12 +195,10 @@ public class ViewUserAdminDetails extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String srt = chatPinn.getEditableText().toString();
                                 if (srt.matches(loginChatPin)) {
-                                    firebaseAuth = FirebaseAuth.getInstance();
-                                    FirebaseUser logged = firebaseAuth.getCurrentUser();
-                                    Log.d(TAG, "Logged in user information's: " + logged.getEmail());
+                                    Log.d(TAG, "Logged in user information's: " + loginMail);
                                     Intent intent = new Intent(getActivity(), ChatEmployeeActivity.class);
                                     intent.putExtra(toEmail, user1.getUserName());
-                                    intent.putExtra(fromEmail, logged.getEmail());
+                                    intent.putExtra(fromEmail, loginMail);
                                     intent.putExtra(sendId, loginsenderId);
                                     intent.putExtra(notificationId, user1.getPushNotificationId());
                                     intent.putExtra(firstName, user1.getFirstName());
@@ -314,9 +315,7 @@ public class ViewUserAdminDetails extends AppCompatActivity {
         isOnline =  preflogin.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -328,17 +327,13 @@ public class ViewUserAdminDetails extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        preflogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  preflogin.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

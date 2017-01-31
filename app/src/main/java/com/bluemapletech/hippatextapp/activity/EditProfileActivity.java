@@ -94,7 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
         loginRole = pref.getString("role", "");
         loginAuth = pref.getString("auth", "");
         loginMail = pref.getString("loginMail","");
-
+        isOnline =  pref.getString("isOnline", "");
 
         init();
     }
@@ -499,14 +499,9 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
-        loginMail = pref1.getString("loginMail","");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
             firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-           // String reArrangeEmail = logged.getEmail().replace(".", "-");
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
@@ -517,20 +512,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     @Override
-    protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
-        loginMail = pref1.getString("loginMail","");
+        protected  void onResume(){
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-           // String reArrangeEmail = logged.getEmail().replace(".", "-");
             String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

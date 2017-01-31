@@ -33,7 +33,7 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     User user1 = new User();
     SharedPreferences preflogin;
     SharedPreferences.Editor editorlogin;
-    String isOnline,returnGroup;
+    String isOnline,returnGroup,loginMail;
     private FirebaseDatabase fireBaseDatabase; private FirebaseAuth firebaseAuth;
     String logi_role_value,reArrangeEmail,userAuths,userEmails,userId;
     private TextView userEmail,compName,empId,providerNPI,providerName,providerNpiLabel,providerNameLabel;
@@ -44,6 +44,9 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_user_detail_tab);
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         logi_role_value =  pref.getString("role", "");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =   pref.getString("loginMail","");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
@@ -62,7 +65,7 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         }
         if(userEmails==null || userEmails.matches("")) {
             Bundle bundle = getIntent().getExtras();
-            String userEmails = bundle.getString("userEmail");
+            userEmails = bundle.getString("userEmail");
             returnGroup = bundle.getString("return");
         }
         userEmail = (TextView) findViewById(R.id.user_email);
@@ -161,13 +164,9 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        preflogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  preflogin.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -184,12 +183,10 @@ public class ViewUserDetailTabActivity extends AppCompatActivity {
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

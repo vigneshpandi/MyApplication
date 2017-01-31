@@ -1,5 +1,7 @@
 package com.bluemapletech.hippatextapp.widgets;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,18 +31,22 @@ import java.util.List;
 
 public class PendingAdminTabActivity extends Fragment {
     private static final String TAG = PendingAdminTabActivity.class.getCanonicalName();
-
+    SharedPreferences preflogin;
+    SharedPreferences.Editor editorlogin;
     private ListView listview;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
 
-    private String loggedINCompany,loginsenderId;
+    private String loggedINCompany,loginsenderId,loginMail;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.pending_admin_tab_fragment, container, false);
+//login user details
+        preflogin = this.getActivity().getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginMail =   preflogin.getString("loginMail","");
 
         listview = (ListView) rootView.findViewById(R.id.pending_admin_tab_fragment);
 
@@ -83,9 +89,7 @@ if(getActivity()!=null) {
 
     public void checkCompanyExistence() {
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override

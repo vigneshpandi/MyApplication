@@ -63,8 +63,12 @@ public class SelectUser extends AppCompatActivity {
         setContentView(R.layout.activity_select_user);
         toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         Bundle bundle =  getIntent().getExtras();
+
+        //login user details
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginMail =  pref1.getString("loginMail", "");
+        isOnline =  pref1.getString("isOnline", "");
+
 
         groupVal = (Groups) bundle.getSerializable("groupDetails");
         if (toolbar != null) {
@@ -86,9 +90,6 @@ public class SelectUser extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     user = new User();
                     fireBaseDatabase = FirebaseDatabase.getInstance();
-                    firebaseAuth = FirebaseAuth.getInstance();
-                    FirebaseUser logged = firebaseAuth.getCurrentUser();
-                    String reArrangeEmail = logged.getEmail().replace(".", "-");
                     user.setCompanyName(snapshot.child("companyName").getValue(String.class));
                     user.setEmpId(snapshot.child("employeeId").getValue(String.class));
                     user.setPassword(snapshot.child("password").getValue(String.class));
@@ -251,13 +252,9 @@ public class SelectUser extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -269,17 +266,13 @@ public class SelectUser extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

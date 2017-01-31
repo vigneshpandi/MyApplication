@@ -52,6 +52,7 @@ public class ListOfAdminActivity extends AppCompatActivity {
     public int listPosition;
     private String groupName = "";
     SharedPreferences pref;
+    String loginMail;
     SharedPreferences.Editor editor;
     public static final String userEmails = "userEmails";
     public static final String userAuth = "userAuth";
@@ -70,10 +71,12 @@ public class ListOfAdminActivity extends AppCompatActivity {
             TextView header = (TextView) findViewById(R.id.header);
             header.setText("Admin List");
         }
+        //login user details
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        String loginMail =  pref.getString("loginMail", "");
+        loginMail =  pref.getString("loginMail", "");
         String chatPin =  pref.getString("chatPin", "");
         String companyName =  pref.getString("loginCompanyName", "");
+        isOnline =  pref.getString("isOnline", "");
         loggedINEmail = loginMail;
         loggedInCompanyValue = companyName;
         Log.d("loggedInCoInCom",loggedInCompanyValue);
@@ -248,13 +251,9 @@ public class ListOfAdminActivity extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -266,17 +265,13 @@ public class ListOfAdminActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();

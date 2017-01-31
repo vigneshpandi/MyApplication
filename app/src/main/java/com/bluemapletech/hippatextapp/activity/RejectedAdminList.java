@@ -40,11 +40,11 @@ public class RejectedAdminList extends AppCompatActivity {
     private static final String TAG = RejectedAdminList.class.getCanonicalName();
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
-    private String loggedInCompanyValue,loggedINEmail;
+    private String loggedInCompanyValue,loggedINEmail,loginMail;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     private ListView iv;
-    private String loginsenderId;
+    private String loginsenderId,loginChatPin;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
     SharedPreferences prefr;
@@ -64,6 +64,12 @@ public class RejectedAdminList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejected_admin_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
+        //login user details
+        pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
+        loginsenderId = pref.getString("senderId","");
+        loginChatPin =   pref.getString("chatPin", "");
+        isOnline =  pref.getString("isOnline", "");
+        loginMail =  pref.getString("loginMail", "");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Admin List");
@@ -106,9 +112,8 @@ public class RejectedAdminList extends AppCompatActivity {
                         }
                     }
                     UserDetailDto userDto = new UserDetailDto();
-                    pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-                    userDto.setLoggedINChatPin(pref.getString("chatPin", ""));
-                    loginsenderId = pref.getString("senderId","");
+
+                    userDto.setLoggedINChatPin(loginChatPin);
                     userDto.setLoginSenderId(loginsenderId);
                     iv.setAdapter(new RejectedAdminList.PageAdminBaseAdaptersAdmin(getActivity(), userObj,loggedINEmail,userDto));
                 }
@@ -267,13 +272,9 @@ public class RejectedAdminList extends AppCompatActivity {
     @Override
     public void onPause()
     {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
             dataReferences.removeValue();
@@ -285,17 +286,13 @@ public class RejectedAdminList extends AppCompatActivity {
 
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
