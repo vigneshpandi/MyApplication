@@ -17,17 +17,16 @@ import android.view.MenuItem;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
+import com.bluemapletech.hippatextapp.utils.ExamplesService;
 import com.bluemapletech.hippatextapp.widgets.AcceptedTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class RootHomeActivity extends AppCompatActivity {
@@ -54,7 +53,7 @@ public class RootHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root_home);
-
+        getActivity().startService(new Intent(RootHomeActivity.this, ExamplesService.class));
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -170,7 +169,7 @@ public class RootHomeActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
+    /*@Override
     public void onPause()
     {
         if(isOnline.matches("true")) {
@@ -197,7 +196,7 @@ public class RootHomeActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
-    }
+    }*/
     public RootHomeActivity getActivity() {
         return this;
     }

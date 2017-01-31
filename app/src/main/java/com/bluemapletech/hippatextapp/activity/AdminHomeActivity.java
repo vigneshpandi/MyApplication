@@ -17,19 +17,18 @@ import android.view.MenuItem;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
+import com.bluemapletech.hippatextapp.utils.ExamplesService;
 import com.bluemapletech.hippatextapp.widgets.AcceptedAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.ChatAdminActivity;
 import com.bluemapletech.hippatextapp.widgets.GroupAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.PendingAdminTabActivity;
 import com.bluemapletech.hippatextapp.widgets.RequestedAdminTabActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class AdminHomeActivity extends AppCompatActivity {
@@ -53,7 +52,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
-
+        getActivity().startService(new Intent(AdminHomeActivity.this, ExamplesService.class));
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager());
@@ -167,7 +166,7 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    @Override
+  /*  @Override
     public void onPause()
     {
         if(isOnline.matches("true")) {
@@ -195,7 +194,7 @@ public class AdminHomeActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
-    }
+    }*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {

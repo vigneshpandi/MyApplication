@@ -4,32 +4,27 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.adapter.ViewPageAdapter;
+import com.bluemapletech.hippatextapp.utils.ExamplesService;
 import com.bluemapletech.hippatextapp.widgets.GroupChatEmployeeTabActivity;
 import com.bluemapletech.hippatextapp.widgets.InterChatEmployeeTabActivity;
 import com.bluemapletech.hippatextapp.widgets.IntraChatEmployeeTabActivity;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -47,7 +42,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_home);
-
+        getActivity().startService(new Intent(EmployeeHomeActivity.this, ExamplesService.class));
        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
 
@@ -78,7 +73,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         editor.commit();
         super.onDestroy();
     }
-    @Override
+  /*  @Override
     public void onPause()
     {
         if(isOnline.matches("true")) {
@@ -105,7 +100,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
-    }
+    }*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
