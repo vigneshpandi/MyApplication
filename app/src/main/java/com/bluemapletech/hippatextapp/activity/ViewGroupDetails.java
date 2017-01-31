@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.bluemapletech.hippatextapp.R;
 import com.bluemapletech.hippatextapp.dao.EmployeeDao;
 import com.bluemapletech.hippatextapp.model.Groups;
+import com.bluemapletech.hippatextapp.utils.PushNotification;
 import com.bluemapletech.hippatextapp.utils.Utility;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -84,6 +85,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     private Bitmap bm;
     public int listPosition;
     Groups groupInformation;
+    String pushNotificationId;
 int adminCount = 0;
     boolean adminAddedPermisson = false;
     SharedPreferences pref;SharedPreferences.Editor editor;FirebaseUser logged;
@@ -196,8 +198,18 @@ int adminCount = 0;
                             });
                     alertDialogs.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            String groupNotificationId = null;
                             Log.d(TAG, "exit from the group" + group.toString());
-                            exitGroup(group);
+                            for(int g=0; g < groupObj.size(); g++){
+                                if(groupNotificationId == null){
+                                    groupNotificationId = groupObj.get(g).getPushNotificationId();
+                                }else{
+                                    groupNotificationId = groupNotificationId +";"+groupObj.get(g).getPushNotificationId();
+                                }
+                            }
+                            Log.d(TAG,"groupNotificationId"+groupNotificationId);
+                            final String finalGroupNotificationId = groupNotificationId;
+                            exitGroup(group,finalGroupNotificationId,groupObj.get(listPosition).getPushNotificationId());
                         }
                     });
                     alertDialogs.show();
@@ -260,14 +272,23 @@ int adminCount = 0;
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                String groupNotificationId = null;
                 if(notAllowUser) {
                     Log.d(TAG, "clicking the details");
                     listPosition = position;
+                    for(int g=0; g < groupObj.size(); g++){
+                        if(groupNotificationId == null){
+                            groupNotificationId = groupObj.get(g).getPushNotificationId();
+                        }else{
+                            groupNotificationId = groupNotificationId +";"+groupObj.get(g).getPushNotificationId();
+                        }
+                    }
                     if (adminAddedPermisson) {
                         if (groupObj.get(listPosition).getStatus().matches("admin") && !groupObj.get(listPosition).getUserMail().matches(loginMail)) {
                             final CharSequence[] items = {"View", "Remove",
                                     "Cancel"};
                             AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
+                            final String finalGroupNotificationId = groupNotificationId;
                             builder.setItems(items, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int item) {
@@ -275,7 +296,9 @@ int adminCount = 0;
                                     if (items[item].equals("View")) {
                                         viewUserDetails();
                                     } else if (items[item].equals("Remove")) {
-                                        removeGroup(group, groupObj.get(listPosition).getUserMail());
+                                        Log.d(TAG,"groupObjPushNotificationId"+ finalGroupNotificationId);
+                                        Log.d(TAG,"selectingPushNotificationId"+groupObj.get(listPosition).getPushNotificationId());
+                                        removeGroup(group, groupObj.get(listPosition).getUserMail(),finalGroupNotificationId,groupObj.get(listPosition).getPushNotificationId());
                                     } else if (items[item].equals("Cancel")) {
                                         dialog.dismiss();
                                     }
@@ -285,6 +308,7 @@ int adminCount = 0;
                         } else if (groupObj.get(listPosition).getStatus().matches("user") && !groupObj.get(listPosition).getUserMail().matches(loginMail)) {
                             final CharSequence[] items = {"Make group admin", "View", "Remove",
                                     "Cancel"};
+                            final String finalGroupNotificationId = groupNotificationId;
                             AlertDialog.Builder builder = new AlertDialog.Builder(ViewGroupDetails.this);
                             builder.setItems(items, new DialogInterface.OnClickListener() {
                                 @Override
@@ -296,7 +320,9 @@ int adminCount = 0;
                                     } else if (items[item].equals("View")) {
                                          viewUserDetails();
                                     } else if (items[item].equals("Remove")) {
-                                        removeGroup(group, groupObj.get(listPosition).getUserMail());
+                                        Log.d(TAG,"groupObjPushNotificationId"+ finalGroupNotificationId);
+                                        Log.d(TAG,"selectingPushNotificationId"+groupObj.get(listPosition).getPushNotificationId());
+                                       removeGroup(group, groupObj.get(listPosition).getUserMail(),finalGroupNotificationId,groupObj.get(listPosition).getPushNotificationId());
                                     } else if (items[item].equals("Cancel")) {
                                         dialog.dismiss();
                                     }
@@ -429,10 +455,10 @@ int adminCount = 0;
         boolean success = empDao.empChangeAdmintoGroup(groupObj.get(listPosition).getRandomName(), groupObj.get(listPosition).getUserMail());
        // groupObj.remove(listPosition);
     }
-    public void removeGroup(Groups group,String userMail){
+    public void removeGroup(Groups group,String userMail,String groupPushNotificationId,String selectUserPushNotificationId){
         adminCount = 0 ;
-        Log.d(TAG,"groupDetails"+group.toString());
-        Log.d(TAG,"userMail"+userMail);
+        Log.d(TAG,"groupDetailsuser"+group.toString());
+        Log.d(TAG,"userMail11"+userMail);
         fireBaseDatabase = FirebaseDatabase.getInstance();
         String[] groupUsers = group.getGroupEmailId().split(";");
         String newGroup = null;
@@ -457,6 +483,50 @@ int adminCount = 0;
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(group.getRandomName());
         dataReferences.removeValue();
         removeSameUser.remove(userMail);
+        Log.d(TAG,"after remove group user details"+group.toString());
+        Log.d(TAG,"remove userMail..."+userMail);
+
+        String[] seprateNotificationId = groupPushNotificationId.split(";");
+        for(int j=0;j< seprateNotificationId.length; j++){
+            Log.d("value","groupNotificstion"+seprateNotificationId[j]);
+            if(!selectUserPushNotificationId.matches(seprateNotificationId[j])){
+                try {
+                    PushNotification runners = new PushNotification();
+                    runners.execute("TCTText",loginMail+" "+"removed"+" "+userMail,seprateNotificationId[j]);
+
+                } catch (Exception ex) {
+                    Log.d("error","Exception error...");
+                }
+            }
+
+        }
+
+        try {
+            PushNotification runners = new PushNotification();
+            runners.execute("TCTText",loginMail+" removed you",selectUserPushNotificationId);
+
+        } catch (Exception ex) {
+            Log.d("error","Exception error...");
+        }
+       /* if(!userMail.matches(groupObj.toString())){
+            try {
+                PushNotification runners = new PushNotification();
+                runners.execute("TCTText",loginMail+" removed "+userMail,pushNotificationId);
+
+            } catch (Exception ex) {
+                Log.d("error","Exception error...");
+            }
+        }*/
+       /* Log.d(TAG,"groupObj.."+groupObj.toString());
+        if(groupObj.toString() != null){
+            try {
+                PushNotification runners = new PushNotification();
+                runners.execute("TCTText",loginMail+" removed "+userMail,pushNotificationId);
+
+            } catch (Exception ex) {
+                Log.d("error","Exception error...");
+            }
+        }*/
     }
 
     public void  viewUserDetails(){
@@ -611,6 +681,7 @@ int adminCount = 0;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map) dataSnapshot.getValue();
+                groupInformation.setPushNotificationId(map.get("pushNotificationId"));
                 groupInformation.setUserImage(map.get("profilePhoto"));
                 groupObjs.add(groupInformation);
                 getGroupUser(userMail, group.getRandomName());
@@ -625,12 +696,13 @@ int adminCount = 0;
     }
 
 
-    private void getGroupUser(String userMail, String randomValue) {
+    private void getGroupUser(final String userMail, String randomValue) {
         userMailId = userMail;
         groupObj = new ArrayList<Groups>();
         final Groups groupValue = new Groups();
         groupValue.setUserMail(userMail);
         groupValue.setUserImage(groupObjs.get(k).getUserImage());
+        groupValue.setPushNotificationId(groupObjs.get(k).getPushNotificationId());
         k++;
         removeSameUser = new HashMap<String, String>();
         adminCount =0;
@@ -666,14 +738,17 @@ int adminCount = 0;
                     }
                 }else {
                     Log.d(TAG,"remove user within the group");
-                    String[] groupUserNameSeprate = groupObj.get(0).getGroupEmailId().split(";");
-                    HashMap<String,String>  findUser = new HashMap<String, String>();
-                    for(int d =0; d<groupUserNameSeprate.length; d++ ){
-                        findUser.put(groupUserNameSeprate[d],groupUserNameSeprate[d]);
+                    if(!groupObj.isEmpty()){
+                        String[] groupUserNameSeprate = groupObj.get(0).getGroupEmailId().split(";");
+                        HashMap<String,String>  findUser = new HashMap<String, String>();
+                        for(int d =0; d<groupUserNameSeprate.length; d++ ){
+                            findUser.put(groupUserNameSeprate[d],groupUserNameSeprate[d]);
+                        }
+                        if(findUser.get(loginMail)==null){
+                            notAllowUser = false;
+                        }
                     }
-                    if(findUser.get(loginMail)==null){
-                        notAllowUser = false;
-                    }
+
 
                 }
 
@@ -858,7 +933,7 @@ int adminCount = 0;
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public void exitGroup(Groups group){
+    public void exitGroup(Groups group,String groupPushNotificationId,String selectUserPushNotificationId){
         Log.d(TAG,"adminCountUserExit"+adminCount);
        fireBaseDatabase = FirebaseDatabase.getInstance();
         String reArrangeEmail = loginMail.replace(".", "-");
@@ -874,6 +949,19 @@ int adminCount = 0;
 
             }
         }
+        String[] seprateNotificationId = groupPushNotificationId.split(";");
+        for(int j=0;j< seprateNotificationId.length; j++){
+            Log.d("value","groupNotificstion"+seprateNotificationId[j]);
+            try {
+                PushNotification runners = new PushNotification();
+                runners.execute("TCTText",loginMail+" left ",seprateNotificationId[j]);
+
+            } catch (Exception ex) {
+                Log.d("error", "Exception error...");
+            }
+
+        }
+
         int moreThanUser = 0;
         for(int z = 0; z < groupUsers.length; z++){
             if(!loginMail.matches(groupUsers[z])) {
@@ -900,11 +988,12 @@ int adminCount = 0;
             }
 
         }
-
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         reArrangeEmail =  loginMail.replace(".","-");
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(group.getRandomName());
         dataReferences.removeValue();
+        Log.d(TAG,"login value"+loginMail);
+
         if(login_role.matches("root")){
             Intent redirect = new Intent(getActivity(), RootHomeActivity.class);
             startActivity(redirect);

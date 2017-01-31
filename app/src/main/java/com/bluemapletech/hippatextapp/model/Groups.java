@@ -17,7 +17,7 @@ public class Groups implements Serializable {
     private String userImage;
     private String firstName;
     private String lastName;
-
+    private  String pushNotificationId;
     public String getAdmin() {
         return admin;
     }
@@ -98,6 +98,14 @@ public class Groups implements Serializable {
         this.lastName = lastName;
     }
 
+    public String getPushNotificationId() {
+        return pushNotificationId;
+    }
+
+    public void setPushNotificationId(String pushNotificationId) {
+        this.pushNotificationId = pushNotificationId;
+    }
+
     @Override
     public String toString() {
         return "Groups{" +
@@ -111,6 +119,7 @@ public class Groups implements Serializable {
                 ", userImage='" + userImage + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", pushNotificationId='" + pushNotificationId + '\'' +
                 '}';
     }
 }
