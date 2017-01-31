@@ -88,7 +88,8 @@ public class ViewGroupDetails extends AppCompatActivity {
     String pushNotificationId;
 int adminCount = 0;
     boolean adminAddedPermisson = false;
-    SharedPreferences pref;SharedPreferences.Editor editor;FirebaseUser logged;
+    SharedPreferences pref;SharedPreferences.Editor editor;
+    //FirebaseUser logged;
     final private int SELECT_FILE = 1;final private int REQUEST_CAMERA = 2;
 
     String loginMail,login_role;
@@ -107,8 +108,8 @@ int adminCount = 0;
         toolbar = (Toolbar) findViewById(R.id.toolbar_header_menu);
         TextView header = (TextView) findViewById(R.id.header);
         header.setText("");
-        firebaseAuth = FirebaseAuth.getInstance();
-        logged = firebaseAuth.getCurrentUser();
+       // firebaseAuth = FirebaseAuth.getInstance();
+       // logged = firebaseAuth.getCurrentUser();
         RelativeLayout exit=(RelativeLayout)findViewById(R.id.rel_lay_exit);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -117,13 +118,15 @@ int adminCount = 0;
         }
         viewImage = (ImageView) findViewById(R.id.view_group_image);
         ImageView groupNameEdit = (ImageView) findViewById(R.id.groupNameEdit);
-        /*
-          values comes  from GroupMessageEmployeeActivity
-         */
+
         prefLogin = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginMail =   prefLogin.getString("loginMail","");
         login_role = prefLogin.getString("role","");
+        isOnline =  prefLogin.getString("isOnline", "");
 
+        /*
+          values comes  from GroupMessageEmployeeActivity
+         */
         groupName = getIntent().getStringExtra(GroupMessageEmployeeActivity.groupNames);
 
         /*
@@ -147,9 +150,9 @@ int adminCount = 0;
         name.setText(groupName);
 
         fireBaseDatabase = FirebaseDatabase.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuth.getCurrentUser();
-        loggedEmail = logged.getEmail().replace(".", "-");
+       /* firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser logged = firebaseAuth.getCurrentUser();*/
+        loggedEmail = loginMail.replace(".", "-");
         //get login user groupdetais
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(loggedEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
@@ -350,7 +353,7 @@ int adminCount = 0;
 
                     ImageView backPageArrow = (ImageView) dialog.findViewById(R.id.backarrow);
                     ImageView takePhoto = (ImageView) dialog.findViewById(R.id.gallery_camera);
-                    displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
+                   displayImage = (ImageView) dialog.findViewById(R.id.view_group_img);
                     ImageView saveProfileImage = (ImageView) dialog.findViewById(R.id.save);
                     if (toolbar != null) {
                         setSupportActionBar(toolbar);
@@ -362,7 +365,11 @@ int adminCount = 0;
                     //dialog.addContentView();
                     Log.d(TAG, "randomNameLogin" + group.getRandomName());
                     //showImage = (ImageView) dialog.findViewById(R.id.view_group_img);
-                    Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(displayImage);
+                    if(group.getGroupImage()!=null && !group.getGroupImage().matches("")){
+                        dialog.findViewById(R.id.loadingPanel).setVisibility(View.GONE);//hide the loading progress bar
+                        Picasso.with(ViewGroupDetails.this).load(group.getGroupImage()).fit().centerCrop().into(displayImage);
+                    }
+
                     dialog.show();
                     backPageArrow.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -734,7 +741,7 @@ int adminCount = 0;
                     removeSameUser.put(groupValue.getUserMail(),groupValue.getUserMail());
                     Log.d(TAG,"groupObjToString"+groupObj.toString());
                     if (getActivity() != null) {
-                        iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, logged.getEmail()));
+                        iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, loginMail));
                     }
                 }else {
                     Log.d(TAG,"remove user within the group");
@@ -854,23 +861,7 @@ int adminCount = 0;
         startActivity(new Intent(
                 getActivity(), GroupMessageEmployeeActivity.class));
     }
-    @Override
-    public void onPause()
-    {
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
-        if(isOnline.matches("true")) {
-            fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
-            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            dataReferences.removeValue();
-        }
-        super.onPause();
-        //Do whatever you want to do when the application stops.
-    }
+
 
     public void showErrorMsg(){
         Log.d(TAG,"showError");
@@ -901,19 +892,30 @@ int adminCount = 0;
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
+
+
+    @Override
+    public void onPause()
+    {
+        if(isOnline.matches("true")) {
+            fireBaseDatabase = FirebaseDatabase.getInstance();
+            String reArrangeEmail = loginMail.replace(".", "-");
+            FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
+            dataReferences.removeValue();
+        }
+        super.onPause();
+        //Do whatever you want to do when the application stops.
+    }
     @Override
     protected  void onResume(){
-        pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
-        isOnline =  pref1.getString("isOnline", "");
         if(isOnline.matches("true")) {
             HashMap<String, Object> onlineReenter = new HashMap<>();
             fireBaseDatabase = FirebaseDatabase.getInstance();
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser logged = firebaseAuth.getCurrentUser();
-            String reArrangeEmail = logged.getEmail().replace(".", "-");
+            String reArrangeEmail = loginMail.replace(".", "-");
             FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("onlineUser").child(reArrangeEmail);
-            onlineReenter.put("onlineUser", logged.getEmail());
+            onlineReenter.put("onlineUser", loginMail);
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
@@ -972,7 +974,6 @@ int adminCount = 0;
                 dataReference.setValue(newGroup);
             }
         }
-
         if(adminCount==1 && moreThanUser!=0) {
             String nextAccessAdmin = null;
             if (groupUsers[0].matches(loginMail)) {
