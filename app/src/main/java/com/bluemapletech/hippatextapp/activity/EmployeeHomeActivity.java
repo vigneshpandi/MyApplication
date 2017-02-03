@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -73,7 +74,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         editor.commit();
         super.onDestroy();
     }
-  /*  @Override
+    @Override
     public void onPause()
     {
         if(isOnline.matches("true")) {
@@ -100,7 +101,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
-    }*/
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);

@@ -89,7 +89,7 @@ public class NotAcceptedUser extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(loginroleValue.matches("admin") ){
+        if(loginroleValue.matches("admin") || loginroleValue.matches("root") ){
             getMenuInflater().inflate(R.menu.not_accept_user_menu, menu);
         }else if(loginroleValue.matches("user")){
             getMenuInflater().inflate(R.menu.not_accept_user, menu);
@@ -108,7 +108,7 @@ public class NotAcceptedUser extends AppCompatActivity {
         if (id == R.id.list_of_roots) {
             Intent intent = new Intent(getActivity(), ListOfRoots.class);
             String rootVal = "1";
-            if(loginroleValue.matches("admin")){
+            if(loginroleValue.matches("admin") || loginroleValue.matches("root")){
                  roleVal = "root";
             }else if(loginroleValue.matches("user")){
                  roleVal = "admin";

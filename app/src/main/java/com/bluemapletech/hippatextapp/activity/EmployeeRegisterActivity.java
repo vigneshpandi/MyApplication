@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -89,7 +90,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
     public void init() {
         Log.d(TAG, "Init method has been called!");
         firstName = (EditText) findViewById(R.id.emp_first_name1);
-        //firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+       // firstName.setInputType(InputType.TYPE_CLASS_TEXT);
         lastName = (EditText) findViewById(R.id.emp_last_name1);
         //lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         emailTxt = (EditText) findViewById(R.id.emp_email_address);
@@ -167,7 +168,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if(empFirstName.isEmpty()){
                     firstName.setError("Employee First Name is required");
                     valid = false;
-                }else if(empFirstName.length() < 2 || empFirstName.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
+                }else if(empFirstName.length() < 2 || !empFirstName.toString().matches("[a-zA-Z ]+")){
                     firstName.setError("Employee First Name is invalid");
                     valid = false;
                 }else{
@@ -177,7 +178,7 @@ public class EmployeeRegisterActivity extends AppCompatActivity {
                 if(empLastName.isEmpty()){
                     lastName.setError("Employee Last Name is required");
                     valid = false;
-                }else if(empLastName.length() < 2 || empLastName.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
+                }else if(empLastName.length() < 2 || !empLastName.toString().matches("[a-zA-Z ]+")){
                     lastName.setError("Employee Last Name is invalid");
                     valid = false;
                 }else{

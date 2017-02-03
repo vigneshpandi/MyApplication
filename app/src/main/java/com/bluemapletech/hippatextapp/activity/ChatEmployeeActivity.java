@@ -790,31 +790,38 @@ public class ChatEmployeeActivity extends AppCompatActivity implements View.OnCl
 
                 try {
                     // convert for date format showing
-                    date = sdf.parse(lastUpdateDate);
-                    sdf = new SimpleDateFormat("hh:mm a");
-                    d1 = sdf.format(date);
-                    sdf = new SimpleDateFormat("dd-MMM-yyyy");
-                    sdf1 = new SimpleDateFormat("MMM dd,yyyy");
-                    d2 = sdf.format(date);
-                    d3 = sdf1.format(date);
-                    val = d2+d1;
-                    Log.d(TAG,"message.getDateAndTime = "+ val);
+                    Log.d(TAG,"lastUpdateDate"+lastUpdateDate);
+                    if(!lastUpdateDate.matches("")){
+                        date = sdf.parse(lastUpdateDate);
+                        sdf = new SimpleDateFormat("hh:mm a");
+                        d1 = sdf.format(date);
+                        sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                        sdf1 = new SimpleDateFormat("MMM dd,yyyy");
+                        d2 = sdf.format(date);
+                        d3 = sdf1.format(date);
+                        val = d2+d1;
+                        Log.d(TAG,"message.getDateAndTime = "+ val);
 
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if(formattedDate.matches(d2)){
-                    String lastSeen = "Today at "+d1;
-                    userStaus = lastSeen;
-                }else if(yest_date.matches(d2)){
-                    String lastSeen = "last seen Yesterday at "+d1;
-                    userStaus = lastSeen;
-                }else{
-                    String lastSeen = "last seen "+d3;
-                    userStaus = lastSeen;
+                Log.d(TAG,"d2"+d2);
+                if(d2 != null){
+                    if(formattedDate.matches(d2)){
+                        String lastSeen = "Today at "+d1;
+                        userStaus = lastSeen;
+                    }else if(yest_date.matches(d2)){
+                        String lastSeen = "last seen Yesterday at "+d1;
+                        userStaus = lastSeen;
+                    }else{
+                        String lastSeen = "last seen "+d3;
+                        userStaus = lastSeen;
+                    }
+
                 }
 
-               /* userStaus = lastUpdateDate;*/
+               /*userStaus = lastUpdateDate;*/
                 Log.d("it is last updated date", "success"+lastUpdateDate);
                 getSupportActionBar().setSubtitle(userStaus);
             }

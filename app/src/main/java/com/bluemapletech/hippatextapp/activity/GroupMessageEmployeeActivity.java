@@ -100,6 +100,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private ImageView selectImages,sendMessage;
     private String loginMail; // loginDetail string declare
     public static final String groupNames = "groupNames";
+    public static final String randomValues = "randomValues";
         private static final String TAG = GroupMessageEmployeeActivity.class.getCanonicalName();
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
@@ -162,8 +163,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
     private void init() {
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuthRef = FirebaseAuth.getInstance();
-        FirebaseUser logged = firebaseAuthRef.getCurrentUser();
-        reArrangeEmail = logged.getEmail().replace(".", "-");
+       // FirebaseUser logged = firebaseAuthRef.getCurrentUser();
+        reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
 
         dataReference.addValueEventListener(new ValueEventListener() {
@@ -216,6 +217,7 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
                 if(notAllowUser){
                     Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
                     intent.putExtra(groupNames,groupName);
+                    intent.putExtra(randomValues,randomValue);
                     startActivity(intent);
                 }else{
                     showErrorMsg();
@@ -223,6 +225,8 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
 
             }
         });
+
+          /* background image for chatting */
         prefs = getSharedPreferences("myBackgroundImage", Context.MODE_PRIVATE);
         String backgroundImageValue =  prefs.getString("backgroundImage", "");
         if(backgroundImageValue!=null){
@@ -542,10 +546,11 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }else if(wallpaperImage==true){
             BitmapDrawable myBackground = new BitmapDrawable(bm);
             layout.setBackgroundDrawable(myBackground);
-            editors = prefs.edit();
+           /* editors = prefs.edit();
             editors.putString("backgroundImage", base64Profile);
+             editors.apply();*/
             base64Profile = "";
-            editors.apply();
+
         }
     }
 
@@ -562,7 +567,13 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        String val = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+        if(wallpaperImage==true){
+            editors = prefs.edit();
+            editors.putString("backgroundImage", val);
+            editors.apply();
+        }
+        return val;
     }
 
     public void saveMessages (){
@@ -581,7 +592,9 @@ public class GroupMessageEmployeeActivity extends AppCompatActivity implements V
         }else{
             msg.setImage("");
         }
-        GroupMessageDao.saveMessage(msg, randomValue);
+        if(!msg.getMtext().matches("") || !msg.getImage().matches("")){
+            GroupMessageDao.saveMessage(msg, randomValue);
+        }
         base64Profile ="";
     }
     @Override

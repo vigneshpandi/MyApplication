@@ -168,6 +168,7 @@ public class UserDao {
         String myFormat = "yyyy-MM-dd HH:mm:ss Z";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         String dateValue = sdf.format(c.getTime());
+
         String sendMail = message.getMsender().replace(".", "-");
         String toMail = message.getToChatEmail().replace(".", "-");
         String[] ids = {sendMail,"+", toMail};

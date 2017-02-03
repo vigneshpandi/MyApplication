@@ -24,7 +24,7 @@ public class PushNotification extends AsyncTask<String, String, String> {
             HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Authorization", "key=AIzaSyDTtRllw9gAzmXenhFFgy5vikWxtUtG1iQ");
+            conn.setRequestProperty("Authorization", "key=AIzaSyBWM1_H5KrB9EPGcf0iIK_8hh8kh1YqhAE");
             JSONObject root = new JSONObject();
             root.put("title",params[0]);
             root.put("body",params[1]);

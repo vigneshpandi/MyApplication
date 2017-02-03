@@ -151,7 +151,7 @@ public class CreateGroup extends AppCompatActivity {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser logged = firebaseAuth.getCurrentUser();
-        String reArrangeEmail = logged.getEmail().replace(".", "-");
+        String reArrangeEmail = loginMail.replace(".", "-");
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override

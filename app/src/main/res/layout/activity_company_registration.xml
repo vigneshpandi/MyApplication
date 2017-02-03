@@ -85,7 +85,7 @@
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="Provider Name"
                 android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-                android:inputType="textPersonName" />
+                />
             <Button
                 android:id="@+id/comp_register_btn"
                 android:layout_width="match_parent"
@@ -95,7 +95,6 @@
                 android:text="Register"
                 android:textAppearance="@style/appFont"
                 android:textColor="@color/btn_text_color" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

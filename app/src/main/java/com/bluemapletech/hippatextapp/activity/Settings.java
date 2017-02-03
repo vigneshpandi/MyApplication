@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -58,6 +59,11 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         roleValue = getIntent().getStringExtra(RootHomeActivity.role);
+
+
+       // getSupportActionBar().setTitle("Settings");
+        TextView header = (TextView) findViewById(R.id.header);
+        header.setText("Settings");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_header);
         if (toolbar != null) {
@@ -301,12 +307,34 @@ public class Settings extends AppCompatActivity {
                     Intent user = new Intent(getActivity(),NotAcceptedUser.class);
                     startActivity(user);
                 }
-
-
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if(role_Value.matches("root") && auth.matches("1")){
+                startActivity(new Intent(getActivity(),RootHomeActivity.class));
+            }else
+            if(role_Value.matches("admin") && auth.matches("1")){
+                startActivity(new Intent(getActivity(),AdminHomeActivity.class));
+            }else
+            if(role_Value.matches("user") && auth.matches("1")){
+                startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
+            }else{
+                Intent user = new Intent(getActivity(),NotAcceptedUser.class);
+                startActivity(user);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
     public void showOnline(User user) {
         final UserDao userDao = new UserDao();
         boolean result = userDao.isOnline(user);

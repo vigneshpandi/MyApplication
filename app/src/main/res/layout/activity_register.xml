@@ -46,10 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:hint="First Name"
-                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
-                android:inputType="textPersonName" />
-
-
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+               />
             <EditText
                 android:id="@+id/emp_last_name1"
                 android:layout_width="match_parent"
@@ -81,7 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
                 android:digits="@string/alpha_numeric"
-                android:hint="EmployeeId" />
+                android:hint="EmployeeId"/>
+
+
 
             <Spinner
                 android:id="@+id/company_list"

@@ -30,7 +30,7 @@ boolean dummy=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getActivity().startService(new Intent(HomeActivity.this, ExamplesService.class));
+        //getActivity().startService(new Intent(HomeActivity.this, ExamplesService.class));
         Log.d(TAG,"homeControlle has been called");
         //login user details
         pref = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);

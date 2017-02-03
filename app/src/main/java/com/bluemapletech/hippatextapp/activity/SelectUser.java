@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,10 +37,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SelectUser extends AppCompatActivity {
     private static final String TAG = SelectUser.class.getCanonicalName();
     public static final String groupNames = "groupNames";
+    public static final String randomValues = "randomValues";
     private Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase fireBaseDatabase;
@@ -49,7 +52,8 @@ public class SelectUser extends AppCompatActivity {
     SharedPreferences.Editor editor;
     SharedPreferences pref1;
     SharedPreferences.Editor editor1;
-    String isOnline;
+    String isOnline,login_role;
+    boolean notAllowUser = true;
     int p=0;
     Groups groupVal;
     private ArrayList<String> data = new ArrayList<>();
@@ -68,8 +72,7 @@ public class SelectUser extends AppCompatActivity {
         pref1 = getSharedPreferences("loginUserDetails", Context.MODE_PRIVATE);
         loginMail =  pref1.getString("loginMail", "");
         isOnline =  pref1.getString("isOnline", "");
-
-
+        login_role = pref1.getString("role", "");
         groupVal = (Groups) bundle.getSerializable("groupDetails");
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -134,37 +137,67 @@ public class SelectUser extends AppCompatActivity {
 
         iv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listPosition = position - iv.getFirstVisiblePosition();
-                Log.d("positionMAil","positionMAil"+userObj.get(listPosition).getUserName());
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setMessage("Add Ac to " + " ' " +groupVal.getGroupName() + " ' " + " group?");
-                // Setting Positive "Yes" Button
-                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d("SelectUser","serializablevalue"+ groupVal);
-                        progressDialog = new ProgressDialog(getActivity());
-                        progressDialog.setMessage("Please wait a moment...");
-                        progressDialog.show();
-                        progressDialog.setCanceledOnTouchOutside(false);
-                        EmployeeDao empDao = new EmployeeDao();
-                        boolean success = empDao.addMemberToGroup(userObj.get(listPosition).getUserName(),groupVal,groupPushNotificationId,userObj.get(listPosition).getPushNotificationId(),loginMail);
-                        if(success){
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
-                            intent.putExtra(groupNames,groupVal.getGroupName());
-                            startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                if(notAllowUser){
+                    listPosition = position - iv.getFirstVisiblePosition();
+                    Log.d("positionMAil","positionMAil"+userObj.get(position).getUserName());
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setMessage("Add Ac to " + " ' " +groupVal.getGroupName() + " ' " + " group?");
+                    // Setting Positive "Yes" Button
+                    dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("SelectUser","serializablevalue"+ groupVal);
+                            progressDialog = new ProgressDialog(getActivity());
+                            progressDialog.setMessage("Please wait a moment...");
+                            progressDialog.show();
+                            progressDialog.setCanceledOnTouchOutside(false);
+                            EmployeeDao empDao = new EmployeeDao();
+                            boolean success = empDao.addMemberToGroup(userObj.get(position).getUserName(),groupVal,groupPushNotificationId,userObj.get(position).getPushNotificationId(),loginMail);
+                            if(success){
+                                progressDialog.dismiss();
+                                Intent intent = new Intent(getActivity(), ViewGroupDetails.class);
+                                intent.putExtra(groupNames,groupVal.getGroupName());
+                                intent.putExtra(randomValues,groupVal.getRandomName());
+                                startActivity(intent);
+                            }
                         }
-                    }
-                });
-                // Setting Negative "NO" Button
-                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                // Showing Alert Message
-                dialog.show();
+                    });
+                    // Setting Negative "NO" Button
+                    dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    // Showing Alert Message
+                    dialog.show();
+                }else{
+                    showErrorMsg();
+                }
+
+            }
+        });
+
+        String loggedEmail = loginMail.replace(".", "-");
+        //get login user groupdetais
+        Log.d(TAG,"randomValues"+groupVal.getRandomName());
+        DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(loggedEmail).child(groupVal.getRandomName());
+        dataReferences.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                if(map!=null) {
+                    Log.d(TAG,"dataSnapshot map not null");
+                }else{
+                    Log.d(TAG,"dataSnapshot map  null");
+                    notAllowUser = false;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -242,12 +275,47 @@ public class SelectUser extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            backPage();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     private void backPage() {
         Log.d(TAG,"back page..");
-        startActivity(new Intent(getActivity(),ViewGroupDetails.class));
+        if(notAllowUser){
+            startActivity(new Intent(getActivity(),ViewGroupDetails.class));
+        }else{
+            showErrorMsg();
+        }
     }
 
+
+    public void showErrorMsg(){
+        Log.d(TAG,"showError");
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Error");
+        alert.setMessage("You can't send message to this group because you're no longer a participant.");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //dialog.cancel();
+                if(login_role.matches("admin")){
+                    Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
+                    startActivity(intent);
+                } else if(login_role.matches("user")){
+                    Intent intent = new Intent(getActivity(), EmployeeHomeActivity.class);
+                    startActivity(intent);
+                }else if(login_role.matches("root")){
+                    Intent intent = new Intent(getActivity(), RootHomeActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
+    }
 
     @Override
     public void onPause()

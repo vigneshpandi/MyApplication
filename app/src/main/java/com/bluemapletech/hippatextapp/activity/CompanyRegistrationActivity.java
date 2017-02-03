@@ -76,6 +76,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     GMailSender sender;
     private User comInfos = new User();
     private Uri downloadUrl;
+    final UserDao userDao = new UserDao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +197,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 if(providerNameText.isEmpty()){
                     providerName.setError("Provider Name is required");
                     valid = false;
-                }else if(providerNameText.length()<2 || providerNameText.toString().matches("[A-Z][a-z]+( [A-Z][a-z]+ )*")){
+                }else if(providerNameText.length()<2 || !providerNameText.toString().matches("[a-zA-Z ]+")){
                     providerName.setError("Provider Name is invalid");
                     valid = false;
                 }else{
@@ -223,7 +224,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    saveImage();
+                   saveImage();
+                   // entryAuth();
                 }else{
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Entered email address is already exists! ",Toast.LENGTH_LONG).show();
@@ -234,9 +236,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
 
     public void entryAuth() {
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        databaseRef = firebaseDatabaseRef.getReference().child("companyName");
+        databaseRef = firebaseDatabaseRef.getReference().child("registeredCompanyName");
 
-        final UserDao userDao = new UserDao();
 
         databaseRef.child(companyName.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -244,73 +245,11 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 Log.d(TAG, "On data change method has been called!");
                 if (dataSnapshot.getValue() != null) {
                     Log.d(TAG, "Company name already exists!");
+                    progressDialog.dismiss();
+                    Toast.makeText(getActivity(), "Entered Company name already exists! ",Toast.LENGTH_LONG).show();
                 } else {
-                    User comInfo = new User();
-                    password = compPasswordtxt.getText().toString();
-                    byte[] enCode = new byte[0];
-                    try {
-                        enCode = password.getBytes("UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
-                    comInfo.setUserName(compEmailtxt.getText().toString());
-                    comInfo.setPassword(enCodes);
-                    comInfo.setCompanyName(companyName.getText().toString());
-                    comInfo.setTINorEIN(compEinOrTinNo.getText().toString());
-                    comInfo.setProviderNPIId(providerNPIId.getText().toString());
-                    comInfo.setProviderName(providerName.getText().toString());
-                    comInfo.setRole("admin");
-                    comInfo.setStatus("chatPin");
-                    comInfo.setEmpId("");
-                    comInfo.setAuth("0");
-                    comInfo.setChatPin("");
-                    comInfo.setDesignation("");
-                    Log.d(TAG,"firstName...LastNAme.."+firstName+""+lastName);
-                    comInfo.setFirstName(firstName);
-                    comInfo.setLastName(lastName);
-                    random = new SecureRandom();
-                    senderID = new BigInteger(130, random).toString(32);
-                    String randomValue = senderID.substring(0, 7);
-                    Log.d("randomValue",randomValue);
-                    comInfo.setSenderId(randomValue);
-                    comInfo.setIsOnlie("true");
-                    comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
-                    Calendar c = Calendar.getInstance();
-                    String myFormat = "yyyy-MM-dd HH:mm:ss Z";
-                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                    String dateValue = sdf.format(c.getTime());
-                    comInfo.setCreateDate(dateValue);
-                    comInfo.setUpdateDate(dateValue);
-                    Log.d(TAG, "Company information's " + comInfo.toString());
-                    boolean data = userDao.createCompany(comInfo);
-                  if (data){
-                      progressDialog.dismiss();
-                        try {
-                        //  new MyAsyncClass().execute();
-                          MailSender runners = new MailSender();
-                          runners.execute("Profile has been created!","Thanks for your registration, Please wait for HippaText admin's confirmation.","hipaatext123@gmail.com",compEmailtxt.getText().toString());
+                    checkUserExistence();
 
-                      } catch (Exception ex) {
-                          // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
-                      }
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                        alertDialog.setTitle("Thank You Registering");
-                        alertDialog.setMessage("You will receive an email once we verify the company details, if the company is exists");
-                        // Setting OK Button
-                        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                               Intent intent = new Intent(getActivity(), HomeActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        // Showing Alert Message
-                        alertDialog.show();
-                    }else{
-                        progressDialog.dismiss();
-                        Log.d(TAG, "Error while inserting the company details!");
-                        Toast.makeText(getActivity(),"Error while inserting the company details!",Toast.LENGTH_LONG).show();
-                    }
                 }
             }
 
@@ -319,6 +258,76 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             }
         });
     }
+public  void registerCompanyDetails(){
+    User comInfo = new User();
+    password = compPasswordtxt.getText().toString();
+    byte[] enCode = new byte[0];
+    try {
+        enCode = password.getBytes("UTF-8");
+    } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+    }
+    String enCodes = Base64.encodeToString(enCode, Base64.NO_WRAP);
+    comInfo.setUserName(compEmailtxt.getText().toString());
+    comInfo.setPassword(enCodes);
+    comInfo.setCompanyName(companyName.getText().toString());
+    comInfo.setTINorEIN(compEinOrTinNo.getText().toString());
+    comInfo.setProviderNPIId(providerNPIId.getText().toString());
+    comInfo.setProviderName(providerName.getText().toString());
+    comInfo.setRole("admin");
+    comInfo.setStatus("chatPin");
+    comInfo.setEmpId("");
+    comInfo.setAuth("0");
+    comInfo.setChatPin("");
+    comInfo.setDesignation("");
+    Log.d(TAG,"firstName...LastNAme.."+firstName+""+lastName);
+    comInfo.setFirstName(firstName);
+    comInfo.setLastName(lastName);
+    random = new SecureRandom();
+    senderID = new BigInteger(130, random).toString(32);
+    String randomValue = senderID.substring(0, 7);
+    Log.d("randomValue",randomValue);
+    comInfo.setSenderId(randomValue);
+    comInfo.setIsOnlie("true");
+    comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
+    Calendar c = Calendar.getInstance();
+    String myFormat = "yyyy-MM-dd HH:mm:ss Z";
+    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+    String dateValue = sdf.format(c.getTime());
+    comInfo.setCreateDate(dateValue);
+    comInfo.setUpdateDate(dateValue);
+    Log.d(TAG, "Company information's " + comInfo.toString());
+    boolean data = userDao.createCompany(comInfo);
+    if (data){
+        progressDialog.dismiss();
+        try {
+            //  new MyAsyncClass().execute();
+            MailSender runners = new MailSender();
+            runners.execute("Profile has been created!","Thanks for your registration, Please wait for HippaText admin's confirmation.","hipaatext123@gmail.com",compEmailtxt.getText().toString());
+
+        } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+        }
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("Thank You Registering");
+        alertDialog.setMessage("You will receive an email once we verify the company details, if the company is exists");
+        // Setting OK Button
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Showing Alert Message
+        alertDialog.show();
+    }else{
+        progressDialog.dismiss();
+        Log.d(TAG, "Error while inserting the company details!");
+        Toast.makeText(getActivity(),"Error while inserting the company details!",Toast.LENGTH_LONG).show();
+    }
+}
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -347,7 +356,7 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
                 downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
                 Log.d(TAG,"success..");
                 Log.d(TAG,"downloadUrl"+downloadUrl);
-                entryAuth();
+                registerCompanyDetails();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -393,7 +402,8 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
             Log.d(TAG,firstName + " " + lastName);
             if(firstName !=null && !firstName.isEmpty()) {
                 Log.d(TAG,"not empty");
-                checkUserExistence();
+               // checkUserExistence();
+                entryAuth();
             }else {
                 Log.d(TAG,"Please enter valid npi id");
                 progressDialog.dismiss();

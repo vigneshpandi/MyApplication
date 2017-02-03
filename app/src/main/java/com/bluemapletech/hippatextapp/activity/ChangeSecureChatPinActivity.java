@@ -211,11 +211,17 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(role.equals("root")) {
+        if(role.equals("root") && login_auth.matches("1")) {
             switch (item.getItemId()) {
                 case android.R.id.home:
                     backPageRoot();
-
+                    return true;
+            }
+        }
+        if(role.equals("root") && !login_auth.matches("1")) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    backPageAdminNotAccept();
                     return true;
             }
         }
@@ -260,6 +266,7 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
         Log.d(TAG,"back page..");
         startActivity(new Intent(getActivity(),EmployeeHomeActivity.class));
     }
+
     private void backPageAdminNotAccept() {
         Log.d(TAG,"back page..not accept");
         startActivity(new Intent(getActivity(),NotAcceptedUser.class));
@@ -315,6 +322,12 @@ public class ChangeSecureChatPinActivity extends AppCompatActivity {
             }
             if (role.equals("user") && login_auth.matches("1")) {
                 backPageEmp();
+            }
+            if (role.equals("root") && !login_auth.matches("1")) {
+                backPageEmpNotAccept();
+            }
+            if (role.equals("root") && login_auth.matches("1")) {
+                backPageRoot();
             }
            // this.moveTaskToBack(true);
                 return true;

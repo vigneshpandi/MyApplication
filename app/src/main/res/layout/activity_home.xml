@@ -27,17 +27,18 @@
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/btn_color"
+            android:background="@drawable/rounded_button"
             android:text="Go To Login"
             android:textAppearance="@style/appFont"
-            android:textColor="@color/btn_text_color" />
+            android:textColor="@color/btn_text_color"
+            />
 
         <Button
             android:id="@+id/register_as_comp_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@color/btn_color"
+            android:background="@drawable/rounded_button"
             android:text="Register As Company"
             android:textAppearance="@style/appFont"
             android:textColor="@color/btn_text_color" />
@@ -47,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@color/btn_color"
+            android:background="@drawable/rounded_button"
             android:text="Register As Employee"
             android:textAppearance="@style/appFont"
             android:textColor="@color/btn_text_color" />
