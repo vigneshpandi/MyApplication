@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_margin"
-                android:background="@color/btn_color"
+                android:background="@drawable/rounded_button"
                 android:text="Register"
                 android:textAppearance="@style/appFont"
                 android:textColor="@color/btn_text_color" />

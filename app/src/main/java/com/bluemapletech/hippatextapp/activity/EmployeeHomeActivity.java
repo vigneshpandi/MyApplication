@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +47,6 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         getActivity().startService(new Intent(EmployeeHomeActivity.this, ExamplesService.class));
        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_header);
         setSupportActionBar(toolbar);
-
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager());
@@ -121,13 +121,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.log_out) {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("Processing...");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
-            Intent logOut = new Intent(getActivity(), HomeActivity.class);
-            progressDialog.dismiss();
-            startActivity(logOut);
+
             SharedPreferences preferences = getSharedPreferences("myBackgroundImage", 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
@@ -153,6 +147,8 @@ public class EmployeeHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editors = preferencess.edit();
             editors.clear();
             editors.commit();
+            Intent logOut = new Intent(getActivity(), HomeActivity.class);
+            startActivity(logOut);
                 onStop();
                 finish();
             return true;

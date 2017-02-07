@@ -215,15 +215,50 @@ public class Settings extends AppCompatActivity {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             });
-            showOnline.setOnClickListener(new View.OnClickListener() {
+
+            if(isOnline.matches("true")){
+                showOnline.setChecked(true);
+            }else if(isOnline.matches("false")){
+                showOnline.setChecked(false);
+            }
+
+            showOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    Log.d(TAG,"button clicked");
+                    if(isChecked){
+                        //   switchStatus.setText("Switch is currently ON");
+                        pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                        editor = pref.edit();
+                        editor.putString("isOnline", "true");
+                        editor.commit();
+                        User u = new User();
+                        u.setUserName(login_mail);
+                        u.setIsOnlie("true");
+                        showOnline(u);
+                    }else{
+                        pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
+                        editor = pref.edit();
+                        editor.putString("isOnline", "false");
+                        editor.commit();
+                        User u1 = new User();
+                        u1.setUserName(login_mail);
+                        u1.setIsOnlie("false");
+                        showOnline(u1);
+                        //  switchStatus.setText("Switch is currently OFF");
+                    }
+
+                }
+            });
+       /*     showOnline.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG,"show online is clicked....");
                     //  showOnline.setChecked(true);
                     showOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                            Log.d(TAG,"button clicked");
                             if(isChecked){
                                 //   switchStatus.setText("Switch is currently ON");
                                 pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
@@ -249,16 +284,10 @@ public class Settings extends AppCompatActivity {
                         }
                     });
                 }
-            });
+            });*/
 
         }
-        if(isOnline.matches("true")){
-            showOnline.setChecked(true);
 
-        }else if(isOnline.matches("false")){
-            showOnline.setChecked(false);
-
-        }
     }
 
     /* if(isOnline.matches("true")) {*/

@@ -87,7 +87,6 @@ UserDetailDto userDetailDtos = new UserDetailDto();
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         PageEmployeeBaseAdpter.MyViewHolder mViewHolder;
-Log.d(TAG,"userDetailDtos"+userDetailDtos);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.custom_employee_list_view, parent, false);
             mViewHolder = new PageEmployeeBaseAdpter.MyViewHolder(convertView);
@@ -102,7 +101,8 @@ Log.d(TAG,"userDetailDtos"+userDetailDtos);
         }else if(info.getRole().matches("admin")){
             mViewHolder.fieldId.setText(info.getProviderNPIId());
         }
-
+        View imgs = convertView.findViewById(R.id.onlineImageView);
+        imgs.setVisibility(View.INVISIBLE);
 
         mViewHolder.fieldName.setText(info.getFirstName());
         if (info.getProfilePjhoto() != null && !info.getProfilePjhoto().matches("")) {

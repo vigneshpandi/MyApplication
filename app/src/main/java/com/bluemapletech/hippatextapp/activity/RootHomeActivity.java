@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class RootHomeActivity extends AppCompatActivity {
@@ -92,7 +93,6 @@ public class RootHomeActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.clear();
             editor.commit();
-
             Calendar c = Calendar.getInstance();
             String myFormat = "yyyy-MM-dd HH:mm:ss Z";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -169,7 +169,7 @@ public class RootHomeActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    /*@Override
+   @Override
     public void onPause()
     {
         if(isOnline.matches("true")) {
@@ -196,7 +196,7 @@ public class RootHomeActivity extends AppCompatActivity {
             dataReferences.setValue(onlineReenter);
         }
         super.onResume();
-    }*/
+    }
     public RootHomeActivity getActivity() {
         return this;
     }

@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         prefs = getApplicationContext().getSharedPreferences("checkForLogin", MODE_PRIVATE);
         init();
         firebaseAuth = FirebaseAuth.getInstance();
+        Log.d(TAG,"setPersistenceEnabled true");
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +172,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void getUserInformation() {
         String reArrangeEmail = usernameTxt.getText().toString().replace(".", "-");
-
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference dataReference = mfireBaseDatabase.getReference().child("userDetails").child(reArrangeEmail);
         dataReference.addValueEventListener(new ValueEventListener() {
