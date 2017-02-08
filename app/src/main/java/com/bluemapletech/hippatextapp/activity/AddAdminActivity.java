@@ -153,13 +153,6 @@ public class AddAdminActivity extends AppCompatActivity {
                 }else{
                     adminProviderNPItxt.setError(null);
                 }
-
-              /*  if(providerNpi.length() < 9 || !(providerNpi.length() > 10)){
-                    adminProviderNPItxt.setError("Provider NPI Id is invalid");
-                    valid = false;
-                }else{
-                    adminProviderNPItxt.setError(null);
-                }*/
                 if(providerNpi.length() != 10){
                     adminProviderNPItxt.setError("Provider NPI Id is invalid");
                     valid = false;
@@ -275,13 +268,12 @@ public class AddAdminActivity extends AppCompatActivity {
             progressDialog.dismiss();
             Log.d(TAG, "Add Admin  successfuly registered!");
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Thanks for your registration, Please wait for HippaText admin's confirmation."+passRandomValue;
                 runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",adminEmailTxt.getText().toString());
 
             } catch (Exception ex) {
-                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+
             }
             Toast.makeText(getActivity(), "Admin addedd successfully!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
@@ -350,7 +342,6 @@ public class AddAdminActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // providerNameTxt.setText(firstName + " " + lastName);
             Log.d(TAG,firstName + " " + lastName);
             if(firstName !=null && !firstName.isEmpty()) {
                 Log.d(TAG,"not empty");
