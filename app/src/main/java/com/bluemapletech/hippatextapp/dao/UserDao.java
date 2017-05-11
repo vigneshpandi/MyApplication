@@ -94,7 +94,8 @@ public class UserDao {
         compData.put("showOnline",user.getIsOnlie());
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(user.getCompanyName()).child("companyName");
+        String rearrangeCompany = user.getCompanyName().replace(".","-");
+        DatabaseReference dataReference = firebaseDatabaseRef.getReference().child("registeredCompanyName").child(rearrangeCompany).child("companyName");
         dataReference.setValue(compData.get("companyName"));
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail);
         databaseRef.setValue(compData);
@@ -116,7 +117,7 @@ public class UserDao {
             runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",acceptEmail);
 
         } catch (Exception ex) {
-
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return true;
     }
@@ -144,7 +145,7 @@ public class UserDao {
             runners.execute("Profile has been rejected!",value,"hipaatext123@gmail.com",acceptEmail);
 
         } catch (Exception ex) {
-
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return true;
     }
@@ -217,6 +218,7 @@ public class UserDao {
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("chatPin");
         databaseRef.setValue(user.getChatPin());
         try {
+            //  new MyAsyncClass().execute();
             String loggedInEmail = user.getUserName().replace("-", ".");
             MailSender runners = new MailSender();
             String  value = "Your chat pin has been changed successfully in HippaText.\n" +
@@ -225,6 +227,7 @@ public class UserDao {
             runners.execute("Chat Pin has been changed!",value,"hipaatext123@gmail.com",loggedInEmail);
 
         } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return true;
     }
@@ -407,6 +410,7 @@ public class UserDao {
             runners.execute("Profile has been deleted!",value,"hipaatext123@gmail.com",acceptEmail);
 
         } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return  true;
     }
@@ -424,6 +428,7 @@ public class UserDao {
             runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",acceptEmail);
 
         } catch (Exception ex) {
+            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return  true;
     }
@@ -467,6 +472,49 @@ public class UserDao {
         return success;*/
         return true;
     }
+
+   /* private static  class AsyncTaskRunners extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            Object json = null;
+            try {
+                URL url1;
+                url1 = new URL("https://fcm.googleapis.com/fcm/send");
+                HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Authorization", "key=AIzaSyAuVyl2BdhVZIw1sjplD41sY8utywdz8_k");
+                JSONObject root = new JSONObject();
+                root.put("title","TCTText");
+                root.put("body",params[1]);
+                JSONObject root1 = new JSONObject();
+                root1.put("notification",root);
+                root1.put("to",params[0]);
+                root1.put("priority","high");
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write(root1.toString());
+                wr.flush();
+                wr.close();
+                int responsecode = conn.getResponseCode();
+                if(responsecode == 200) {
+                    Log.d(TAG,"success"+conn.getResponseMessage());
+                }else{
+                    Log.d(TAG,"error"+conn.getResponseMessage());
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }*/
 
     public UserDao getActivity() {
         return this;

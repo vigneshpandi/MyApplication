@@ -106,7 +106,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validate()) {
-                    Toast.makeText(getActivity(), "Add Root failed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Add Employee failed!", Toast.LENGTH_LONG).show();
                 } else {
                     progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setMessage("Processing Add Employee...");
@@ -235,14 +235,12 @@ public class AddEmployeeActivity extends AppCompatActivity {
         if (insertUser) {
             progressDialog.dismiss();
             try {
-                //  new MyAsyncClass().execute();
                 MailSender runners = new MailSender();
                 String  value = "Thanks for your registration, Please wait your admin's confirmation.\n" +
                         "Thanks for showing your interest."+passRandomValue;
                 runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",addEmpEmailId.getText().toString());
 
             } catch (Exception ex) {
-                // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
             }
             Toast.makeText(getActivity(), "Employee addedd successfully!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getActivity(), AdminHomeActivity.class);
@@ -302,7 +300,6 @@ public class AddEmployeeActivity extends AppCompatActivity {
             dataReferences.removeValue();
         }
         super.onPause();
-        //Do whatever you want to do when the application stops.
     }
 
 

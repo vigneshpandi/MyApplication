@@ -237,9 +237,9 @@ public class CompanyRegistrationActivity extends AppCompatActivity {
     public void entryAuth() {
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
         databaseRef = firebaseDatabaseRef.getReference().child("registeredCompanyName");
+        String rearrangeCompany = companyName.getText().toString().replace(".","-");
 
-
-        databaseRef.child(companyName.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseRef.child(rearrangeCompany).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "On data change method has been called!");
@@ -280,13 +280,11 @@ public  void registerCompanyDetails(){
     comInfo.setAuth("0");
     comInfo.setChatPin("");
     comInfo.setDesignation("");
-    Log.d(TAG,"firstName...LastNAme.."+firstName+""+lastName);
     comInfo.setFirstName(firstName);
     comInfo.setLastName(lastName);
     random = new SecureRandom();
     senderID = new BigInteger(130, random).toString(32);
     String randomValue = senderID.substring(0, 7);
-    Log.d("randomValue",randomValue);
     comInfo.setSenderId(randomValue);
     comInfo.setIsOnlie("true");
     comInfo.setProfilePjhoto(String.valueOf(downloadUrl));
@@ -296,17 +294,15 @@ public  void registerCompanyDetails(){
     String dateValue = sdf.format(c.getTime());
     comInfo.setCreateDate(dateValue);
     comInfo.setUpdateDate(dateValue);
-    Log.d(TAG, "Company information's " + comInfo.toString());
     boolean data = userDao.createCompany(comInfo);
     if (data){
         progressDialog.dismiss();
         try {
-            //  new MyAsyncClass().execute();
             MailSender runners = new MailSender();
             runners.execute("Profile has been created!","Thanks for your registration, Please wait for HippaText admin's confirmation.","hipaatext123@gmail.com",compEmailtxt.getText().toString());
 
         } catch (Exception ex) {
-            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
+
         }
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("Thank You Registering");

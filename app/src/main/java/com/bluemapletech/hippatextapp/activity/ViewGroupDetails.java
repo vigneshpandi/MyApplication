@@ -93,6 +93,7 @@ public class ViewGroupDetails extends AppCompatActivity {
     String pushNotificationId,randomValues;
     int adminCount = 0;
     boolean adminAddedPermisson = false;
+    boolean adminPermission = false;
     SharedPreferences pref;SharedPreferences.Editor editor;
     //FirebaseUser logged;
     final private int SELECT_FILE = 1;final private int REQUEST_CAMERA = 2;
@@ -165,11 +166,13 @@ public class ViewGroupDetails extends AppCompatActivity {
         fireBaseDatabase = FirebaseDatabase.getInstance();
         loggedEmail = loginMail.replace(".", "-");
         //get login user groupdetais
+
         DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(loggedEmail).child(randomValues);
         dataReferences.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG,"dataSnapshot"+dataSnapshot);
+                adminPermission = false;
                 Map<String, String> map = (Map) dataSnapshot.getValue();
                 if(map!=null) {
                     String admin = map.get("admin");
@@ -206,6 +209,10 @@ public class ViewGroupDetails extends AppCompatActivity {
                     for(int l=0;l < separatedAdmin.length; l++){
                         if(separatedAdmin[l].matches(separated[i])){
                             userStatus = "admin";
+                            if(separatedAdmin[l].matches(loginMail)){
+                                adminPermission = true;
+                            }
+
                         }
                     }
 
@@ -281,7 +288,9 @@ public class ViewGroupDetails extends AppCompatActivity {
                                         for (int m = 0; m < groupObj.size(); m++) {
                                             String us_mail = groupObj.get(m).getUserMail();
                                             reArrangeEmails = us_mail.replace(".", "-");
-                                            String r_value = groupObj.get(m).getRandomName();
+                                            String r_value = group.getRandomName();
+                                            Log.d("reArrangeEmails",reArrangeEmails);
+                                            Log.d("groupName",groupName);
                                             DatabaseReference dataReferences = fireBaseDatabase.getReference().child("group").child(reArrangeEmails).child(r_value).child("groupName");
                                             dataReferences.setValue(editGroupName);
                                             TextView name = (TextView) findViewById(R.id.group_name);
@@ -466,29 +475,35 @@ public class ViewGroupDetails extends AppCompatActivity {
                     saveProfileImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
-                            if (bitmap != null) {
-                                try {
-                                    String root = Environment.getExternalStorageDirectory().toString();
-                                    File myDir = new File(root + "/HippaText");
-                                    if (!myDir.exists()) {
-                                        myDir.mkdirs();
-                                    }
-                                    random = new SecureRandom();
-                                    String ran_img_name = new BigInteger(130, random).toString(32);
-                                    String randomValue = ran_img_name.substring(0, 7);
-                                    String name = randomValue + ".jpg";
+                            if(displayImage.getDrawable()!=null){
+                                Bitmap bitmap = ((BitmapDrawable) displayImage.getDrawable()).getBitmap();
+                                if (bitmap != null) {
+                                    try {
+                                        String root = Environment.getExternalStorageDirectory().toString();
+                                        File myDir = new File(root + "/HippaText");
+                                        if (!myDir.exists()) {
+                                            myDir.mkdirs();
+                                        }
+                                        random = new SecureRandom();
+                                        String ran_img_name = new BigInteger(130, random).toString(32);
+                                        String randomValue = ran_img_name.substring(0, 7);
+                                        String name = randomValue + ".jpg";
 
-                                    myDir = new File(myDir, name);
-                                    FileOutputStream out = new FileOutputStream(myDir);
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                                    Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
-                                    out.flush();
-                                    out.close();
-                                } catch (Exception e) {
-                                    // some action
+                                        myDir = new File(myDir, name);
+                                        FileOutputStream out = new FileOutputStream(myDir);
+                                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                                        Toast.makeText(getActivity(), "saved to files!", Toast.LENGTH_LONG).show();
+                                        out.flush();
+                                        out.close();
+                                    } catch (Exception e) {
+                                        // some action
+                                    }
                                 }
+                            }else{
+                                Log.d(TAG,"please wait");
+                                Toast.makeText(getActivity(), "please wait!", Toast.LENGTH_LONG).show();
                             }
+
                         }
                     });
 
@@ -776,7 +791,7 @@ public class ViewGroupDetails extends AppCompatActivity {
                 }
                 if (getActivity() != null) {
                     Log.d(TAG,"call check 6"+groupObj.toString());
-                    iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, loginMail));
+                    iv.setAdapter(new GroupUserAdapter(getActivity(), groupObj, loginMail,adminPermission));
                 }
             }
 
@@ -810,11 +825,12 @@ public class ViewGroupDetails extends AppCompatActivity {
         LayoutInflater inflater;
         String loginMailId;
         Context context;
-
-        public GroupUserAdapter(Context context, List<Groups> group, String loginMail) {
+        boolean admin_premiddion;
+        public GroupUserAdapter(Context context, List<Groups> group, String loginMail,boolean adminPermission) {
             this.context = context;
             this.groupInfo = group;
             this.loginMailId = loginMail;
+            this.admin_premiddion = adminPermission;
             inflater = LayoutInflater.from(this.context);
         }
 
@@ -846,11 +862,15 @@ public class ViewGroupDetails extends AppCompatActivity {
             }
 
             final Groups info = getItem(position);
-Log.d(TAG,"info.getStatus()"+info.getStatus()+info.getUserMail());
-            if (info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId)) {
+           /* if (info.getStatus().matches("admin") && info.getUserMail().matches(loginMailId)) {
                 toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
                 adminAddedPermisson = true;
-            } else if (info.getStatus().matches("user")) {
+            }*/
+            if (admin_premiddion) {
+                toolbar.getMenu().findItem(R.id.add_admin_group_menu).setVisible(true);
+                adminAddedPermisson = true;
+            }
+            if (info.getStatus().matches("user")) {
                 View btn = convertView.findViewById(R.id.btn_admin_view);
                 btn.setVisibility(View.INVISIBLE);
             }
@@ -984,15 +1004,27 @@ Log.d(TAG,"info.getStatus()"+info.getStatus()+info.getUserMail());
 
 
         String newadmin = null;
+        int p =0;
         String[] groupAdmins = group.getAdmin().split(";");
         for (int z = 0; z < groupAdmins.length; z++) {
             if(!loginMail.matches(groupAdmins[z])) {
                 if(newadmin == null){
+                    p++;
                     newadmin =  groupAdmins[z];
                 } else {
                     newadmin =  newadmin +";"+groupAdmins[z];
                 }
             }
+
+        }
+
+        if(p == 0) {
+            if (groupUsers[0].matches(loginMail)) {
+                newadmin = groupUsers[1];
+            } else {
+                newadmin = groupUsers[0];
+            }
+
         }
         String[] seprateNotificationId = groupPushNotificationId.split(";");
         for(int j=0;j< seprateNotificationId.length; j++){
@@ -1019,6 +1051,8 @@ Log.d(TAG,"info.getStatus()"+info.getStatus()+info.getUserMail());
                 dataReferences.setValue(newadmin);
             }
         }
+
+// dout need or not
         if(adminCount==1 && moreThanUser!=0) {
             String nextAccessAdmin = null;
             if (groupUsers[0].matches(loginMail)) {
@@ -1032,8 +1066,13 @@ Log.d(TAG,"info.getStatus()"+info.getStatus()+info.getUserMail());
                 DatabaseReference dataReference = fireBaseDatabase.getReference().child("group").child(reArrangeEmailId).child(group.getRandomName()).child("status");
                 dataReference.setValue("admin");
             }
-
         }
+
+
+
+
+
+
         FirebaseDatabase mfireBaseDatabase = FirebaseDatabase.getInstance();
         reArrangeEmail =  loginMail.replace(".","-");
         DatabaseReference dataReferences = mfireBaseDatabase.getReference().child("group").child(reArrangeEmail).child(group.getRandomName());

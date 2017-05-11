@@ -27,7 +27,8 @@ public class CompanyDao {
     public boolean acceptedCompany(User user){
         String reArrangeEmail = user.getUserName().replace(".", "-");
         firebaseDatabaseRef = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(user.getCompanyName()).child("companyName");
+        String rearrangeCompanyName = user.getCompanyName().replace(".","-");
+        DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(rearrangeCompanyName).child("companyName");
         databaseRefs.setValue(user.getCompanyName());
         DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
         databaseRef.setValue(user.getAuth());
@@ -39,7 +40,6 @@ public class CompanyDao {
             runners.execute("Profile has been accepted!",value,"hipaatext123@gmail.com",acceptEmail);
 
         } catch (Exception ex) {
-            // Toast.makeText(getApplicationContext(), ex.toString(), 100).show();
         }
         return true;
     }
@@ -98,7 +98,8 @@ public class CompanyDao {
             DatabaseReference databaseRef = firebaseDatabaseRef.getReference().child("userDetails").child(reArrangeEmail).child("auth");
             databaseRef.setValue("3");
             if(emailId.get(i).getRole().matches("admin")){
-                DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(emailId.get(i).getCompanyName());
+                String rearrangeCompanyName = emailId.get(i).getCompanyName().replace(".","-");
+                DatabaseReference databaseRefs = firebaseDatabaseRef.getReference().child("approvedCompany").child(rearrangeCompanyName);
                 databaseRefs.removeValue();
             }
 

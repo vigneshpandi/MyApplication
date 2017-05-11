@@ -97,7 +97,7 @@ public class Settings extends AppCompatActivity {
             password.setVisibility(View.VISIBLE);
             deleteAcount.setVisibility(View.VISIBLE);
             notificationSetting.setVisibility(View.VISIBLE);
-            showOnline.setVisibility(View.GONE);
+            showOnline.setVisibility(View.VISIBLE);
             hr.setVisibility(View.GONE);
             hr1.setVisibility(View.VISIBLE);
             hr2.setVisibility(View.VISIBLE);
@@ -211,7 +211,6 @@ public class Settings extends AppCompatActivity {
             notificationSetting.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Empty coding....
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
             });
@@ -227,7 +226,6 @@ public class Settings extends AppCompatActivity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     Log.d(TAG,"button clicked");
                     if(isChecked){
-                        //   switchStatus.setText("Switch is currently ON");
                         pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
                         editor = pref.edit();
                         editor.putString("isOnline", "true");
@@ -245,52 +243,17 @@ public class Settings extends AppCompatActivity {
                         u1.setUserName(login_mail);
                         u1.setIsOnlie("false");
                         showOnline(u1);
-                        //  switchStatus.setText("Switch is currently OFF");
                     }
 
                 }
             });
-       /*     showOnline.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG,"show online is clicked....");
-                    //  showOnline.setChecked(true);
-                    showOnline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                            Log.d(TAG,"button clicked");
-                            if(isChecked){
-                                //   switchStatus.setText("Switch is currently ON");
-                                pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
-                                editor = pref.edit();
-                                editor.putString("isOnline", "true");
-                                editor.commit();
-                                User u = new User();
-                                u.setUserName(login_mail);
-                                u.setIsOnlie("true");
-                                showOnline(u);
-                            }else{
-                                pref = getApplicationContext().getSharedPreferences("loginUserDetails", MODE_PRIVATE);
-                                editor = pref.edit();
-                                editor.putString("isOnline", "false");
-                                editor.commit();
-                                User u1 = new User();
-                                u1.setUserName(login_mail);
-                                u1.setIsOnlie("false");
-                                showOnline(u1);
-                                //  switchStatus.setText("Switch is currently OFF");
-                            }
 
-                        }
-                    });
-                }
-            });*/
 
         }
 
     }
 
-    /* if(isOnline.matches("true")) {*/
+
     public void deleteAcount(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d(TAG,"deleted userdetails...."+user.getEmail());
